@@ -1,0 +1,11 @@
+spaceone-core
+spaceone-api
+docker
+schematics
+
+adal
+msrestazure
+
+azure-identity
+azure-mgmt-resource==15.0.0
+azure-mgmt-compute==17.0.0b1
