@@ -77,7 +77,7 @@ class CollectorService(BaseService):
         #         for result in future.result():
         #             yield resource.to_primitive()
 
-        print("[ EXECUTOR START: Azure Cloud Service ]")
+        print("[ EXECUTOR STARTt: Azure Cloud Service ]")
 
         for manager in self.execute_managers:
             _manager = self.locator.get_manager(manager)
