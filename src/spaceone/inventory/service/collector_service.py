@@ -61,8 +61,9 @@ class CollectorService(BaseService):
         """
 
         secret_data = params['secret_data']
-
         start_time = time.time()
+
+        print("[ EXECUTOR START: Azure Cloud Service ]")
 
         # TODO: Thread per cloud services
         # with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
@@ -71,13 +72,11 @@ class CollectorService(BaseService):
         #     for execute_manager in self.execute_managers:
         #         print(f'@@@ {execute_manager} @@@')
         #         _manager = self.locator.get_manager(execute_manager)
-        #         future_executors.append(executor.submit(_manager.collect_resources, **params))
+        #         future_executors.append(executor.submit(_manager.collect_resources, params))
         #
         #     for future in concurrent.futures.as_completed(future_executors):
         #         for result in future.result():
-        #             yield resource.to_primitive()
-
-        print("[ EXECUTOR START: Azure Cloud Service ]")
+        #             yield result.to_primitive()
 
         for manager in self.execute_managers:
             _manager = self.locator.get_manager(manager)

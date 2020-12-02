@@ -98,15 +98,21 @@ class AzureManager(BaseManager):
         raise NotImplemented
 
     def collect_resources(self, params) -> list:
-        for cloud_service_type in self.collect_cloud_service_type():
-            yield cloud_service_type
+        resources = []
 
-        for cloud_service_response_schema in self.collect_cloud_service(params):
-            yield cloud_service_response_schema
+        resources.extend(self.collect_cloud_service_type())
+        resources.extend(self.collect_cloud_service(params))
+        resources.extend(self.collect_region())
 
+        return resources
+
+    def collect_region(self):
+        results = []
         for region_code in self.collected_region_codes:
             if region := self.match_region_info(region_code):
-                yield RegionResponse({'resource': region})
+                results.append(RegionResponse({'resource': region}))
+
+        return results
 
     def set_region_code(self, region):
         if region not in REGION_INFO:
@@ -127,3 +133,7 @@ class AzureManager(BaseManager):
             return RegionResource(region_info, strict=False)
 
         return None
+
+    @staticmethod
+    def convert_dictionary(obj):
+        return vars(obj)
