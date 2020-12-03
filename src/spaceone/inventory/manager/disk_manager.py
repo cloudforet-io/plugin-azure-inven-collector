@@ -32,7 +32,28 @@ class DiskManager(AzureManager):
         disks = []
         for disk in disk_conn.list_disks():
             # TODO: to be Implemented
-            disk_data = Disk(self.convert_dictionary(disk), strict=False)
+
+            disk_dict = self.convert_dictionary(disk)
+            sku_dict = self.convert_dictionary(disk_dict['sku'])
+
+            # properties_dict = self.convert_dictionary(disk_dict['properties'])
+            managed_by = disk_dict.get('managed_by')
+            disk_dict.update({
+                'resource_group': self.get_resource_group_from_id(disk_dict['id']),
+                'sku_name': sku_dict['name'],
+                'sku_tier': sku_dict['tier'],
+                'size': disk_dict['disk_size_bytes']
+            })
+
+            if managed_by is not None:
+                disk_dict.update({
+                    'managedBy': self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
+                })
+
+            print("----disk_dict----")
+            print(disk_dict)
+
+            disk_data = Disk(disk_dict, strict=False)
             disk_resource = DiskResource({
                 'data': disk_data,
                 'reference': ReferenceModel(disk_data.reference())
@@ -44,3 +65,13 @@ class DiskManager(AzureManager):
 
         print(f'** Disk Finished {time.time() - start_time} Seconds **')
         return disks
+
+    @staticmethod
+    def get_resource_group_from_id(disk_id):
+        resource_group = disk_id.split('/')[4].lower()
+        return resource_group
+
+    @staticmethod
+    def get_attached_vm_name_from_managed_by(managed_by):
+        attached_vm_name = managed_by.split('/')[8]
+        return attached_vm_name
