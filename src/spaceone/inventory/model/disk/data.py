@@ -45,13 +45,21 @@ class EncryptionSettingsCollection(Model):
 class Encryption(Model):
     disk_encryption_set_id = StringType(serialize_when_none=False)
     type = StringType(choices=('EncryptionAtRestWithCustomerKey', 'EncryptionAtRestWithPlatformAndCustomerKeys',
-                       'EncryptionAtRestWithPlatformKey'),
+                               'EncryptionAtRestWithPlatformKey'),
                       default='EncryptionAtRestWithPlatformKey')
 
 
 class Tags(Model):
     key = StringType()
     value = StringType()
+
+
+# 예제일뿐...
+class Lock(Model):
+    name = StringType()
+    type = StringType()
+    scope = StringType()
+    notes = ListType(StringType())
 
 
 class Disk(Model):
@@ -72,7 +80,7 @@ class Disk(Model):
     size = IntType()  # disk size for statistics
     encryption_settings_collection = ModelType(EncryptionSettingsCollection, serialize_when_none=False)
     encryption = ModelType(Encryption, serialize_when_none=False),
-    hyper_v_generation= StringType()
+    hyper_v_generation = StringType()
     time_created = DateTimeType()
     creation_data = ModelType(CreationData)
     os_type = StringType(choices=('Linux', 'Windows'), serialize_when_none=False)
@@ -80,6 +88,9 @@ class Disk(Model):
     share_info = StringType()
     unique_id = StringType()
     disk_m_bps_read_write = IntType()
+    subscription_id = StringType()
+    subscription_name = StringType()
+    locks = ListType(ModelType(Lock))
     disk_m_bps_read_only = BooleanType(serialize_when_none=False)
     disk_state = StringType(choices=('ActiveSAS', 'ActiveUpload', 'Attached', 'ReadyToUpload', 'Reserved', 'Unattached'))
     networkAccessPolicy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'))

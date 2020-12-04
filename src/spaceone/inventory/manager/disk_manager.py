@@ -34,6 +34,9 @@ class DiskManager(AzureManager):
             # TODO: to be Implemented
             disk_dict = self.convert_dictionary(disk)
             sku_dict = self.convert_dictionary(disk.sku)
+
+
+
             creation_data_dict = self.convert_dictionary(disk.creation_data)
             # 여기 요부분.. 함수로 뺄까
             if disk.creation_data.image_reference is not None:
@@ -45,6 +48,7 @@ class DiskManager(AzureManager):
             managed_by = disk_dict.get('managed_by')
             disk_dict.update({
                 'resource_group': self.get_resource_group_from_id(disk_dict['id']),
+                'subscription_id': secret_data['subscription_id'],
                 'size': disk_dict['disk_size_bytes'],
                 'sku': sku_dict,
                 'creation_data': creation_data_dict
