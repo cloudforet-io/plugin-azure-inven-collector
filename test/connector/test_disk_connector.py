@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta
 from unittest.mock import patch
 
+import upstream as upstream
 from spaceone.core.unittest.result import print_data
 from spaceone.core.unittest.runner import RichTestRunner
 from spaceone.core import config
@@ -26,6 +27,7 @@ class TestDiskConnector(unittest.TestCase):
 
         cls.azure_connector = DiskConnector(transaction=Transaction(), config={},
                                             secret_data=test_config.get('AZURE_CREDENTIALS', {}))
+        #cls.azure_connector = DiskConnector(transaction=Transaction(), config={}, secret_data=cls.azure_credentials['secret_data'])
         super().setUpClass()
 
     @classmethod
@@ -33,6 +35,7 @@ class TestDiskConnector(unittest.TestCase):
         super().tearDownClass()
 
     def test_list_disks(self):
+        #self.azure_connector.set_connect(self.azure_credentials)
         disks = self.azure_connector.list_disks()
 
         for disk in disks:

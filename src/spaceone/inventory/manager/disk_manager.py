@@ -32,17 +32,22 @@ class DiskManager(AzureManager):
         disks = []
         for disk in disk_conn.list_disks():
             # TODO: to be Implemented
-
             disk_dict = self.convert_dictionary(disk)
-            sku_dict = self.convert_dictionary(disk_dict['sku'])
+            sku_dict = self.convert_dictionary(disk.sku)
+            creation_data_dict = self.convert_dictionary(disk.creation_data)
+            # 여기 요부분.. 함수로 뺄까
+            if disk.creation_data.image_reference is not None:
+                image_reference_dict = self.convert_dictionary(disk.creation_data.image_reference)
+                creation_data_dict.update({
+                    'image_reference': image_reference_dict
+                })
 
-            # properties_dict = self.convert_dictionary(disk_dict['properties'])
             managed_by = disk_dict.get('managed_by')
             disk_dict.update({
                 'resource_group': self.get_resource_group_from_id(disk_dict['id']),
-                'sku_name': sku_dict['name'],
-                'sku_tier': sku_dict['tier'],
-                'size': disk_dict['disk_size_bytes']
+                'size': disk_dict['disk_size_bytes'],
+                'sku': sku_dict,
+                'creation_data': creation_data_dict
             })
 
             if managed_by is not None:
@@ -54,14 +59,20 @@ class DiskManager(AzureManager):
             print(disk_dict)
 
             disk_data = Disk(disk_dict, strict=False)
+            print(disk_data.to_primitive())
+
             disk_resource = DiskResource({
                 'data': disk_data,
                 'reference': ReferenceModel(disk_data.reference())
             })
 
+            '''
+            sku_resource = DiskResource({
+                'data': sku_data
+            })
+            '''
             # Must set_region_code method for region collection
             self.set_region_code(disk_data['location'])
-            disks.append(DiskResponse({'resource': disk_resource}))
 
         print(f'** Disk Finished {time.time() - start_time} Seconds **')
         return disks

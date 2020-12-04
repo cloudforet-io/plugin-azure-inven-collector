@@ -11,6 +11,19 @@ DISK
 disk_info_meta = ItemDynamicLayout.set_fields('Disk', fields=[
     # TODO: Fill out to Dynamic Item Field Tab
     TextDyField.data_source('ID', 'data.id'),
+    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Location', 'data.location'),
+    TextDyField.data_source('Attached VM', 'data.ManagedBy'),
+    TextDyField.data_source('Zone', 'data.zones'),
+    TextDyField.data_source('Name', 'data.skuTier'),
+
+    # TextDyField.data_source('Storage account type', 'data.type'),
+    TextDyField.data_source('Size(GiB)', 'data.diskSizeGB'),
+    TextDyField.data_source('State', 'data.diskState'),
+    TextDyField.data_source('Owner', 'data.managedBy'),
+    TextDyField.data_source('Resource Group', 'data.resourceGroup'),
+    TextDyField.data_source('Location', 'data.location'),
+    TextDyField.data_source('Type', 'data.type')
 ])
 
 disk_meta = CloudServiceMeta.set_layouts([disk_info_meta, ])
