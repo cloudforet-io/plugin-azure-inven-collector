@@ -15,3 +15,7 @@ class DiskConnector(AzureConnector):
 
     def list_disks(self):
         return self.compute_client.disks.list()
+
+    def get_subscription_info(self):
+        return self.subscription_client.subscriptions.get()
+
