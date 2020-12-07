@@ -17,7 +17,7 @@ class CreationData(Model):
     creation_option = StringType(choices=('Attach', 'Copy', 'Empty', 'FromImage', 'Import', 'Restore', 'Upload'))
     gallery_image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
     image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
-    logical_sector_size = ModelType(IntType, serialize_when_none=False)
+    logical_sector_size = IntType(serialize_when_none=False)
     source_resource_id = StringType(serialize_when_none=False)
     source_unique_id = StringType(serialize_when_none=False)
     source_uri = StringType(serialize_when_none=False)
@@ -51,11 +51,6 @@ class Encryption(Model):
                       default='EncryptionAtRestWithPlatformKey')
 
 
-class OsType(Model):
-    Linux = StringType(serialize_when_none=False),
-    Windows = StringType(serialize_when_none=False)
-
-
 class ShareInfoElement(Model):
     vmUri = StringType(serialize_when_none=False)
 
@@ -81,7 +76,7 @@ class Disk(Model):
     location = StringType()
     managed_by = StringType(serialize_when_none=False)
     managed_by_extended = ListType(StringType, serialize_when_none=False)
-    max_shares = IntType(serialize_when_none=False)
+    max_shares = IntType(serialize_when_none=False, default=0)
     sku = ModelType(Sku)
     zones = ListType(StringType(), serialize_when_none=False)
     disk_size_gb = IntType()
@@ -91,12 +86,12 @@ class Disk(Model):
     size = IntType()  # disk size for statistics
     encryption_settings_collection = ModelType(EncryptionSettingsCollection, serialize_when_none=False)
     encryption = ModelType(Encryption, serialize_when_none=False),
-    hyper_v_generation = StringType()
+    hyper_v_generation = StringType(serialize_when_none=False)
     time_created = DateTimeType()
     creation_data = ModelType(CreationData)
-    os_type = ModelType(OsType, serialize_when_none=False)
+    os_type = StringType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
-    share_info = ListType(ShareInfoElement, serialize_when_none=False)
+    share_info = ModelType(ShareInfoElement, serialize_when_none=False)
     unique_id = StringType()
     disk_m_bps_read_write = IntType()
     subscription_id = StringType()
@@ -104,12 +99,14 @@ class Disk(Model):
     locks = ListType(ModelType(Lock))
     disk_m_bps_read_only = BooleanType(serialize_when_none=False)
     disk_state = StringType(choices=('ActiveSAS', 'ActiveUpload', 'Attached', 'ReadyToUpload', 'Reserved', 'Unattached'))
-    disk_state_display = StringType()
-    networkAccessPolicy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'))
+    disk_state_display = StringType()  # TODO : display set
+    network_access_policy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'), serialize_when_none=False)
+    network_access_policy_display = StringType()
     tier = StringType(choices=('P1', 'P2', 'P3', 'P4', 'P6', 'P10', 'P15', 'P20',
                                'P30', 'P40', 'P50', 'P60', 'P70', 'P80', 'E1', 'E2', 'E3', 'E4', 'E6', 'E10', 'E15',
                                'E20', 'E30', 'E40', 'E50', 'S4', 'S6', 'S10', 'S15', 'S20', 'S30', 'S40', 'S50',
                                'S60', 'S70', 'S80'), serialize_when_none=False)
+    tier_display = StringType(default='')
     tags = ListType(ModelType(Tags), default=[])
 
     def reference(self):
