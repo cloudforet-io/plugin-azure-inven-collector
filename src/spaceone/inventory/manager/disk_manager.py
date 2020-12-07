@@ -35,10 +35,11 @@ class DiskManager(AzureManager):
             disk_dict = self.convert_dictionary(disk)
             sku_dict = self.convert_dictionary(disk.sku)
             creation_data_dict = self.convert_dictionary(disk.creation_data)
+            encryption_dict = self.convert_dictionary(disk.encryption)
 
             # update sku_dict
-            sku_dict.update({  # switch DiskStorageAccountType to disk_sku_name for user-friendly word.
-                # (ex.Premium SSD, Standard HDD..)
+            sku_dict.update({   # switch DiskStorageAccountType to disk_sku_name for user-friendly word.
+                                # (ex.Premium SSD, Standard HDD..)
                 'name': self.get_disk_sku_name(sku_dict['name'])
             })
 
@@ -57,12 +58,30 @@ class DiskManager(AzureManager):
                 'size': disk_dict['disk_size_bytes'],
                 'sku': sku_dict,
                 'creation_data': creation_data_dict,
+                'encryption': encryption_dict,
+                'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
+                                                      disk_dict['disk_m_bps_read_write']),
+                'disk_state_display': self.get_disk_state_display(disk_dict['disk_state'])
+
             })
             managed_by = disk_dict.get('managed_by')  # get attached vm's name
             if managed_by is not None:
                 disk_dict.update({
                     'managedBy': self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
                 })
+
+            # os_type = disk_dict.get('os_type')
+            # if os_type is not None:
+            #    disk_dict.update({
+            #         'os_type': self.convert_dictionary(disk_dict.get('os_type'))
+            #    })
+
+            network_access_policy = disk_dict.get('network_access_policy') # switch network_access_policy name
+            if network_access_policy is not None:
+                disk_dict.update({
+                    'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
+                })
+
             tags = disk_dict.get('tags')  # update tags
             if tags is not None:
                 disk_dict.update({
@@ -124,6 +143,39 @@ class DiskManager(AzureManager):
         # 2. API 날려서 return 받고 중복제거 한 new 배열에 넣고
         # 3. id 키 기반으로 tenant 원래 subscription 에 매핑
         return subscription_info_dict
+
+    @staticmethod
+    def get_network_access_policy(network_access_policy):
+        if network_access_policy == 'AllowAll':
+            network_access_policy_display = 'Public endpoint (all network)'
+        elif network_access_policy == 'AllowPrivate' :
+            network_access_policy_display = 'Private endpoint (through disk access)'
+        elif network_access_policy == 'DenyAll' :
+            network_access_policy_display = 'Deny all'
+
+        return network_access_policy_display
+
+    @staticmethod
+    def get_disk_state_display(disk_state):
+        if disk_state == 'ActiveSAS':
+            disk_state_display = 'Safe'
+        elif disk_state == 'ActiveUpload':
+            disk_state_display = 'Safe'
+        elif disk_state == 'Attached':
+            disk_state_display = 'Safe'
+        elif disk_state == 'ReadyToUpload':
+            disk_state_display = 'Safe'
+        elif disk_state == 'Reserved':
+            disk_state_display = 'Safe'
+        elif disk_state == 'Unattached':
+            disk_state_display = 'Safe'
+
+        return disk_state_display
+
+    @staticmethod
+    def get_tier_display(disk_iops_read_write, disk_m_bps_read_write):
+        tier_display = str(disk_iops_read_write) + ' IOPS' + ', ' + str(disk_m_bps_read_write) + ' Mbps'
+        return tier_display
 
     @staticmethod
     def get_tags(disk_dict):
