@@ -27,6 +27,8 @@ class DiskManager(AzureManager):
             CloudServiceResponse
         """
         secret_data = params['secret_data']
+        subscription = params['secret_data'].get('subscription_id')
+
         disk_conn: DiskConnector = self.locator.get_connector(self.connector_name, **params)
 
         disks = []
@@ -35,8 +37,8 @@ class DiskManager(AzureManager):
             disk_dict = self.convert_dictionary(disk)
             sku_dict = self.convert_dictionary(disk.sku)
             creation_data_dict = self.convert_dictionary(disk.creation_data)
+            # lock_dict = self.convert_dictionary(disk.locks)
             encryption_dict = self.convert_dictionary(disk.encryption)
-
             # update sku_dict
             sku_dict.update({   # switch DiskStorageAccountType to disk_sku_name for user-friendly word.
                                 # (ex.Premium SSD, Standard HDD..)
@@ -50,6 +52,20 @@ class DiskManager(AzureManager):
                     'image_reference': image_reference_dict
                 })
 
+            ''' 
+            # update lock_dict
+            lock_dict.update({
+
+            })
+            '''
+
+            # subscription dict
+            # subscription_info_dict = {'subscription_id': disk_dict['subscription_id']}
+            # self.set_subscription_info(disk_conn, subscription)
+
+            # lock dict
+            # self.get_lock_info(disk_conn, subscription)
+
             # update disk_data dict
             disk_dict.update({
                 'resource_group': self.get_resource_group_from_id(disk_dict['id']),  # parse resource group from ID
@@ -61,8 +77,7 @@ class DiskManager(AzureManager):
                 'encryption': encryption_dict,
                 'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
                                                       disk_dict['disk_m_bps_read_write']),
-                'disk_state_display': self.get_disk_state_display(disk_dict['disk_state'])
-
+                # 'lock': lock_dict
             })
             managed_by = disk_dict.get('managed_by')  # get attached vm's name
             if managed_by is not None:
@@ -70,13 +85,8 @@ class DiskManager(AzureManager):
                     'managedBy': self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
                 })
 
-            # os_type = disk_dict.get('os_type')
-            # if os_type is not None:
-            #    disk_dict.update({
-            #         'os_type': self.convert_dictionary(disk_dict.get('os_type'))
-            #    })
-
-            network_access_policy = disk_dict.get('network_access_policy') # switch network_access_policy name
+            # switch network_access_policy name
+            network_access_policy = disk_dict.get('network_access_policy')
             if network_access_policy is not None:
                 disk_dict.update({
                     'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
@@ -88,15 +98,11 @@ class DiskManager(AzureManager):
                     'tags': self.get_tags(disk_dict)
                 })
 
-            # subscription dict
-            subscription_info_dict = {'subscription_id': disk_dict['subscription_id'],
-                                      'subscription_name': disk_dict['subscription_name']}
-            # self.set_subscription_info(disk_conn, subscription_info_dict)
-
             print("----disk_dict----")
             print(disk_dict)
 
             disk_data = Disk(disk_dict, strict=False)
+            print("----disk_data----")
             print(disk_data.to_primitive())
 
             disk_resource = DiskResource({
@@ -133,22 +139,20 @@ class DiskManager(AzureManager):
         return sku_name
 
     @staticmethod
-    def set_subscription_info(disk_conn, subscription_info_dict):  # 정제 된 애
-        # 0. subscription['id' 'name' 'tenant_id'] 배열 만들고
-        for subscription_info_dict in disk_conn.get_subscription_info():
-            subscription_info_slist = {}
-            # subscription_info_dict.update({
-            # subscription_info_dict['name']= subscription['id']
-            # })
-        # 2. API 날려서 return 받고 중복제거 한 new 배열에 넣고
-        # 3. id 키 기반으로 tenant 원래 subscription 에 매핑
-        return subscription_info_dict
+    def set_subscription_info(disk_conn, subscription):  # id 정제 된 애
+        subscription_info = disk_conn.get_subscription_info(subscription)  # subscription_info = disk_conn.get_subscription_info(subscription)
+        subscription_data = {
+            'subscription_id': subscription_info.subsscription_id,
+            'subscription_name': subscription_info.display_name,
+            'tenant_id': subscription_info.tenant_id
+        }
+        return subscription_data
 
     @staticmethod
     def get_network_access_policy(network_access_policy):
         if network_access_policy == 'AllowAll':
             network_access_policy_display = 'Public endpoint (all network)'
-        elif network_access_policy == 'AllowPrivate' :
+        elif network_access_policy == 'AllowPrivate':
             network_access_policy_display = 'Private endpoint (through disk access)'
         elif network_access_policy == 'DenyAll' :
             network_access_policy_display = 'Deny all'
@@ -156,21 +160,12 @@ class DiskManager(AzureManager):
         return network_access_policy_display
 
     @staticmethod
-    def get_disk_state_display(disk_state):
-        if disk_state == 'ActiveSAS':
-            disk_state_display = 'Safe'
-        elif disk_state == 'ActiveUpload':
-            disk_state_display = 'Safe'
-        elif disk_state == 'Attached':
-            disk_state_display = 'Safe'
-        elif disk_state == 'ReadyToUpload':
-            disk_state_display = 'Safe'
-        elif disk_state == 'Reserved':
-            disk_state_display = 'Safe'
-        elif disk_state == 'Unattached':
-            disk_state_display = 'Safe'
+    def get_lock_info(disk_conn, lock_dict):
+        disk_conn.subscription_client.disks.list()
+        lock_dict.update({
 
-        return disk_state_display
+        })
+        return lock_dict
 
     @staticmethod
     def get_tier_display(disk_iops_read_write, disk_m_bps_read_write):
