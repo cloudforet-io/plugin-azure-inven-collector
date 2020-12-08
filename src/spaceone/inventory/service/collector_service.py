@@ -2,6 +2,7 @@ import time
 import logging
 import concurrent.futures
 from spaceone.inventory.libs.manager import AzureManager
+from spaceone.inventory.manager.subscription_manager import SubscriptionManager
 from spaceone.core.service import *
 
 
@@ -19,6 +20,9 @@ class CollectorService(BaseService):
         self.execute_managers = [
             # set MS Azure cloud service manager
             'DiskManager',
+            # 'SnapshotManager',
+            # 'ScaleSetManager'
+            # ...
         ]
 
     @check_required(['options'])
@@ -60,8 +64,11 @@ class CollectorService(BaseService):
                 - filter
         """
 
-        secret_data = params['secret_data']
         start_time = time.time()
+
+        params.update({
+            'subscription_info': self.get_subscription_info(params)
+        })
 
         print("[ EXECUTOR START: Azure Cloud Service ]")
 
@@ -85,3 +92,7 @@ class CollectorService(BaseService):
                 yield resource.to_primitive()
 
         print(f'TOTAL TIME : {time.time() - start_time} Seconds')
+
+    def get_subscription_info(self, params):
+        subscription_manager: SubscriptionManager = self.locator.get_manager('SubscriptionManager')
+        return subscription_manager.get_subscription_info(params)
