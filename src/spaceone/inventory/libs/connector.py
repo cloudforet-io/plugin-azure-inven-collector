@@ -47,7 +47,6 @@ class AzureConnector(BaseConnector):
         self.compute_client = ComputeManagementClient(credential=credential, subscription_id=subscription_id)
         self.resource_client = ResourceManagementClient(credential=credential, subscription_id=subscription_id)
         self.subscription_client: SubscriptionClient = SubscriptionClient(credential=credential)
-        self.network_client: NetworkManagementClient = NetworkManagementClient(credential=credential)
 
     def verify(self, **kwargs):
         self.set_connect(**kwargs)
