@@ -3,8 +3,9 @@ from schematics.types import ModelType, ListType, StringType, FloatType, DateTim
 
 
 class Sku(Model):
-    name = StringType(choices=('Standard_LRS', 'Premium_LRS', 'StandardSSD_LRS', 'UltraSSD_LRS'))
-    tier = StringType(choices=('Premium', 'Standard'))
+    name = StringType(choices=('Standard_LRS', 'Premium_LRS', 'StandardSSD_LRS', 'UltraSSD_LRS'),
+                      serialize_when_none=False)
+    tier = StringType(choices=('Premium', 'Standard'), serialize_when_none=False)
 
 
 class ImageDiskReference(Model):
@@ -16,6 +17,7 @@ class CreationData(Model):
     creation_option = StringType(choices=('Attach', 'Copy', 'Empty', 'FromImage', 'Import', 'Restore', 'Upload'))
     gallery_image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
     image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
+    logical_sector_size = IntType(serialize_when_none=False)
     source_resource_id = StringType(serialize_when_none=False)
     source_unique_id = StringType(serialize_when_none=False)
     source_uri = StringType(serialize_when_none=False)
@@ -24,12 +26,12 @@ class CreationData(Model):
 
 
 class SourceVault(Model):
-    id = StringType()
+    id = StringType(serialize_when_none=False)
 
 
 class DiskEncryptionKey(Model):
-    source_vault = ModelType(SourceVault)
-    secret_url = StringType()
+    source_vault = ModelType(SourceVault, serialize_when_none=False)
+    secret_url = StringType(serialize_when_none=False)
 
 
 class KeyEncryptionKey(Model):
@@ -38,15 +40,19 @@ class KeyEncryptionKey(Model):
 
 
 class EncryptionSettingsCollection(Model):
-    disk_encryption_key = ModelType(DiskEncryptionKey)
-    key_encryption_key = ModelType(KeyEncryptionKey)
+    disk_encryption_key = ModelType(DiskEncryptionKey, serialize_when_none=False)
+    key_encryption_key = ModelType(KeyEncryptionKey, serialize_when_none=False)
 
 
 class Encryption(Model):
-    disk_encryption_set_id = StringType(serialize_when_none=False)
+    disk_encryption_set_id = StringType(default='', serialize_when_none=False)
     type = StringType(choices=('EncryptionAtRestWithCustomerKey', 'EncryptionAtRestWithPlatformAndCustomerKeys',
                                'EncryptionAtRestWithPlatformKey'),
-                      default='EncryptionAtRestWithPlatformKey')
+                      default='EncryptionAtRestWithPlatformKey', serialize_when_none=False)
+
+
+class ShareInfoElement(Model):
+    vm_uri = StringType(serialize_when_none=False)
 
 
 class Tags(Model):
@@ -54,12 +60,25 @@ class Tags(Model):
     value = StringType()
 
 
-# 예제일뿐...
-class Lock(Model):
+class LockLevel(Model):
+    can_not_delete = StringType()
+    not_specified = StringType()
+    read_only = StringType()
+
+
+class ManagementLockObject(Model):
+    id = StringType()
     name = StringType()
+    level = ModelType(LockLevel)
+    level_display = StringType()
+    notes = StringType()
+    properties_owners = ListType(StringType())
     type = StringType()
-    scope = StringType()
-    notes = ListType(StringType())
+
+
+class Lock(Model):
+    next_link = StringType()
+    value = ModelType(ManagementLockObject)
 
 
 class Disk(Model):
@@ -69,8 +88,8 @@ class Disk(Model):
     resource_group = StringType()
     location = StringType()
     managed_by = StringType(serialize_when_none=False)
-    managed_by_extended = StringType(serialize_when_none=False)
-    max_shares = StringType(serialize_when_none=False)
+    managed_by_extended = ListType(StringType, serialize_when_none=False)
+    max_shares = IntType(serialize_when_none=False, default=0)
     sku = ModelType(Sku)
     zones = ListType(StringType(), serialize_when_none=False)
     disk_size_gb = IntType()
@@ -78,28 +97,28 @@ class Disk(Model):
     disk_iops_read_only = BooleanType(serialize_when_none=False)
     disk_size_bytes = IntType()
     size = IntType()  # disk size for statistics
-    encryption_settings_collection = ModelType(EncryptionSettingsCollection, serialize_when_none=False)
-    encryption = ModelType(Encryption, serialize_when_none=False),
-    hyper_v_generation = StringType()
+    encryption_settings_collection = ModelType(EncryptionSettingsCollection)
+    encryption = ModelType(Encryption)
+    hyper_v_generation = StringType(serialize_when_none=False)
     time_created = DateTimeType()
     creation_data = ModelType(CreationData)
-    os_type = StringType(choices=('Linux', 'Windows'), serialize_when_none=False)
+    os_type = StringType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
-    share_info = StringType()
+    share_info = ModelType(ShareInfoElement, serialize_when_none=False)
     unique_id = StringType()
     disk_m_bps_read_write = IntType()
     subscription_id = StringType()
     subscription_name = StringType()
-    locks = ListType(ModelType(Lock))
+    # locks = ListType(ModelType(Lock), serialize_when_none=False)
     disk_m_bps_read_only = BooleanType(serialize_when_none=False)
     disk_state = StringType(choices=('ActiveSAS', 'ActiveUpload', 'Attached', 'ReadyToUpload', 'Reserved', 'Unattached'))
-    networkAccessPolicy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'))
-    tier = StringType(choices=('P1', 'P2', 'P3', 'P4', 'P6', 'P10', 'P15', 'P20',
-                               'P30', 'P40', 'P50', 'P60', 'P70', 'P80'), serialize_when_none=False)
-    # tags = ListType(ModelType(Tags), default=[])
+    network_access_policy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'), serialize_when_none=False)
+    network_access_policy_display = StringType()
+    tier_display = StringType(default='')
+    tags = ListType(ModelType(Tags), default=[])
 
     def reference(self):
         return {
             "resource_id": self.id,
-            "external_link": ""
+            "external_link": f"https://portal.azure.com/#@.onmicrosoft.com/resource{self.id}/overview",
         }

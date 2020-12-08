@@ -41,7 +41,9 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
         SearchField.set(name='Creation Time', key='data.time_created', data_type='datetime'),
     ]
+
 )
+
 
 CLOUD_SERVICE_TYPES = [
     CloudServiceTypeResponse({'resource': cst_disk}),
