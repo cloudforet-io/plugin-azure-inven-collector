@@ -23,11 +23,12 @@ class DiskManager(AzureManager):
                 - secret_data
                 - filter
                 - zones
+                - subscription_info
         Response:
             CloudServiceResponse
         """
         secret_data = params['secret_data']
-        subscription = params['secret_data'].get('subscription_id')
+        subscription_info = params['subscription_info']
 
         disk_conn: DiskConnector = self.locator.get_connector(self.connector_name, **params)
 
@@ -69,8 +70,8 @@ class DiskManager(AzureManager):
             # update disk_data dict
             disk_dict.update({
                 'resource_group': self.get_resource_group_from_id(disk_dict['id']),  # parse resource group from ID
-                'subscription_id': secret_data['subscription_id'],
-                'subscription_name': '',
+                'subscription_id': subscription_info['subscription_id'],
+                'subscription_name': subscription_info['subscription_name'],
                 'size': disk_dict['disk_size_bytes'],
                 'sku': sku_dict,
                 'creation_data': creation_data_dict,
