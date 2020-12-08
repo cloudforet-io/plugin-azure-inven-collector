@@ -3,6 +3,7 @@ from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.model.disk import *
 from spaceone.inventory.model.disk.cloud_service import *
 from spaceone.inventory.connector.disk import DiskConnector
+from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
 from datetime import datetime
 import time
@@ -31,18 +32,17 @@ class DiskManager(AzureManager):
         subscription_info = params['subscription_info']
 
         disk_conn: DiskConnector = self.locator.get_connector(self.connector_name, **params)
-
         disks = []
         for disk in disk_conn.list_disks():
-            # TODO: to be Implemented
             disk_dict = self.convert_dictionary(disk)
             sku_dict = self.convert_dictionary(disk.sku)
             creation_data_dict = self.convert_dictionary(disk.creation_data)
-            # lock_dict = self.convert_dictionary(disk.locks)
             encryption_dict = self.convert_dictionary(disk.encryption)
+
             # update sku_dict
-            sku_dict.update({   # switch DiskStorageAccountType to disk_sku_name for user-friendly word.
-                                # (ex.Premium SSD, Standard HDD..)
+            # switch DiskStorageAccountType to disk_sku_name for user-friendly words.
+            # (ex.Premium SSD, Standard HDD..)
+            sku_dict.update({
                 'name': self.get_disk_sku_name(sku_dict['name'])
             })
 
@@ -53,23 +53,9 @@ class DiskManager(AzureManager):
                     'image_reference': image_reference_dict
                 })
 
-            ''' 
-            # update lock_dict
-            lock_dict.update({
-
-            })
-            '''
-
-            # subscription dict
-            # subscription_info_dict = {'subscription_id': disk_dict['subscription_id']}
-            # self.set_subscription_info(disk_conn, subscription)
-
-            # lock dict
-            # self.get_lock_info(disk_conn, subscription)
-
             # update disk_data dict
             disk_dict.update({
-                'resource_group': self.get_resource_group_from_id(disk_dict['id']),  # parse resource group from ID
+                'resource_group': self.get_resource_group_from_id(disk_dict['id']),  # parse resource_group from ID
                 'subscription_id': subscription_info['subscription_id'],
                 'subscription_name': subscription_info['subscription_name'],
                 'size': disk_dict['disk_size_bytes'],
@@ -78,32 +64,29 @@ class DiskManager(AzureManager):
                 'encryption': encryption_dict,
                 'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
                                                       disk_dict['disk_m_bps_read_write']),
-                # 'lock': lock_dict
+                'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
             })
 
             # get attached vm's name
-            managed_by = disk_dict.get('managed_by')
+            managed_by = disk_dict['managed_by']
             if managed_by is not None:
-                disk_dict.update({
-                    'managedBy': self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
-                })
+                managed_by = self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
+            else:
+                managed_by = ''
 
-            # switch network_access_policy name
-            network_access_policy = disk_dict.get('network_access_policy')
-            if network_access_policy is not None:
-                disk_dict.update({
-                    'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
+            disk_dict.update({
+                    'managed_by': managed_by
                 })
 
             # switch tags form
             tags = disk_dict.get('tags')
             if tags is not None:
-                disk_dict.update({
-                    'tags': self.get_tags(disk_dict)
-                })
-
-            print("----disk_dict----")
-            print(disk_dict)
+                tags = self.get_tags(disk_dict)
+            else:
+                tags = []
+            disk_dict.update({
+                'tags': tags
+            })
 
             disk_data = Disk(disk_dict, strict=False)
             print("----disk_data----")
@@ -143,33 +126,15 @@ class DiskManager(AzureManager):
         return sku_name
 
     @staticmethod
-    def set_subscription_info(disk_conn, subscription):  # id 정제 된 애
-        subscription_info = disk_conn.get_subscription_info(subscription)  # subscription_info = disk_conn.get_subscription_info(subscription)
-        subscription_data = {
-            'subscription_id': subscription_info.subsscription_id,
-            'subscription_name': subscription_info.display_name,
-            'tenant_id': subscription_info.tenant_id
-        }
-        return subscription_data
-
-    @staticmethod
     def get_network_access_policy(network_access_policy):
         if network_access_policy == 'AllowAll':
             network_access_policy_display = 'Public endpoint (all network)'
         elif network_access_policy == 'AllowPrivate':
             network_access_policy_display = 'Private endpoint (through disk access)'
-        elif network_access_policy == 'DenyAll' :
+        elif network_access_policy == 'DenyAll':
             network_access_policy_display = 'Deny all'
 
         return network_access_policy_display
-
-    @staticmethod
-    def get_lock_info(disk_conn, lock_dict):
-        disk_conn.subscription_client.disks.list()
-        lock_dict.update({
-
-        })
-        return lock_dict
 
     @staticmethod
     def get_tier_display(disk_iops_read_write, disk_m_bps_read_write):
