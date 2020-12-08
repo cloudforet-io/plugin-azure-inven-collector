@@ -79,7 +79,9 @@ class DiskManager(AzureManager):
                                                       disk_dict['disk_m_bps_read_write']),
                 # 'lock': lock_dict
             })
-            managed_by = disk_dict.get('managed_by')  # get attached vm's name
+
+            # get attached vm's name
+            managed_by = disk_dict.get('managed_by')
             if managed_by is not None:
                 disk_dict.update({
                     'managedBy': self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
@@ -92,7 +94,8 @@ class DiskManager(AzureManager):
                     'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
                 })
 
-            tags = disk_dict.get('tags')  # update tags
+            # switch tags form
+            tags = disk_dict.get('tags')
             if tags is not None:
                 disk_dict.update({
                     'tags': self.get_tags(disk_dict)

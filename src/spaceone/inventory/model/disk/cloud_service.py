@@ -50,8 +50,8 @@ disk_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
 
 
 disk_meta = CloudServiceMeta.set_layouts([disk_info_meta])
-disk_lock = CloudServiceMeta.set_layouts('Locks', [disk_info_lock])
-disk_tag = CloudServiceMeta.set_layouts('Tags', [disk_info_tags])
+# disk_lock = CloudServiceMeta.set_layouts('Locks', [disk_info_lock])
+# disk_tag = CloudServiceMeta.set_layouts('Tags', disk_info_tags)
 
 
 class ComputeResource(CloudServiceResource):
