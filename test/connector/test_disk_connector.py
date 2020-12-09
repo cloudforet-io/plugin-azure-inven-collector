@@ -3,7 +3,6 @@ import os
 from datetime import datetime, timedelta
 from unittest.mock import patch
 
-import upstream as upstream
 from spaceone.core.unittest.result import print_data
 from spaceone.core.unittest.runner import RichTestRunner
 from spaceone.core import config

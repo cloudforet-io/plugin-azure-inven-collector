@@ -16,7 +16,7 @@ class CloudServiceMeta(BaseMetaData):
 
 
 class CloudServiceResource(Model):
-    provider = StringType(default="google_cloud")
+    provider = StringType(default="azure")
     cloud_service_type = StringType()
     cloud_service_group = StringType()
     data = PolyModelType(Model, default=lambda: {})

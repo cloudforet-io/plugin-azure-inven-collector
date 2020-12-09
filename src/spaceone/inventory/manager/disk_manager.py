@@ -64,41 +64,37 @@ class DiskManager(AzureManager):
                 'encryption': encryption_dict,
                 'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
                                                       disk_dict['disk_m_bps_read_write']),
-                'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
             })
+
+            if 'network_access_policy' in disk_dict:
+                disk_dict.update({
+                    'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
+                })
 
             # get attached vm's name
             managed_by = disk_dict['managed_by']
-            if managed_by is not None:
-                managed_by = self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
-            else:
-                managed_by = ''
-
-            disk_dict.update({
-                    'managed_by': managed_by
+            if managed_by:
+                disk_dict.update({
+                    'managed_by': self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
                 })
 
             # switch tags form
-            tags = disk_dict.get('tags')
-            if tags is not None:
-                tags = self.get_tags(disk_dict)
-            else:
-                tags = []
+            tags = disk_dict.get('tags', {})
             disk_dict.update({
-                'tags': tags
+                'tags': self.convert_tag_format(tags)
             })
 
             disk_data = Disk(disk_dict, strict=False)
-            print("----disk_data----")
-            print(disk_data.to_primitive())
 
             disk_resource = DiskResource({
                 'data': disk_data,
+                'region_code': disk_data.location,
                 'reference': ReferenceModel(disk_data.reference())
             })
 
             # Must set_region_code method for region collection
             self.set_region_code(disk_data['location'])
+            disks.append(DiskResponse({'resource': disk_resource}))
 
         print(f'** Disk Finished {time.time() - start_time} Seconds **')
         return disks
@@ -140,13 +136,3 @@ class DiskManager(AzureManager):
     def get_tier_display(disk_iops_read_write, disk_m_bps_read_write):
         tier_display = str(disk_iops_read_write) + ' IOPS' + ', ' + str(disk_m_bps_read_write) + ' Mbps'
         return tier_display
-
-    @staticmethod
-    def get_tags(disk_dict):
-        tags = []
-        for k, v in disk_dict.get('tags', {}).items():
-            tags.append({
-                'key': k,
-                'value': v
-            })
-        return tags
