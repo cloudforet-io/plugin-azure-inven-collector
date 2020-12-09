@@ -39,7 +39,7 @@ setup(
         'msrestazure',
         'azure-identity',
         'azure-mgmt-resource==15.0.0',
-        'azure-mgmt-compute==17.0.0b1'
+        'azure-mgmt-compute==18.0.0'
     ],
     zip_safe=False,
 )
