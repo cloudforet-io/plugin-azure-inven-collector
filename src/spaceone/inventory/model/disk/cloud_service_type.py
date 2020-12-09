@@ -11,7 +11,7 @@ cst_disk.group = 'Compute'
 cst_disk.labels = ['Compute', 'Storage']
 cst_disk.is_major = True
 cst_disk.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-disk.svg',
+    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk.svg',
     'spaceone:display_name': 'Disk'
 }
 
