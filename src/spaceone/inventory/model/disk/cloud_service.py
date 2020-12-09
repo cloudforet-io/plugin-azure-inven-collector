@@ -15,8 +15,7 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disk', fields=[
     TextDyField.data_source('Size(GiB)', 'data.disk_size_gb'),
     EnumDyField.data_source('Disk State', 'data.disk_state', default_state={
         'safe': ['ActiveSAS', 'ActiveUpload', 'Attached'],
-        'warning':['ReadyToUpload', 'Reserved'],
-        'alert':['Unattached']
+        'warning':['ReadyToUpload', 'Reserved', 'Unattached']
     }),
     TextDyField.data_source('Attached VM', 'data.managed_by'),
     TextDyField.data_source('Location', 'data.location'),
@@ -28,18 +27,10 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disk', fields=[
     TextDyField.data_source('Subscription ID', 'data.subscription_id'),
     TextDyField.data_source('Subscription Name', 'data.subscription_name'),
     TextDyField.data_source('Encryption Type', 'data.encryption.type'),
-    TextDyField.data_source('Networking', 'data.'),
+    TextDyField.data_source('Networking', 'data.network_access_policy_display'),
     DateTimeDyField.data_source('Created Time', 'data.time_created'),
     TextDyField.data_source('Max Shares', 'data.max_shares')
 
-])
-
-# TAB - Locks
-disk_info_lock = TableDynamicLayout.set_fields('Locks', 'data.locks.value', fields=[
-    TextDyField.data_source('Lock Name', 'name'),
-    TextDyField.data_source('Lock Type', 'level_display'),
-    TextDyField.data_source('Lock Scope', 'scope'),
-    TextDyField.data_source('Lock Notes', 'notes')
 ])
 
 # TAB - tags
@@ -50,8 +41,7 @@ disk_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
 
 
 disk_meta = CloudServiceMeta.set_layouts([disk_info_meta])
-# disk_lock = CloudServiceMeta.set_layouts('Locks', [disk_info_lock])
-# disk_tag = CloudServiceMeta.set_layouts('Tags', [disk_info_tags])
+disk_tag = CloudServiceMeta.set_layouts([disk_info_tags])
 
 
 class ComputeResource(CloudServiceResource):

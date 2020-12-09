@@ -14,7 +14,7 @@ class ImageDiskReference(Model):
 
 
 class CreationData(Model):
-    creation_option = StringType(choices=('Attach', 'Copy', 'Empty', 'FromImage', 'Import', 'Restore', 'Upload'))
+    creation_option = StringType(choices=('Attach', 'Copy', 'Empty', 'FromImage', 'Import', 'Restore', 'Upload'), serialize_when_none=False)
     gallery_image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
     image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
     logical_sector_size = IntType(serialize_when_none=False)
@@ -60,34 +60,13 @@ class Tags(Model):
     value = StringType()
 
 
-class LockLevel(Model):
-    can_not_delete = StringType()
-    not_specified = StringType()
-    read_only = StringType()
-
-
-class ManagementLockObject(Model):
-    id = StringType()
-    name = StringType()
-    level = ModelType(LockLevel)
-    level_display = StringType()
-    notes = StringType()
-    properties_owners = ListType(StringType())
-    type = StringType()
-
-
-class Lock(Model):
-    next_link = StringType()
-    value = ModelType(ManagementLockObject)
-
-
 class Disk(Model):
     name = StringType()
     id = StringType()
     type = StringType()
     resource_group = StringType()
     location = StringType()
-    managed_by = StringType(serialize_when_none=False)
+    managed_by = StringType(default='')
     managed_by_extended = ListType(StringType, serialize_when_none=False)
     max_shares = IntType(serialize_when_none=False, default=0)
     sku = ModelType(Sku)
@@ -97,7 +76,7 @@ class Disk(Model):
     disk_iops_read_only = BooleanType(serialize_when_none=False)
     disk_size_bytes = IntType()
     size = IntType()  # disk size for statistics
-    encryption_settings_collection = ModelType(EncryptionSettingsCollection)
+    encryption_settings_collection = ModelType(EncryptionSettingsCollection, serialize_when_none=False)
     encryption = ModelType(Encryption)
     hyper_v_generation = StringType(serialize_when_none=False)
     time_created = DateTimeType()
@@ -109,7 +88,6 @@ class Disk(Model):
     disk_m_bps_read_write = IntType()
     subscription_id = StringType()
     subscription_name = StringType()
-    # locks = ListType(ModelType(Lock), serialize_when_none=False)
     disk_m_bps_read_only = BooleanType(serialize_when_none=False)
     disk_state = StringType(choices=('ActiveSAS', 'ActiveUpload', 'Attached', 'ReadyToUpload', 'Reserved', 'Unattached'))
     network_access_policy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'), serialize_when_none=False)
