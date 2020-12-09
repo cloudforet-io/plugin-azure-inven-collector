@@ -4,7 +4,6 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource import SubscriptionClient
-from azure.mgmt.network import NetworkManagementClient
 
 from spaceone.core.error import *
 from spaceone.core.connector import BaseConnector
@@ -32,7 +31,6 @@ class AzureConnector(BaseConnector):
         self.compute_client = None
         self.resource_client = None
         self.subscription_client = None
-        self.network_client = None
 
     def set_connect(self, secret_data):
         subscription_id = secret_data['subscription_id']
