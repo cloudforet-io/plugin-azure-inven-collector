@@ -122,6 +122,19 @@ class AzureManager(BaseManager):
             self.collected_region_codes.append(region)
 
     @staticmethod
+    def convert_tag_format(tags):
+        convert_tags = []
+
+        if tags:
+            for k, v in tags.items():
+                convert_tags.append({
+                    'key': k,
+                    'value': v
+                })
+
+        return convert_tags
+
+    @staticmethod
     def match_region_info(region_code):
         match_region_info = REGION_INFO.get(region_code)
 
