@@ -1,6 +1,5 @@
 spaceone-core
 spaceone-api
-docker
 schematics
 
 adal
@@ -9,4 +8,3 @@ msrestazure
 azure-identity
 azure-mgmt-resource==15.0.0
 azure-mgmt-compute==18.0.0
-azure-mgmt-network==17.0.0
