@@ -20,6 +20,11 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Storage Account Type', 'data.sku.name'),
         TextDyField.data_source('Size(GiB)', 'data.disk_size_gb'),
+        EnumDyField.data_source('Disk State', 'data.disk_state', default_state={
+            'safe': ['ActiveSAS', 'ActiveUpload', 'Attached', 'Reserved'],
+            'warning': ['ReadyToUpload'],
+            'available': ['Unattached']
+        }),
         TextDyField.data_source('Owner', 'data.managed_by'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
