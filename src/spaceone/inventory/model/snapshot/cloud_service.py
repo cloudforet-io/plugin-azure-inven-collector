@@ -29,9 +29,7 @@ snapshot_info_meta = ItemDynamicLayout.set_fields('Snapshot', fields=[
     TextDyField.data_source('Subscription Name', 'data.subscription_name'),
     TextDyField.data_source('Encryption Type', 'data.encryption.type_display'),
     TextDyField.data_source('Network Access Policy', 'data.network_access_policy_display'),
-    DateTimeDyField.data_source('Created Time', 'data.time_created'),
-    TextDyField.data_source('Max Shares', 'data.max_shares')
-
+    DateTimeDyField.data_source('Created Time', 'data.time_created')
 ])
 
 # TAB - tags
