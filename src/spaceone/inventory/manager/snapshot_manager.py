@@ -74,9 +74,6 @@ class SnapshotManager(AzureManager):
                 encryption_dict.update({
                     'type_display': encryption_type
                 })
-            print("-----")
-            print("encryption_dict")
-            print(encryption_dict)
 
             # update snapshot_dict
             snapshot_dict.update({
