@@ -4,7 +4,7 @@ from spaceone.inventory.model.snapshot.cloud_service import *
 from spaceone.inventory.model.disk.cloud_service import *
 from spaceone.inventory.connector.snapshot import SnapshotConnector
 from spaceone.inventory.connector.subscription import SubscriptionConnector
-from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.snapshot.cloud_service_type import CLOUD_SERVICE_TYPES
 from datetime import datetime
 import time
 
@@ -60,9 +60,10 @@ class SnapshotManager(AzureManager):
                 creation_data_dict.update({
                     'gallery_image_reference': gallery_image_dict
                 })
+
             # update encryption_dict type to user-friendly words
             # (ex.EncryptionAtRestWithPlatformKey -> Platform-managed key...)
-            if snapshot.encryption.type in encryption_dict:
+            if snapshot.encryption.type is not None:
                 if snapshot.encryption.type == 'EncryptionAtRestWithPlatformKey':
                     encryption_type = 'Platform-managed key'
                 elif snapshot.encryption.type == 'EncryptionAtRestWithPlatformAndCustomerKeys':
@@ -73,6 +74,9 @@ class SnapshotManager(AzureManager):
                 encryption_dict.update({
                     'type_display': encryption_type
                 })
+            print("-----")
+            print("encryption_dict")
+            print(encryption_dict)
 
             # update snapshot_dict
             snapshot_dict.update({
@@ -123,7 +127,7 @@ class SnapshotManager(AzureManager):
             self.set_region_code(snapshot_data['location'])
             snapshots.append(SnapshotResponse({'resource': snapshot_resource}))
 
-        print(f'** Disk Finished {time.time() - start_time} Seconds **')
+        print(f'** Snapshot Finished {time.time() - start_time} Seconds **')
         return snapshots
 
     @staticmethod
