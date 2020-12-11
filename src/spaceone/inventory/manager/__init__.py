@@ -1,2 +1,3 @@
 from spaceone.inventory.manager.disk_manager import DiskManager
 from spaceone.inventory.manager.subscription_manager import SubscriptionManager
+from spaceone.inventory.manager.snapshot_manager import SnapshotManager
