@@ -51,5 +51,5 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_disk}),
+    CloudServiceTypeResponse({'resource': cst_disk})
 ]
