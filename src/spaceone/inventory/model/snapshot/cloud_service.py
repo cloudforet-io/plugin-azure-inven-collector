@@ -15,7 +15,7 @@ snapshot_info_meta = ItemDynamicLayout.set_fields('Snapshot', fields=[
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Storage Type', 'data.sku.name'),
     TextDyField.data_source('Size(GiB)', 'data.disk_size_gb'),
-    TextDyField.data_source('Source Disk', 'data.source_disk'),
+    TextDyField.data_source('Source Disk', 'data.source_disk_name'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -29,9 +29,7 @@ snapshot_info_meta = ItemDynamicLayout.set_fields('Snapshot', fields=[
     TextDyField.data_source('Subscription Name', 'data.subscription_name'),
     TextDyField.data_source('Encryption Type', 'data.encryption.type_display'),
     TextDyField.data_source('Network Access Policy', 'data.network_access_policy_display'),
-    DateTimeDyField.data_source('Created Time', 'data.time_created'),
-    TextDyField.data_source('Max Shares', 'data.max_shares')
-
+    DateTimeDyField.data_source('Created Time', 'data.time_created')
 ])
 
 # TAB - tags
