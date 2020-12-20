@@ -29,8 +29,12 @@ class SnapshotManager(AzureManager):
             CloudServiceResponse
         """
         secret_data = params['secret_data']
-        subscription_info = params['subscription_info']
-
+        # subscription_info = params['subscription_info']
+        subscription_info = {
+            'subscription_id': '3ec64e1e-1ce8-4f2c-82a0-a7f6db0899ca',
+            'subscription_name': 'Azure subscription 1',
+            'tenant_id': '35f43e22-0c0b-4ff3-90aa-b2c04ef1054c'
+        }
         snapshot_conn: SnapshotConnector = self.locator.get_connector(self.connector_name, **params)
         snapshots = []
         for snapshot in snapshot_conn.list_snapshots():
