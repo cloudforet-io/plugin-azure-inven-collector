@@ -16,9 +16,9 @@ class AdditionalCapabilities(Model):
 
 
 class AdditionalUnattendedContent(Model):  # belongs to VmScaleSet
-    component_name = StringType(choices='Microsoft-Windows-Shell-Setup', serialize_when_none=False)
+    component_name = StringType(choices=('Microsoft-Windows-Shell-Setup', ''), serialize_when_none=False)
     content = StringType(serialize_when_none=False)
-    pass_name = StringType(choices='OobeSystem', serialize_when_none=False)
+    pass_name = StringType(choices=('OobeSystem', ''), serialize_when_none=False)
     setting_name = StringType(choices=('AutoLogon', 'FirstLogonCommands'), serialize_when_none=False)
 
 
@@ -78,7 +78,7 @@ class SshPublicKey(Model):  # belongs to VmScaleSet >> LinuxConfiguration >> Ssh
 
 
 class SshConfiguration(Model):  # belongs to VmScaleSet >> LinuxConfiguration
-    public_keys = ListType(SshPublicKey, serialize_when_none=False)
+    public_keys = ModelType(SshPublicKey)
 
 
 class LinuxConfiguration(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetOSProfile
@@ -100,11 +100,6 @@ class Plan(Model):  # belongs to VmScaleSet
     product = StringType(serialize_when_none=False)
     promotion_code = StringType(serialize_when_none=False)
     publisher = StringType(serialize_when_none=False)
-
-
-class ResourceIdentityType(Model):
-    resource_identity_type = StringType(choices=('None', 'SystemAssigned', 'SystemAssigned, UserAssigned',
-                                                 'UserAssigned'), serialize_when_none=False)
 
 
 class RollingUpgradePolicy(Model):  # belongs to VmScaleSet >> UpgradePolicy
@@ -155,7 +150,7 @@ class WinRMListener(Model):
 
 class WinRMConfiguration(Model):
     # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile >> WindowsConfiguration
-    listeners = ListType(WinRMListener, serialize_when_none=False)
+    listeners = ListType(ModelType(WinRMListener), serialize_when_none=False)
 
 
 class WindowsConfiguration(Model):
@@ -176,14 +171,14 @@ class VaultCertificate(Model):
 
 class VaultSecretGroup(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
     source_vault = ModelType(SubResource, serialize_when_none=False)
-    vault_certificates = ListType(VaultCertificate, serialize_when_none=False)
+    vault_certificates = ListType(ModelType(VaultCertificate), serialize_when_none=False)
 
 
 class VirtualMachineScaleSetManagedDiskParameters(Model):
     # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
     # >> VirtualMachineScaleSetStorageProfile >> VirtualMachineScaleSetDataDisk
-    disk_encryption_set_parameters = ModelType(DiskEncryptionSetParameters, serialize_when_none=False)
-
+    disk_encryption_set = ModelType(DiskEncryptionSetParameters, serialize_when_none=False)
+    storage_account_type = StringType(serialize_when_none=False)
 
 class VirtualMachineScaleSetDataDisk(Model):
     # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile >> VirtualMachineScaleSetStorageProfile
@@ -217,14 +212,15 @@ class VirtualMachineScaleSetExtension(Model):
 
 class VirtualMachineScaleSetExtensionProfile(Model):
     # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
-    extensions = ListType(VirtualMachineScaleSetExtension, serialize_when_none=False)
+    extensions = ListType(ModelType(VirtualMachineScaleSetExtension), serialize_when_none=False)
     extensions_time_budget = StringType(serialize_when_none=False)  # ISO 8601 format
 
 
 class VirtualMachineScaleSetIdentity(Model):  # belongs to VmScaleSet
     principal_id = StringType(serialize_when_none=False)
     tenant_id = StringType(serialize_when_none=False)
-    type = ModelType(ResourceIdentityType, serialize_when_none=False)
+    type = StringType(choices=(None, 'SystemAssigned', ' SystemAssigned, UserAssigned', 'UserAssigned'),
+                      serialize_when_none=False)
     user_assigned_identities = StringType(serialize_when_none=False)
 
 
@@ -250,7 +246,7 @@ class VirtualMachineScaleSetPublicIPAddressConfiguration(Model):
     name = StringType()
     dns_settings = ModelType(VirtualMachineScaleSetPublicIPAddressConfigurationDnsSettings, serialize_when_none=False)
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
-    ip_tags = ListType(VirtualMachineScaleSetIpTag, serialize_when_none=False)
+    ip_tags = ListType(ModelType(VirtualMachineScaleSetIpTag), serialize_when_none=False)
     public_ip_address_version = StringType(choices=('IPv4', 'IPv6'), default='IPv4')
     public_ip_prefix = ModelType(SubResource, serialize_when_none=False)
 
@@ -260,9 +256,9 @@ class VirtualMachineScaleSetIPConfiguration(Model):
     #                       >> VirtualMachineScaleSetNetworkProfile >> VirtualMachineScaleSetNetworkConfiguration
     id = StringType()
     name = StringType()
-    application_gateway_backend_address_pools = ListType(SubResource, serialize_when_none=False)
-    load_balancer_backend_address_pools = ListType(SubResource, serialize_when_none=False)
-    load_balancer_inbound_nat_pools = ListType(SubResource, serialize_when_none=False)
+    application_gateway_backend_address_pools = ListType(ModelType(SubResource), serialize_when_none=False)
+    load_balancer_backend_address_pools = ListType(ModelType(SubResource), serialize_when_none=False)
+    load_balancer_inbound_nat_pools = ListType(ModelType(SubResource), serialize_when_none=False)
     primary = BooleanType(serialize_when_none=False)
     private_ip_address_version = StringType(choices=('IPv4', 'IPv6'), default='IPv4')
     public_ip_address_configuration = ModelType(VirtualMachineScaleSetPublicIPAddressConfiguration,
@@ -283,14 +279,14 @@ class VirtualMachineScaleSetNetworkConfiguration(Model):
     dns_settings = ModelType(VirtualMachineScaleSetNetworkConfigurationDNSSettings, serialize_when_none=False)
     enable_accelerated_networking = BooleanType(serialize_when_none=False)
     enable_ip_forwarding = BooleanType(serialize_when_none=False)
-    ip_configurations = ListType(VirtualMachineScaleSetIPConfiguration, serialize_when_none=False)
+    ip_configurations = ListType(ModelType(VirtualMachineScaleSetIPConfiguration), serialize_when_none=False)
     network_security_group = ModelType(SubResource, serialize_when_none=False)
 
 
 class VirtualMachineScaleSetNetworkProfile(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
     # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
     health_probe = ModelType(ApiEntityReference, serialize_when_none=False)
-    network_interface_configurations = ListType(VirtualMachineScaleSetNetworkConfiguration, serialize_when_none=False)
+    network_interface_configurations = ListType(ModelType(VirtualMachineScaleSetNetworkConfiguration), serialize_when_none=False)
 
 
 class VirtualHardDisk(Model):
@@ -314,7 +310,7 @@ class VirtualMachineScaleSetOSDisk(Model):
 
 
 class VirtualMachineScaleSetStorageProfile(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
-    data_disks = ListType(VirtualMachineScaleSetDataDisk, serialize_when_none=False)
+    data_disks = ListType(ModelType(VirtualMachineScaleSetDataDisk), serialize_when_none=False)
     image_reference = ModelType(ImageReference, serialize_when_none=False)
     os_disk = ModelType(VirtualMachineScaleSetOSDisk, serialize_when_none=False)
 
@@ -325,7 +321,7 @@ class VirtualMachineScaleSetOSProfile(Model):  # belongs to VmScaleSet >> Virtua
     computer_name_prefix = StringType()
     custom_data = StringType(serialize_when_none=False)
     linux_configuration = ModelType(LinuxConfiguration, serialize_when_none=False)
-    secrets = ListType(VaultSecretGroup, serialize_when_none=False)
+    secrets = ListType(ModelType(VaultSecretGroup), serialize_when_none=False)
     windows_configuration = ModelType(WindowsConfiguration, serialize_when_none=False)
 
 
@@ -337,7 +333,7 @@ class VirtualMachineScaleSetVMProfile(Model):  # belongs to VmScaleSet
     license_type = StringType(choices=('Windows_Client', 'Windows_Server', 'RHEL_BYOS', 'SLES_BYOS'))
     os_profile = ModelType(VirtualMachineScaleSetOSProfile, serialize_when_none=False)
     network_profile = ModelType(VirtualMachineScaleSetNetworkProfile, serialize_when_none=False)
-    priority = ModelType(choices=('Low', 'Regular', 'Spot'), serialize_when_none=False)
+    priority = StringType(choices=('Low', 'Regular', 'Spot'), serialize_when_none=False)
     scheduled_events_profile = ModelType(ScheduledEventsProfile, serialize_when_none=False)
     security_profile = ModelType(SecurityProfile, serialize_when_none=False)
     storage_profile = ModelType(VirtualMachineScaleSetStorageProfile, serialize_when_none=False)
@@ -348,25 +344,30 @@ class Vms(Model):
     name = StringType()
 '''
 
-class VmScaleSet(Model):
 
+class VmScaleSet(Model):
     # vm_instances = ListType(ModelType(Vms))  # ##vm list
     id = StringType()
     subscription_id = StringType()
     subscription_name = StringType()
     identity = ModelType(VirtualMachineScaleSetIdentity, serialize_when_none=False)
+    instance_num = IntType()
+    status = StringType()
     resource_group = StringType()
     location = StringType()
     name = StringType()
     plan = ModelType(Plan, serialize_when_none=False)
     additional_capabilities = ModelType(AdditionalCapabilities, serialize_when_none=False)
     automatic_repairs_policy = ModelType(AutomaticRepairsPolicy, serialize_when_none=False)
+    automatic_repairs_policy_display = StringType(serialize_when_none=False, default='Disabled')
     do_not_run_extensions_on_overprovisioned_vms = BooleanType(serialize_when_none=False)
     host_group = ModelType(SubResource, serialize_when_none=False)
-    over_provision = BooleanType(default=True)
+    overprovision = BooleanType(default=True)
+    overprovision_display = StringType(serialize_when_none=True)
     platform_fault_domain_count = IntType(default=5)
     provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
     proximity_placement_group = ModelType(SubResource, serialize_when_none=False)
+    proximity_placement_group_name = StringType(serialize_when_none=False)
     scale_in_policy = ModelType(ScaleInPolicy, serialize_when_none=False)
     single_placement_group = BooleanType(serialize_when_none=False)
     storage_account_types = StringType(choices=('Premium_LRS', 'StandardSSD_LRS', 'Standard_LRS', 'UltraSSD_LRS'),
@@ -377,7 +378,7 @@ class VmScaleSet(Model):
     zone_balance = BooleanType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ListType(ModelType(Tags), default=[])
-    zones = ListType(StringType(), serialize_when_none=False)
+    zones = ListType(StringType, serialize_when_none=False)
 
     def reference(self):
         return {

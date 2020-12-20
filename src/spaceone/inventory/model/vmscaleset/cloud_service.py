@@ -1,57 +1,70 @@
 from schematics.types import ModelType, StringType, PolyModelType
 
-from spaceone.inventory.model.disk.data import Disk
+from spaceone.inventory.model.vmscaleset.data import VmScaleSet
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField
-from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout,ListDynamicLayout
+from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, ListDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
 
 '''
-DISK
+VM_SCALE_SET
 '''
 # TAB - Default
-disk_info_meta = ItemDynamicLayout.set_fields('Disk', fields=[
+# TODO : instance termination notification(Configuration Tab), over provisioning, proximity placement group(o),
+#        application health monitoring(Health and repair Tab), Upgrade Policy(Upgrade Policy Tab),
+vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSet', fields=[
     TextDyField.data_source('Name', 'data.name'),
-    TextDyField.data_source('Storage Account Type', 'data.sku.name'),
-    TextDyField.data_source('Size(GiB)', 'data.disk_size_gb'),
-    EnumDyField.data_source('Disk State', 'data.disk_state', default_state={
-        'safe': ['ActiveSAS', 'ActiveUpload', 'Attached', 'Reserved'],
-        'warning':['ReadyToUpload'],
-        'available': ['Unattached']
-    }),
-    TextDyField.data_source('Attached VM', 'data.managed_by'),
-    TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Resource ID', 'data.id'),
-    ListDyField.data_source('Zones', 'data.zones', options={
-        'delimiter': '<br>'
-    }),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
-    TextDyField.data_source('Subscription Name', 'data.subscription_name'),
-    TextDyField.data_source('Encryption Type', 'data.encryption.type'),
-    TextDyField.data_source('Networking', 'data.network_access_policy_display'),
-    DateTimeDyField.data_source('Created Time', 'data.time_created'),
-    TextDyField.data_source('Max Shares', 'data.max_shares')
+    # TextDyField.data_source('Termination Notification', )
+    TextDyField.data_source('OverProvisioning', 'data.overprovision_display'),
+    TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_name'),
+    TextDyField.data_source('Automatic Repairs', 'data.automatic_repairs_policy_display'),
+    TextDyField.data_source('Upgrade Policy', 'data.upgrade_policy.mode')
+
 
 ])
 
 # TAB - tags
-disk_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
+vm_scale_set_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
     TextDyField.data_source('Key', 'key'),
     TextDyField.data_source('Value', 'value')
 ])
 
-disk_meta = CloudServiceMeta.set_layouts([disk_info_meta, disk_info_tags])
+# TAB - Instances
+# TODO : name, computer name, status, health state, provisioning state, protection policy, and latest model
+
+# TAB - Networking
+# TODO : IP Configuration, NEtwork interface(o), Virtual Network(o), Accelerated Networking,
+#        Inbound /Outbound port rules ,Load balancing(Boolean)
+vm_scale_set_info_networking = TableDynamicLayout.set_fields('Networking', 'data.network_profile', fields=[
+    TextDyField.data_source('IP Configuration', 'network_interface_configurations.ip_configurations.name'),
+    TextDyField.data_source('Network Interface', 'network_interface_configurations.name'),
+    TextDyField.data_source('Accelerated Networking', 'network_interface_configurations'
+                                                      '.enable_accelerated_networking_display'),
+    TableDynamicLayout.set_fiels('Load Balancing', 'data.network_profile')
+
+])
+# TAB - Scaling
+
+# TAB - Disks OS Disks and Data Disks
+# TODO : Image reference, Storage Type, Size, MAX iops, max throughput, encryption, host caching
+#      : LUN, Storage Type, Size, MAx iops, max throughput, encryption, host caching
+
+# TAB - Operating System
+# TODO : Operating system, image reference, computer name prefix, adminitrator username,
+#        password authentication, vm agent, enable automatic OS upgrades(x), custom data and cloud init(x)
+vm_scale_set_meta = CloudServiceMeta.set_layouts([vm_scale_set_info_meta, vm_scale_set_info_tags])
 
 
 class ComputeResource(CloudServiceResource):
     cloud_service_group = StringType(default='Compute')
 
 
-class DiskResource(ComputeResource):
-    cloud_service_type = StringType(default='Disk')
-    data = ModelType(Disk)
-    _metadata = ModelType(CloudServiceMeta, default=disk_meta, serialized_name='metadata')
+class VmScaleSetResource(ComputeResource):
+    cloud_service_type = StringType(default='VmScaleSet')
+    data = ModelType(VmScaleSet)
+    _metadata = ModelType(CloudServiceMeta, default=vm_scale_set_meta, serialized_name='metadata')
 
 
-class DiskResponse(CloudServiceResponse):
-    resource = PolyModelType(DiskResource)
+class VmScaleSetResponse(CloudServiceResponse):
+    resource = PolyModelType(VmScaleSetResource)
