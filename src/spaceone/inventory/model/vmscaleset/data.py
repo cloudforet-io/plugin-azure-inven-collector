@@ -29,6 +29,7 @@ class ApiEntityReference(Model):  # belongs to VmScaleSet
 class AutomaticOSUpgradePolicy(Model):  # belongs to VmScaleSet >> UpgradePolicy
     disable_automatic_rollback = BooleanType(default=False)
     enable_automatic_os_upgrade = BooleanType(default=False)
+    enable_automatic_os_upgrade_display = StringType(serialize_when_none=False)
 
 
 class AutomaticRepairsPolicy(Model):  # belongs to VmScaleSet
@@ -84,6 +85,7 @@ class SshConfiguration(Model):  # belongs to VmScaleSet >> LinuxConfiguration
 class LinuxConfiguration(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetOSProfile
     disable_password_authentication = BooleanType(serialize_when_none=False)
     provision_vm_agent = BooleanType(serialize_when_none=False, default=True)
+    provision_vm_agent_display = StringType(serialize_when_none=False)
     ssh = ModelType(SshConfiguration, serialize_when_none=False)
 
 
@@ -281,6 +283,7 @@ class VirtualMachineScaleSetNetworkConfiguration(Model):
     enable_ip_forwarding = BooleanType(serialize_when_none=False)
     ip_configurations = ListType(ModelType(VirtualMachineScaleSetIPConfiguration), serialize_when_none=False)
     network_security_group = ModelType(SubResource, serialize_when_none=False)
+    virtual_network = StringType(serialize_when_none=False)
 
 
 class VirtualMachineScaleSetNetworkProfile(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
@@ -319,7 +322,7 @@ class VirtualMachineScaleSetOSProfile(Model):  # belongs to VmScaleSet >> Virtua
     admin_password = StringType()
     admin_username = StringType()
     computer_name_prefix = StringType()
-    custom_data = StringType(serialize_when_none=False)
+    custom_data = StringType(serialize_when_none=False, default='')
     linux_configuration = ModelType(LinuxConfiguration, serialize_when_none=False)
     secrets = ListType(ModelType(VaultSecretGroup), serialize_when_none=False)
     windows_configuration = ModelType(WindowsConfiguration, serialize_when_none=False)
