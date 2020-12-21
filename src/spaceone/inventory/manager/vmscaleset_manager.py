@@ -104,9 +104,9 @@ class VmScaleSetManager(AzureManager):
             })
 
             # Add Repairs policy to the dictionary to display with user-friendly words.
-            if vm_scale_set.automatic_repairs_policy is not None:
+            if vm_scale_set_dict['automatic_repairs_policy'] is not None:
                 vm_scale_set_dict.update({
-                    'automatic_repairs_policy_display': self.get_automatic_repairs_policy_display(vm_scale_set.automatic_repairs_policy.id)
+                    'automatic_repairs_policy_display': self.get_automatic_repairs_policy_display(vm_scale_set_dict['automatic_repairs_policy']['enabled'])
                 })
 
             print("vm_scale_set_dict")
@@ -188,23 +188,31 @@ class VmScaleSetManager(AzureManager):
     @staticmethod
     def get_upgrade_policy_dict(self, upgrade_policy_object):
 
-        def get_automatic_os_upgrade_policy(automatic_os_upgrade_policy_object):
-            return self.convert_dictionary(upgrade_policy_object.automatic_os_upgrade_policy)
+        def get_automatic_os_upgrade_policy(upgrade_policy_object):
+            def get_automatic_os_upgrade_policy_display(enable_automatic_os_upgrade):
+                if enable_automatic_os_upgrade is True:
+                    enable_automatic_os_upgrade_display = 'Enabled'
+                else:
+                    enable_automatic_os_upgrade_display = 'Disabled'
+                return enable_automatic_os_upgrade_display
 
-        def rolling_upgrade_policy(rolling_upgrade_policy_object):
+            automatic_os_upgrade_policy_dict = self.convert_dictionary(upgrade_policy_object.automatic_os_upgrade_policy)
+            automatic_os_upgrade_policy_dict['automatic_os_upgrade_display'] = get_automatic_os_upgrade_policy_display(automatic_os_upgrade_policy_dict['enable_automatic_os_upgrade'])
+            return automatic_os_upgrade_policy_dict
+
+        def rolling_upgrade_policy(upgrade_policy_object):
             return self.convert_dictionary(upgrade_policy_object.rolling_upgrade_policy)
 
         upgrade_policy_dict = self.convert_dictionary(upgrade_policy_object)
 
         if upgrade_policy_object.automatic_os_upgrade_policy is not None:
             upgrade_policy_dict.update({
-                'automatic_os_upgrade_policy': get_automatic_os_upgrade_policy(
-                    upgrade_policy_object.automatic_os_upgrade_policy)
+                'automatic_os_upgrade_policy': get_automatic_os_upgrade_policy(upgrade_policy_object)
             })
 
         if upgrade_policy_object.rolling_upgrade_policy is not None:
             upgrade_policy_dict.update({
-                'rolling_upgrade_policy': rolling_upgrade_policy(upgrade_policy_object.rolling_upgrade_policy)
+                'rolling_upgrade_policy': rolling_upgrade_policy(upgrade_policy_object)
             })
 
         return upgrade_policy_dict
@@ -241,10 +249,27 @@ class VmScaleSetManager(AzureManager):
 
     @staticmethod
     def get_os_profile_dict(self, os_profile_object):
+        def get_operating_system(os_profile_dictionary):
+            if os_profile_dictionary['linux_configuration'] is None:
+                operating_system = 'Windows'
+            else:
+                operating_system = 'Linux'
+            return operating_system
 
         def get_linux_configuration(linux_configuration_object):
+            def get_vm_agent_display(provision_vm_agent):
+                if provision_vm_agent is True:
+                    provision_vm_agent_display = 'Enabled'
+                else:
+                    provision_vm_agent_display = 'Disabled'
+                return provision_vm_agent_display
+
             if linux_configuration_object is not None:
-                return self.convert_dictionary(linux_configuration_object)
+                linux_configuration_dict = self.convert_dictionary(linux_configuration_object)
+                linux_configuration_dict.update({
+                    'provision_vm_agent_display': get_vm_agent_display(linux_configuration_dict['provision_vm_agent'])
+                })
+                return linux_configuration_dict
 
         def get_windows_configuration(windows_configuration_object):
             if windows_configuration_object is not None:
@@ -280,6 +305,8 @@ class VmScaleSetManager(AzureManager):
             'secrets': get_secrets(os_profile_object.secrets),
             'windows_configuration': get_windows_configuration(os_profile_object.windows_configuration)
         })
+        # get operating system type
+        os_profile_dict['operating_system'] = get_operating_system(os_profile_dict)
         return os_profile_dict
 
     @staticmethod
@@ -390,7 +417,7 @@ class VmScaleSetManager(AzureManager):
                     'network_security_group': get_security_group(network_interface_configuration.network_security_group)
                 })
                 network_interface_configuration_dict['enable_accelerated_networking_display'] = get_enable_accelerated_networking_display(network_interface_configuration_dict['enable_accelerated_networking'])
-
+                network_interface_configuration_dict['vnet'] = network_interface_configuration_dict['name'].split('-')[0]
                 network_interface_configuration_list.append(network_interface_configuration_dict)
             return network_interface_configuration_list
 
@@ -436,17 +463,14 @@ class VmScaleSetManager(AzureManager):
     def get_storage_profile(self, storage_profile_object):
         def get_data_disks(data_disks_object):
             def get_managed_disk(managed_disk_object):
-                managed_disk_dict= self.convert_dictionary(managed_disk_object)
-                managed_disk_dict.update({
-                    'disk_encryption_set_parameters': self.convert_dictionary(managed_disk_object.disk_encryption_set_parameters)
-                })
+                managed_disk_dict = self.convert_dictionary(managed_disk_object)
+                if managed_disk_dict['disk_encryption_set'] is not None:
+                    managed_disk_dict.update({
+                        'disk_encryption_set': self.convert_dictionary(managed_disk_object.disk_encryption_set)
+                    })
+                    # parse disk_encryption_set's name from it's id
+                    managed_disk_dict['disk_encryption_set_display'] = managed_disk_dict['disk_encryption_set']['id'].split('/')[8]
                 return managed_disk_dict
-
-            def get_vhd_containers(vhd_containers_object):
-                vhd_containers_list = list()
-                for vhd_container in vhd_containers_object:
-                    vhd_containers_list.append((self.convert_dictionary(vhd_container)))
-                return vhd_containers_list
 
             data_disks_list = list()
             for data_disk in data_disks_object:
@@ -455,10 +479,7 @@ class VmScaleSetManager(AzureManager):
                     data_disk_dict.update({
                         'managed_disk': get_managed_disk(data_disk_dict['managed_disk'])
                     })
-                if(data_disk_dict['vhd_containers']) is not None:
-                    data_disk_dict.update({
-                        'vhd_containers': get_vhd_containers(data_disk_dict['vhd_containers'])
-                    })
+
                 data_disks_list.append(data_disk_dict)
             return data_disks_list
 
@@ -508,6 +529,8 @@ class VmScaleSetManager(AzureManager):
                 os_disk_dict.update({
                     'vhd_containers': get_vhd_containers(os_disk_dict['vhd_containers'])
                 })
+
+
             return os_disk_dict
 
         storage_profile_dict = self.convert_dictionary(storage_profile_object)
@@ -519,10 +542,17 @@ class VmScaleSetManager(AzureManager):
             storage_profile_dict.update({
                 'image_reference': get_image_reference(storage_profile_dict['image_reference'])
             })
+            # get os_disk spec in listType (for display)
+            image_reference_list = list()
+            for image in storage_profile_dict['image_reference'].items():
+                image_reference_list.append(list(image))
+            storage_profile_dict['os_disk_spec_list'] = image_reference_list
+
         if storage_profile_dict['os_disk'] is not None:
             storage_profile_dict.update({
                 'os_disk': get_os_disk(storage_profile_dict['os_disk'])
             })
+
         return storage_profile_dict
 
     @staticmethod
