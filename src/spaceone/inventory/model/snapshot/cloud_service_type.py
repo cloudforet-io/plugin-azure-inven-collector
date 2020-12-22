@@ -1,5 +1,5 @@
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, DateTimeDyField, ListDyField, \
-    EnumDyField
+    EnumDyField, SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
@@ -17,7 +17,9 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Source disk', 'data.source_disk_name'),
         TextDyField.data_source('Snapshot type', 'data.incremental_display'),
-        TextDyField.data_source('Source disk size(GiB)', 'data.disk_size_gb'),
+        SizeField.data_source('Source disk size', 'data.disk_size_gb', options={
+            'source_unit': 'GB'
+        }),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
