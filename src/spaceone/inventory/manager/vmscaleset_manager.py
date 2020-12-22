@@ -99,8 +99,6 @@ class VmScaleSetManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
                 'virtual_machine_profile': virtual_machine_profile_dict,
                 'overprovision_display': self.get_overprovision_display(vm_scale_set_dict['overprovision']),
-                'instance_num': self.get_instance_num(),
-                'status': self.get_status(),
             })
 
             # Add Repairs policy to the dictionary to display with user-friendly words.
@@ -109,6 +107,20 @@ class VmScaleSetManager(AzureManager):
                     'automatic_repairs_policy_display': self.get_automatic_repairs_policy_display(vm_scale_set_dict['automatic_repairs_policy']['enabled'])
                 })
 
+            # vm instances 리스트 api날려서 dict에다가 instances list로 첨부하기
+            '''
+            vm_instances_list = list()
+            instance_count = 0
+            for vm_instance in vm_scale_set_conn.list_vm_scale_set_vms(vm_scale_set_dict['resource_group'], vm_scale_set_dict['name']):
+                instance_count += 1
+                vm_scale_set_dict.update({
+                    'instance_count': instance_count
+                })
+                vm_instances_dict = self.vm_instances_dict_update(self, self.convert_dictionary(vm_instance))
+                vm_instances_list.append(vm_instances_dict)
+
+            vm_scale_set_dict['vm_instances'] = vm_instances_list
+            '''
             print("vm_scale_set_dict")
             print(vm_scale_set_dict)
 
@@ -530,7 +542,6 @@ class VmScaleSetManager(AzureManager):
                     'vhd_containers': get_vhd_containers(os_disk_dict['vhd_containers'])
                 })
 
-
             return os_disk_dict
 
         storage_profile_dict = self.convert_dictionary(storage_profile_object)
@@ -576,18 +587,6 @@ class VmScaleSetManager(AzureManager):
         return placement_group_name
 
     @staticmethod
-    # TODO: instances number
-    def get_instance_num():
-        return
-
-    @staticmethod
-    # TODO: status function
-    def get_status():
-        return
-
-    #####
-
-    @staticmethod
     def get_network_access_policy(network_access_policy):
         if network_access_policy == 'AllowAll':
             network_access_policy_display = 'Public endpoint (all network)'
@@ -620,21 +619,52 @@ class VmScaleSetManager(AzureManager):
             automatic_repairs_policy_display = 'Disabled'
         return automatic_repairs_policy_display
 
+    @staticmethod
+    def get_instance_count(vm_scale_set_dict):
+        return vm_scale_set_dict['instance_count']
 
-def convert_dictionary_recursive(self, vm_dict):
-    if type(vm_dict) != dict:
-        vm_dict = self.convert_dictionary(vm_dict)
+    # instance dictionary
+    @staticmethod
+    def vm_instances_dict_update(self, vm_instances_dict):
+        def get_computer_name_from_os_profile(os_profile):
+            os_profile_dict = self.convert_dictionary(os_profile)
+            return os_profile_dict['computer_name']
 
-    for k, v in vm_dict.items():
-        # 탈출 조건 아니..? 뭐지/..?
-        if (any(isinstance(i, dict) for i in vm_dict.values())) == False:  # nested dict가 없으면
-            return
+        def get_latest_model_display(latest_model_applied):
+            if latest_model_applied is True:
+                latest_model_display = 'Yes'
+            elif latest_model_applied is False:
+                latest_model_display = 'No'
+            return latest_model_display
 
-        print("dict value type")
-        print(type(vm_dict[k]))
-        if type(vm_dict[k]) is not str:
-            if vm_dict[k]:
-                vm_dict.update({
-                    k: convert_dictionary_recursive(self, vm_dict[k])
+        def get_linux_configuration(linux_configuration_object):
+            if linux_configuration_object is not None:
+                return self.convert_dictionary(linux_configuration_object)
+
+        def get_windows_configuration(windows_configuration_object):
+            if windows_configuration_object is not None:
+                return self.convert_dictionary(windows_configuration_object)
+
+        if vm_instances_dict['os_profile'] is not None:
+            os_profile_dict = self.convert_dictionary(vm_instances_dict['os_profile'])
+
+            # if OS type is Linux
+            if os_profile_dict['linux_configuration'] is not None:
+                os_profile_dict.update({
+                    'linux_configuration': get_linux_configuration(os_profile_dict['linux_configuration'])
                 })
-    return vm_dict
+            # if OS type is Windows
+            if os_profile_dict['windows_configuration'] is not None:
+                os_profile_dict.update({
+                    'windows_configuration': get_windows_configuration(os_profile_dict['windows_configuration'])
+                })
+
+            vm_instances_dict.update({
+                'computer_name': get_computer_name_from_os_profile(vm_instances_dict['os_profile'])
+            })
+        if vm_instances_dict['latest_model_applied'] is not None:
+            vm_instances_dict.update({
+                'latest_model_applied_display': get_latest_model_display(vm_instances_dict['latest_model_applied'])
+            })
+        return vm_instances_dict
+
