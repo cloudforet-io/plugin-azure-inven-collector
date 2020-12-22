@@ -82,6 +82,15 @@ class DateTimeDyFieldOptions(FieldViewOption):
     display_format = StringType(serialize_when_none=False)
 
 
+class ProgressFieldOptions(FieldViewOption):
+    unit = StringType(serialize_when_none=False)
+
+
+class SizeFieldOptions(FieldViewOption):
+    display_unit = StringType(serialize_when_none=False, choices=('BYTES', 'KB', 'MB', 'GB', 'TB', 'PB'))
+    source_unit = StringType(serialize_when_none=False, choices=('BYTES', 'KB', 'MB', 'GB', 'TB', 'PB'))
+
+
 class TextDyField(BaseDynamicField):
     type = StringType(default="text")
     options = PolyModelType(TextDyFieldOptions, serialize_when_none=False)
@@ -303,6 +312,34 @@ class EnumDyField(BaseDynamicField):
 
         if 'reference' in kwargs:
             _data_source.update({'reference': kwargs.get('reference')})
+
+        return cls(_data_source)
+
+
+class ProgressField(BaseDynamicField):
+    type = StringType(default="progress")
+    options = PolyModelType(ProgressFieldOptions, serialize_when_none=False, )
+
+    @classmethod
+    def data_source(cls, name, key, **kwargs):
+        _data_source = {'key': key, 'name': name}
+
+        if 'options' in kwargs:
+            _data_source.update({'options': kwargs.get('options')})
+
+        return cls(_data_source)
+
+
+class SizeField(BaseDynamicField):
+    type = StringType(default="size")
+    options = PolyModelType(SizeFieldOptions, serialize_when_none=False)
+
+    @classmethod
+    def data_source(cls, name, key, **kwargs):
+        _data_source = {'key': key, 'name': name}
+
+        if 'options' in kwargs:
+            _data_source.update({'options': kwargs.get('options')})
 
         return cls(_data_source)
 
