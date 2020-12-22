@@ -31,7 +31,8 @@ class Icon(Model):
 
 
 class BaseField(Model):
-    type = StringType(choices=["text", "state", "badge", "list", "dict", "datetime", "image", "enum"],
+    type = StringType(choices=["text", "state", "badge", "list", "dict",
+                               "datetime", "image", "enum", "progress", "size"],
                       serialize_when_none=False)
     options = PolyModelType([Model, DictType(PolyModelType(Model))], serialize_when_none=False)
 
