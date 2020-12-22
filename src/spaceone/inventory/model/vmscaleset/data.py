@@ -213,7 +213,7 @@ class VirtualMachineScaleSetExtension(Model):
 
 
 class VirtualMachineScaleSetExtensionProfile(Model):
-    # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
+    # belongs to VmScaleSet >> VirtualMachineScaleㄷSetVMProfile
     extensions = ListType(ModelType(VirtualMachineScaleSetExtension), serialize_when_none=False)
     extensions_time_budget = StringType(serialize_when_none=False)  # ISO 8601 format
 
@@ -342,19 +342,45 @@ class VirtualMachineScaleSetVMProfile(Model):  # belongs to VmScaleSet
     storage_profile = ModelType(VirtualMachineScaleSetStorageProfile, serialize_when_none=False)
 
 
-'''
-class Vms(Model):
+class OSProfile(Model):  # belongs to VirtualMachineScaleSetVM
+    admin_username = StringType(serialize_when_none=False)
+    allow_extension_operations = BooleanType(serialize_when_none=False)
+    computer_name = StringType(serialize_when_none=False)
+    custom_data = StringType(serialize_when_none=False)
+    linux_configuration = ModelType(LinuxConfiguration, serialize_when_none=False)
+    windows_configuration = ModelType(WindowsConfiguration, serialize_when_none=False)
+    require_guest_provision_signal = BooleanType(serialize_when_none=False)
+    secrets = ListType(ModelType(VaultSecretGroup), serialize_when_none=False)
+
+
+class VirtualMachineScaleSetOSProtectionPolicy(Model):
+    protect_from_scale_in = BooleanType(serialize_when_none=False)
+    protect_from_scale_set_actions = BooleanType(serialize_when_none=False)
+    protection_policy_display = StringType(serialize_when_none=False)
+
+
+class VirtualMachineScaleSetVM(Model):
     name = StringType()
-'''
+    id = StringType()
+    location = StringType()
+    latest_model_applied = BooleanType(default=True, serialize_when_none=False)
+    latest_model_applied_display = StringType(serialize_when_none=False)
+    licence_type = StringType(serialize_when_none=False)
+    os_profile = ModelType(OSProfile, serialize_when_none=False)
+    protection_policy = ModelType(VirtualMachineScaleSetOSProtectionPolicy, serialize_when_none=False)
+    provisioning_state = StringType(serialize_when_none=False)
+    vm_id = StringType(serialize_when_none=False)
+    sku = ModelType(Sku, serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    zones = ListType(StringType, serialize_when_none=False)
 
 
 class VmScaleSet(Model):
-    # vm_instances = ListType(ModelType(Vms))  # ##vm list
     id = StringType()
     subscription_id = StringType()
     subscription_name = StringType()
     identity = ModelType(VirtualMachineScaleSetIdentity, serialize_when_none=False)
-    instance_num = IntType()
+    instance_count = IntType(default=0)
     status = StringType()
     resource_group = StringType()
     location = StringType()
@@ -367,7 +393,7 @@ class VmScaleSet(Model):
     host_group = ModelType(SubResource, serialize_when_none=False)
     overprovision = BooleanType(default=True)
     overprovision_display = StringType(serialize_when_none=True)
-    platform_fault_domain_count = IntType(default=5)
+    platform_fault_domain_count = IntType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
     proximity_placement_group = ModelType(SubResource, serialize_when_none=False)
     proximity_placement_group_name = StringType(serialize_when_none=False)
@@ -382,6 +408,7 @@ class VmScaleSet(Model):
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ListType(ModelType(Tags), default=[])
     zones = ListType(StringType, serialize_when_none=False)
+    vm_instances = ListType(ModelType(VirtualMachineScaleSetVM), serialize_when_none=False)
 
     def reference(self):
         return {
