@@ -9,7 +9,7 @@ from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, C
 VM_SCALE_SET
 '''
 # TAB - Default
-# TODO : instance termination notification(Configuration Tab), over provisioning, proximity placement group(o),
+# TODO : instance termination notification(Configuration Tab), over provisioning, proximity placement group, Termination Notification(x)
 #        application health monitoring(Health and repair Tab), Upgrade Policy(Upgrade Policy Tab),
 vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSet', fields=[
     TextDyField.data_source('Name', 'data.name'),
@@ -31,11 +31,25 @@ vm_scale_set_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fiel
 ])
 
 # TAB - Instances
-# TODO : name, computer name, status, health state, provisioning state, protection policy, and latest model
+# TODO : name, computer name, location, status(x), health state(x), provisioning state, fault domain,
+#       protection policy, and latest model
+vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_instances', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Computer Name', 'os_profile.computer_name'),
+    TextDyField.data_source('Location', 'location'),
+    TextDyField.data_source('Fault Domain', ''),
+    # TextDyField.data_source('Status', ''),
+    # TextDyField.data_source('Health State', ''),
+    TextDyField.data_source('Provisioning State', 'provisioning_state'),
+    TextDyField.data_source('Protection Policy', 'protection_policy'),
+    TextDyField.data_source('Latest Model', 'latest_model_applied_display'),
+    TextDyField.data_source('Virtual Network', '')
+])
+
 
 # TAB - Networking
-# TODO : IP Configuration, NEtwork interface(o), Virtual Network(o), Accelerated Networking,
-#        Inbound /Outbound port rules ,Load balancing(x)
+# TODO : IP Configuration, Network interface, Virtual Network, Accelerated Networking,
+#        Inbound /Outbound port rules , Load balancing(x)
 vm_scale_set_info_networking = ItemDynamicLayout.set_fields('Networking', 'data.network_profile', fields=[
     TextDyField.data_source('IP Configuration', 'network_interface_configurations.ip_configurations.name'),
     TextDyField.data_source('Network Interface', 'network_interface_configurations.name'),
