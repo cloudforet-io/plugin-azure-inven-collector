@@ -1,7 +1,7 @@
 from schematics.types import ModelType, StringType, PolyModelType
 
 from spaceone.inventory.model.vmscaleset.data import VmScaleSet
-from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField, SizeField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
 
@@ -72,14 +72,18 @@ vm_scale_set_info_scaling = ItemDynamicLayout.set_fields('Scaling', fields=[
 os_disk = SimpleTableDynamicLayout.set_fields('OS Disk', 'data.storage_profile', fields=[
     TextDyField.data_source('Image Reference', 'image_reference.id'),
     TextDyField.data_source('Storage Type', 'os_disk.managed_disk.storage_account_type'),
-    TextDyField.data_source('Size (GiB)', 'os_disk.disk_size_gb'),
+    SizeField.data_source('Size', 'os_disk.disk_size_gb', options={
+        'source_unit': 'GB'
+    }),
     TextDyField.data_source('Host Caching', 'os_disk.caching')
 
 ])
 data_disks = SimpleTableDynamicLayout.set_fields('Data Disks', 'data.storage_profile', fields=[
     TextDyField.data_source('LUN', 'data_disks.lun'),
     TextDyField.data_source('Storage Type', 'data_disks.managed_disk.storage_account_type'),
-    TextDyField.data_source('Size (GiB)', 'data_disks.disk_size_gb'),
+    SizeField.data_source('Size', 'data_disks.disk_size_gb', options={
+        'source_unit': 'GB'
+    }),
     TextDyField.data_source('Max IOPS', 'data_disks.disk_iops_read_write'),
     TextDyField.data_source('MAX Throughput(MBps)', 'data_disks.disk_m_bps_read_write'),
     TextDyField.data_source('Encryption', 'data_disks.disk_encryption_set_display'),
