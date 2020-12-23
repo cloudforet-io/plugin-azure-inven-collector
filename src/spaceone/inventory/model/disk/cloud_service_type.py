@@ -1,5 +1,5 @@
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, DateTimeDyField, ListDyField, \
-    EnumDyField
+    EnumDyField, SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
@@ -19,7 +19,7 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Storage Account Type', 'data.sku.name'),
-        TextDyField.data_source('Size(GiB)', 'data.disk_size_gb'),
+        SizeField.data_source('Size', 'data.size'),
         EnumDyField.data_source('Disk State', 'data.disk_state', default_state={
             'safe': ['ActiveSAS', 'ActiveUpload', 'Attached', 'Reserved'],
             'warning': ['ReadyToUpload'],
@@ -40,7 +40,7 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Location', key='data.location', data_type='string'),
         SearchField.set(name='Zone', key='data.zones', data_type='string'),
         SearchField.set(name='Storage Account Type', key='data.sku.name', data_type='string'),
-        SearchField.set(name='Disk Size(GiB)', key='data.disk_size_gb', data_type='integer'),
+        SearchField.set(name ='Disk Size', key='data.disk_size_gb', data_type='integer'),
         SearchField.set(name='Disk IOPS', key='data.disk_iops_read_write', data_type='integer'),
         SearchField.set(name='OS Type', key='data.os_type', data_type='string'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
