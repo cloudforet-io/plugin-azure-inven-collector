@@ -12,9 +12,7 @@ DISK
 disk_info_meta = ItemDynamicLayout.set_fields('Disk', fields=[
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Storage Account Type', 'data.sku.name'),
-    SizeField.data_source('Size', 'data.disk_size_gb', options={
-        'source_unit': 'GB'
-    }),
+    SizeField.data_source('Size', 'data.disk_size_gb'),
     EnumDyField.data_source('Disk State', 'data.disk_state', default_state={
         'safe': ['ActiveSAS', 'ActiveUpload', 'Attached', 'Reserved'],
         'warning':['ReadyToUpload'],
