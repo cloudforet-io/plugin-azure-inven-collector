@@ -14,7 +14,7 @@ snapshot_info_meta = ItemDynamicLayout.set_fields('Snapshot', fields=[
 
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Storage Type', 'data.sku.name'),
-    SizeField.data_source('Size', 'data.disk_size_gb'),
+    SizeField.data_source('Size', 'data.size'),
     TextDyField.data_source('Source Disk', 'data.source_disk_name'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Resource ID', 'data.id'),
