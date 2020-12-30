@@ -7,6 +7,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 cst_snapshot = CloudServiceTypeResource()
 cst_snapshot.name = 'Snapshot'
 cst_snapshot.group = 'Compute'
+cst_snapshot.service_code = 'Microsoft.Compute/snapshots'
 cst_snapshot.labels = ['Compute', 'Storage']
 cst_snapshot.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk-snapshot.svg',
