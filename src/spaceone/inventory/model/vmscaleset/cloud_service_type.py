@@ -6,7 +6,8 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 cst_vm_scale_set = CloudServiceTypeResource()
 cst_vm_scale_set.name = 'VmScaleSet'
-cst_vm_scale_set.group = 'Compute'
+cst_vm_scale_set.group = 'Compute',
+cst_vm_scale_set.service_code = 'Microsoft.Compute/virtualMachineScaleSets'
 cst_vm_scale_set.labels = ['Compute', 'Storage']
 cst_vm_scale_set.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-vm-scale-set.svg',
