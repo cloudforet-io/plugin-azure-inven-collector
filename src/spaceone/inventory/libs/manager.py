@@ -78,6 +78,7 @@ REGION_INFO = {
                         'tags': {'latitude': '-22.90278', 'longitude': '-43.2075'}},
 }
 
+
 class AzureManager(BaseManager):
     connector_name = None
     cloud_service_types = []
@@ -150,3 +151,24 @@ class AzureManager(BaseManager):
     @staticmethod
     def convert_dictionary(obj):
         return vars(obj)
+
+    @staticmethod
+    def convert_dictionary_recursive(self, vm_dict):
+        for k, v in vm_dict.items():
+            if isinstance(v, object):           # case 1: object 인가?
+                if v:                           # case 2: v 가 비어있는가? nested dict가 있으면(vm_converse_dict[k]), additional 처럼 {} 비어있는 애 있을 수 있음
+                    if isinstance(v, list):     # case 3-1: object가 list인 경우
+                        for list_obj in v:
+                            vm_converse_list = list()
+                            if hasattr(list_obj, '__dict__'):
+                                vm_converse_dict = self.convert_dictionary_recursive(self, self.convert_dictionary(list_obj))
+                                vm_converse_list.append(vm_converse_dict)
+                        vm_dict[k] = vm_converse_list
+
+                    if hasattr(v, '__dict__'):  # case 3-2: 평범 obj 인 경우
+                        vm_converse_dict = self.convert_dictionary_recursive(self, self.convert_dictionary(v))
+                        vm_dict[k] = vm_converse_dict
+
+        # print("This is result-vm_dict")
+        # print(vm_dict)
+        return vm_dict
