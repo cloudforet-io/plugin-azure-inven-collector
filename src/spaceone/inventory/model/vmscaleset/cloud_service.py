@@ -1,6 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType
 
-from spaceone.inventory.model.vmscaleset.data import VmScaleSet
+from spaceone.inventory.model.vmscaleset.data import VirtualMachineScaleSet
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField, SizeField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
@@ -13,13 +13,13 @@ VM_SCALE_SET
 #        application health monitoring(Health and repair Tab), Upgrade Policy(Upgrade Policy Tab),
 vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSet', fields=[
     TextDyField.data_source('Name', 'data.name'),
-    TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Resource ID', 'data.id'),
+    TextDyField.data_source('Resource Group', 'data.resource_group'),
     # TextDyField.data_source('Termination Notification', )
-    TextDyField.data_source('OverProvisioning', 'data.overprovision_display'),
-    TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_name'),
+    TextDyField.data_source('OverProvisioning', 'data.overprovision'),
+    TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_display'),
     TextDyField.data_source('Automatic Repairs', 'data.automatic_repairs_policy_display'),
-    TextDyField.data_source('Upgrade Policy', 'data.upgrade_policy.mode')
+    # TextDyField.data_source('Upgrade Policy', 'data.upgrade_policy.mode')
 
 
 ])
@@ -42,21 +42,21 @@ vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_inst
     # TextDyField.data_source('Health State', ''),
     TextDyField.data_source('Provisioning State', 'provisioning_state'),
     TextDyField.data_source('Protection Policy', 'protection_policy'),
-    TextDyField.data_source('Latest Model', 'latest_model_applied_display'),
+    TextDyField.data_source('Latest Model', 'latest_model_applied'),
     TextDyField.data_source('Virtual Network', '')
 ])
-
-
+'''
 # TAB - Networking
 # TODO : IP Configuration, Network interface, Virtual Network, Accelerated Networking,
 #        Inbound /Outbound port rules , Load balancing(x)
-vm_scale_set_info_networking = ItemDynamicLayout.set_fields('Networking', 'data.network_profile', fields=[
+vm_scale_set_info_networking = ItemDynamicLayout.set_fields('Networking', 'data.virtual_machine_profile.network_profile', fields=[
     TextDyField.data_source('IP Configuration', 'network_interface_configurations.ip_configurations.name'),
     TextDyField.data_source('Network Interface', 'network_interface_configurations.name'),
     TextDyField.data_source('Virtual Network', 'network_interface_configurations.virtual_network'),
     TextDyField.data_source('Accelerated Networking', 'network_interface_configurations'
                                                       '.enable_accelerated_networking_display')
 ])
+
 # vm_scale_set_info_networking_port_rules = TableDynamicLayout.set_fields('Inbound/Outbound Port Rules','')
 # TAB - Scaling
 # TODO: Instance Count, Scale-in policy
@@ -106,7 +106,7 @@ vm_scale_set_info_os = ItemDynamicLayout.set_fields('Operating System', fields=[
     TextDyField.data_source('Automatic OS Upgrades', 'data.upgrade_policy.automatic_os_upgrade_policy'),
     TextDyField.data_source('Custom Data', 'data.os_profile.custom_data')
 ])
-
+'''
 vm_scale_set_meta = CloudServiceMeta.set_layouts([vm_scale_set_info_meta, vm_scale_set_info_tags])
 
 
@@ -116,7 +116,7 @@ class ComputeResource(CloudServiceResource):
 
 class VmScaleSetResource(ComputeResource):
     cloud_service_type = StringType(default='VmScaleSet')
-    data = ModelType(VmScaleSet)
+    data = ModelType(VirtualMachineScaleSet)
     _metadata = ModelType(CloudServiceMeta, default=vm_scale_set_meta, serialized_name='metadata')
 
 
