@@ -19,3 +19,5 @@ class VmScaleSetConnector(AzureConnector):
     def list_vm_scale_set_vms(self, resource_group, vm_scale_set_name):
         return self.compute_client.virtual_machine_scale_set_vms.list(resource_group, vm_scale_set_name)
 
+    def get_vm_scale_set_instance_view(self, resource_group, vm_scale_set_name, instance_id,):
+        return self.compute_client.virtual_machine_scale_set_vms.get_instance_view(resource_group, vm_scale_set_name, instance_id)
