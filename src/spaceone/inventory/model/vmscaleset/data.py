@@ -14,7 +14,6 @@ class AdditionalCapabilities(Model):  # belongs to VmScaleSet
 class AutomaticOSUpgradePolicy(Model):  # belongs to VmScaleSet >> UpgradePolicy
     disable_automatic_rollback = BooleanType(default=False, serialize_when_none=False)
     enable_automatic_os_upgrade = BooleanType(default=False, serialize_when_none=False)
-    enable_automatic_os_upgrade_display = StringType(serialize_when_none=False)
 
 
 class AutomaticRepairsPolicy(Model):  # belongs to VmScaleSet
@@ -262,6 +261,7 @@ class VirtualMachineScaleSetNetworkProfile(Model):  # belongs to VmScaleSet >> V
     health_probe = ModelType(ApiEntityReference, serialize_when_none=False)
     network_interface_configurations = ListType(ModelType(VirtualMachineScaleSetNetworkConfiguration),
                                                 serialize_when_none=False)
+    primary_vnet = StringType(serialize_when_none=False)
 
 
 class VirtualMachineScaleSetOSProfile(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
@@ -322,21 +322,22 @@ class VirtualMachineScaleSetStorageProfile(Model):  # belongs to VmScaleSet >> V
     data_disks = ListType(ModelType(VirtualMachineScaleSetDataDisk), serialize_when_none=False)
     image_reference = ModelType(ImageReference, serialize_when_none=False)
     os_disk = ModelType(VirtualMachineScaleSetOSDisk, serialize_when_none=False)
+    image_reference_display = StringType(serialize_when_none=False)
 
 
 class VirtualMachineScaleSetVMProfile(Model):  # belongs to VmScaleSet
     billing_profile = ModelType(BillingProfile, serialize_when_none=False)
     diagnostics_profile = ModelType(DiagnosticsProfile, serialize_when_none=False)
-    eviction_policy = StringType(choices=('Deallocate', 'Delete', '', None), serialize_when_none=False)
+    eviction_policy = StringType(choices=('Deallocate', 'Delete', 'None'), default='None')
     extension_profile = ModelType(VirtualMachineScaleSetExtensionProfile, serialize_when_none=False)
-    license_type = StringType(choices=('Windows_Client', 'Windows_Server', 'RHEL_BYOS', 'SLES_BYOS', '', None), serialize_when_none=False)
+    license_type = StringType(choices=('Windows_Client', 'Windows_Server', 'RHEL_BYOS', 'SLES_BYOS', None), serialize_when_none=False)
     network_profile = ModelType(VirtualMachineScaleSetNetworkProfile, serialize_when_none=False)
     os_profile = ModelType(VirtualMachineScaleSetOSProfile, serialize_when_none=False)
     priority = StringType(choices=('Low', 'Regular', 'Spot', '', None), serialize_when_none=False)
     scheduled_events_profile = ModelType(ScheduledEventsProfile, serialize_when_none=False)
     security_profile = ModelType(SecurityProfile, serialize_when_none=False)
     storage_profile = ModelType(VirtualMachineScaleSetStorageProfile, serialize_when_none=False)
-
+    terminate_notification_display = StringType(default='Off', serialize_when_none=False)
 
 ###### vm instances class
 
@@ -394,6 +395,7 @@ class ManagedDiskParameters(Model):
     # >> VirtualMachineScaleSetStorageProfile >> VirtualMachineScaleSetDataDisk
     disk_encryption_set = ModelType(DiskEncryptionSetParameters, serialize_when_none=False)
     storage_account_type = StringType(serialize_when_none=False)
+    storage_type = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
 
 
@@ -412,9 +414,9 @@ class OSDisk(Model):
 
 
 class DataDisk(Model):
-    caching = StringType(choices=('None', 'ReadOnly', 'ReadWrite', '', None), serialize_when_none=False)
+    caching = StringType(choices=('None', 'ReadOnly', 'ReadWrite', None), serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    create_option = StringType(choices=('Attach', 'Empty', 'FromImage', None, ''), default='Empty',
+    create_option = StringType(choices=('Attach', 'Empty', 'FromImage', None), default='Empty',
                                serialize_when_none=False)
     disk_iops_read_write = IntType(serialize_when_none=False)
     disk_m_bps_read_write = IntType(serialize_when_none=False)
@@ -482,12 +484,14 @@ class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     model_definition_applied = StringType(serialize_when_none=False)
     network_profile = ModelType(NetworkProfile, serialize_when_none=False)
     network_profile_configuration = ModelType(VirtualMachineScaleSetVMNetworkProfileConfiguration, serialize_when_none=False)
+    primary_vnet = StringType(serialize_when_none=False)
     os_profile = ModelType(OSProfile, serialize_when_none=False)
     protection_policy = ModelType(VirtualMachineScaleSetVMProtectionPolicy, serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     security_profile = ModelType(SecurityProfile, serialize_when_none=False)
     storage_profile = ModelType(StorageProfile, serialize_when_none=False)
     vm_id = StringType(serialize_when_none=False)
+    vm_instance_status_profile = ModelType(VirtualMachineExtensionInstanceView, serialize_when_none=False)
     resources = ListType(ModelType(VirtualMachineExtension), serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
@@ -506,7 +510,6 @@ class VirtualMachineScaleSet(Model):
     plan = ModelType(Plan, serialize_when_none=False)
     additional_capabilities = ModelType(AdditionalCapabilities, serialize_when_none=False)
     automatic_repairs_policy = ModelType(AutomaticRepairsPolicy, serialize_when_none=False)
-    automatic_repairs_policy_display = StringType(serialize_when_none=False)
     do_not_run_extensions_on_overprovisioned_v_ms = BooleanType(serialize_when_none=False)
     host_group = ModelType(SubResource, serialize_when_none=False)
     overprovision = BooleanType(default=True, serialize_when_none=False)
