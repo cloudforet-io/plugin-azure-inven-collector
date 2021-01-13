@@ -13,7 +13,7 @@ class AdditionalCapabilities(Model):  # belongs to VmScaleSet
 
 class AutomaticOSUpgradePolicy(Model):  # belongs to VmScaleSet >> UpgradePolicy
     disable_automatic_rollback = BooleanType(default=False, serialize_when_none=False)
-    enable_automatic_os_upgrade = BooleanType(default=False, serialize_when_none=False)
+    enable_automatic_os_upgrade = BooleanType(default=False)
 
 
 class AutomaticRepairsPolicy(Model):  # belongs to VmScaleSet
