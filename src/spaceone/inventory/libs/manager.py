@@ -78,6 +78,7 @@ REGION_INFO = {
                         'tags': {'latitude': '-22.90278', 'longitude': '-43.2075'}},
 }
 
+
 class AzureManager(BaseManager):
     connector_name = None
     cloud_service_types = []
@@ -150,3 +151,22 @@ class AzureManager(BaseManager):
     @staticmethod
     def convert_dictionary(obj):
         return vars(obj)
+
+    @staticmethod
+    def convert_nested_dictionary(self, vm_object):
+        vm_dict = self.convert_dictionary(vm_object)
+        for k, v in vm_dict.items():
+            if isinstance(v, object):  # object
+                if isinstance(v, list):  # if vm_object is list
+                    for list_obj in v:
+                        vm_converse_list = list()
+                        if hasattr(list_obj, '__dict__'):
+                            vm_converse_dict = self.convert_nested_dictionary(self, list_obj)
+                            vm_converse_list.append(vm_converse_dict)
+                        vm_dict[k] = vm_converse_list
+
+                if hasattr(v, '__dict__'):  # if vm_object is not a list type, just an object
+                    vm_converse_dict = self.convert_nested_dictionary(self, v)
+                    vm_dict[k] = vm_converse_dict
+
+        return vm_dict

@@ -21,7 +21,7 @@ class CollectorService(BaseService):
             # set MS Azure cloud service manager
             'DiskManager',
             'SnapshotManager'
-            # 'ScaleSetManager'
+            'VmScaleSetManager'
             # ...
         ]
 
