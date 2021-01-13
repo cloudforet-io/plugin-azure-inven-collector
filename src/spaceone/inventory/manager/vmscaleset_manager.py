@@ -113,19 +113,7 @@ class VmScaleSetManager(AzureManager):
 
             # print("vm_scale_set_dict")
             # print(vm_scale_set_dict)
-            '''
-            snapshot_data = Snapshot(snapshot_dict, strict=False)
-            snapshot_resource = SnapshotResource({
-                'data': snapshot_data,
-                'region_code': snapshot_data.location,
-                'reference': ReferenceModel(snapshot_data.reference())
-            })
 
-            # Must set_region_code method for region collection
-            self.set_region_code(snapshot_data['location'])
-            snapshots.append(SnapshotResponse({'resource': snapshot_resource}))
-
-            '''
             vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
             vm_scale_set_resource = VmScaleSetResource({
                 'data': vm_scale_set_data,
@@ -135,7 +123,6 @@ class VmScaleSetManager(AzureManager):
 
             # Must set_region_code method for region collection
             self.set_region_code(vm_scale_set_data['location'])
-            # vm_scale_sets.append({'resource': vm_scale_set_resource})
             vm_scale_sets.append(VmScaleSetResponse({'resource': vm_scale_set_resource}))
 
         print(f'** VmScaleSet Finished {time.time() - start_time} Seconds **')
