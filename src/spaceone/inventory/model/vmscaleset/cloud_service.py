@@ -109,26 +109,26 @@ vm_scale_set_info_scaling = ItemDynamicLayout.set_fields('Scaling', fields=[
 # TAB - Disks OS Disks and Data Disks
 # TODO : Image reference, Storage Type, Size, MAX iops, max throughput, encryption, host caching
 #      : LUN, Storage Type, Size, MAx iops, max throughput, encryption, host caching
-os_disk = SimpleTableDynamicLayout.set_fields('OS Disk', 'data.virtual_machine_profile.storage_profile', fields=[
+os_disk = ItemDynamicLayout.set_fields('OS Disk', 'data.virtual_machine_profile.storage_profile', fields=[
     TextDyField.data_source('Image Reference', 'image_reference_display'),
-    TextDyField.data_source('Storage Type', 'os_disk.managed_disk.storage_account_type'),
+    TextDyField.data_source('Storage Account Type', 'os_disk.managed_disk.storage_account_type'),
     SizeField.data_source('Size', 'os_disk.disk_size_gb', options={
         'source_unit': 'GB'
     }),
     TextDyField.data_source('Host Caching', 'os_disk.caching')
 
 ])
-data_disks = TableDynamicLayout.set_fields('Data Disks', 'data.storage_profile.data_disks', fields=[
-    TextDyField.data_source('LUN', 'lun'),
+data_disks = SimpleTableDynamicLayout.set_fields('Data Disks', 'data.storage_profile.data_disks', fields=[
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Storage Type', 'managed_disk.storage_type'),
     SizeField.data_source('Size', 'disk_size_gb', options={
         'source_unit': 'GB'
     }),
     TextDyField.data_source('Max IOPS', 'disk_iops_read_write'),
     TextDyField.data_source('MAX Throughput(MBps)', 'disk_m_bps_read_write'),
-    TextDyField.data_source('Encryption', 'disk_encryption_set_display'),
-    TextDyField.data_source('Host Caching', 'caching')
-
+    TextDyField.data_source('Encryption', 'disk_encryption_set.id'),
+    TextDyField.data_source('Host Caching', 'caching'),
+    TextDyField.data_source('LUN', 'lun')
 ])
 vm_scale_set_info_disk = ListDynamicLayout.set_layouts('Disks', layouts=[os_disk, data_disks])
 
@@ -136,18 +136,14 @@ vm_scale_set_info_disk = ListDynamicLayout.set_layouts('Disks', layouts=[os_disk
 # TODO : Operating system, image reference, computer name prefix, administrator username,
 #        password authentication, vm agent, enable automatic OS upgrades, custom data and cloud init
 
-vm_scale_set_info_os_profile = ItemDynamicLayout.set_fields('Operating System',
-                                                            'data.virtual_machine_profile.os_profile', fields=[
-        ListDyField.data_source('Image Reference', 'data.os_disk_spec_list', options={
-            'delimiter': '<br>'
-        }),
-        TextDyField.data_source('Computer Name Prefix', 'computer_name_prefix'),
-        TextDyField.data_source('Administrator Username', 'admin_username'),
-        TextDyField.data_source('Operating System', 'os_type'),
-        TextDyField.data_source('VM Agent', 'linux_configuration.provision_vm_agent'),
+vm_scale_set_info_os_profile = ItemDynamicLayout.set_fields('Operating System', fields=[
+        TextDyField.data_source('Computer Name Prefix', 'data.virtual_machine_profile.os_profile.computer_name_prefix'),
+        TextDyField.data_source('Administrator Username', 'data.virtual_machine_profile.os_profile.admin_username'),
+        TextDyField.data_source('Operating System', 'data.virtual_machine_profile.os_profile.operating_system'),
+        TextDyField.data_source('VM Agent', 'data.virtual_machine_profile.os_profile.linux_configuration.provision_vm_agent'),
         TextDyField.data_source('Automatic OS Upgrades',
                                 'data.upgrade_policy.automatic_os_upgrade_policy.enable_automatic_os_upgrade'),
-        TextDyField.data_source('Custom Data', 'custom_data')
+        TextDyField.data_source('Custom Data', 'data.virtual_machine_profile.os_profile.custom_data')
     ])
 
 vm_scale_set_meta = CloudServiceMeta.set_layouts(
