@@ -19,8 +19,8 @@ class CollectorService(BaseService):
 
         self.execute_managers = [
             # set MS Azure cloud service manager
-            # 'DiskManager',
-            # 'SnapshotManager'
+            'DiskManager',
+            'SnapshotManager'
             'VmScaleSetManager'
             # ...
         ]
