@@ -1,26 +1,39 @@
 from schematics.types import ModelType, StringType, PolyModelType
 
-from spaceone.inventory.model.vmscaleset.data import VmScaleSet
-from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField, SizeField
-from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, ListDynamicLayout, SimpleTableDynamicLayout
+from spaceone.inventory.model.vmscaleset.data import VirtualMachineScaleSet
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
+    ListDyField, SizeField
+from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
+    ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
 
 '''
 VM_SCALE_SET
 '''
 # TAB - Default
-# TODO : instance termination notification(Configuration Tab), over provisioning, proximity placement group, Termination Notification(x)
+# TODO : instance termination notification(Configuration Tab), over provisioning, proximity placement group, Termination Notification
 #        application health monitoring(Health and repair Tab), Upgrade Policy(Upgrade Policy Tab),
 vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSet', fields=[
     TextDyField.data_source('Name', 'data.name'),
-    TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Resource ID', 'data.id'),
-    # TextDyField.data_source('Termination Notification', )
-    TextDyField.data_source('OverProvisioning', 'data.overprovision_display'),
-    TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_name'),
-    TextDyField.data_source('Automatic Repairs', 'data.automatic_repairs_policy_display'),
-    TextDyField.data_source('Upgrade Policy', 'data.upgrade_policy.mode')
-
+    TextDyField.data_source('Resource Group', 'data.resource_group'),
+    TextDyField.data_source('Location', 'data.location'),
+    TextDyField.data_source('Subscription', 'data.subscription_name'),
+    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Instances', 'data.instance_count'),
+    TextDyField.data_source('Operating System', 'data.virtual_machine_profile.storage_profile.os_disk.os_type'),
+    TextDyField.data_source('Size', 'data.virtual_machine_profile.storage_profile.sku.name'),
+    TextDyField.data_source('Virtual network/subnet', 'data.virtual_machine_profile.primary_vnet'),
+    TextDyField.data_source('Host group', 'data.host_group.id'),
+    TextDyField.data_source('Ephemeral OS Disk',
+                            'data.virtual_machine_profile.storage_profile.os_disk.diff_disk_settings.option.local'),
+    TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy'),
+    TextDyField.data_source('Termination Notification', 'data.virtual_machine_profile.terminate_notification_display'),
+    TextDyField.data_source('OverProvisioning', 'data.overprovision'),
+    TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_display'),
+    TextDyField.data_source('Automatic Repairs', 'data.automatic_repairs_policy'),
+    TextDyField.data_source('Upgrade Policy', 'data.upgrade_policy.mode'),
+    TextDyField.data_source('Fault Domains', 'data.platform_fault_domain_count'),
 
 ])
 
@@ -34,43 +47,71 @@ vm_scale_set_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fiel
 # TODO : name, computer name, location, status(x), health state(x), provisioning state, fault domain,
 #       protection policy, and latest model
 vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_instances', fields=[
-    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Name', 'vm_name'),
     TextDyField.data_source('Computer Name', 'os_profile.computer_name'),
     TextDyField.data_source('Location', 'location'),
-    TextDyField.data_source('Fault Domain', ''),
-    # TextDyField.data_source('Status', ''),
-    # TextDyField.data_source('Health State', ''),
+    ListDyField.data_source('Status', 'vm_instance_status_profile.vm_agent.statuses', options={
+        'sub_key': 'display_status',
+        'delimiter': '<br>'
+    }),
     TextDyField.data_source('Provisioning State', 'provisioning_state'),
-    TextDyField.data_source('Protection Policy', 'protection_policy'),
-    TextDyField.data_source('Latest Model', 'latest_model_applied_display'),
-    TextDyField.data_source('Virtual Network', '')
+    TextDyField.data_source('Protection From Scale-in', 'protection_policy.protect_from_scale_in'),
+    TextDyField.data_source('Protection From Scale-set Actions', 'protection_policy.protect_from_scale_set_actions'),
+    TextDyField.data_source('Latest Model', 'latest_model_applied'),
+    TextDyField.data_source('Virtual Network', 'primary_vnet')
 ])
-
 
 # TAB - Networking
 # TODO : IP Configuration, Network interface, Virtual Network, Accelerated Networking,
-#        Inbound /Outbound port rules , Load balancing(x)
-vm_scale_set_info_networking = ItemDynamicLayout.set_fields('Networking', 'data.network_profile', fields=[
-    TextDyField.data_source('IP Configuration', 'network_interface_configurations.ip_configurations.name'),
-    TextDyField.data_source('Network Interface', 'network_interface_configurations.name'),
-    TextDyField.data_source('Virtual Network', 'network_interface_configurations.virtual_network'),
-    TextDyField.data_source('Accelerated Networking', 'network_interface_configurations'
-                                                      '.enable_accelerated_networking_display')
-])
-# vm_scale_set_info_networking_port_rules = TableDynamicLayout.set_fields('Inbound/Outbound Port Rules','')
+#        Inbound /Outbound port rules(x) , Load balancing(x)
+vm_scale_set_info_networking = SimpleTableDynamicLayout.set_fields('Networking',
+                                                                   'data.virtual_machine_profile.network_profile',
+                                                                   fields=[
+                                                                       TextDyField.data_source('Virtual Network',
+                                                                                               'primary_vnet'),
+                                                                   ])
+
+vm_scale_set_info_network_configuration = SimpleTableDynamicLayout.set_fields('Network Configuration',
+                                                                              'data.virtual_machine_profile.network_profile_configuration.network_interface_configurations',
+                                                                              fields=[
+                                                                                  TextDyField.data_source(
+                                                                                      'Accelerated Networking',
+                                                                                      'enable_accelerated_networking_display')
+                                                                              ])
+
+vm_scale_set_info_ip_configuration = TableDynamicLayout.set_fields('IP Configurations',
+                                                                   'data.virtual_machine_profile.network_profile_configuration.network_interface_configurations',
+                                                                   fields=[
+                                                                       TextDyField.data_source('Name', 'name'),
+                                                                       TextDyField.data_source('Network interface',
+                                                                                               'enable_accelerated_networking_display'),
+                                                                       TextDyField.data_source('Primary', 'primary'),
+                                                                       TextDyField.data_source(
+                                                                           'Public Ip Address Configuration',
+                                                                           'public_ip_address_configuration'),
+                                                                       TextDyField.data_source(
+                                                                           'Private IP Address Version',
+                                                                           'private_ip_address_version'),
+                                                                   ])
+
+vm_scale_set_info_network = ListDynamicLayout.set_layouts('Disks', layouts=[vm_scale_set_info_networking,
+                                                                            vm_scale_set_info_network_configuration,
+                                                                            vm_scale_set_info_ip_configuration])
+
 # TAB - Scaling
 # TODO: Instance Count, Scale-in policy
 vm_scale_set_info_scaling = ItemDynamicLayout.set_fields('Scaling', fields=[
     TextDyField.data_source('Instance Count', 'data.instance_count'),
-    TextDyField.data_source('Scale-in Policy', 'data.scale_in_policy.rules[0]'),
-
+    ListDyField.data_source('Scale-in Policy', 'data.scale_in_policy.rules', options={
+        'delimiter': '<br>'
+    }),
 ])
 
 # TAB - Disks OS Disks and Data Disks
 # TODO : Image reference, Storage Type, Size, MAX iops, max throughput, encryption, host caching
 #      : LUN, Storage Type, Size, MAx iops, max throughput, encryption, host caching
-os_disk = SimpleTableDynamicLayout.set_fields('OS Disk', 'data.storage_profile', fields=[
-    TextDyField.data_source('Image Reference', 'image_reference.id'),
+os_disk = SimpleTableDynamicLayout.set_fields('OS Disk', 'data.virtual_machine_profile.storage_profile', fields=[
+    TextDyField.data_source('Image Reference', 'image_reference_display'),
     TextDyField.data_source('Storage Type', 'os_disk.managed_disk.storage_account_type'),
     SizeField.data_source('Size', 'os_disk.disk_size_gb', options={
         'source_unit': 'GB'
@@ -78,16 +119,16 @@ os_disk = SimpleTableDynamicLayout.set_fields('OS Disk', 'data.storage_profile',
     TextDyField.data_source('Host Caching', 'os_disk.caching')
 
 ])
-data_disks = SimpleTableDynamicLayout.set_fields('Data Disks', 'data.storage_profile', fields=[
-    TextDyField.data_source('LUN', 'data_disks.lun'),
-    TextDyField.data_source('Storage Type', 'data_disks.managed_disk.storage_account_type'),
-    SizeField.data_source('Size', 'data_disks.disk_size_gb', options={
+data_disks = TableDynamicLayout.set_fields('Data Disks', 'data.storage_profile.data_disks', fields=[
+    TextDyField.data_source('LUN', 'lun'),
+    TextDyField.data_source('Storage Type', 'managed_disk.storage_type'),
+    SizeField.data_source('Size', 'disk_size_gb', options={
         'source_unit': 'GB'
     }),
-    TextDyField.data_source('Max IOPS', 'data_disks.disk_iops_read_write'),
-    TextDyField.data_source('MAX Throughput(MBps)', 'data_disks.disk_m_bps_read_write'),
-    TextDyField.data_source('Encryption', 'data_disks.disk_encryption_set_display'),
-    TextDyField.data_source('Host Caching', 'data_disks.caching')
+    TextDyField.data_source('Max IOPS', 'disk_iops_read_write'),
+    TextDyField.data_source('MAX Throughput(MBps)', 'disk_m_bps_read_write'),
+    TextDyField.data_source('Encryption', 'disk_encryption_set_display'),
+    TextDyField.data_source('Host Caching', 'caching')
 
 ])
 vm_scale_set_info_disk = ListDynamicLayout.set_layouts('Disks', layouts=[os_disk, data_disks])
@@ -95,19 +136,31 @@ vm_scale_set_info_disk = ListDynamicLayout.set_layouts('Disks', layouts=[os_disk
 # TAB - Operating System
 # TODO : Operating system, image reference, computer name prefix, administrator username,
 #        password authentication, vm agent, enable automatic OS upgrades, custom data and cloud init
-vm_scale_set_info_os = ItemDynamicLayout.set_fields('Operating System', fields=[
-    TextDyField.data_source('Operating System', 'data.os_profile.operating_system'),
-    ListDyField.data_source('Image Reference', 'data.storage_profile.os_disk_spec_list', options={
-        'delimiter': '<br>'
-    }),
-    TextDyField.data_source('Computer Name Prefix', 'data.os_profile.computer_name_prefix'),
-    TextDyField.data_source('Administrator Username', 'data.os_profile.admin_username'),
-    TextDyField.data_source('VM Agent', 'data.os_profile.linux_configuration.provision_vm_agent_display'),
-    TextDyField.data_source('Automatic OS Upgrades', 'data.upgrade_policy.automatic_os_upgrade_policy'),
-    TextDyField.data_source('Custom Data', 'data.os_profile.custom_data')
-])
+vm_scale_set_info_os_type = ItemDynamicLayout.set_fields('OS Type',
+                                                         'data.virtual_machine_profile.storage_profile.os_disk',
+                                                         fields=[
+                                                             TextDyField.data_source('Operating System',
+                                                                                     'data.virtual_machine_profile.storage_profile.os_disk.os_type'),
+                                                         ])
 
-vm_scale_set_meta = CloudServiceMeta.set_layouts([vm_scale_set_info_meta, vm_scale_set_info_tags])
+vm_scale_set_info_os_profile = ItemDynamicLayout.set_fields('Operating System',
+                                                            'data.virtual_machine_profile.os_profile', fields=[
+        ListDyField.data_source('Image Reference', 'data.os_disk_spec_list', options={
+            'delimiter': '<br>'
+        }),
+        TextDyField.data_source('Computer Name Prefix', 'computer_name_prefix'),
+        TextDyField.data_source('Administrator Username', 'admin_username'),
+        TextDyField.data_source('VM Agent', 'linux_configuration.provision_vm_agent'),
+        TextDyField.data_source('Automatic OS Upgrades',
+                                'data.upgrade_policy.automatic_os_upgrade_policy.enable_automatic_os_upgrade'),
+        TextDyField.data_source('Custom Data', 'custom_data')
+    ])
+vm_scale_set_info_os = ListDynamicLayout.set_layouts('Operating System',
+                                                     layouts=[vm_scale_set_info_os_type, vm_scale_set_info_os_profile])
+
+vm_scale_set_meta = CloudServiceMeta.set_layouts(
+    [vm_scale_set_info_meta, vm_scale_set_info_tags, vm_scale_set_instance, vm_scale_set_info_network,
+     vm_scale_set_info_scaling, vm_scale_set_info_disk, vm_scale_set_info_os])
 
 
 class ComputeResource(CloudServiceResource):
@@ -116,7 +169,7 @@ class ComputeResource(CloudServiceResource):
 
 class VmScaleSetResource(ComputeResource):
     cloud_service_type = StringType(default='VmScaleSet')
-    data = ModelType(VmScaleSet)
+    data = ModelType(VirtualMachineScaleSet)
     _metadata = ModelType(CloudServiceMeta, default=vm_scale_set_meta, serialized_name='metadata')
 
 
