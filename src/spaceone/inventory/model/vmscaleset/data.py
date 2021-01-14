@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType
 
 
 class Tags(Model):
@@ -350,9 +350,9 @@ class VirtualMachineScaleSetVMProfile(Model):  # belongs to VmScaleSet
 class InstanceViewStatus(Model):
     code = StringType(serialize_when_none=False)
     display_status = StringType(serialize_when_none=False)
-    level = StringType(choices = ('Error', 'Info', 'Warning'), serialize_when_none=False)
+    level = StringType(choices=('Error', 'Info', 'Warning'), serialize_when_none=False)
     message = StringType(serialize_when_none=False)
-    time = StringType(serialize_when_none=False)
+    time = DateTimeType(serialize_when_none=False)
 
 
 class VirtualMachineExtensionInstanceView(Model):
@@ -476,6 +476,22 @@ class VirtualMachineScaleSetVMNetworkProfileConfiguration(Model):
     network_interface_configurations = ListType(ModelType(VirtualMachineScaleSetNetworkConfiguration), serialize_when_none=False)
 
 
+class VirtualMachineAgentInstanceView(Model):
+    statuses = ListType(ModelType(InstanceViewStatus), serialize_when_none=False)
+    vm_agent_version = StringType(serialize_when_none=False)
+    display_status = StringType(serialize_when_none=False)  # #
+
+
+class VirtualMachineExtensionVMInstanceView(Model):
+    assigned_host = StringType(serialize_when_none=False)
+    # boot_diagnostics = ModelType(BootDiagnosticsInstanceView, serialize_when_none=False)
+    extensions = ListType(ModelType(VirtualMachineExtensionInstanceView), serialize_when_none=False)
+    placement_group_id = StringType(serialize_when_none=False)
+    statuses = ListType(ModelType(InstanceViewStatus), serialize_when_none=False)
+    display_status = StringType(serialize_when_none=False)
+    vm_agent = ModelType(VirtualMachineAgentInstanceView, serialize_when_none=False)
+
+
 class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     id = StringType()
     instance_id = IntType()
@@ -498,7 +514,7 @@ class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     security_profile = ModelType(SecurityProfile, serialize_when_none=False)
     storage_profile = ModelType(StorageProfile, serialize_when_none=False)
     vm_id = StringType(serialize_when_none=False)
-    vm_instance_status_profile = ModelType(VirtualMachineExtensionInstanceView, serialize_when_none=False)
+    vm_instance_status_profile = ModelType(VirtualMachineExtensionVMInstanceView, serialize_when_none=False)
     resources = ListType(ModelType(VirtualMachineExtension), serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
