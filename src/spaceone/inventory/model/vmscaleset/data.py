@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType
 
 
 class Tags(Model):
@@ -13,7 +13,7 @@ class AdditionalCapabilities(Model):  # belongs to VmScaleSet
 
 class AutomaticOSUpgradePolicy(Model):  # belongs to VmScaleSet >> UpgradePolicy
     disable_automatic_rollback = BooleanType(default=False, serialize_when_none=False)
-    enable_automatic_os_upgrade = BooleanType(default=False, serialize_when_none=False)
+    enable_automatic_os_upgrade = BooleanType(default=False)
 
 
 class AutomaticRepairsPolicy(Model):  # belongs to VmScaleSet
@@ -103,6 +103,11 @@ class SecurityProfile(Model):  # belongs to VmScaleSet
     encryption_at_host = BooleanType(default=False, serialize_when_none=False)
 
 
+class Settings(Model):
+    protocol = StringType(serialize_when_none=False)
+    port = IntType(serialize_when_none=False)
+    requestPath = StringType(serialize_when_none=False)
+
 class Sku(Model):  # belongs to VmScaleSet
     capacity = IntType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
@@ -173,7 +178,7 @@ class VirtualMachineScaleSetExtension(Model):
     provisioned_after_extensions = ListType(StringType, serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     publisher = StringType(serialize_when_none=False)
-    settings = StringType(serialize_when_none=False)
+    settings = ModelType(Settings, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     type_handler_version = StringType(serialize_when_none=False)
 
@@ -272,6 +277,7 @@ class VirtualMachineScaleSetOSProfile(Model):  # belongs to VmScaleSet >> Virtua
     linux_configuration = ModelType(LinuxConfiguration, serialize_when_none=False)
     secrets = ListType(ModelType(VaultSecretGroup), serialize_when_none=False)
     windows_configuration = ModelType(WindowsConfiguration, serialize_when_none=False)
+    operating_system = StringType(serialize_when_none=False)
 
 
 class DiskEncryptionSetParameters(Model):
@@ -339,14 +345,14 @@ class VirtualMachineScaleSetVMProfile(Model):  # belongs to VmScaleSet
     storage_profile = ModelType(VirtualMachineScaleSetStorageProfile, serialize_when_none=False)
     terminate_notification_display = StringType(default='Off', serialize_when_none=False)
 
-###### vm instances class
 
+#  vm instances class
 class InstanceViewStatus(Model):
     code = StringType(serialize_when_none=False)
     display_status = StringType(serialize_when_none=False)
-    level = StringType(choices = ('Error', 'Info', 'Warning'), serialize_when_none=False)
+    level = StringType(choices=('Error', 'Info', 'Warning'), serialize_when_none=False)
     message = StringType(serialize_when_none=False)
-    time = StringType(serialize_when_none=False)
+    time = DateTimeType(serialize_when_none=False)
 
 
 class VirtualMachineExtensionInstanceView(Model):
@@ -355,6 +361,7 @@ class VirtualMachineExtensionInstanceView(Model):
     substatuses = ListType(ModelType(InstanceViewStatus))
     type = StringType(serialize_when_none=False)
     type_handler_version = StringType(serialize_when_none=False)
+    display_status = StringType(serialize_when_none=False)
 
 
 class VirtualMachineExtension(Model):
@@ -368,7 +375,7 @@ class VirtualMachineExtension(Model):
     protected_settings = StringType(serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     publisher = StringType(serialize_when_none=False)
-    settings = StringType(serialize_when_none=False)
+    settings = ModelType(Settings, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     type_handler_version = StringType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
@@ -436,8 +443,8 @@ class StorageProfile(Model):
 
 
 class VirtualMachineScaleSetVMProtectionPolicy(Model):
-    protect_from_scale_in = BooleanType(serialize_when_none=False)
-    protect_from_scale_set_actions = BooleanType(serialize_when_none=False)
+    protect_from_scale_in = BooleanType(default=False)
+    protect_from_scale_set_actions = BooleanType(default=False)
 
 
 class OSProfile(Model):  # belongs to VirtualMachineScaleSetVM
@@ -469,6 +476,22 @@ class VirtualMachineScaleSetVMNetworkProfileConfiguration(Model):
     network_interface_configurations = ListType(ModelType(VirtualMachineScaleSetNetworkConfiguration), serialize_when_none=False)
 
 
+class VirtualMachineAgentInstanceView(Model):
+    statuses = ListType(ModelType(InstanceViewStatus), serialize_when_none=False)
+    vm_agent_version = StringType(serialize_when_none=False)
+    display_status = StringType(serialize_when_none=False)  # #
+
+
+class VirtualMachineExtensionVMInstanceView(Model):
+    assigned_host = StringType(serialize_when_none=False)
+    # boot_diagnostics = ModelType(BootDiagnosticsInstanceView, serialize_when_none=False)
+    extensions = ListType(ModelType(VirtualMachineExtensionInstanceView), serialize_when_none=False)
+    placement_group_id = StringType(serialize_when_none=False)
+    statuses = ListType(ModelType(InstanceViewStatus), serialize_when_none=False)
+    display_status = StringType(serialize_when_none=False)
+    vm_agent = ModelType(VirtualMachineAgentInstanceView, serialize_when_none=False)
+
+
 class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     id = StringType()
     instance_id = IntType()
@@ -491,7 +514,7 @@ class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     security_profile = ModelType(SecurityProfile, serialize_when_none=False)
     storage_profile = ModelType(StorageProfile, serialize_when_none=False)
     vm_id = StringType(serialize_when_none=False)
-    vm_instance_status_profile = ModelType(VirtualMachineExtensionInstanceView, serialize_when_none=False)
+    vm_instance_status_profile = ModelType(VirtualMachineExtensionVMInstanceView, serialize_when_none=False)
     resources = ListType(ModelType(VirtualMachineExtension), serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
@@ -506,6 +529,7 @@ class VirtualMachineScaleSet(Model):
     resource_group = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     identity = ModelType(VirtualMachineScaleSetIdentity, serialize_when_none=False)
+    instance_count = IntType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     plan = ModelType(Plan, serialize_when_none=False)
     additional_capabilities = ModelType(AdditionalCapabilities, serialize_when_none=False)
@@ -516,7 +540,7 @@ class VirtualMachineScaleSet(Model):
     platform_fault_domain_count = IntType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
     proximity_placement_group = ModelType(SubResource, serialize_when_none=False)
-    proximity_placement_group_display = StringType(serialize_when_none=False)
+    proximity_placement_group_display = StringType(serialize_when_none=False, default='None')
     scale_in_policy = ModelType(ScaleInPolicy, serialize_when_none=False)
     single_placement_group = BooleanType(serialize_when_none=False)
     unique_id = StringType(serialize_when_none=False)
