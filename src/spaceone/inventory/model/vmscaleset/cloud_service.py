@@ -44,13 +44,13 @@ vm_scale_set_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fiel
 ])
 
 # TAB - Instances
-# TODO : name, computer name, location, status(x), health state(x), provisioning state, fault domain,
+# name, computer name, location, status,  provisioning state, fault domain,
 #       protection policy, and latest model
 vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_instances', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Computer Name', 'os_profile.computer_name'),
     TextDyField.data_source('Location', 'location'),
-    TextDyField.data_source('Status', 'vm_instance_status_profile.vm_agent.statuses.display_status'),
+    TextDyField.data_source('Status', 'vm_instance_status_profile.display_status'),
     TextDyField.data_source('Provisioning State', 'provisioning_state'),
     TextDyField.data_source('Protection From Scale-in', 'protection_policy.protect_from_scale_in'),
     TextDyField.data_source('Protection From Scale-set Actions', 'protection_policy.protect_from_scale_set_actions'),
@@ -59,7 +59,7 @@ vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_inst
 ])
 
 # TAB - Networking
-# TODO : IP Configuration, Network interface, Virtual Network, Accelerated Networking,
+# IP Configuration, Network interface, Virtual Network, Accelerated Networking,
 #        Inbound /Outbound port rules(x) , Load balancing(x)
 vm_scale_set_info_networking = ItemDynamicLayout.set_fields('Networking',
                                                             'data.virtual_machine_profile.network_profile', fields=[
@@ -67,7 +67,7 @@ vm_scale_set_info_networking = ItemDynamicLayout.set_fields('Networking',
     ])
 
 vm_scale_set_info_network_configuration = SimpleTableDynamicLayout.set_fields('Network Configuration',
-                                                                              'data.virtual_machine_profile.network_profile_configuration.network_interface_configurations',
+                                                                              'data.virtual_machine_profile.network_profile.network_interface_configurations',
                                                                               fields=[
                                                                                   TextDyField.data_source('Name',
                                                                                                           'name'),
@@ -81,9 +81,9 @@ vm_scale_set_info_network_configuration = SimpleTableDynamicLayout.set_fields('N
                                                                                                           'primary'),
                                                                               ])
 
-vm_scale_set_info_ip_configuration = SimpleTableDynamicLayout.set_fields('IP Configurations',
-                                                                         'data.virtual_machine_profile.network_profile_configuration.network_interface_configurations.ip_configurations',
-                                                                         fields=[
+vm_scale_set_info_ip_configurations = SimpleTableDynamicLayout.set_fields('IP Configurations',
+                                                                         'data.virtual_machine_profile.network_profile.network_interface_configurations.ip_configurations',
+                                                                          fields=[
 
                                                                              TextDyField.data_source(
                                                                                  'Public Ip Address Configuration',
@@ -95,7 +95,7 @@ vm_scale_set_info_ip_configuration = SimpleTableDynamicLayout.set_fields('IP Con
 
 vm_scale_set_info_network = ListDynamicLayout.set_layouts('Networking', layouts=[vm_scale_set_info_networking,
                                                                                  vm_scale_set_info_network_configuration,
-                                                                                 vm_scale_set_info_ip_configuration])
+                                                                                 vm_scale_set_info_ip_configurations])
 
 # TAB - Scaling
 # TODO: Instance Count, Scale-in policy
@@ -118,7 +118,7 @@ os_disk = ItemDynamicLayout.set_fields('OS Disk', 'data.virtual_machine_profile.
     TextDyField.data_source('Host Caching', 'os_disk.caching')
 
 ])
-data_disks = SimpleTableDynamicLayout.set_fields('Data Disks', 'data.storage_profile.data_disks', fields=[
+data_disks = SimpleTableDynamicLayout.set_fields('Data Disks', 'data.virtual_machine_profile.storage_profile.data_disks', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Storage Type', 'managed_disk.storage_type'),
     SizeField.data_source('Size', 'disk_size_gb', options={
