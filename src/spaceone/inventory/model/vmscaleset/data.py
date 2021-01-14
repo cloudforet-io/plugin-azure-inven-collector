@@ -103,6 +103,11 @@ class SecurityProfile(Model):  # belongs to VmScaleSet
     encryption_at_host = BooleanType(default=False, serialize_when_none=False)
 
 
+class Settings(Model):
+    protocol = StringType(serialize_when_none=False)
+    port = IntType(serialize_when_none=False)
+    requestPath = StringType(serialize_when_none=False)
+
 class Sku(Model):  # belongs to VmScaleSet
     capacity = IntType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
@@ -173,7 +178,7 @@ class VirtualMachineScaleSetExtension(Model):
     provisioned_after_extensions = ListType(StringType, serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     publisher = StringType(serialize_when_none=False)
-    settings = StringType(serialize_when_none=False)
+    settings = ModelType(Settings, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     type_handler_version = StringType(serialize_when_none=False)
 
@@ -272,6 +277,7 @@ class VirtualMachineScaleSetOSProfile(Model):  # belongs to VmScaleSet >> Virtua
     linux_configuration = ModelType(LinuxConfiguration, serialize_when_none=False)
     secrets = ListType(ModelType(VaultSecretGroup), serialize_when_none=False)
     windows_configuration = ModelType(WindowsConfiguration, serialize_when_none=False)
+    operating_system = StringType(serialize_when_none=False)
 
 
 class DiskEncryptionSetParameters(Model):
@@ -339,8 +345,8 @@ class VirtualMachineScaleSetVMProfile(Model):  # belongs to VmScaleSet
     storage_profile = ModelType(VirtualMachineScaleSetStorageProfile, serialize_when_none=False)
     terminate_notification_display = StringType(default='Off', serialize_when_none=False)
 
-###### vm instances class
 
+#  vm instances class
 class InstanceViewStatus(Model):
     code = StringType(serialize_when_none=False)
     display_status = StringType(serialize_when_none=False)
@@ -355,6 +361,7 @@ class VirtualMachineExtensionInstanceView(Model):
     substatuses = ListType(ModelType(InstanceViewStatus))
     type = StringType(serialize_when_none=False)
     type_handler_version = StringType(serialize_when_none=False)
+    display_status = StringType(serialize_when_none=False)
 
 
 class VirtualMachineExtension(Model):
@@ -368,7 +375,7 @@ class VirtualMachineExtension(Model):
     protected_settings = StringType(serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     publisher = StringType(serialize_when_none=False)
-    settings = StringType(serialize_when_none=False)
+    settings = ModelType(Settings, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     type_handler_version = StringType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
@@ -436,8 +443,8 @@ class StorageProfile(Model):
 
 
 class VirtualMachineScaleSetVMProtectionPolicy(Model):
-    protect_from_scale_in = BooleanType(serialize_when_none=False)
-    protect_from_scale_set_actions = BooleanType(serialize_when_none=False)
+    protect_from_scale_in = BooleanType(default=False)
+    protect_from_scale_set_actions = BooleanType(default=False)
 
 
 class OSProfile(Model):  # belongs to VirtualMachineScaleSetVM
