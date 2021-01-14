@@ -2,7 +2,7 @@ from schematics.types import ModelType, StringType, PolyModelType
 
 from spaceone.inventory.model.vmscaleset.data import VirtualMachineScaleSet
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
-    ListDyField, SizeField
+    ListDyField, SizeField, StateItemDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
@@ -50,7 +50,10 @@ vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_inst
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Computer Name', 'os_profile.computer_name'),
     TextDyField.data_source('Location', 'location'),
-    TextDyField.data_source('Status', 'vm_instance_status_profile.vm_agent.display_status'),
+    EnumDyField.data_source('Status', 'vm_instance_status_profile.vm_agent.display_status', default_state={
+        'safe': ['Ready'],
+        'warning':['Not Ready']
+    }),
     TextDyField.data_source('Provisioning State', 'provisioning_state'),
     TextDyField.data_source('Protection From Scale-in', 'protection_policy.protect_from_scale_in'),
     TextDyField.data_source('Protection From Scale-set Actions', 'protection_policy.protect_from_scale_set_actions'),
