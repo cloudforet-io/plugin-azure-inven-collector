@@ -50,7 +50,7 @@ vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_inst
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Computer Name', 'os_profile.computer_name'),
     TextDyField.data_source('Location', 'location'),
-    TextDyField.data_source('Status', 'vm_instance_status_profile.display_status'),
+    TextDyField.data_source('Status', 'vm_instance_status_profile.vm_agent.display_status'),
     TextDyField.data_source('Provisioning State', 'provisioning_state'),
     TextDyField.data_source('Protection From Scale-in', 'protection_policy.protect_from_scale_in'),
     TextDyField.data_source('Protection From Scale-set Actions', 'protection_policy.protect_from_scale_set_actions'),
@@ -107,7 +107,7 @@ vm_scale_set_info_scaling = ItemDynamicLayout.set_fields('Scaling', fields=[
 ])
 
 # TAB - Disks OS Disks and Data Disks
-# TODO : Image reference, Storage Type, Size, MAX iops, max throughput, encryption, host caching
+#  Image reference, Storage Type, Size, MAX iops, max throughput, encryption, host caching
 #      : LUN, Storage Type, Size, MAx iops, max throughput, encryption, host caching
 os_disk = ItemDynamicLayout.set_fields('OS Disk', 'data.virtual_machine_profile.storage_profile', fields=[
     TextDyField.data_source('Image Reference', 'image_reference_display'),
@@ -133,7 +133,7 @@ data_disks = SimpleTableDynamicLayout.set_fields('Data Disks', 'data.virtual_mac
 vm_scale_set_info_disk = ListDynamicLayout.set_layouts('Disks', layouts=[os_disk, data_disks])
 
 # TAB - Operating System
-# TODO : Operating system, image reference, computer name prefix, administrator username,
+# Operating system, image reference, computer name prefix, administrator username,
 #        password authentication, vm agent, enable automatic OS upgrades, custom data and cloud init
 
 vm_scale_set_info_os_profile = ItemDynamicLayout.set_fields('Operating System', fields=[

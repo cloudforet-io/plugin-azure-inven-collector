@@ -105,11 +105,15 @@ class VmScaleSetManager(AzureManager):
 
             vm_scale_set_dict['vm_instances'] = vm_instances_list
 
+
             # switch tags form
             tags = vm_scale_set_dict.get('tags', {})
             vm_scale_set_dict.update({
                 'tags': self.convert_tag_format(tags)
             })
+
+            # print("vm_scale_set_dict")
+            # print(vm_scale_set_dict)
 
             vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
             vm_scale_set_resource = VmScaleSetResource({
