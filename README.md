@@ -1,7 +1,8 @@
 # plugin-azure-cloud-services
 
-**Plugin to collect Microsoft Azure Cloud Services**
 ![Microsoft Azure Cloud Services](https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg)
+**Plugin to collect Microsoft Azure Cloud Services**
+
 
 > SpaceONE's [plugin-azure-cloud-services](https://github.com/spaceone-dev/plugin-azure-cloud-services) is a convenient tool to 
 get cloud service data from Azure Cloud Services. 
