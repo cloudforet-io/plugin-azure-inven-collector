@@ -18,16 +18,16 @@ Please contact us if you need any further information.
 ### Contents
 
 * Table of Contents
-    * [Virtual Machines](#virtual_machines)
-        * [Azure VM (Instance)](#azure_vm)
+    * [Virtual Machines](#Azure_VM_(Instance))
+        * [Azure VM (Instance)](#azure_vm_instance)
         * [Disk](#disks)
-        * [NIC](#nic)
+        * [NIC](#NIC)
         * [Network Security Groups](#network_security_groups)
         * [Load Balancer](#load_balancer)
-    * [Virtual Machine Scale Sets](#virtual_machine_scale_sets)
+    * [Virtual Machine Scale Sets](#Virtual_Machine_Scale_Sets)
     * [Disks](#disks)
-    * [Snapshots](#snapshots)
-    * [Load Balancer](#load_balancer)
+    * [Snapshots](#Snapshots)
+    * [Load Balancer](#Load_Balancer)
     
 
 ---
