@@ -15,11 +15,28 @@ Please contact us if you need any further information.
 <support@spaceone.dev>
 
 ---
+### Contents
+
+* Table of Contents
+    * [Virtual Machines](#virtual_machines)
+        * [Azure VM (Instance)](#azure_vm)
+        * [Disk](#disks)
+        * [NIC](#nic)
+        * [Network Security Groups](#network_security_groups)
+        * [Load Balancer](#load_balancer)
+    * [Virtual Machine Scale Sets](#virtual_machine_scale_sets)
+    * [Disks](#disks)
+    * [Snapshots](#snapshots)
+    * [Load Balancer](#load_balancer)
+    
+
+---
 
 ## Authentication Overview
 Registered service account on SpaceONE must have certain permissions to collect cloud service data 
 Please, set authentication privilege for followings:
  
+
 #### [Virtual Machines](https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/list)
 
 - Azure VM (Instance)
@@ -38,7 +55,7 @@ Please, set authentication privilege for followings:
         - Microsoft.Network/networkInterfaces/read	
         - Microsoft.Network/publicIPAddresses/read	
 
-- Disk
+- Disks
     - Permissions
         - Microsoft.Compute/disks/read	
         
