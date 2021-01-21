@@ -1,2 +1,92 @@
 # plugin-azure-cloud-services
-Plugins for MS Azure Cloud Services
+
+![Microsoft Azure Cloud Services](https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure.svg)
+**Plugin to collect Microsoft Azure Cloud Services**
+
+> SpaceONE's [plugin-azure-cloud-services](https://github.com/spaceone-dev/plugin-azure-cloud-services) is a convenient tool to 
+get cloud service data from Azure Cloud Services. 
+
+
+Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
+> Latest stable version : 1.1
+
+Please contact us if you need any further information. 
+<support@spaceone.dev>
+
+---
+
+## Authentication Overview
+Registered service account on SpaceONE must have certain permissions to collect cloud service data 
+Please, set authentication privilege for followings:
+ 
+#### [Virtual Machines](https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/list)
+
+- Azure VM (Instance)
+    - Scope
+        - https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/listall
+        - https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/get
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/virtualnetworks/list
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/publicipaddresses/list
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/virtualnetworks
+
+    - Permissions
+        - Microsoft.Compute/*/read
+        - Microsoft.Resources/*/read
+        - Microsoft.Network/networkInterfaces/read	
+        - Microsoft.Network/publicIPAddresses/read	
+
+- Disk
+    - Permissions
+        - Microsoft.Compute/disks/read	
+        
+- NIC
+    - Scope
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networkinterfaces
+    - Permissions
+        - Microsoft.Network/networkInterfaces/read	
+     
+- Network Security Groups
+    - Scope
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networksecuritygroups
+
+    - Permissions
+        - Microsoft.Network/networkSecurityGroups/read	
+    
+- Load Balancer
+    - Permissions
+        - Microsoft.Network/loadBalancers/read
+  
+
+#### [Virtual Machine Scale Sets](https://docs.microsoft.com/en-us/rest/api/compute/virtualmachinescalesets/listall)
+- Virtual Machine Scale Sets
+    - Scope
+        - https://docs.microsoft.com/en-us/rest/api/compute/virtualmachinescalesets/listall
+        - https://docs.microsoft.com/en-us/rest/api/compute/virtualmachinescalesetvms/list
+
+    - Permissions
+        - Microsoft.Compute/virtualMachineScaleSets/*/read	
+        
+
+#### [Disks](https://docs.microsoft.com/en-ca/rest/api/compute/disks/list)
+- Disks
+    - Permissions
+        - Microsoft.Storage/*/read
+
+
+#### [Snapshots](https://docs.microsoft.com/en-us/rest/api/compute/snapshots/list)
+- Snapshots
+    - Permissions
+        - Microsoft.Compute/snapshots/*/read	
+
+
+#### [Load Balancer](https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall)
+- Load Balancer
+    - Permissions
+        - Microsoft.Network/loadBalancers/*/read
+        - Microsoft.Network/virtualNetworks/subnets/*/read		
+
+            
+
+
+
+
