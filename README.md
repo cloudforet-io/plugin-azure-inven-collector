@@ -14,22 +14,29 @@ Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-servic
 Please contact us if you need any further information. 
 <support@spaceone.dev>
 
----
-### Contents
+
+## Contents
 
 * Table of Contents
     * [Virtual Machines](#Azure_VM_(Instance))
-        * [Azure VM (Instance)](#azure_vm_instance)
-        * [Disk](#disks)
-        * [NIC](#NIC)
-        * [Network Security Groups](#network_security_groups)
-        * [Load Balancer](#load_balancer)
     * [Virtual Machine Scale Sets](#Virtual_Machine_Scale_Sets)
     * [Disks](#disks)
     * [Snapshots](#Snapshots)
     * [Load Balancer](#Load_Balancer)
-    
+---
+## SETTING
+You should insert information about account in SpaceONE's **Service Account** initially.
+* Base Information
+	* `name`
+	* `Tenant ID`
+	* `Subscription ID`
+	* `Tag`
 
+* Credentials
+	* `Tenant ID`
+	* `Subscription ID`
+	* `Client Secret`
+	* `Client ID`
 ---
 
 ## Authentication Overview
@@ -38,8 +45,9 @@ Please, set authentication privilege for followings:
  
 
 #### [Virtual Machines](https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/list)
-
+        
 - Azure VM (Instance)
+
     - Scope
         - https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/listall
         - https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/get
@@ -48,30 +56,16 @@ Please, set authentication privilege for followings:
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/virtualnetworks
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networkinterfaces
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networksecuritygroups
-
+		
     - Permissions
         - Microsoft.Compute/*/read
         - Microsoft.Resources/*/read
         - Microsoft.Network/networkInterfaces/read	
-        - Microsoft.Network/publicIPAddresses/read	
-
-- Disks
-    - Permissions
-        - Microsoft.Compute/disks/read	
-        
-- NIC
-    - Permissions
-        - Microsoft.Network/networkInterfaces/read	
-     
-- Network Security Groups
-    - Permissions
-        - Microsoft.Network/networkSecurityGroups/read	
-    
-- Load Balancer
-    - Permissions
+        - Microsoft.Network/publicIPAddresses/read
+        - Microsoft.Network/networkSecurityGroups/read
         - Microsoft.Network/loadBalancers/read
+	
   
-
 #### [Virtual Machine Scale Sets](https://docs.microsoft.com/en-us/rest/api/compute/virtualmachinescalesets/listall)
 - Virtual Machine Scale Sets
     - Scope
