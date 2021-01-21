@@ -29,6 +29,8 @@ Please, set authentication privilege for followings:
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/virtualnetworks/list
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/publicipaddresses/list
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/virtualnetworks
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networkinterfaces
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networksecuritygroups
 
     - Permissions
         - Microsoft.Compute/*/read
@@ -41,15 +43,10 @@ Please, set authentication privilege for followings:
         - Microsoft.Compute/disks/read	
         
 - NIC
-    - Scope
-        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networkinterfaces
     - Permissions
         - Microsoft.Network/networkInterfaces/read	
      
 - Network Security Groups
-    - Scope
-        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networksecuritygroups
-
     - Permissions
         - Microsoft.Network/networkSecurityGroups/read	
     
@@ -70,18 +67,28 @@ Please, set authentication privilege for followings:
 
 #### [Disks](https://docs.microsoft.com/en-ca/rest/api/compute/disks/list)
 - Disks
+    - Scope
+        - https://docs.microsoft.com/en-ca/rest/api/compute/disks/list
+    
     - Permissions
         - Microsoft.Storage/*/read
 
 
 #### [Snapshots](https://docs.microsoft.com/en-us/rest/api/compute/snapshots/list)
 - Snapshots
+    - Scope
+        - https://docs.microsoft.com/en-us/rest/api/compute/snapshots/list
+    
     - Permissions
         - Microsoft.Compute/snapshots/*/read	
 
 
 #### [Load Balancer](https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall)
 - Load Balancer
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall
+        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/subnets/get
+
     - Permissions
         - Microsoft.Network/loadBalancers/*/read
         - Microsoft.Network/virtualNetworks/subnets/*/read		
