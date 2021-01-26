@@ -105,11 +105,11 @@ class VmScaleSetManager(AzureManager):
 
             vm_scale_set_dict['vm_instances'] = vm_instances_list
 
-
             # switch tags form
             tags = vm_scale_set_dict.get('tags', {})
+            _tags = self.convert_tag_format(tags)
             vm_scale_set_dict.update({
-                'tags': self.convert_tag_format(tags)
+                'tags': _tags
             })
 
             # print("vm_scale_set_dict")
@@ -119,7 +119,8 @@ class VmScaleSetManager(AzureManager):
             vm_scale_set_resource = VmScaleSetResource({
                 'data': vm_scale_set_data,
                 'region_code': vm_scale_set_data.location,
-                'reference': ReferenceModel(vm_scale_set_data.reference())
+                'reference': ReferenceModel(vm_scale_set_data.reference()),
+                'tags': _tags
             })
 
             # Must set_region_code method for region collection
