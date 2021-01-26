@@ -23,7 +23,7 @@ class CollectorService(BaseService):
             'DiskManager',
             'SnapshotManager',
             'VmScaleSetManager'
-            # ...
+            # 'LoadBalancerManager'
         ]
 
     @check_required(['options'])

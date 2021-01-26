@@ -15,10 +15,16 @@ class CloudServiceMeta(BaseMetaData):
         return cls({'view': MetaDataView({'sub_data': sub_data})})
 
 
+class Tags(Model):
+    key = StringType()
+    value = StringType()
+
+
 class CloudServiceResource(Model):
     provider = StringType(default="azure")
     cloud_service_type = StringType()
     cloud_service_group = StringType()
+    tags = ListType(ModelType(Tags), serialize_when_none=False)
     data = PolyModelType(Model, default=lambda: {})
     reference = ModelType(ReferenceModel)
     region_code = StringType()
