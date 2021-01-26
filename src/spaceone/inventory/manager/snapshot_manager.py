@@ -113,15 +113,17 @@ class SnapshotManager(AzureManager):
 
             # switch tags form
             tags = snapshot_dict.get('tags', {})
+            _tags = self.convert_tag_format(tags)
             snapshot_dict.update({
-                'tags': self.convert_tag_format(tags)
+                'tags': _tags
             })
 
             snapshot_data = Snapshot(snapshot_dict, strict=False)
             snapshot_resource = SnapshotResource({
                 'data': snapshot_data,
                 'region_code': snapshot_data.location,
-                'reference': ReferenceModel(snapshot_data.reference())
+                'reference': ReferenceModel(snapshot_data.reference()),
+                'tags': _tags
             })
 
             # Must set_region_code method for region collection
