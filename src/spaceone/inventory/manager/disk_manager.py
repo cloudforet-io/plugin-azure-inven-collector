@@ -80,8 +80,9 @@ class DiskManager(AzureManager):
 
             # switch tags form
             tags = disk_dict.get('tags', {})
+            _tags = self.convert_tag_format(tags)
             disk_dict.update({
-                'tags': self.convert_tag_format(tags)
+                'tags': _tags
             })
 
             disk_data = Disk(disk_dict, strict=False)
@@ -89,11 +90,13 @@ class DiskManager(AzureManager):
             disk_resource = DiskResource({
                 'data': disk_data,
                 'region_code': disk_data.location,
-                'reference': ReferenceModel(disk_data.reference())
+                'reference': ReferenceModel(disk_data.reference()),
+                'tags':  _tags
             })
 
             # Must set_region_code method for region collection
             self.set_region_code(disk_data['location'])
+
             disks.append(DiskResponse({'resource': disk_resource}))
 
         print(f'** Disk Finished {time.time() - start_time} Seconds **')

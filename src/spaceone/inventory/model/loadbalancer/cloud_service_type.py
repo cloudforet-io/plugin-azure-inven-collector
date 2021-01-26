@@ -4,23 +4,20 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 
-cst_vm_scale_set = CloudServiceTypeResource()
-cst_vm_scale_set.name = 'VmScaleSet'
-cst_vm_scale_set.group = 'Compute'
-cst_vm_scale_set.service_code = 'Microsoft.Compute/virtualMachineScaleSets'
-cst_vm_scale_set.labels = ['Compute', 'Storage']
-cst_vm_scale_set.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-vm-scale-set.svg',
+cst_load_balancer = CloudServiceTypeResource()
+cst_load_balancer.name = 'LoadBalancers'
+cst_load_balancer.group = 'Network'
+cst_load_balancer.service_code = 'Microsoft.Network/loadBalancers'
+cst_load_balancer.labels = ['Network']
+cst_load_balancer.tags = {
+    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-loadbalancers.svg',
 }
 
-cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
+cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        # TextDyField.data_source('Status', 'data.'), (x)
-        TextDyField.data_source('Instances', 'data.instance_count'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy'),
         TextDyField.data_source('Subscription', 'data.subscription_name')
     ],
     search=[
@@ -36,5 +33,5 @@ cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_vm_scale_set}),
+    CloudServiceTypeResponse({'resource': cst_load_balancer}),
 ]

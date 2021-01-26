@@ -107,8 +107,9 @@ class VmScaleSetManager(AzureManager):
 
             # switch tags form
             tags = vm_scale_set_dict.get('tags', {})
+            _tags = self.convert_tag_format(tags)
             vm_scale_set_dict.update({
-                'tags': self.convert_tag_format(tags)
+                'tags': _tags
             })
 
             # print("vm_scale_set_dict")
@@ -118,7 +119,8 @@ class VmScaleSetManager(AzureManager):
             vm_scale_set_resource = VmScaleSetResource({
                 'data': vm_scale_set_data,
                 'region_code': vm_scale_set_data.location,
-                'reference': ReferenceModel(vm_scale_set_data.reference())
+                'reference': ReferenceModel(vm_scale_set_data.reference()),
+                'tags': _tags
             })
 
             # Must set_region_code method for region collection
@@ -192,7 +194,14 @@ class VmScaleSetManager(AzureManager):
     # Get instance view of a virtual machine from a VM scale set instance
     @staticmethod
     def get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, instance_id):
-        vm_instance_view = vm_instance_conn.get_vm_scale_set_instance_view(resource_group, vm_scale_set_name, instance_id)
-        vm_instance_status_dict = self.convert_nested_dictionary(self, vm_instance_view)
+        vm_instance_status_profile = vm_instance_conn.get_vm_scale_set_instance_view(resource_group, vm_scale_set_name, instance_id)
+        vm_instance_status_profile_dict = self.convert_nested_dictionary(self, vm_instance_status_profile)
 
-        return vm_instance_status_dict
+        for status in vm_instance_status_profile_dict['vm_agent']['statuses']:
+            status_str = status['display_status']
+
+        vm_instance_status_profile_dict['vm_agent'].update({
+                'display_status': status_str
+        })
+
+        return vm_instance_status_profile_dict
