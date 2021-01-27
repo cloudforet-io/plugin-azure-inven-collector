@@ -28,12 +28,7 @@ class LoadBalancerManager(AzureManager):
             CloudServiceResponse
         """
         secret_data = params['secret_data']
-        # subscription_info = params['subscription_info']
-        subscription_info = {
-            'subscription_id': '3ec64e1e-1ce8-4f2c-82a0-a7f6db0899ca',
-            'subscription_name': 'Azure subscription 1',
-            'tenant_id': '35f43e22-0c0b-4ff3-90aa-b2c04ef1054c'
-        }
+        subscription_info = params['subscription_info']
 
         load_balancer_conn: LoadBalancerConnector = self.locator.get_connector(self.connector_name, **params)
         load_balancers = []
@@ -62,12 +57,13 @@ class LoadBalancerManager(AzureManager):
                                                                                            fic['subnet'])
                         fic['subnet']['name'] = self.get_frontend_ip_subnet_name(fic['subnet']['id'])
 
-                    # Get Used_by_rules_display
+                    # Get used inbound NAT rules
                     if fic.get('inbound_nat_rules') is not None:
                         load_balancer_dict.update({
                             'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(used_by_list, fic['inbound_nat_rules'])
                         })
 
+                    # Get used load balancing NAT rules
                     if fic.get('load_balancing_rules') is not None:
                         load_balancer_dict.update({
                             'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(used_by_list, fic['load_balancing_rules']),
@@ -75,6 +71,7 @@ class LoadBalancerManager(AzureManager):
 
                     # Get all of private ip addresses
                     private_ip_address_list.append(fic['private_ip_address'])
+
                     load_balancer_dict.update({
                         'private_ip_address_display': private_ip_address_list
                     })
@@ -118,7 +115,7 @@ class LoadBalancerManager(AzureManager):
                             'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(lbr['frontend_ip_configuration'])
                         })
 
-            # Get inbound NAT Rules for display
+            # Get Inbound NAT Rules for display
             if load_balancer_dict.get('inbound_nat_rules') is not None:
                 load_balancer_dict.update({
                     'inbound_nat_rules_display': self.get_nat_rules_display(self,
@@ -130,22 +127,22 @@ class LoadBalancerManager(AzureManager):
                         'port_mapping_display': self.get_port_mapping_display(inr['frontend_port'], inr['backend_port'])
                     })
 
-            # Get
-
             # switch tags form
             tags = load_balancer_dict.get('tags', {})
+            _tags = self.convert_tag_format(tags)
             load_balancer_dict.update({
-                'tags': self.convert_tag_format(tags)
+                'tags': _tags
             })
 
-            print("load_balancer_dict")
-            print(load_balancer_dict)
+            # print("load_balancer_dict")
+            # print(load_balancer_dict)
 
             load_balancer_data = LoadBalancer(load_balancer_dict, strict=False)
             load_balancer_resource = LoadBalancerResource({
                 'data': load_balancer_data,
                 'region_code': load_balancer_data.location,
-                'reference': ReferenceModel(load_balancer_data.reference())
+                'reference': ReferenceModel(load_balancer_data.reference()),
+                'tags': _tags
             })
 
             # Must set_region_code method for region collection
@@ -167,13 +164,21 @@ class LoadBalancerManager(AzureManager):
 
         for nil in network_interface_object_list:
             network_interface_dict = self.convert_nested_dictionary(self, nil)
+
+            # 1) Get LB's name which is attached to this network interface card
             # network_interfaces >> network_interfaces >> ip_configurations
-            for ip_configuration in network_interface_dict['ip_configurations']:
-                # if ip_configuration.get['load_balancer_backend_address_pools'] is not None:
+            if network_interface_dict.get('ip_configurations') is not None:
+                for ip_configuration in network_interface_dict['ip_configurations']:
                     for lb_bap in ip_configuration['load_balancer_backend_address_pools']:
                         network_interface_dict.update({
-                            'load_balancer_backend_address_pools_name_display': lb_bap['id'].split('/')[8]
+                                'load_balancer_backend_address_pools_name_display': lb_bap['id'].split('/')[8]
                         })
+
+            # 2) Get VM's name which is attached to this network interface card
+            if network_interface_dict.get('virtual_machine') is not None:
+                network_interface_dict.update({
+                    'virtual_machine_name_display': network_interface_dict['virtual_machine']['id'].split('/')[8]
+                })
 
             network_interface_list.append(network_interface_dict)
 
