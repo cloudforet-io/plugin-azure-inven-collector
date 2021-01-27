@@ -124,8 +124,15 @@ class LoadBalancerManager(AzureManager):
                 for inr in load_balancer_dict['inbound_nat_rules']:
                     inr.update({
                         'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(inr['frontend_ip_configuration']),
-                        'port_mapping_display': self.get_port_mapping_display(inr['frontend_port'], inr['backend_port'])
+                        'port_mapping_display': self.get_port_mapping_display(inr['frontend_port'], inr['backend_port']),
+                        'target_virtual_machine': self.get_matched_vm_info(self, inr['backend_ip_configuration']['id'], load_balancer_dict['network_interfaces'])
                     })
+
+            # Get Health Probes for display
+            if load_balancer_dict.get('probes') is not None:
+                load_balancer_dict.update({
+                    'probes_display': self.get_probe_display_list(self, load_balancer_dict['probes'])
+                })
 
             # switch tags form
             tags = load_balancer_dict.get('tags', {})
@@ -169,10 +176,20 @@ class LoadBalancerManager(AzureManager):
             # network_interfaces >> network_interfaces >> ip_configurations
             if network_interface_dict.get('ip_configurations') is not None:
                 for ip_configuration in network_interface_dict['ip_configurations']:
-                    for lb_bap in ip_configuration['load_balancer_backend_address_pools']:
+
+                    if ip_configuration.get('load_balancer_backend_address_pools') is not None:
+                        for ic in ip_configuration['load_balancer_backend_address_pools']:
+                            # Get backend address vm name
+                            backend_pool_vm_name = ic['id'].split('/')[8]
+
                         network_interface_dict.update({
-                                'load_balancer_backend_address_pools_name_display': lb_bap['id'].split('/')[8]
+                            'load_balancer_backend_address_pools_name_display': backend_pool_vm_name,
                         })
+
+                # Get the primary ip configuration from network interface card
+                network_interface_dict.update({
+                    'private_ip_display': self.get_primary_ip_configuration(network_interface_dict['ip_configurations'])
+                })
 
             # 2) Get VM's name which is attached to this network interface card
             if network_interface_dict.get('virtual_machine') is not None:
@@ -183,6 +200,12 @@ class LoadBalancerManager(AzureManager):
             network_interface_list.append(network_interface_dict)
 
         return network_interface_list
+
+    @staticmethod
+    def get_primary_ip_configuration(ip_configurations_list):
+        for ic in ip_configurations_list:
+            if ic.get('primary') is True:
+                return ic['private_ip_address']
 
     @staticmethod
     def get_frontend_address_prefix(self, conn, subnet):
@@ -244,17 +267,21 @@ class LoadBalancerManager(AzureManager):
 
         return backend_address_pools_count_display
 
-    '''
     @staticmethod
-    def get_matched_vm_info(self, backend_ip_configuration_id, network_interfaces_list):
+    def get_matched_vm_info(self, find_key, find_list_pool):
         matched_vm_list = list()
-        for network_interface in network_interfaces_list:
-            if network_interface['id'] in backend_ip_configuration_id:  # if network interface card's id matches to the backend configuration's id
-                if network_interface.get('virtual_machine') is not None:
-                    matched_vm_list.append(network_interface['virtual_machine']['id'])
+        for find_object in find_list_pool:
+            if find_object['id'] in find_key:  # if network interface card's id matches to the backend configuration's id
+                if find_object.get('virtual_machine') is not None:
+                    matched_vm_list.append((find_object['virtual_machine']['id']).split('/')[8])
         return matched_vm_list
-    '''
 
+    @staticmethod
+    def get_probe_display_list(self, probes_list):
+        probe_display_list = list()
+        for probe in probes_list:
+            probe_display_list.append(probe['name'])
+        return probe_display_list
 
     @staticmethod
     def get_load_balancing_rules_display(self, load_balancing_rules_list):
