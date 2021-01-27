@@ -389,6 +389,7 @@ class NetworkInterface(Model):
     tap_configurations = ListType(ModelType(NetworkInterfaceTapConfiguration), serialize_when_none=False)
     virtual_machine = ModelType(SubResource, serialize_when_none=False)
     virtual_machine_name_display = StringType(serialize_when_none=False)
+    private_ip_display = StringType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
@@ -484,7 +485,8 @@ class InboundNatRule(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    backend_ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)  # 아래에 있음
+    backend_ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)
+    target_virtual_machine = ListType(StringType, serialize_when_none=False)
     backend_port = IntType(serialize_when_none=False)
     enable_floating_ip = BooleanType(serialize_when_none=False)
     enable_tcp_reset = BooleanType(serialize_when_none=False)
@@ -764,12 +766,20 @@ class BackendAddressPool(Model):
     vm_ids = ListType(StringType, serialize_when_none=False)
 
 
+class LoadBalancerSku(Model):
+    tier = StringType(choices=('Global', 'Regional'), serialize_when_none=False)
+    name = StringType(choices=('Standard', 'Basic'), serialize_when_none=False)
+
+
 class LoadBalancer(Model):
     name = StringType()
     id = StringType()
     type = StringType()
+    subscription_id = StringType()
+    subscription_name = StringType()
     resource_group = StringType()
     location = StringType()
+    sku = ModelType(LoadBalancerSku, serialize_when_none=False)
     extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
     backend_address_pools = ListType(ModelType(BackendAddressPool), serialize_when_none=False)
     backend_address_pools_count_display = StringType(serialize_when_none=False, default='')
@@ -784,6 +794,7 @@ class LoadBalancer(Model):
     load_balancing_rules_display = ListType(StringType, serialize_when_none=False)
     outbound_rules = ListType(ModelType(OutboundRule), serialize_when_none=False)
     probes = ListType(ModelType(Probe), serialize_when_none=False)
+    probes_display = ListType(StringType, serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     tags = ListType(ModelType(Tags), serialize_when_none=False)
