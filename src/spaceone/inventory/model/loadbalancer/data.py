@@ -93,6 +93,7 @@ class FlowLog(Model):
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
+
 class NetworkInterfaceTapConfiguration(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -245,6 +246,7 @@ class RouteTable(Model):
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
+
 class ServiceEndpointPolicy(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -263,6 +265,7 @@ class ServiceEndpointPropertiesFormat(Model):
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     service = StringType(serialize_when_none=False)
 
+
 class NetworkSecurityGroupRef(Model):
     id = StringType()
     name = StringType()
@@ -280,6 +283,7 @@ class IPConfiguration(Model):
     private_ip_address = StringType(serialize_when_none=False)
     public_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+
 
 class PublicIPAddress(Model):
     etag = StringType(serialize_when_none=False)
@@ -342,6 +346,7 @@ class PrivateEndpoint(Model):
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
+
 class NetworkInterfaceIPConfiguration(Model):  # ip configuration in a network interface
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -361,6 +366,7 @@ class NetworkInterfaceIPConfiguration(Model):  # ip configuration in a network i
     subnet = ModelType(SubnetRef, serialize_when_none=False)
     virtual_network_taps = ListType(ModelType(SubResource), serialize_when_none=False)
 
+
 class NetworkInterface(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -372,15 +378,17 @@ class NetworkInterface(Model):
     enable_accelerated_networking = BooleanType(serialize_when_none=False)
     enable_ip_forwarding = BooleanType(serialize_when_none=False)
     hosted_workloads = ListType(StringType, serialize_when_none=False)
-    ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False) # 아래에 있음
+    ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)  # 아래에 있음
     mac_address = StringType(serialize_when_none=False)
     network_security_group = ModelType(SubResource)
+    load_balancer_backend_address_pools_name_display = StringType(serialize_when_none=False)
     primary = BooleanType(serialize_when_none=False)
     private_endpoint = ModelType(PrivateEndpoint, serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     tap_configurations = ListType(ModelType(NetworkInterfaceTapConfiguration), serialize_when_none=False)
     virtual_machine = ModelType(SubResource, serialize_when_none=False)
+    virtual_machine_name_display = StringType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
@@ -399,6 +407,7 @@ class NetworkSecurityGroupRef(Model):
     subnet = ListType(StringType(), default=[], serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+
 
 class PrivateEndpointRef(Model):
     etag = StringType(serialize_when_none=False)
@@ -446,9 +455,8 @@ class InboundNatPool(Model):
 
 ################################################################################
 ################################################################################
-'''
-공통 클래스
-'''
+
+
 class SubnetRef(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -471,9 +479,6 @@ class SubnetRef(Model):
     service_endpoint_policies = ListType(ModelType(ServiceEndpointPolicy), serialize_when_none=False)
     service_endpoints = ListType(ModelType(ServiceEndpointPropertiesFormat), serialize_when_none=False)
 
-'''
-공통 클래스 끝
-'''
 
 class InboundNatRule(Model):
     etag = StringType(serialize_when_none=False)
@@ -484,7 +489,9 @@ class InboundNatRule(Model):
     enable_floating_ip = BooleanType(serialize_when_none=False)
     enable_tcp_reset = BooleanType(serialize_when_none=False)
     frontend_ip_configuration = ModelType(SubResource, serialize_when_none=False)
+    frontend_ip_configuration_display = StringType(serialize_when_none=False)
     frontend_port = IntType(serialize_when_none=False)
+    port_mapping_display = StringType(serialize_when_none=False)
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
     protocol = StringType(choices=('All', 'Tcp', 'Udp'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
@@ -496,14 +503,17 @@ class LoadBalancingRule(Model):
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     backend_address_pool = ModelType(SubResource, serialize_when_none=False)
+    backend_address_pool_display = StringType(serialize_when_none=False)
     backend_port = IntType(serialize_when_none=False)
     disable_outbound_s_nat = BooleanType(serialize_when_none=False)
     enable_floating_ip = BooleanType(serialize_when_none=False)
     enable_tcp_reset = BooleanType(serialize_when_none=False)
     frontend_ip_configuration = ModelType(SubResource, serialize_when_none=False)
+    frontend_ip_configuration_display = StringType(serialize_when_none=False)
     frontend_port = IntType(serialize_when_none=False)
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
     load_distribution = StringType(choices=('Default', 'SourceIP', 'SourceIPProtocol'), serialize_when_none=False)
+    load_distribution_display = StringType(serialize_when_none=False)
     probe = ModelType(SubResource, serialize_when_none=False)
     protocol = StringType(choices=('All', 'Tcp', 'Udp'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
@@ -573,10 +583,10 @@ class FrontendIPConfiguration(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    inbound_nat_pools = ModelType(SubResource, serialize_when_none=False)
-    inbound_nat_rules = ModelType(SubResource, serialize_when_none=False)
-    load_balancing_rules = ModelType(SubResource, serialize_when_none=False)
-    outbound_rules = ModelType(SubResource, serialize_when_none=False)
+    inbound_nat_pools = ListType(ModelType(InboundNatPool), serialize_when_none=False)
+    inbound_nat_rules = ListType(ModelType(InboundNatRule), serialize_when_none=False)
+    load_balancing_rules = ListType(ModelType(LoadBalancingRule), serialize_when_none=False)
+    outbound_rules = ListType(ModelType(OutboundRule), serialize_when_none=False)
     private_ip_address = StringType(serialize_when_none=False)
     private_ip_address_version = StringType(choices=('IPv4', 'IPv6'), serialize_when_none=False)
     private_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
@@ -601,6 +611,7 @@ class VirtualNetworkTap(Model):
     resource_guid = StringType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+
 
 class NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties(Model):  # belongs to NetworkInterfaceIPConfiguration
     fqdns = ListType(StringType, serialize_when_none=False)
@@ -743,13 +754,14 @@ class BackendAddressPool(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    backend_ip_configurations = ListType(StringType(NetworkInterfaceIPConfiguration), serialize_when_none=False)
+    backend_ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)
     load_balancer_backend_addresses = ListType(ModelType(LoadBalancerBackendAddress), serialize_when_none=False)
     load_balancing_rules = ListType(ModelType(SubResource), serialize_when_none=False)
     outbound_rule = ModelType(SubResource, serialize_when_none=False)
     outbound_rules = ListType(ModelType(SubResource), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    vm_ids = ListType(StringType, serialize_when_none=False)
 
 
 class LoadBalancer(Model):
@@ -758,18 +770,24 @@ class LoadBalancer(Model):
     type = StringType()
     resource_group = StringType()
     location = StringType()
-    extended_location = ModelType(ExtendedLocation, serialize_when_none=False) # Okay
-    backend_address_pools = ListType(ModelType(BackendAddressPool), serialize_when_none=False) # Okay
-    frontend_ip_configurations = ListType(ModelType(FrontendIPConfiguration), serialize_when_none=False) # Okay
-    inbound_nat_pools = ListType(ModelType(InboundNatPool), serialize_when_none=False) # Okay
-    inbound_nat_rules = ListType(ModelType(InboundNatRule), serialize_when_none=False)  # Okay
-    load_balancing_rules = ListType(ModelType(LoadBalancingRule), serialize_when_none=False) # Okay
-    outbound_rules = ListType(ModelType(OutboundRule), serialize_when_none=False) # Okay
-    probes = ListType(ModelType(Probe), serialize_when_none=False) # Okay
-    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False) # Okay
-    resource_guid = StringType(serialize_when_none=False) # Okay
-    tags = ModelType(Tags, serialize_when_none=False) # Okay
-    type = StringType(serialize_when_none=False) # Okay
+    extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
+    backend_address_pools = ListType(ModelType(BackendAddressPool), serialize_when_none=False)
+    backend_address_pools_count_display = StringType(serialize_when_none=False, default='')
+    network_interfaces = ListType(ModelType(NetworkInterface), serialize_when_none=False)
+    frontend_ip_configurations = ListType(ModelType(FrontendIPConfiguration), serialize_when_none=False)
+    frontend_ip_configurations_used_by_display = ListType(StringType, serialize_when_none=False)
+    private_ip_address_display = ListType(StringType, serialize_when_none=False)
+    inbound_nat_pools = ListType(ModelType(InboundNatPool), serialize_when_none=False)
+    inbound_nat_rules = ListType(ModelType(InboundNatRule), serialize_when_none=False)
+    inbound_nat_rules_display = ListType(StringType, serialize_when_none=False)
+    load_balancing_rules = ListType(ModelType(LoadBalancingRule), serialize_when_none=False)
+    load_balancing_rules_display = ListType(StringType, serialize_when_none=False)
+    outbound_rules = ListType(ModelType(OutboundRule), serialize_when_none=False)
+    probes = ListType(ModelType(Probe), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    resource_guid = StringType(serialize_when_none=False)
+    tags = ListType(ModelType(Tags), serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
 
     def reference(self):
         return {

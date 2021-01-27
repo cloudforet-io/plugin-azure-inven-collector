@@ -15,3 +15,12 @@ class LoadBalancerConnector(AzureConnector):
 
     def list_load_balancers(self):
         return self.network_client.load_balancers.list_all()
+
+    def get_subnets(self, resource_group_name, vnet_name, subnet_name):
+        return self.network_client.subnets.get(resource_group_name, vnet_name, subnet_name)
+
+    def list_load_balancer_backend_address_pools(self, resource_group_name, lb_name):
+        return self.network_client.load_balancer_backend_address_pools.list(resource_group_name, lb_name)
+
+    def list_load_balancer_network_interfaces(self, resource_group_name, lb_name):
+        return self.network_client.load_balancer_network_interfaces.list(resource_group_name, lb_name)
