@@ -378,7 +378,7 @@ class NetworkInterface(Model):
     enable_accelerated_networking = BooleanType(serialize_when_none=False)
     enable_ip_forwarding = BooleanType(serialize_when_none=False)
     hosted_workloads = ListType(StringType, serialize_when_none=False)
-    ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False) # 아래에 있음
+    ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)  # 아래에 있음
     mac_address = StringType(serialize_when_none=False)
     network_security_group = ModelType(SubResource)
     load_balancer_backend_address_pools_name_display = StringType(serialize_when_none=False)
