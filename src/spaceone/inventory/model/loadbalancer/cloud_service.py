@@ -63,8 +63,7 @@ load_balancer_info_frontend_ip_config_meta = ListDynamicLayout.set_layouts('Fron
 # 3) Backend pool name, Virtual Network, Private IP Address Version
 load_balancer_info_backend_pools = SimpleTableDynamicLayout.set_fields('Backend Pools', 'data.backend_address_pools', fields=[
     TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Virtual network', 'private_ip_address'),
-    TextDyField.data_source('IP Version', 'private_ip_address_version'),
+    TextDyField.data_source('ID', 'id')
 ])
 
 # 4) Virtual machine, Load Balancer, Network interface, private IP address
