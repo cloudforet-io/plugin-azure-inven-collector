@@ -3,7 +3,6 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
-
 cst_load_balancer = CloudServiceTypeResource()
 cst_load_balancer.name = 'LoadBalancers'
 cst_load_balancer.group = 'Network'
