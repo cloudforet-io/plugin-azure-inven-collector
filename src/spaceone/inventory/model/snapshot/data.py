@@ -87,6 +87,7 @@ class Snapshot(Model):
     provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
     time_created = DateTimeType()
     unique_id = StringType()
+    size = IntType()
     sku = ModelType(Sku)
     source_disk_name = StringType()
     subscription_id = StringType()
