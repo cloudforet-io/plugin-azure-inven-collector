@@ -3,7 +3,6 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
-
 cst_load_balancer = CloudServiceTypeResource()
 cst_load_balancer.name = 'LoadBalancers'
 cst_load_balancer.group = 'Network'
@@ -18,7 +17,7 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name')
+        TextDyField.data_source('Subscription', 'data.subscription_name'),
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
@@ -27,6 +26,9 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
+        SearchField.set(name='Load Balancer Type', key='data.sku.name', data_type='string'),
+
+
     ]
 
 )

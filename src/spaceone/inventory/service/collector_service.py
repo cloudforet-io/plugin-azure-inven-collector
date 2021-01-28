@@ -22,8 +22,8 @@ class CollectorService(BaseService):
             # set MS Azure cloud service manager
             'DiskManager',
             'SnapshotManager',
-            'VmScaleSetManager'
-            # 'LoadBalancerManager'
+            'VmScaleSetManager',
+            'LoadBalancerManager'
         ]
 
     @check_required(['options'])
