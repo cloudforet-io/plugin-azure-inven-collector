@@ -69,10 +69,12 @@ load_balancer_info_backend_pools = SimpleTableDynamicLayout.set_fields('Backend 
 # 4) Virtual machine, Load Balancer, Network interface, private IP address
 load_balancer_info_backend_pools_vms = SimpleTableDynamicLayout.set_fields('Backend Pools VM information',
                                                                      'data.network_interfaces', fields=[
-        TextDyField.data_source('Load Balancer', 'load_balancer_backend_address_pools_name_display'),
+        TextDyField.data_source('Backend Pool', 'load_balancer_backend_address_pools_name_display'),
         TextDyField.data_source('VM Name', 'virtual_machine_name_display'),
         TextDyField.data_source('Network Interface', 'name'),
-        TextDyField.data_source('Private IP Address', 'private_ip_display')
+        ListDyField.data_source('Private IP Address', 'private_ip_display', options={
+            'delimiter': '<br>'
+        })
     ])
 
 # 3 + 4) TAB - Backend Pools

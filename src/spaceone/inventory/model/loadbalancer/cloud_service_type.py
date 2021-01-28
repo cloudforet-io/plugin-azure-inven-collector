@@ -8,6 +8,7 @@ cst_load_balancer.name = 'LoadBalancers'
 cst_load_balancer.group = 'Network'
 cst_load_balancer.service_code = 'Microsoft.Network/loadBalancers'
 cst_load_balancer.labels = ['Network']
+cst_load_balancer.is_major = True
 cst_load_balancer.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-loadbalancers.svg',
 }
