@@ -2,7 +2,7 @@ from schematics.types import ModelType, StringType, PolyModelType
 
 from spaceone.inventory.model.loadbalancer.data import LoadBalancer
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
-    ListDyField, SizeField, StateItemDyField
+    ListDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
@@ -22,7 +22,9 @@ load_balancer_info_meta = ItemDynamicLayout.set_fields('LoadBalancer', fields=[
     TextDyField.data_source('Subscription', 'data.subscription_id'),
     TextDyField.data_source('SKU', 'data.sku.name'),
     TextDyField.data_source('Backend pools', 'data.backend_address_pools_count_display'),
-    TextDyField.data_source('Health Probe', 'data.sku.name'),
+    ListDyField.data_source('Health Probe', 'data.probes_display', options={
+        'delimiter': '<br>'
+    }),
     ListDyField.data_source('Load Balancing Rule', 'data.load_balancing_rules_display', options={
         'delimiter': '<br>'
     }),
@@ -31,52 +33,55 @@ load_balancer_info_meta = ItemDynamicLayout.set_fields('LoadBalancer', fields=[
     }),
     ListDyField.data_source('Private IP Address', 'data.private_ip_address_display', options={
         'delimiter': '<br>'
-    })
+    }),
 ])
 
 # TAB - Frontend IP Configurations
-# Name, IP Address, Rules Count, Type, Public IP Address
-load_balancer_info_frontend_ip_config = TableDynamicLayout.set_fields('Frontend IP Configurations',
+# 1) Name, IP Address, Rules Count, Type, Public IP Address
+load_balancer_info_frontend_ip_config = SimpleTableDynamicLayout.set_fields('Frontend IP Configurations',
                                                                       'data.frontend_ip_configurations', fields=[
         TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('IP Address', 'private_ip_address'),
         TextDyField.data_source('IP Version', 'private_ip_address_version'),
     ])
 
-# TAB - Frontend IP Configurations
-# Used By
-load_balancer_info_frontend_ip_config_rules = TableDynamicLayout.set_fields('Frontend Ip Configurations', fields=[
+
+# 2) Used By
+load_balancer_info_frontend_ip_config_rules = ItemDynamicLayout.set_fields('Used By', fields=[
     ListDyField.data_source('Used By', 'data.frontend_ip_configurations_used_by_display', options={
         'delimiter': '<br>'
     })
 ])
 
-# TAB - Frontend IP Configurations Meta
+# 1 + 2) TAB - Frontend IP Configurations Meta
 load_balancer_info_frontend_ip_config_meta = ListDynamicLayout.set_layouts('Frontend IP Configurations',
                                                                            layouts=[
                                                                                load_balancer_info_frontend_ip_config,
                                                                                load_balancer_info_frontend_ip_config_rules])
 
 # TAB - Backend Pools
-# Backend pool name, Virtual machine, VM status, Network interface, private IP address, availability zone
-load_balancer_info_backend_pools = TableDynamicLayout.set_fields('Backend Pools', 'data.backend_address_pools', fields=[
-    TextDyField.data_source('Name', '.name'),
-    TextDyField.data_source('Virtual network', 'private_ip_address'),
-    TextDyField.data_source('IP Version', 'private_ip_address_version'),
+# 3) Backend pool name, Virtual Network, Private IP Address Version
+load_balancer_info_backend_pools = SimpleTableDynamicLayout.set_fields('Backend Pools', 'data.backend_address_pools', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('ID', 'id')
 ])
 
-load_balancer_info_backend_pools_vms = TableDynamicLayout.set_fields('Backend Pools VM information', 'data.network_interfaces', fields=[
-    TextDyField.data_source('VM Name', 'virtual_machine_name_display'),
-    TextDyField.data_source('Load Balancer', 'load_balancer_backend_address_pools_name_display'),
-    TextDyField.data_source('Network Interface', 'name'),
-    TextDyField.data_source('Private IP Address', 'private_ip_address')
-])
+# 4) Virtual machine, Load Balancer, Network interface, private IP address
+load_balancer_info_backend_pools_vms = SimpleTableDynamicLayout.set_fields('Backend Pools VM information',
+                                                                     'data.network_interfaces', fields=[
+        TextDyField.data_source('Load Balancer', 'load_balancer_backend_address_pools_name_display'),
+        TextDyField.data_source('VM Name', 'virtual_machine_name_display'),
+        TextDyField.data_source('Network Interface', 'name'),
+        TextDyField.data_source('Private IP Address', 'private_ip_display')
+    ])
+
+# 3 + 4) TAB - Backend Pools
 load_balancer_info_backend_pools_meta = ListDynamicLayout.set_layouts('Backend Pools',
-                                                                           layouts=[
-                                                                               load_balancer_info_backend_pools,
-                                                                               load_balancer_info_backend_pools_vms])
+                                                                      layouts=[
+                                                                          load_balancer_info_backend_pools,
+                                                                          load_balancer_info_backend_pools_vms])
 # TAB - Health Probes
-# Name, Protocol, Port, Used By
+# Name, Protocol, Port
 load_balancer_info_health_probes = TableDynamicLayout.set_fields('Health Probes', 'data.probes', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Protocol', 'protocol'),
@@ -117,8 +122,8 @@ load_balancer_info_load_balancing_rules = TableDynamicLayout.set_fields('Inbound
                                                                                                     'enable_tcp_reset'),
                                                                             TextDyField.data_source('Port',
                                                                                                     'frontend_port'),
-                                                                            TextDyField.data_source(
-                                                                                'Target Virtual Machine', ''),  # *****
+                                                                            ListDyField.data_source(
+                                                                                'Target Virtual Machine', 'target_virtual_machine'),  # *****
                                                                             TextDyField.data_source(
                                                                                 'Network IP Configuration',
                                                                                 'frontend_ip_configuration_display'),
@@ -139,7 +144,8 @@ load_balancer_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fie
 ])
 
 load_balancer_meta = CloudServiceMeta.set_layouts(
-    [load_balancer_info_meta, load_balancer_info_frontend_ip_config_meta, load_balancer_info_backend_pools_meta, load_balancer_info_health_probes,
+    [load_balancer_info_meta, load_balancer_info_frontend_ip_config_meta, load_balancer_info_backend_pools_meta,
+     load_balancer_info_health_probes,
      load_balancer_info_load_balancing_rules, load_balancer_info_tags])
 
 
@@ -148,7 +154,7 @@ class NetworkResource(CloudServiceResource):
 
 
 class LoadBalancerResource(NetworkResource):
-    cloud_service_type = StringType(default='LoadBalancer')
+    cloud_service_type = StringType(default='LoadBalancers')
     data = ModelType(LoadBalancer)
     _metadata = ModelType(CloudServiceMeta, default=load_balancer_meta, serialized_name='metadata')
 
