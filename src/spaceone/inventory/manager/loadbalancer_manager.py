@@ -172,21 +172,22 @@ class LoadBalancerManager(AzureManager):
         for nil in network_interface_object_list:
             network_interface_dict = self.convert_nested_dictionary(self, nil)
 
-            # 1) Get LB's name which is attached to this network interface card
+            # 1) Loop for getting LB's name which is attached to this network interface card
             # network_interfaces >> network_interfaces >> ip_configurations
             if network_interface_dict.get('ip_configurations') is not None:
                 for ip_configuration in network_interface_dict['ip_configurations']:
 
+                    # 2) Loop for getting VMs name attached to Backend Pool
                     if ip_configuration.get('load_balancer_backend_address_pools') is not None:
                         for ic in ip_configuration['load_balancer_backend_address_pools']:
                             # Get backend address vm name
-                            backend_pool_vm_name = ic['id'].split('/')[8]
+                            backend_pool_vm_name = ic['id'].split('/')[10]
 
                         network_interface_dict.update({
                             'load_balancer_backend_address_pools_name_display': backend_pool_vm_name,
                         })
 
-                # Get the primary ip configuration from network interface card
+                # Get the primary ip configuration from a network interface card
                 network_interface_dict.update({
                     'private_ip_display': self.get_primary_ip_configuration(network_interface_dict['ip_configurations'])
                 })
@@ -203,9 +204,11 @@ class LoadBalancerManager(AzureManager):
 
     @staticmethod
     def get_primary_ip_configuration(ip_configurations_list):
+        ic_list = list()
         for ic in ip_configurations_list:
-            if ic.get('primary') is True:
-                return ic['private_ip_address']
+            # if ic.get('primary') is True:     # SDK error
+            ic_list.append(ic['private_ip_address'])
+        return ic_list
 
     @staticmethod
     def get_frontend_address_prefix(self, conn, subnet):
@@ -320,7 +323,7 @@ class LoadBalancerManager(AzureManager):
 
     @staticmethod
     def get_port_mapping_display(frontend_port, backend_port):
-        if frontend_port==backend_port:
+        if frontend_port == backend_port:
             port_mapping_display = 'Default'
         else:
             port_mapping_display = 'Custom'

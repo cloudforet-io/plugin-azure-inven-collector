@@ -388,8 +388,8 @@ class NetworkInterface(Model):
     resource_guid = StringType(serialize_when_none=False)
     tap_configurations = ListType(ModelType(NetworkInterfaceTapConfiguration), serialize_when_none=False)
     virtual_machine = ModelType(SubResource, serialize_when_none=False)
-    virtual_machine_name_display = StringType(serialize_when_none=False)
-    private_ip_display = StringType(serialize_when_none=False)
+    virtual_machine_name_display = StringType(serialize_when_none=False, default='-')
+    private_ip_display = ListType(StringType, default=[], serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
@@ -661,8 +661,8 @@ class NetworkInterface(Model):
     resource_guid = StringType(serialize_when_none=False)
     tap_configurations = ListType(ModelType(NetworkInterfaceTapConfiguration), serialize_when_none=False)
     virtual_machine = ModelType(SubResource, serialize_when_none=False)
-    virtual_machine_name_display = StringType(serialize_when_none=False)
-    private_ip_display = StringType(serialize_when_none=False)
+    virtual_machine_name_display = StringType(serialize_when_none=False, default='-')
+    private_ip_display = ListType(StringType, serialize_when_none=False, default=[])
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
