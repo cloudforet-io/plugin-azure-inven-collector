@@ -44,7 +44,9 @@ class LoadBalancerManager(AzureManager):
 
             # Get Network Interfaces attached in this load balancer
             load_balancer_dict.update({
-                'network_interfaces': self.get_network_interfaces(self, load_balancer_conn, load_balancer_dict['resource_group'], load_balancer_dict['name'])
+                'network_interfaces': self.get_network_interfaces(self, load_balancer_conn,
+                                                                  load_balancer_dict['resource_group'],
+                                                                  load_balancer_dict['name'])
             })
 
             # Get Frontend IP Configurations information
@@ -52,7 +54,8 @@ class LoadBalancerManager(AzureManager):
                 private_ip_address_list = list()
                 used_by_list = list()
                 for fic in load_balancer_dict['frontend_ip_configurations']:
-                    if fic.get('subnet'):  # If the 'public' type, Skip this part because there isn't subnet information for them.
+                    if fic.get(
+                            'subnet'):  # If the 'public' type, Skip this part because there isn't subnet information for them.
                         fic['subnet']['address_prefix'] = self.get_frontend_address_prefix(self, load_balancer_conn,
                                                                                            fic['subnet'])
                         fic['subnet']['name'] = self.get_frontend_ip_subnet_name(fic['subnet']['id'])
@@ -60,13 +63,15 @@ class LoadBalancerManager(AzureManager):
                     # Get used inbound NAT rules
                     if fic.get('inbound_nat_rules') is not None:
                         load_balancer_dict.update({
-                            'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(used_by_list, fic['inbound_nat_rules'])
+                            'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(
+                                used_by_list, fic['inbound_nat_rules'])
                         })
 
                     # Get used load balancing NAT rules
                     if fic.get('load_balancing_rules') is not None:
                         load_balancer_dict.update({
-                            'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(used_by_list, fic['load_balancing_rules']),
+                            'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(
+                                used_by_list, fic['load_balancing_rules']),
                         })
 
                     # Get all of private ip addresses
@@ -83,7 +88,9 @@ class LoadBalancerManager(AzureManager):
                     'backend_address_pools': self.list_load_balancer_backend_address_pools(self, load_balancer_conn,
                                                                                            load_balancer_dict[
                                                                                                'resource_group'],
-                                                                                           load_balancer_dict['name'], load_balancer_dict['network_interfaces'])
+                                                                                           load_balancer_dict['name'],
+                                                                                           load_balancer_dict[
+                                                                                               'network_interfaces'])
                 })
                 # get backend address pool's count
                 load_balancer_dict.update({
@@ -102,7 +109,8 @@ class LoadBalancerManager(AzureManager):
                 for lbr in load_balancer_dict['load_balancing_rules']:
                     if lbr.get('backend_address_pool') is not None:
                         lbr.update({
-                            'backend_address_pool_display': self.get_backend_address_pool_name(lbr['backend_address_pool']),
+                            'backend_address_pool_display': self.get_backend_address_pool_name(
+                                lbr['backend_address_pool']),
                         })
 
                     if lbr.get('load_distribution') is not None:
@@ -112,7 +120,8 @@ class LoadBalancerManager(AzureManager):
 
                     if lbr.get('frontend_ip_configuration') is not None:
                         lbr.update({
-                            'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(lbr['frontend_ip_configuration'])
+                            'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(
+                                lbr['frontend_ip_configuration'])
                         })
 
             # Get Inbound NAT Rules for display
@@ -123,9 +132,12 @@ class LoadBalancerManager(AzureManager):
                 })
                 for inr in load_balancer_dict['inbound_nat_rules']:
                     inr.update({
-                        'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(inr['frontend_ip_configuration']),
-                        'port_mapping_display': self.get_port_mapping_display(inr['frontend_port'], inr['backend_port']),
-                        'target_virtual_machine': self.get_matched_vm_info(self, inr['backend_ip_configuration']['id'], load_balancer_dict['network_interfaces'])
+                        'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(
+                            inr['frontend_ip_configuration']),
+                        'port_mapping_display': self.get_port_mapping_display(inr['frontend_port'],
+                                                                              inr['backend_port']),
+                        'target_virtual_machine': self.get_matched_vm_info(self, inr['backend_ip_configuration']['id'],
+                                                                           load_balancer_dict['network_interfaces'])
                     })
 
             # Get Health Probes for display
@@ -169,15 +181,19 @@ class LoadBalancerManager(AzureManager):
         network_interface_object_list = list(load_balancer_conn.list_load_balancer_network_interfaces(rg_name, lb_name))
         network_interface_list = list()  # list for return values
 
+        # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
             network_interface_dict = self.convert_nested_dictionary(self, nil)
-
-            # 1) Loop for getting LB's name which is attached to this network interface card
-            # network_interfaces >> network_interfaces >> ip_configurations
+            # 1) Since this sdk doesn't give the full ip configurations list, use another API for getting the whole ip configs
             if network_interface_dict.get('ip_configurations') is not None:
-                for ip_configuration in network_interface_dict['ip_configurations']:
+                network_interface_dict['ip_configurations'].clear()
+                network_interface_dict.update({
+                    'ip_configurations': self.get_ip_configurations_list(self, load_balancer_conn, rg_name,
+                                                                        network_interface_dict['name'])
+                })
 
-                    # 2) Loop for getting VMs name attached to Backend Pool
+                # Loop for getting LB's name VMs name attached to Backend Pool
+                for ip_configuration in network_interface_dict['ip_configurations']:
                     if ip_configuration.get('load_balancer_backend_address_pools') is not None:
                         for ic in ip_configuration['load_balancer_backend_address_pools']:
                             # Get backend address vm name
@@ -189,7 +205,7 @@ class LoadBalancerManager(AzureManager):
 
                 # Get the primary ip configuration from a network interface card
                 network_interface_dict.update({
-                    'private_ip_display': self.get_primary_ip_configuration(network_interface_dict['ip_configurations'])
+                    'private_ip_display': self.get_ip_configuration_display(network_interface_dict['ip_configurations'])
                 })
 
             # 2) Get VM's name which is attached to this network interface card
@@ -203,10 +219,19 @@ class LoadBalancerManager(AzureManager):
         return network_interface_list
 
     @staticmethod
-    def get_primary_ip_configuration(ip_configurations_list):
+    def get_ip_configurations_list(self, load_balancer_conn, rg_name, network_interface_name):
+        ip_configuration_list = list()
+        ip_configurations_object_list = load_balancer_conn.list_network_interface_ip_configurations(rg_name,
+                                                                                                    network_interface_name)
+        for ip_configuration_object in ip_configurations_object_list:
+            ip_configuration_list.append(self.convert_nested_dictionary(self, ip_configuration_object))
+
+        return ip_configuration_list
+
+    @staticmethod
+    def get_ip_configuration_display(ip_configurations_list):
         ic_list = list()
         for ic in ip_configurations_list:
-            # if ic.get('primary') is True:     # SDK error
             ic_list.append(ic['private_ip_address'])
         return ic_list
 
@@ -240,7 +265,8 @@ class LoadBalancerManager(AzureManager):
         backend_pools_list = list()  # return result list
 
         backend_pools_object = conn.list_load_balancer_backend_address_pools(rg_name, lb_name)
-        backend_pools_object_list = list(backend_pools_object)  # Since return type is ItemPagedClass, change to the list before convert dictionary
+        backend_pools_object_list = list(
+            backend_pools_object)  # Since return type is ItemPagedClass, change to the list before convert dictionary
 
         # Loop for converting backend pools objects to dictionary
         for bp in backend_pools_object_list:
@@ -274,7 +300,8 @@ class LoadBalancerManager(AzureManager):
     def get_matched_vm_info(self, find_key, find_list_pool):
         matched_vm_list = list()
         for find_object in find_list_pool:
-            if find_object['id'] in find_key:  # if network interface card's id matches to the backend configuration's id
+            if find_object[
+                'id'] in find_key:  # if network interface card's id matches to the backend configuration's id
                 if find_object.get('virtual_machine') is not None:
                     matched_vm_list.append((find_object['virtual_machine']['id']).split('/')[8])
         return matched_vm_list
@@ -303,8 +330,9 @@ class LoadBalancerManager(AzureManager):
         return nat_rules_list
 
     @staticmethod
-    def get_backend_address_pool_name(lbr_backend_address_pool):  # id must exist if there is a backend address pool object
-        return  lbr_backend_address_pool['id'].split('/')[10]
+    def get_backend_address_pool_name(
+            lbr_backend_address_pool):  # id must exist if there is a backend address pool object
+        return lbr_backend_address_pool['id'].split('/')[10]
 
     @staticmethod
     def get_load_distribution_display(lbr_load_distribution):
@@ -328,4 +356,3 @@ class LoadBalancerManager(AzureManager):
         else:
             port_mapping_display = 'Custom'
         return port_mapping_display
-
