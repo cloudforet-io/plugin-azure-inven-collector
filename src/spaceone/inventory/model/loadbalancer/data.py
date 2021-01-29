@@ -666,6 +666,7 @@ class NetworkInterface(Model):
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
+
 class Route(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)

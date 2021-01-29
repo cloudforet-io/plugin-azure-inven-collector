@@ -24,3 +24,6 @@ class LoadBalancerConnector(AzureConnector):
 
     def list_load_balancer_network_interfaces(self, resource_group_name, lb_name):
         return self.network_client.load_balancer_network_interfaces.list(resource_group_name, lb_name)
+
+    def list_network_interface_ip_configurations(self, resource_group_name, network_interface_name):
+        return self.network_client.network_interface_ip_configurations.list(resource_group_name, network_interface_name)
