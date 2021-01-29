@@ -126,6 +126,9 @@ class SnapshotManager(AzureManager):
                 'tags': _tags
             })
 
+            # print("snapshot_dict")
+            # print(snapshot_dict)
+
             # Must set_region_code method for region collection
             self.set_region_code(snapshot_data['location'])
             snapshots.append(SnapshotResponse({'resource': snapshot_resource}))
