@@ -1,6 +1,7 @@
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.libs.schema.region import RegionResource, RegionResponse
+from collections.abc import Iterable
 
 REGION_INFO = {
     'eastus': {'name': 'US East (Virginia)', 'tags': {'latitude': '37.3719', 'longitude': '-79.8164'}},
@@ -157,7 +158,7 @@ class AzureManager(BaseManager):
         vm_dict = self.convert_dictionary(vm_object)
         for k, v in vm_dict.items():
             if isinstance(v, object):  # object
-                if isinstance(v, list):  # if vm_object is list
+                if isinstance(v, list):  # 1) if vm_object is list
                     for list_obj in v:
                         vm_converse_list = list()
                         if hasattr(list_obj, '__dict__'):
