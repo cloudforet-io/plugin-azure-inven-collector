@@ -16,10 +16,14 @@ cst_sql_database.tags = {
 cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
+        EnumDyField.data_source('Status', 'data.state', default_state={
+            'safe': ['Ready'],
+            'warning': ['Disabled']
+        }),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
+        TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
-        DateTimeDyField.data_source('Time created', 'data.time_created')
+        TextDyField.data_source('Subscription', 'data.subscription_id'),
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
@@ -28,12 +32,11 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Storage Account Type', key='data.sku.name', data_type='string'),
-        SearchField.set(name='Snapshot Type', key='data.incremental_display', data_type='string')
+        SearchField.set(name='Public Network Access', key='data.public_network_access', data_type='string'),
+
     ]
 
 )
-
 
 CLOUD_SERVICE_TYPES = [
     CloudServiceTypeResponse({'resource': cst_sql_database}),
