@@ -49,29 +49,30 @@ class SqlServerManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
             })
 
-            # Get Server Automatic Tuning
-            server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
-            if server_automatic_tuning_dict == {}:  # if automatic tuning is not configured
-                sql_servers_dict.update({
-                    'server_automatic_tuning_display': False
-                })
-            else:
-                sql_servers_dict.update({
-                    'server_automatic_tuning': server_automatic_tuning_dict,
-                    'server_automatic_tuning_display': True
-                })
-
             # Get Server Auditing Settings, Failover groups. azure ad administrators
             server_auditing_settings_dict = self.get_server_auditing_settings(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
-            failover_dict = self.list_failover_groups(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            failover_group_list = self.list_failover_groups(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             # transparent_data_encryption_dict = self.get_transparent_data_encryption_dict(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name']) -> DB에서 조회
-            azure_ad_admin_dict = self.list_azure_ad_administrators(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
-            sql_servers_dict.update({
-                'server_auditing_settings': server_auditing_settings_dict,
-                'failover_groups': failover_dict,
-                'azure_ad_administrators': azure_ad_admin_dict
+            azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            databases_list = self.list_databases(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            elastic_pools_list = self.list_elastic_pools(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            deleted_databases_list = self.list_deleted_databases(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
 
+            sql_servers_dict.update({
+                'azure_ad_administrators': azure_ad_admin_list,
+                'server_auditing_settings': server_auditing_settings_dict,
+                'failover_groups': failover_group_list,
+                'server_automatic_tuning': server_automatic_tuning_dict,
+                'databases': databases_list,
+                'elastic_pools': elastic_pools_list,
+                'deleted_databases': deleted_databases_list
             })
+
+            if sql_servers_dict.get('azure_ad_administrators') is not None:
+                sql_servers_dict.update({
+                    'azure_ad_admin_name': self.get_azure_ad_admin_name(sql_servers_dict['azure_ad_administrators'])
+                })
 
             # switch tags form
             tags = sql_servers_dict.get('tags', {})
@@ -82,8 +83,8 @@ class SqlServerManager(AzureManager):
 
             sql_servers_data = SqlServer(sql_servers_dict, strict=False)
 
-            # print("sql_server_dict")
-            # print(sql_servers_dict)
+            print("sql_server_dict")
+            print(sql_servers_dict)
 
             sql_servers_resource = SqlServerResource({
                 'data': sql_servers_data,
@@ -106,24 +107,95 @@ class SqlServerManager(AzureManager):
         return resource_group
 
     @staticmethod
-    def list_azure_ad_administrators(self, sql_servers_conn, rg_name, server_name):  # TODO: here
-        ad_admin_dict = dict()
-        ad_admin_obj = sql_servers_conn.list_server_azure_ad_administrators(resource_group=rg_name, server_name=server_name)
-        print("ad_admin_obj")
-        print(ad_admin_obj)
+    def list_databases(self, sql_servers_conn, rg_name, server_name):
+        databases_list = list()
+        databases = sql_servers_conn.list_databases_by_server(resource_group=rg_name, server_name=server_name)
 
-        '''
-        ad_admin_dict['data'] = self.convert_dictionary(ad_admin_obj)
-        ad_admin_dict.update({
-            'data': self.convert_nested_dictionary(self,  ad_admin_dict['data'])
-        })
-        '''
-        return ad_admin_dict
+        for database in databases:
+            database_dict = self.convert_nested_dictionary(self, database)
+            if database_dict.get('sku') is not None:
+                if database_dict.get('name') != 'master':  # No pricing tier for system database
+                    database_dict.update({
+                        'pricing_tier_display': self.get_pricing_tier_display(database_dict['sku'])
+                    })
+            databases_list.append(database_dict)
+
+        return databases_list
+
+    @staticmethod
+    def list_elastic_pools(self, sql_servers_conn, rg_name, server_name):
+        elastic_pools_list = list()
+        elastic_pools = sql_servers_conn.list_elastic_pools_by_server(resource_group=rg_name, server_name=server_name)
+
+        for elastic_pool in elastic_pools:
+            elastic_pool_dict = self.convert_nested_dictionary(self, elastic_pool)
+
+            # Get Databases list by elastic pool
+            elastic_pool_dict['databases'] = self.get_databases_by_elastic_pools(self, sql_servers_conn, elastic_pool_dict['name'], rg_name, server_name)
+
+            # Get pricing tier for display
+            if elastic_pool_dict.get('per_database_settings') is not None:
+                elastic_pool_dict.update({
+                    'pricing_tier_display': self.get_pricing_tier_display(elastic_pool_dict['sku']),
+                    'per_db_settings_display': self.get_per_db_settings(elastic_pool_dict['per_database_settings']),
+                    'number_of_databases': len(elastic_pool_dict['databases']),
+                    'unit_display': elastic_pool_dict['sku']['tier'],
+                    'server_name_display': elastic_pool_dict['id'].split('/')[8],
+                    'resource_group_display': elastic_pool_dict['id'].split('/')[4],
+                    'max_size_gb': elastic_pool_dict['max_size_bytes'] / 1073741824
+                })
+
+            elastic_pools_list.append(elastic_pool_dict)
+
+        return elastic_pools_list
+
+    @staticmethod
+    def get_databases_by_elastic_pools(self, sql_servers_conn, elastic_pool_name, rg_name, server_name):
+        databases_obj = sql_servers_conn.list_databases_by_elastic_pool(elastic_pool_name, rg_name, server_name)
+        databases_list = list()
+        for database in databases_obj:
+            database_dict = self.convert_nested_dictionary(self, database)
+            databases_list.append(database_dict)
+
+        return databases_list
+
+    @staticmethod
+    def list_deleted_databases(self, sql_servers_conn, rg_name, server_name):
+        deleted_databases_obj = sql_servers_conn.list_restorable_dropped_databases_by_server(resource_group=rg_name, server_name=server_name)
+        deleted_databases_list = list()
+        for deleted_database in deleted_databases_obj:
+            deleted_database_dict = self.convert_nested_dictionary(self, deleted_database)
+            deleted_databases_list.append(deleted_database_dict)
+
+        return deleted_databases_list
+
+    @staticmethod
+    def get_per_db_settings(per_database_settings_dict):
+        per_db_settings = str(per_database_settings_dict['min_capacity']) + " - " + str(per_database_settings_dict['max_capacity']) + "vCores"
+        return per_db_settings
+
+    @staticmethod
+    def get_pricing_tier_display(sku_dict):
+        if sku_dict.get('capacity') is not None:
+            pricing_tier = str(sku_dict['tier']) + " : " + str(sku_dict['family']) + " , " + str(sku_dict['capacity']) + " vCores"
+        return pricing_tier
+
+    @staticmethod
+    def list_azure_ad_administrators(self, sql_servers_conn, rg_name, server_name):
+        ad_admin_list = list()  # return list
+        ad_admin_obj = sql_servers_conn.list_server_azure_ad_administrators(resource_group=rg_name, server_name=server_name)
+
+        for ad_admin in ad_admin_obj:
+            ad_admin_list.append(self.convert_dictionary(ad_admin))
+
+        return ad_admin_list
 
     @staticmethod
     def get_server_automatic_tuning(self, sql_servers_conn, rg_name, server_name):
         server_automatic_tuning_obj = sql_servers_conn.get_server_automatic_tuning(rg_name, server_name)
         server_automatic_tuning_dict = self.convert_nested_dictionary(self, server_automatic_tuning_obj)
+        print("server automatic tuning dict")
+        print(server_automatic_tuning_dict)
 
         return server_automatic_tuning_dict
 
@@ -136,12 +208,47 @@ class SqlServerManager(AzureManager):
 
     @staticmethod
     def list_failover_groups(self, sql_servers_conn, rg_name, server_name):
-        failover_groups_dict = dict()
+        failover_groups_list = list()
         failover_groups_obj = sql_servers_conn.list_failover_groups(rg_name, server_name)
-        failover_groups_dict['data'] = next(failover_groups_obj, {})
+        for failover in failover_groups_obj:
+            failover_dict = self.convert_nested_dictionary(self, failover)
 
-        if len(failover_groups_dict['data']) != 0:
-            failover_groups_dict = self.convert_nested_dictionary(self, failover_groups_dict['data'])
+            if failover_dict.get('id') is not None:  # Get Primary server's name
+                failover_dict.update({
+                    'primary_server': failover_dict['id'].split('/')[8]
+                })
 
-        return failover_groups_dict
+            if failover_dict.get('partner_servers') is not None:  # Get Secondary Server's name
+                failover_dict.update({
+                    'secondary_server': self.get_failover_secondary_server(failover_dict['partner_servers'])
+                })
 
+            if failover_dict.get('read_write_endpoint') is not None:
+                failover_dict.update({
+                    'failover_policy_display': failover_dict['read_write_endpoint'].get('failover_policy'),
+                    'grace_period_display': failover_dict['read_write_endpoint'].get('failover_with_data_loss_grace_period_minutes')
+                })
+
+            failover_groups_list.append(failover_dict)
+
+        return failover_groups_list
+
+    @staticmethod
+    def get_failover_secondary_server(partner_servers):
+        for partner_server in partner_servers:
+            if partner_server['replication_role'] == 'Secondary':
+                secondary_server = partner_server['id'].split('/')[8]
+            else:
+                secondary_server = None
+
+        return secondary_server
+
+    @staticmethod
+    def get_azure_ad_admin_name(azure_ad_administrators_list):
+        az_admin_name = ''
+
+        for az_admin in azure_ad_administrators_list:
+            if az_admin.get('login') is not None:
+                az_admin_name = az_admin.get('login')
+
+        return az_admin_name
