@@ -30,3 +30,16 @@ class SqlConnector(AzureConnector):
 
     def list_failover_groups(self, resource_group, server_name):
         return self.sql_client.failover_groups.list_by_server(resource_group, server_name)
+
+    def list_databases_by_server(self, resource_group, server_name):
+        return self.sql_client.databases.list_by_server(resource_group, server_name)
+
+    def list_elastic_pools_by_server(self, resource_group, server_name):
+        return self.sql_client.elastic_pools.list_by_server(resource_group, server_name)
+
+    def list_databases_by_elastic_pool(self, elastic_pool_name, resource_group, server_name):
+        return self.sql_client.databases.list_by_elastic_pool(elastic_pool_name=elastic_pool_name, resource_group_name=resource_group, server_name=server_name)
+
+    def list_restorable_dropped_databases_by_server(self, resource_group, server_name):
+        return self.sql_client.restorable_dropped_databases.list_by_server(resource_group_name=resource_group, server_name=server_name)
+
