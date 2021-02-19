@@ -5,6 +5,7 @@ from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource import SubscriptionClient
 from azure.mgmt.network import NetworkManagementClient
+from azure.mgmt.sql import SqlManagementClient
 from spaceone.core.error import *
 from spaceone.core.connector import BaseConnector
 
@@ -32,6 +33,7 @@ class AzureConnector(BaseConnector):
         self.resource_client = None
         self.subscription_client = None
         self.network_client = None
+        self.sql_client = None
 
     def set_connect(self, secret_data):
         subscription_id = secret_data['subscription_id']
@@ -47,6 +49,7 @@ class AzureConnector(BaseConnector):
         self.resource_client = ResourceManagementClient(credential=credential, subscription_id=subscription_id)
         self.network_client = NetworkManagementClient(credential=credential, subscription_id=subscription_id)
         self.subscription_client: SubscriptionClient = SubscriptionClient(credential=credential)
+        self.sql_client = SqlManagementClient(credential=credential, subscription_id=subscription_id)
 
     def verify(self, **kwargs):
         self.set_connect(**kwargs)
