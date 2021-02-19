@@ -30,13 +30,8 @@ class SqlServerManager(AzureManager):
             CloudServiceResponse
         """
         secret_data = params['secret_data']
-        # subscription_info = params['subscription_info']
-        subscription_info = {
-            'subscription_id': '3ec64e1e-1ce8-4f2c-82a0-a7f6db0899ca',
-            'subscription_name': 'Azure subscription 1',
-            'tenant_id': '35f43e22-0c0b-4ff3-90aa-b2c04ef1054c'
-        }
-
+        subscription_info = params['subscription_info']
+        
         sql_servers_conn: SqlConnector = self.locator.get_connector(self.connector_name, **params)
         sql_servers = []
         for sql_server in sql_servers_conn.list_servers():
@@ -52,12 +47,14 @@ class SqlServerManager(AzureManager):
             # Get Server Auditing Settings, Failover groups. azure ad administrators
             server_auditing_settings_dict = self.get_server_auditing_settings(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             failover_group_list = self.list_failover_groups(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
-            # transparent_data_encryption_dict = self.get_transparent_data_encryption_dict(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name']) -> DB에서 조회
+            # transparent_data_encryption_dict = self.get_transparent_data_encryption_dict(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             databases_list = self.list_databases(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             elastic_pools_list = self.list_elastic_pools(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             deleted_databases_list = self.list_deleted_databases(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            virtual_network_rules_list = self.list_virtual_network_rules(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            firewall_rules_list = self.list_firewall_rules(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
 
             sql_servers_dict.update({
                 'azure_ad_administrators': azure_ad_admin_list,
@@ -66,12 +63,19 @@ class SqlServerManager(AzureManager):
                 'server_automatic_tuning': server_automatic_tuning_dict,
                 'databases': databases_list,
                 'elastic_pools': elastic_pools_list,
-                'deleted_databases': deleted_databases_list
+                'deleted_databases': deleted_databases_list,
+                'virtual_network_rules': virtual_network_rules_list,
+                'firewall_rules': firewall_rules_list
             })
 
             if sql_servers_dict.get('azure_ad_administrators') is not None:
                 sql_servers_dict.update({
                     'azure_ad_admin_name': self.get_azure_ad_admin_name(sql_servers_dict['azure_ad_administrators'])
+                })
+
+            if sql_servers_dict.get('private_endpoint_connections') is not None:
+                sql_servers_dict.update({
+                    'private_endpoint_connections': self.get_private_endpoint_connections(self, sql_servers_dict['private_endpoint_connections'])
                 })
 
             # switch tags form
@@ -83,8 +87,8 @@ class SqlServerManager(AzureManager):
 
             sql_servers_data = SqlServer(sql_servers_dict, strict=False)
 
-            print("sql_server_dict")
-            print(sql_servers_dict)
+            # print("sql_server_dict")
+            # print(sql_servers_dict)
 
             sql_servers_resource = SqlServerResource({
                 'data': sql_servers_data,
@@ -170,6 +174,51 @@ class SqlServerManager(AzureManager):
         return deleted_databases_list
 
     @staticmethod
+    def list_firewall_rules(self, sql_servers_conn, rg_name, server_name):
+        firewall_obj = sql_servers_conn.list_firewall_rules_by_server(resource_group=rg_name, server_name=server_name)
+        firewall_list = list()
+        for firewall in firewall_obj:
+            firewall_rule_dict = self.convert_nested_dictionary(self, firewall)
+            firewall_list.append(firewall_rule_dict)
+
+        return firewall_list
+
+    @staticmethod
+    def list_virtual_network_rules(self, sql_servers_conn, rg_name, server_name):
+        virtual_network_rule_obj = sql_servers_conn.list_virtual_network_rules_by_server(resource_group=rg_name, server_name=server_name)
+        virtual_network_rules_list = list()
+
+        for virtual_network_rule in virtual_network_rule_obj:
+            virtual_network_rule_dict = self.convert_nested_dictionary(self, virtual_network_rule)
+
+            if virtual_network_rule_dict.get('id') is not None:  # Get Virtual Network's name
+                virtual_network_rule_dict.update({
+                    'virtual_network_name_display': virtual_network_rule_dict['virtual_network_subnet_id'].split('/')[8],
+                    'subscription_id': virtual_network_rule_dict['id'].split('/')[2],
+                    'resource_group': virtual_network_rule_dict['id'].split('/')[4]
+                })
+            virtual_network_rules_list.append(virtual_network_rule_dict)
+
+        return virtual_network_rules_list
+
+    @staticmethod
+    def get_private_endpoint_connections(self, private_endpoint_connection_list):
+        for pec in private_endpoint_connection_list:
+            if pec.get('id') is not None:
+                pec.update({
+                    'connection_id':pec['id'].split('/')[10]
+                })
+
+            if pec.get('properties') is not None:
+                pec.update({
+                    'private_endpoint_name': pec['properties'].get('private_endpoint').get('id').split('/')[8],
+                    'description': pec['properties'].get('private_link_service_connection_state').get('description'),
+                    'status': pec['properties'].get('private_link_service_connection_state').get('status')
+                })
+
+        return private_endpoint_connection_list
+
+    @staticmethod
     def get_per_db_settings(per_database_settings_dict):
         per_db_settings = str(per_database_settings_dict['min_capacity']) + " - " + str(per_database_settings_dict['max_capacity']) + "vCores"
         return per_db_settings
@@ -194,10 +243,34 @@ class SqlServerManager(AzureManager):
     def get_server_automatic_tuning(self, sql_servers_conn, rg_name, server_name):
         server_automatic_tuning_obj = sql_servers_conn.get_server_automatic_tuning(rg_name, server_name)
         server_automatic_tuning_dict = self.convert_nested_dictionary(self, server_automatic_tuning_obj)
-        print("server automatic tuning dict")
-        print(server_automatic_tuning_dict)
+        server_automatic_tuning_dict.update({
+            'options': self.get_server_automatic_tuning_options(self, server_automatic_tuning_dict['options'])
+        })
 
         return server_automatic_tuning_dict
+
+    @staticmethod
+    def get_server_automatic_tuning_options(self, options_dict):
+        options_list = list()
+        created_index_dict = self.convert_nested_dictionary(self, options_dict['createIndex'])
+        drop_index_dict = self.convert_nested_dictionary(self, options_dict['dropIndex'])
+        force_plan_dict = self.convert_nested_dictionary(self, options_dict['forceLastGoodPlan'])
+
+        created_index_dict.update({
+            'tuning_type': 'createIndex'
+        })
+        drop_index_dict.update({
+            'tuning_type': 'dropIndex'
+        })
+        force_plan_dict.update({
+            'tuning_type': 'forceLastGoodPlan'
+        })
+
+        options_list.append(created_index_dict)
+        options_list.append(drop_index_dict)
+        options_list.append(force_plan_dict)
+
+        return options_list
 
     @staticmethod
     def get_server_auditing_settings(self, sql_servers_conn, rg_name, server_name):

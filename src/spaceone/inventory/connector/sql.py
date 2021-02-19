@@ -43,3 +43,8 @@ class SqlConnector(AzureConnector):
     def list_restorable_dropped_databases_by_server(self, resource_group, server_name):
         return self.sql_client.restorable_dropped_databases.list_by_server(resource_group_name=resource_group, server_name=server_name)
 
+    def list_firewall_rules_by_server(self, resource_group, server_name):
+        return self.sql_client.firewall_rules.list_by_server(resource_group_name=resource_group, server_name=server_name)
+
+    def list_virtual_network_rules_by_server(self, resource_group, server_name):
+        return self.sql_client.virtual_network_rules.list_by_server(resource_group_name=resource_group, server_name=server_name)

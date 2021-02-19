@@ -91,12 +91,68 @@ sql_servers_deleted_databases = TableDynamicLayout.set_fields('Deleted Databases
 ])
 
 # TAB - Auditing
-sql_servers_auditing = TableDynamicLayout.set_fields('Auditing', 'data.deleted_databases', fields=[
-    TextDyField.data_source('Database', 'database_name'),
-    DateTimeDyField.data_source('Deletion Time (UTC)', 'deletion_date'),
-    DateTimeDyField.data_source('Creation Time (UTC)', 'creation_date'),
+sql_servers_auditing = ItemDynamicLayout.set_fields('Auditing', 'data.server_auditing_settings', fields=[
+    TextDyField.data_source('Enable SQL Auditing', 'state'),
+    TextDyField.data_source('Audit Log Destination', 'storage_endpoint'),
+    TextDyField.data_source('Storage Account ID', 'storage_account_subscription_id'),
     TextDyField.data_source('Edition Time (UTC)', 'edition')
 ])
+
+# TAB - Firewalls and Virtual Networks
+sql_servers_network = ItemDynamicLayout.set_fields('Network', fields=[
+    TextDyField.data_source('Public Network access', 'public_network_access'),
+    TextDyField.data_source('Minimum TLS Version', 'minimal_tls_version'),
+    # TextDyField.data_source('Connection Policy', ''),
+    # TextDyField.data_source('Allow Azure Services and Resources to Access this server', '')
+
+])
+sql_servers_firewall_rules = TableDynamicLayout.set_fields('Firewall Rules', 'data.firewall_rules', fields=[
+    TextDyField.data_source('Rule Name', 'name'),
+    TextDyField.data_source('Start IP', 'start_ip_address'),
+    TextDyField.data_source('End IP', 'end_ip_address')
+])
+
+sql_servers_virtual_network_rules = TableDynamicLayout.set_fields('Virtual Network Rules', 'data.virtual_network_rules', fields=[
+    TextDyField.data_source('Rule Name', 'name'),
+    TextDyField.data_source('Virtual Network', 'virtual_network_name_display'),
+    TextDyField.data_source('Subnet ID', 'virtual_network_subnet_id'),
+    # TextDyField.data_source('Address Range', ''),
+    # TextDyField.data_source('Endpoint Status', ''),
+    TextDyField.data_source('Resource Group', 'resource_group'),
+    TextDyField.data_source('Subscription', 'subscription_id'),
+    EnumDyField.data_source('State', 'state', default_state={
+        'safe': ['Ready', 'InProgress', 'Initializing'],
+        'warning': ['Deleting', 'Unknown']
+    })
+])
+
+sql_servers_firewalls_and_vn = CloudServiceMeta.set_layouts(
+    [sql_servers_firewall_rules,sql_servers_network, sql_servers_virtual_network_rules])
+
+# TAB - Private Endpoint Connections
+sql_servers_private_endpoint_connections = TableDynamicLayout.set_fields('Private Endpoint Connections', 'data.private_endpoint_connections',fields=[
+    TextDyField.data_source('Connection ID', 'connection_id'),
+    TextDyField.data_source('State', 'status'),
+    TextDyField.data_source('Private Endpoint Name', 'private_endpoint_name'),
+    TextDyField.data_source('Request / Response Message', 'description')
+])
+
+# TAB - Automatic Tuning
+sql_servers_automatic_tuning_info = ItemDynamicLayout.set_fields('Automatic Tuning', 'data.server_automatic_tuning', fields=[
+    TextDyField.data_source('Connection ID', 'connection_id'),
+    TextDyField.data_source('State', 'status'),
+    TextDyField.data_source('Private Endpoint Name', 'private_endpoint_name'),
+    TextDyField.data_source('Request / Response Message', 'description')
+])
+# TAB - Automatic Tuning
+sql_servers_automatic_tuning_options = TableDynamicLayout.set_fields('Tuning Options', 'data.server_automatic_tuning.options', fields=[
+    TextDyField.data_source('Tuning Type', 'tuning_type'),
+    TextDyField.data_source('Desired State', 'desired_state'),
+    TextDyField.data_source('Current State', 'actual_state'),
+])
+
+sql_servers_automatic_tuning = CloudServiceMeta.set_layouts(
+    [sql_servers_automatic_tuning_info, sql_servers_automatic_tuning_options])
 
 
 # TAB - tags
