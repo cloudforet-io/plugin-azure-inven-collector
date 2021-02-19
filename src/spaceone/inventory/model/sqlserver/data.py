@@ -32,6 +32,10 @@ class PrivateEndpointConnectionProperties(Model):
 
 class ServerPrivateEndpointConnection(Model):
     id = StringType(serialize_when_none=False)
+    connection_id = StringType(serialize_when_none=False)
+    private_endpoint_name = StringType(serialize_when_none=False)
+    description = StringType(serialize_when_none=False)
+    status = StringType(serialize_when_none=False)
     properties = ModelType(PrivateEndpointConnectionProperties)
 
 
@@ -49,6 +53,7 @@ class AutomaticTuningServerOptions(Model):
     desired_state = StringType(choices=('Default', 'Off', 'On'), serialize_when_none=False)
     reason_code = IntType(serialize_when_none=False)
     reason_desc = StringType(choices=('AutoConfigured', 'Default', 'Disabled'), serialize_when_none=False)
+    tuning_type = StringType(choices=('createIndex', 'dropIndex', 'forceLastGoodPlan'), serialize_when_none=False)
 
 
 class ServerAutomaticTuning(Model):
@@ -56,7 +61,7 @@ class ServerAutomaticTuning(Model):
     id = StringType()
     actual_state = StringType(choices=('Auto', 'Custom', 'Unspecified'), serialize_when_none=False)
     desired_state = StringType(choices=('Default', 'Off', 'On'), serialize_when_none=False)
-    options = ModelType(AutomaticTuningServerOptions, serialize_when_none=False)
+    options = ListType(ModelType(AutomaticTuningServerOptions, serialize_when_none=False))
     type = StringType(serialize_when_none=False)
 
 
@@ -116,8 +121,6 @@ class Sku(Model):
     tier = StringType(serialize_when_none=False)
 
 
-
-
 class Database(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()
@@ -171,6 +174,7 @@ class Database(Model):
     tags = (ModelType(Tags))
     type = StringType(serialize_when_none=False)
 
+
 class ElasticPoolPerDatabaseSettings(Model):
     max_capacity = FloatType(serialize_when_none=False)
     min_capacity = FloatType(serialize_when_none=False)
@@ -205,14 +209,36 @@ class RestorableDroppedDatabase(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()
     location = StringType()
-    creation_date = StringType(serialize_when_none=False)
+    creation_date = DateTimeType(serialize_when_none=False)
     database_name = StringType(serialize_when_none=False)
-    deletion_date = StringType(serialize_when_none=False)
-    earliest_restore_date = StringType(serialize_when_none=False)
+    deletion_date = DateTimeType(serialize_when_none=False)
+    earliest_restore_date = DateTimeType(serialize_when_none=False)
     edition = StringType(serialize_when_none=False)
     elastic_pool_name = StringType(serialize_when_none=False)
     max_size_bytes = StringType(serialize_when_none=False)
     service_level_objective = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class VirtualNetworkRule(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    subscription_id = StringType(serialize_when_none=False)
+    resource_group = StringType(serialize_when_none=False)
+    ignore_missing_vnet_service_endpoint = BooleanType(serialize_when_none=False)
+    state = StringType(choices=('Deleting', 'InProgress', 'Initializing', 'Ready', 'Unknown'), serialize_when_none=False)
+    virtual_network_subnet_id = StringType(serialize_when_none=False)
+    virtual_network_name_display = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class FirewallRule(Model):
+    id = StringType(serialize_when_none=False)
+    kind = StringType(serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    end_ip_address = StringType(serialize_when_none=False)
+    start_ip_address = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -243,6 +269,8 @@ class SqlServer(Model):
     databases = ListType(ModelType(Database), serialize_when_none=False)
     elastic_pools = ListType(ModelType(ElasticPool), serialize_when_none=False)
     deleted_databases = ListType(ModelType(RestorableDroppedDatabase), serialize_when_none=False)
+    virtual_network_rules = ListType(ModelType(VirtualNetworkRule), serialize_when_none=False)
+    firewall_rules = ListType(ModelType(FirewallRule), serialize_when_none=False)
     tags = ListType(ModelType(Tags))
 
     def reference(self):
