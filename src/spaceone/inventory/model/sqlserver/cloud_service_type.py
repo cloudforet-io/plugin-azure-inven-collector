@@ -4,16 +4,16 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 
-cst_sql_database = CloudServiceTypeResource()
-cst_sql_database.name = 'SQLDatabase'
-cst_sql_database.group = 'Sql'
-cst_sql_database.service_code = 'Microsoft.Sql/servers'
-cst_sql_database.labels = ['Databases']
-cst_sql_database.tags = {
+cst_sql_server = CloudServiceTypeResource()
+cst_sql_server.name = 'SqlServer'
+cst_sql_server.group = 'Sql'
+cst_sql_server.service_code = 'Microsoft.Sql/servers'
+cst_sql_server.labels = ['Server']
+cst_sql_server.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-servers.svg',
 }
 
-cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
+cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
         EnumDyField.data_source('Status', 'data.state', default_state={
@@ -39,5 +39,5 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
 )
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_sql_database}),
+    CloudServiceTypeResponse({'resource': cst_sql_server}),
 ]
