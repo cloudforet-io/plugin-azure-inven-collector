@@ -127,7 +127,7 @@ sql_servers_virtual_network_rules = TableDynamicLayout.set_fields('Virtual Netwo
 ])
 
 sql_servers_firewalls_and_vn = CloudServiceMeta.set_layouts(
-    [sql_servers_firewall_rules,sql_servers_network, sql_servers_virtual_network_rules])
+    [sql_servers_firewall_rules, sql_servers_network, sql_servers_virtual_network_rules])
 
 # TAB - Private Endpoint Connections
 sql_servers_private_endpoint_connections = TableDynamicLayout.set_fields('Private Endpoint Connections', 'data.private_endpoint_connections',fields=[
