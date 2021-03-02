@@ -16,20 +16,24 @@ cst_sql_database.tags = {
 cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Resource Group', 'data.resource_group'),
+        TextDyField.data_source('Status', 'data.status'),
+        TextDyField.data_source('Replication Role', ''),
+        TextDyField.data_source('Server', 'server_name'),
+        TextDyField.data_source('Pricing Tier', 'data.pricing_tier_display'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
-        DateTimeDyField.data_source('Time created', 'data.time_created')
+        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+        TextDyField.data_source('Resource Group', 'data.resource_group'),
+
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
+        SearchField.set(name='Database ID', key='data.database_id', data_type='string'),
         SearchField.set(name='Name', key='data.name', data_type='string'),
         SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Storage Account Type', key='data.sku.name', data_type='string'),
-        SearchField.set(name='Snapshot Type', key='data.incremental_display', data_type='string')
+        SearchField.set(name='Tier', key='data.sku.tier', data_type='string'),
+        SearchField.set(name='Server Name', key='data.managed_by', data_type='string')
+
     ]
 
 )
