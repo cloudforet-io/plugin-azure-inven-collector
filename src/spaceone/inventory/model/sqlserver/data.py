@@ -113,6 +113,36 @@ class FailoverGroup(Model):
     type = StringType(serialize_when_none=False)
 
 
+class SyncGroupSchemaColumn(Model):
+    data_size = StringType(serialize_when_none=False)
+    data_type = StringType(serialize_when_none=False)
+    quoted_name = StringType(serialize_when_none=False)
+
+
+class SyncGroupSchemaTable(Model):
+    columns = ListType(ModelType(SyncGroupSchemaColumn), serialize_when_none=False)
+    quoted_name = StringType(serialize_when_none=False)
+
+
+class SyncGroupSchema(Model):
+    master_sync_member_name = StringType(serialize_when_none=False)
+    tables = ListType(ModelType(SyncGroupSchemaTable), serialize_when_none=False)
+
+
+class SyncGroup(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    conflict_resolution_policy = StringType(choices=('HubWin', 'MemberWin'), serialize_when_none=False)
+    hub_database_password = StringType(serialize_when_none=False)
+    hub_database_user_name = StringType(serialize_when_none=False)
+    interval = IntType(serialize_when_none=False)
+    last_sync_time = StringType(serialize_when_none=False)
+    schema = ModelType(SyncGroupSchema, serialize_when_none=False)
+    sync_database_id = StringType(serialize_when_none=False)
+    sync_state = StringType(choices=('Error', 'Good', 'NotReady', 'Progressing', 'Warning'), serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
 class Sku(Model):
     capacity = IntType(serialize_when_none=False)
     family = StringType(serialize_when_none=False)
@@ -127,6 +157,9 @@ class Database(Model):
     kind = StringType(serialize_when_none=False)
     location = StringType()
     managed_by = StringType(serialize_when_none=False)
+    server_name = StringType(serialize_when_none=False)
+    subscription_id = StringType(serialize_when_none=False)
+    resource_group = StringType(serialize_when_none=False)
     auto_pause_delay = IntType(serialize_when_none=False)
     catalog_collation = StringType(choices=('DATABASE_DEFAULT', 'SQL_Latin1_General_CP1_CI_AS'),
                                    serialize_when_none=False)
@@ -148,6 +181,7 @@ class Database(Model):
     maintenance_configuration_id = StringType(serialize_when_none=False)
     max_log_size_bytes = IntType(serialize_when_none=False)
     max_size_bytes = IntType(serialize_when_none=False)
+    max_size_gb = FloatType(serialize_when_none=False)
     min_capacity = FloatType(serialize_when_none=False)
     paused_date = DateTimeType(serialize_when_none=False)
     read_scale = StringType(choices=('Disabled', 'Enabled'), default='Disabled')
@@ -169,8 +203,10 @@ class Database(Model):
         'Resuming', 'Scaling', 'Shutdown', 'Standby', 'Suspect'), serialize_when_none=False)
     storage_account_type = StringType(choices=('GRS', 'LRS', 'ZRS'), serialize_when_none=False)
     zone_redundant = BooleanType(serialize_when_none=False)
+    sync_group = ListType(ModelType(SyncGroup))
     sku = ModelType(Sku, serialize_when_none=False)
     pricing_tier_display = StringType(default='-')
+    compute_tier = StringType(serialize_when_none=False)
     tags = (ModelType(Tags))
     type = StringType(serialize_when_none=False)
 
@@ -189,7 +225,7 @@ class ElasticPool(Model):
     license_type = StringType(choices=('BasePrice', 'LicenseIncluded'), default='BasePrice')
     maintenance_configuration_id = StringType(serialize_when_none=False)
     max_size_bytes = IntType(serialize_when_none=False)
-    max_size_gb = IntType(serialize_when_none=False, default = 0)
+    max_size_gb = FloatType(serialize_when_none=False, default=0)
     per_database_settings = ModelType(ElasticPoolPerDatabaseSettings, serialize_when_none=False)
     state = StringType(choices=('Creating', 'Disabled', 'Ready'), serialize_when_none=False)
     zone_redundant = BooleanType(serialize_when_none=False)
@@ -214,7 +250,7 @@ class RestorableDroppedDatabase(Model):
     deletion_date = DateTimeType(serialize_when_none=False)
     earliest_restore_date = DateTimeType(serialize_when_none=False)
     edition = StringType(serialize_when_none=False)
-    elastic_pool_name = StringType(serialize_when_none=False)
+    elastic_pool_name = StringType(default='-')
     max_size_bytes = StringType(serialize_when_none=False)
     service_level_objective = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
