@@ -33,7 +33,7 @@ class SqlDatabaseManager(AzureManager):
 
         sql_databases_conn: SqlConnector = self.locator.get_connector(self.connector_name, **params)
         sql_databases = []
-        for sql_database in sql_databases_conn.list_databases():
+        for sql_database in sql_databases_conn.list_databases_by_server(self):
             sql_databases_dict = self.convert_dictionary(sql_database)
             sku_dict = self.convert_dictionary(sql_database.sku)
 
@@ -50,6 +50,9 @@ class SqlDatabaseManager(AzureManager):
             sql_databases_dict.update({
                 'tags': _tags
             })
+
+            print("sql_databases_dict")
+            print(sql_databases_dict)
 
             sql_databases_data = SqlDatabase(sql_databases_dict, strict=False)
 
