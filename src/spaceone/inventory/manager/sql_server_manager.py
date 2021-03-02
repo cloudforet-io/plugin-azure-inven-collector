@@ -31,7 +31,7 @@ class SqlServerManager(AzureManager):
         """
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
-        
+
         sql_servers_conn: SqlConnector = self.locator.get_connector(self.connector_name, **params)
         sql_servers = []
         for sql_server in sql_servers_conn.list_servers():
@@ -87,8 +87,8 @@ class SqlServerManager(AzureManager):
 
             sql_servers_data = SqlServer(sql_servers_dict, strict=False)
 
-            # print("sql_server_dict")
-            # print(sql_servers_dict)
+            print("sql_server_dict")
+            print(sql_servers_dict)
 
             sql_servers_resource = SqlServerResource({
                 'data': sql_servers_data,
@@ -122,6 +122,31 @@ class SqlServerManager(AzureManager):
                     database_dict.update({
                         'pricing_tier_display': self.get_pricing_tier_display(database_dict['sku'])
                     })
+            if database_dict.get('managed_by') is not None: # Get managed server name
+                database_dict.update({
+                    'server_name': database_dict['managed_by'].split('/')[8]
+                })
+            if database_dict.get('id') is not None:  # Get Subscription ID
+                database_dict.update({
+                    'subscription_id': database_dict['id'].split('/')[2],
+                    'resource_group': database_dict['id'].split('/')[4]
+                })
+
+            if database_dict.get('kind') is not None:  # Get Compute Tier
+                database_dict.update({
+                    'compute_tier': self.get_db_compute_tier(database_dict['kind'])
+                })
+
+            if database_dict.get('max_size_bytes') is not None:
+                database_dict.update({
+                    'max_size_gb': database_dict['max_size_bytes'] / 1073741824
+                })
+
+            # Get Sync Groups , Sync Agent
+            database_dict.update({
+                'sync_groups': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
+            })
+
             databases_list.append(database_dict)
 
         return databases_list
@@ -325,3 +350,21 @@ class SqlServerManager(AzureManager):
                 az_admin_name = az_admin.get('login')
 
         return az_admin_name
+
+    @staticmethod
+    def get_db_compute_tier(kind):
+        if kind.find('serverless') < 0:
+            compute_tier = 'Provisioned'
+        else:
+            compute_tier = 'Serverless'
+
+        return compute_tier
+
+    @staticmethod
+    def get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name, database_name):
+        sync_group_obj = sql_servers_conn.list_sync_groups_by_databases(resource_group=rg_name, server_name=server_name, database_name=database_name)
+        sync_group_list = list()
+        for sync_group in sync_group_obj:
+            sync_group_dict = self.convert_nested_dictionary(self, sync_group)
+            sync_group_list.append(sync_group_dict)
+        return sync_group_list
