@@ -143,6 +143,18 @@ class SyncGroup(Model):
     type = StringType(serialize_when_none=False)
 
 
+class SyncAgent(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    expiry_time = StringType(serialize_when_none=False)
+    is_up_to_date = BooleanType(serialize_when_none=False)
+    last_alive_time = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    state = StringType(choices=('NeverConnected', 'Offline', 'Online'), serialize_when_none=False)
+    sync_database_id = StringType(serialize_when_none=False)
+    version = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
 class Sku(Model):
     capacity = IntType(serialize_when_none=False)
     family = StringType(serialize_when_none=False)
@@ -203,9 +215,13 @@ class Database(Model):
         'Resuming', 'Scaling', 'Shutdown', 'Standby', 'Suspect'), serialize_when_none=False)
     storage_account_type = StringType(choices=('GRS', 'LRS', 'ZRS'), serialize_when_none=False)
     zone_redundant = BooleanType(serialize_when_none=False)
-    sync_group = ListType(ModelType(SyncGroup))
+    sync_group = ListType(ModelType(SyncGroup), serialize_when_none=False)
+    sync_agent = ListType(ModelType(SyncAgent), serialize_when_none=False)
+    sync_group_display = ListType(StringType, serialize_when_none=False)
+    sync_agent_display = ListType(StringType, serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     pricing_tier_display = StringType(default='-')
+    service_tier_display = StringType(default='-')
     compute_tier = StringType(serialize_when_none=False)
     tags = (ModelType(Tags))
     type = StringType(serialize_when_none=False)
