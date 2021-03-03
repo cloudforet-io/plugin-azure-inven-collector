@@ -120,14 +120,13 @@ class SqlServerManager(AzureManager):
             if database_dict.get('sku') is not None:
                 if database_dict.get('name') != 'master':  # No pricing tier for system database
                     database_dict.update({
-                        'pricing_tier_display': self.get_pricing_tier_display(database_dict['sku'])
+                        'pricing_tier_display': self.get_pricing_tier_display(database_dict['sku']),
+                        'service_tier_display': database_dict['sku'].get('tier')
                     })
-            if database_dict.get('managed_by') is not None: # Get managed server name
-                database_dict.update({
-                    'server_name': database_dict['managed_by'].split('/')[8]
-                })
+
             if database_dict.get('id') is not None:  # Get Subscription ID
                 database_dict.update({
+                    'server_name': database_dict['id'].split('/')[8],
                     'subscription_id': database_dict['id'].split('/')[2],
                     'resource_group': database_dict['id'].split('/')[4]
                 })
@@ -142,10 +141,24 @@ class SqlServerManager(AzureManager):
                     'max_size_gb': database_dict['max_size_bytes'] / 1073741824
                 })
 
-            # Get Sync Groups , Sync Agent
+            # Get Sync Groups by databases
             database_dict.update({
-                'sync_groups': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
+                'sync_groups': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name, database_dict['name']),
             })
+            if database_dict['sync_groups'] is not None:
+                database_dict.update({
+                    'sync_groups_display': self.get_sync_group_display(self, database_dict['sync_groups'])
+                })
+
+            # Get Sync Agents by servers
+            database_dict.update({
+                'sync_agent': self.get_sync_agent_by_servers(self, sql_servers_conn, rg_name, server_name)
+            })
+
+            if database_dict['sync_agent'] is not None:
+                database_dict.update({
+                    'sync_agent_display': self.get_sync_agent_display(self, database_dict['sync_agent'])
+                })
 
             databases_list.append(database_dict)
 
@@ -368,3 +381,32 @@ class SqlServerManager(AzureManager):
             sync_group_dict = self.convert_nested_dictionary(self, sync_group)
             sync_group_list.append(sync_group_dict)
         return sync_group_list
+
+    @staticmethod
+    def get_sync_group_display(self, sync_group_list):
+        sync_group_display_list = list()
+        for sync_group in sync_group_list:
+            sync_display = sync_group['name'] + " / " + sync_group['conflict_resolution_policy'] + " / " + sync_group['sync_state']
+            sync_group_display_list.append(sync_display)
+
+        return sync_group_display_list
+
+    @staticmethod
+    def get_sync_agent_by_servers(self, sql_servers_conn, rg_name, server_name):
+        sync_agent_list = list()
+        sync_agent_obj = sql_servers_conn.list_sync_agents_by_server(rg_name, server_name)
+
+        for sync_agent in sync_agent_obj:
+            sync_agent_dict = self.convert_nested_dictionary(sync_agent)
+            sync_agent_list.append(sync_agent_dict)
+
+        return sync_agent_list
+
+    @staticmethod
+    def get_sync_agent_display(self, sync_agent_list):
+        sync_agent_display_list = list()
+        for sync_agent in sync_agent_list:
+            sync_display = sync_agent['name'] + " / " + sync_agent['state']
+            sync_agent_display_list.append(sync_display)
+
+        return sync_agent_display_list
