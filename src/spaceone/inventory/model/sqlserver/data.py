@@ -76,7 +76,7 @@ class ServerBlobAuditingPolicy(Model):
     state = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
     storage_account_access_key = StringType(serialize_when_none=False)
     storage_account_subscription_id = StringType(serialize_when_none=False)
-    storage_endpoint = StringType(serialize_when_none=False)
+    storage_endpoint = StringType(default='-')
     type = StringType(serialize_when_none=False)
 
 
@@ -189,7 +189,7 @@ class Database(Model):
     failover_group_id = StringType(serialize_when_none=False)
     high_availability_replica_count = IntType(serialize_when_none=False)
     license_type = StringType(choices=('BasePrice', 'LicenseIncluded'), serialize_when_none=False)
-    long_term_retention_backup_resource_id = StringType(serialize_when_none=False)
+    long_term_retention_backup_resource_id = StringType(default='-')
     maintenance_configuration_id = StringType(serialize_when_none=False)
     max_log_size_bytes = IntType(serialize_when_none=False)
     max_size_bytes = IntType(serialize_when_none=False)

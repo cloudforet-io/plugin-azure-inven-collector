@@ -40,12 +40,12 @@ sql_server_failover_group = TableDynamicLayout.set_fields('Failover Groups', 'da
     TextDyField.data_source('Secondary Server', 'secondary_server'),
     TextDyField.data_source('Read/Write Failover Policy', 'failover_policy_display'),
     TextDyField.data_source('Grace Period (minutes)', 'grace_period_display'),
-    # TextDyField.data_source('Database count', ''),
+    # TextDyField.data_source('Database count', ''),  # TODO: Confirm!!  Failover Group 당 total / active database count
 ])
 
 # TAB - Backups
 # Database, Earliest PITR restore point (UTC), Available LTR backups
-sql_server_failover_group = TableDynamicLayout.set_fields('Backups', 'data.databases', fields=[
+sql_server_backups = TableDynamicLayout.set_fields('Backups', 'data.databases', fields=[
     TextDyField.data_source('Database', 'name'),
     TextDyField.data_source('Earliest PITR Restore Point (UTC)', 'earliest_restore_date'),
     TextDyField.data_source('Available LTR backups', 'long_term_retention_backup_resource_id'),
@@ -54,14 +54,19 @@ sql_server_failover_group = TableDynamicLayout.set_fields('Backups', 'data.datab
 # TAB - Active Directory Admin
 # Active Directory Admin
 sql_servers_active_directory_admin = ItemDynamicLayout.set_fields('Active Directory Admin', fields=[
-    TextDyField.data_source('Active Directory Admin', 'azure_ad_admin_name')
+    TextDyField.data_source('Active Directory Admin', 'data.azure_ad_admin_name')
 ])
 
 # TAB - SQL Databases - Default
 sql_servers_databases = TableDynamicLayout.set_fields('Databases', 'data.databases', fields=[
     TextDyField.data_source('Database', 'name'),
     TextDyField.data_source('Resource ID', 'id'),
-    TextDyField.data_source('Status', 'status'),
+    EnumDyField.data_source('Status', 'status', default_state={
+        'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring', 'Resuming', 'Scaling', 'Standby'],
+        'warning': ['AutoClosed', 'Inaccessible', 'Offline', 'OfflineChangingDwPerformanceTiers', 'OfflineSecondary',  'Pausing', 'Recovering', 'RecoveryPending',  'Suspect'],
+        'disable':['Disabled', 'Paused', 'Shutdown'],
+        'alert': ['EmergencyMode']
+    }),
     TextDyField.data_source('Resource Group', 'resource_group'),
     TextDyField.data_source('Subscription ID', 'subscription_id'),
     TextDyField.data_source('Location', 'location'),
@@ -96,6 +101,7 @@ sql_databases_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fie
     TextDyField.data_source('Value', 'value')
 ])
 
+# TAB - Dynamic Data Masking : "Masking rules: + Tab "Recommended fields to mask"  # TODO: confirm!!
 sql_servers_databases_info = ListDynamicLayout.set_layouts('SQL Databases',
                                                            layouts=[sql_servers_databases,
                                                                     sql_servers_databases_configure,
@@ -114,7 +120,7 @@ sql_servers_elastic_pools = TableDynamicLayout.set_fields('Elastic Pools', 'data
         'safe': ['Ready', 'Creating'],
         'warning': ['Disabled']
     }),
-    # TextDyField.data_source('Storage[%]', ''),
+    # TextDyField.data_source('Storage[%]', ''), # TODO :confirm!!
     # TextDyField.data_source('Avg[%]', ''),
     # TextDyField.data_source('Peak[%]', ''),
     # TextDyField.data_source('Utilization Over Past Hour[%]', ''),
@@ -139,16 +145,15 @@ sql_servers_auditing = ItemDynamicLayout.set_fields('Auditing', 'data.server_aud
     TextDyField.data_source('Enable SQL Auditing', 'state'),
     TextDyField.data_source('Audit Log Destination', 'storage_endpoint'),
     TextDyField.data_source('Storage Account ID', 'storage_account_subscription_id'),
-    TextDyField.data_source('Edition Time (UTC)', 'edition')
 ])
 
 # TAB - Firewalls and Virtual Networks
 sql_servers_network = ItemDynamicLayout.set_fields('Network', fields=[
     TextDyField.data_source('Public Network access', 'data.public_network_access'),
     TextDyField.data_source('Minimum TLS Version', 'data.minimal_tls_version'),
-    TextDyField.data_source('Connection Policy', 'data.server_auditing_settings.name'),  # TODO : confirm
+    TextDyField.data_source('Connection Policy', 'data.server_auditing_settings.name'),  # TODO :  confirm june
     TextDyField.data_source('Allow Azure Services and Resources to Access this server',
-                            'data.server_auditing_settings.is_azure_monitor_target_enabled')  # TODO : confirm!!!
+                            'data.server_auditing_settings.is_azure_monitor_target_enabled')  # TODO : confirm june!!!
 
 ])
 sql_servers_firewall_rules = TableDynamicLayout.set_fields('Firewall Rules', 'data.firewall_rules', fields=[
@@ -164,8 +169,8 @@ sql_servers_virtual_network_rules = TableDynamicLayout.set_fields('Virtual Netwo
                                                                                               'virtual_network_name_display'),
                                                                       TextDyField.data_source('Subnet ID',
                                                                                               'virtual_network_subnet_id'),
-                                                                      # TextDyField.data_source('Address Range', ''),
-                                                                      # TextDyField.data_source('Endpoint Status', ''),
+                                                                      # TextDyField.data_source('Address Range', ''),  # TODO :  confirm
+                                                                      # TextDyField.data_source('Endpoint Status', ''), # TODO :  confirm
                                                                       TextDyField.data_source('Resource Group',
                                                                                               'resource_group'),
                                                                       TextDyField.data_source('Subscription',
@@ -195,16 +200,6 @@ sql_servers_private_endpoint_connections = TableDynamicLayout.set_fields('Privat
     ])
 
 # TAB - Automatic Tuning
-sql_servers_automatic_tuning_info = ItemDynamicLayout.set_fields('Automatic Tuning', 'data.server_automatic_tuning',
-                                                                 fields=[
-                                                                     TextDyField.data_source('Connection ID',
-                                                                                             'connection_id'),
-                                                                     TextDyField.data_source('State', 'status'),
-                                                                     TextDyField.data_source('Private Endpoint Name',
-                                                                                             'private_endpoint_name'),
-                                                                     TextDyField.data_source(
-                                                                         'Request / Response Message', 'description')
-                                                                 ])
 sql_servers_automatic_tuning_options = TableDynamicLayout.set_fields('Tuning Options',
                                                                      'data.server_automatic_tuning.options', fields=[
         TextDyField.data_source('Tuning Type', 'tuning_type'),
@@ -212,9 +207,6 @@ sql_servers_automatic_tuning_options = TableDynamicLayout.set_fields('Tuning Opt
         TextDyField.data_source('Current State', 'actual_state'),
     ])
 
-sql_servers_automatic_tuning = ListDynamicLayout.set_layouts('Automatic Tuning',
-                                                             layouts=[sql_servers_automatic_tuning_info,
-                                                                      sql_servers_automatic_tuning_options])
 
 # TAB - tags
 sql_servers_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
@@ -223,9 +215,9 @@ sql_servers_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', field
 ])
 
 sql_servers_meta = CloudServiceMeta.set_layouts(
-    [sql_servers_info_meta, sql_server_failover_group, sql_servers_active_directory_admin, sql_servers_databases,
+    [sql_servers_info_meta, sql_server_failover_group, sql_server_backups, sql_servers_active_directory_admin, sql_servers_databases_info,
      sql_servers_elastic_pools,
-     sql_servers_deleted_databases, sql_servers_auditing, sql_servers_network, sql_servers_automatic_tuning,
+     sql_servers_deleted_databases, sql_servers_auditing, sql_servers_network, sql_servers_automatic_tuning_options,
      sql_servers_firewalls_and_vn,
      sql_servers_private_endpoint_connections, sql_servers_info_tags])
 
