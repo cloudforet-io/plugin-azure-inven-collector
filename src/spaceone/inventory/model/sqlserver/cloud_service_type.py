@@ -21,9 +21,8 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
             'warning': ['Disabled']
         }),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
-        TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_id'),
+        TextDyField.data_source('Subscription', 'data.subscription_name'),
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
