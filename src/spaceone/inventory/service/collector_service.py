@@ -81,14 +81,19 @@ class CollectorService(BaseService):
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
             # print("[ EXECUTOR START ]")
             future_executors = []
+
             for execute_manager in self.execute_managers:
                 print(f'@@@ {execute_manager} @@@')
                 _manager = self.locator.get_manager(execute_manager)
                 future_executors.append(executor.submit(_manager.collect_resources, params))
 
-            for future in concurrent.futures.as_completed(future_executors):
-                for result in future.result():
-                    yield result.to_primitive()
+            try:
+                for future in concurrent.futures.as_completed(future_executors):
+                    for result in future.result():
+                        yield result.to_primitive()
+
+            except Exception as e:
+                _LOGGER.error(f'failed to result {e}')
 
         # for manager in self.execute_managers:
         #     _manager = self.locator.get_manager(manager)
