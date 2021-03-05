@@ -54,3 +54,9 @@ class SqlConnector(AzureConnector):
 
     def list_sync_agents_by_server(self, resource_group, server_name):
         return self.sql_client.sync_agents.list_by_server(resource_group_name=resource_group, server_name=server_name)
+
+    def list_data_masking_rules_by_database(self, resource_group, server_name, database_name):
+        return self.sql_client.data_masking_rules.list_by_database(resource_group_name=resource_group, server_name=server_name, database_name=database_name)
+
+    def list_replication_link(self, resource_group, server_name, database_name):
+        return self.sql_client.replication_links.list_by_database(resource_group_name=resource_group, server_name=server_name, database_name=database_name)
