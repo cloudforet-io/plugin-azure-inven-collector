@@ -120,7 +120,7 @@ sql_servers_elastic_pools = TableDynamicLayout.set_fields('Elastic Pools', 'data
         'safe': ['Ready', 'Creating'],
         'warning': ['Disabled']
     }),
-    # TextDyField.data_source('Storage[%]', ''), # TODO :confirm!!
+    # TextDyField.data_source('Storage[%]', ''),
     # TextDyField.data_source('Avg[%]', ''),
     # TextDyField.data_source('Peak[%]', ''),
     # TextDyField.data_source('Utilization Over Past Hour[%]', ''),
@@ -142,18 +142,24 @@ sql_servers_deleted_databases = TableDynamicLayout.set_fields('Deleted Databases
 
 # TAB - Auditing
 sql_servers_auditing = ItemDynamicLayout.set_fields('Auditing', 'data.server_auditing_settings', fields=[
-    TextDyField.data_source('Enable SQL Auditing', 'state'),
+    EnumDyField.data_source('Enable SQL Auditing', 'state', default_state={
+        'safe': ['Enabled'],
+        'warning': ['Disabled']
+    }),
     TextDyField.data_source('Audit Log Destination', 'storage_endpoint'),
     TextDyField.data_source('Storage Account ID', 'storage_account_subscription_id'),
 ])
 
 # TAB - Firewalls and Virtual Networks
 sql_servers_network = ItemDynamicLayout.set_fields('Network', fields=[
-    TextDyField.data_source('Public Network access', 'data.public_network_access'),
+    EnumDyField.data_source('Public Network access', 'data.public_network_access', default_state={
+        'safe': ['Enabled'],
+        'warning': ['Disabled']
+    }),
     TextDyField.data_source('Minimum TLS Version', 'data.minimal_tls_version'),
-    TextDyField.data_source('Connection Policy', 'data.server_auditing_settings.name'),  # TODO :  confirm june
+    TextDyField.data_source('Connection Policy', 'data.server_auditing_settings.name'),
     TextDyField.data_source('Allow Azure Services and Resources to Access this server',
-                            'data.server_auditing_settings.is_azure_monitor_target_enabled')  # TODO : confirm june!!!
+                            'data.server_auditing_settings.is_azure_monitor_target_enabled')
 
 ])
 sql_servers_firewall_rules = TableDynamicLayout.set_fields('Firewall Rules', 'data.firewall_rules', fields=[
@@ -169,8 +175,8 @@ sql_servers_virtual_network_rules = TableDynamicLayout.set_fields('Virtual Netwo
                                                                                               'virtual_network_name_display'),
                                                                       TextDyField.data_source('Subnet ID',
                                                                                               'virtual_network_subnet_id'),
-                                                                      # TextDyField.data_source('Address Range', ''),  # TODO :  confirm
-                                                                      # TextDyField.data_source('Endpoint Status', ''), # TODO :  confirm
+                                                                      # TextDyField.data_source('Address Range', ''),
+                                                                      # TextDyField.data_source('Endpoint Status', ''),
                                                                       TextDyField.data_source('Resource Group',
                                                                                               'resource_group'),
                                                                       TextDyField.data_source('Subscription',
@@ -187,7 +193,7 @@ sql_servers_virtual_network_rules = TableDynamicLayout.set_fields('Virtual Netwo
                                                                   ])
 
 sql_servers_firewalls_and_vn = ListDynamicLayout.set_layouts('Firewalls and Network',
-                                                             layouts=[sql_servers_firewall_rules, sql_servers_network,
+                                                             layouts=[sql_servers_network, sql_servers_firewall_rules,
                                                                       sql_servers_virtual_network_rules])
 
 # TAB - Private Endpoint Connections
