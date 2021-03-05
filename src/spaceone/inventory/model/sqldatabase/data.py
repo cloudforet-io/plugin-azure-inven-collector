@@ -37,6 +37,68 @@ class SyncGroup(Model):
     type = StringType(serialize_when_none=False)
 
 
+class SyncAgent(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    expiry_time = StringType(serialize_when_none=False)
+    is_up_to_date = BooleanType(serialize_when_none=False)
+    last_alive_time = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    state = StringType(choices=('NeverConnected', 'Offline', 'Online'), serialize_when_none=False)
+    sync_database_id = StringType(serialize_when_none=False)
+    version = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class RetentionPolicy(Model):
+    days = IntType(serialize_when_none=False)
+    enabled = BooleanType(serialize_when_none=False)
+
+
+class LogSettings(Model):
+    category = StringType(serialize_when_none=False)
+    enabled = BooleanType(serialize_when_none=False)
+    retention_policy = ModelType(RetentionPolicy)
+
+
+class MetricSettings(Model):
+    category = StringType(serialize_when_none=False)
+    enabled = BooleanType(serialize_when_none=False)
+    retention_policy = ModelType(RetentionPolicy)
+    time_grain = StringType(serialize_when_none=False)
+
+
+class DiagnosticSettingsResource(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    event_hub_authorization_rule_id = StringType(serialize_when_none=False)
+    event_hub_name = StringType(serialize_when_none=False)
+    log_analytics_destination_type = StringType(serialize_when_none=False)
+    logs = ListType(ModelType(LogSettings), serialize_when_none=False)
+    metrics = ListType(ModelType(MetricSettings), serialize_when_none=False)
+    service_bus_rule_id = StringType(serialize_when_none=False)
+    storage_account_id = StringType(serialize_when_none=False)
+    workspace_id = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class ReplicationLink(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
+    is_termination_allowed = BooleanType(serialize_when_none=False)
+    partner_database = StringType(serialize_when_none=False)
+    partner_location = StringType(serialize_when_none=False)
+    partner_role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
+    partner_server = StringType(serialize_when_none=False)
+    percent_complete = IntType(serialize_when_none=False)
+    replication_mode = StringType(serialize_when_none=False)
+    replication_state = StringType(choices=('CATCH_UP', 'PENDING', 'SEEDING', 'SUSPENDED'), serialize_when_none=False)
+    role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
+    start_time = DateTimeType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
 class Sku(Model):
     capacity = IntType(serialize_when_none=False)
     family = StringType(serialize_when_none=False)
@@ -45,7 +107,7 @@ class Sku(Model):
     tier = StringType(serialize_when_none=False)
 
 
-class SqlDatabase(Model):
+class Database(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()
     kind = StringType(serialize_when_none=False)
@@ -71,7 +133,7 @@ class SqlDatabase(Model):
     failover_group_id = StringType(serialize_when_none=False)
     high_availability_replica_count = IntType(serialize_when_none=False)
     license_type = StringType(choices=('BasePrice', 'LicenseIncluded'), serialize_when_none=False)
-    long_term_retention_backup_resource_id = StringType(serialize_when_none=False)
+    long_term_retention_backup_resource_id = StringType(default='-')
     maintenance_configuration_id = StringType(serialize_when_none=False)
     max_log_size_bytes = IntType(serialize_when_none=False)
     max_size_bytes = IntType(serialize_when_none=False)
@@ -85,6 +147,7 @@ class SqlDatabase(Model):
     restorable_dropped_database_id = StringType(serialize_when_none=False)
     restore_point_in_time = StringType(serialize_when_none=False)
     resumed_date = DateTimeType(serialize_when_none=False)
+    replication_link = ListType(ModelType(ReplicationLink), serialize_when_none=False)
     sample_name = StringType(choices=('AdventureWorksLT', 'WideWorldImportersFull', 'WideWorldImportersStd'),
                              serialize_when_none=False)
     secondary_type = StringType(choices=('Geo', 'Named'), serialize_when_none=False)
@@ -97,9 +160,20 @@ class SqlDatabase(Model):
         'Resuming', 'Scaling', 'Shutdown', 'Standby', 'Suspect'), serialize_when_none=False)
     storage_account_type = StringType(choices=('GRS', 'LRS', 'ZRS'), serialize_when_none=False)
     zone_redundant = BooleanType(serialize_when_none=False)
-    sync_group = ListType(ModelType(SyncGroup))
+    diagnostic_settings_resource = ListType(ModelType(DiagnosticSettingsResource), serialize_when_none=False)
+    sync_group = ListType(ModelType(SyncGroup), serialize_when_none=False)
+    sync_agent = ListType(ModelType(SyncAgent), serialize_when_none=False)
+    sync_group_display = ListType(StringType, serialize_when_none=False)
+    sync_agent_display = ListType(StringType, serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     pricing_tier_display = StringType(default='-')
+    service_tier_display = StringType(default='-')
     compute_tier = StringType(serialize_when_none=False)
     tags = (ModelType(Tags))
     type = StringType(serialize_when_none=False)
+
+    def reference(self):
+        return {
+            "resource_id": self.id,
+            "external_link": f"https://portal.azure.com/#@.onmicrosoft.com/resource{self.id}/overview",
+        }
