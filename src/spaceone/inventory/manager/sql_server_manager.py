@@ -2,17 +2,22 @@ from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.model.sqlserver import *
 from spaceone.inventory.model.sqlserver.cloud_service import *
+from spaceone.inventory.model.sqldatabase.cloud_service import *
 from spaceone.inventory.connector.sql import SqlConnector
+from spaceone.inventory.connector.monitor import MonitorConnector
 from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.sqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.sqldatabase.cloud_service_type import CLOUD_SERVICE_TYPES_SQL_DB
 from datetime import datetime
 import time
 import copy
 
 
 class SqlServerManager(AzureManager):
-    connector_name = 'SqlConnector'
+    sql_connector_name = 'SqlConnector'
+    monitor_connector_name = 'MonitorConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
+    cloud_service_types_db = CLOUD_SERVICE_TYPES_SQL_DB
 
     def collect_cloud_service(self, params):
         print("** Sql Servers START **")
@@ -32,8 +37,10 @@ class SqlServerManager(AzureManager):
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
 
-        sql_servers_conn: SqlConnector = self.locator.get_connector(self.connector_name, **params)
+        sql_servers_conn: SqlConnector = self.locator.get_connector(self.sql_connector_name, **params)
+        sql_servers_monitor_conn: MonitorConnector = self.locator.get_connector(self.monitor_connector_name, **params)
         sql_servers = []
+        sql_databases = []
         for sql_server in sql_servers_conn.list_servers():
             sql_servers_dict = self.convert_nested_dictionary(self, sql_server)
 
@@ -50,7 +57,7 @@ class SqlServerManager(AzureManager):
             # transparent_data_encryption_dict = self.get_transparent_data_encryption_dict(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
-            databases_list = self.list_databases(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
+            databases_list = self.list_databases(self, sql_servers_conn=sql_servers_conn, sql_monitor_conn=sql_servers_monitor_conn, rg_name=sql_servers_dict['resource_group'], server_name=sql_servers_dict['name'])
             elastic_pools_list = self.list_elastic_pools(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             deleted_databases_list = self.list_deleted_databases(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
             virtual_network_rules_list = self.list_virtual_network_rules(self, sql_servers_conn, sql_servers_dict['resource_group'], sql_servers_dict['name'])
@@ -85,22 +92,30 @@ class SqlServerManager(AzureManager):
                 'tags': _tags
             })
 
+            # print("sql_dict")
+            # print(sql_servers_dict)
+
             sql_servers_data = SqlServer(sql_servers_dict, strict=False)
-
-            print("sql_server_dict")
-            print(sql_servers_dict)
-
             sql_servers_resource = SqlServerResource({
                 'data': sql_servers_data,
                 'region_code': sql_servers_data.location,
                 'reference': ReferenceModel(sql_servers_data.reference()),
-                'tags':  _tags
+                'tags': _tags
             })
+            sql_servers.append(SqlServerResponse({'resource': sql_servers_resource}))
+
+            for sql_database in sql_servers_dict.get('databases', []):
+                sql_database_data = Database(sql_database, strict=False)
+                sql_databases_resource = SqlDatabaseResource({
+                    'data': sql_database_data,
+                    'region_code': sql_database_data.location,
+                    'reference': ReferenceModel(sql_database_data.reference()),
+                    'tags': _tags
+                })
+                sql_servers.append(SqlDatabaseResponse({'resource': sql_databases_resource}))
 
             # Must set_region_code method for region collection
             self.set_region_code(sql_servers_data['location'])
-
-            sql_servers.append(SqlServerResponse({'resource': sql_servers_resource}))
 
         print(f'** Sql Servers Finished {time.time() - start_time} Seconds **')
         return sql_servers
@@ -111,7 +126,7 @@ class SqlServerManager(AzureManager):
         return resource_group
 
     @staticmethod
-    def list_databases(self, sql_servers_conn, rg_name, server_name):
+    def list_databases(self, sql_servers_conn, sql_monitor_conn, rg_name, server_name):
         databases_list = list()
         databases = sql_servers_conn.list_databases_by_server(resource_group=rg_name, server_name=server_name)
 
@@ -159,8 +174,23 @@ class SqlServerManager(AzureManager):
                 database_dict.update({
                     'sync_agent_display': self.get_sync_agent_display(self, database_dict['sync_agent'])
                 })
+            '''
+            # Get Data masking rules
+            database_dict.update({
+                'data_masking_rules': self.list_data_masking_rules(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
+            })
+            '''
 
+            # Get Diagnostic Settings
+            database_dict.update({
+                'diagnostic_settings': self.list_diagnostics_settings(self, sql_monitor_conn, database_dict['id'])
+            })
             databases_list.append(database_dict)
+
+            # Get Database Replication Type
+            database_dict.update({
+                'replication_link': self.list_replication_link(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
+            })
 
         return databases_list
 
@@ -410,3 +440,36 @@ class SqlServerManager(AzureManager):
             sync_agent_display_list.append(sync_display)
 
         return sync_agent_display_list
+
+    @staticmethod
+    def list_data_masking_rules(self, sql_servers_conn, rg_name, server_name, database_name):
+        data_masking_rules_list = list()
+        data_masking_rule_obj = sql_servers_conn.list_data_masking_rules_by_database(resource_group=rg_name, server_name=server_name, database_name=database_name)
+
+        for data_masking_rule in data_masking_rule_obj:
+            data_masking_dict = self.convert_nested_dictionary(self, data_masking_rule)
+            data_masking_rules_list.append(data_masking_dict)
+
+        return data_masking_rules_list
+
+    @staticmethod
+    def list_diagnostics_settings(self, sql_monitor_conn, resource_uri):
+        diagnostic_settings_list = list()
+        diagnostic_settings_obj = sql_monitor_conn.list_diagnostic_settings(resource_uri=resource_uri)
+
+        for diagnostic_setting in diagnostic_settings_obj.value:
+            diagnostic_setting_dict = self.convert_nested_dictionary(self, diagnostic_setting)
+            diagnostic_settings_list.append(diagnostic_setting_dict)
+
+        return diagnostic_settings_list
+
+    @staticmethod
+    def list_replication_link(self, sql_servers_conn, rg_name, server_name, database_name):
+        replication_link_list = list()
+        replication_link_obj = sql_servers_conn.list_replication_link(rg_name, server_name, database_name)
+
+        for replication_link in replication_link_obj:
+            replication_link_dict = self.convert_nested_dictionary(self, replication_link)
+            replication_link_list.append(replication_link_dict)
+
+        return replication_link_list
