@@ -155,6 +155,56 @@ class SyncAgent(Model):
     version = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
+
+class RetentionPolicy(Model):
+    days = IntType(serialize_when_none=False)
+    enabled = BooleanType(serialize_when_none=False)
+
+
+class LogSettings(Model):
+    category = StringType(serialize_when_none=False)
+    enabled = BooleanType(serialize_when_none=False)
+    retention_policy = ModelType(RetentionPolicy)
+
+
+class MetricSettings(Model):
+    category = StringType(serialize_when_none=False)
+    enabled = BooleanType(serialize_when_none=False)
+    retention_policy = ModelType(RetentionPolicy)
+    time_grain = StringType(serialize_when_none=False)
+
+
+class DiagnosticSettingsResource(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    event_hub_authorization_rule_id = StringType(serialize_when_none=False)
+    event_hub_name = StringType(serialize_when_none=False)
+    log_analytics_destination_type = StringType(serialize_when_none=False)
+    logs = ListType(ModelType(LogSettings), serialize_when_none=False)
+    metrics = ListType(ModelType(MetricSettings), serialize_when_none=False)
+    service_bus_rule_id = StringType(serialize_when_none=False)
+    storage_account_id = StringType(serialize_when_none=False)
+    workspace_id = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class ReplicationLink(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
+    is_termination_allowed = BooleanType(serialize_when_none=False)
+    partner_database = StringType(serialize_when_none=False)
+    partner_location = StringType(serialize_when_none=False)
+    partner_role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
+    partner_server = StringType(serialize_when_none=False)
+    percent_complete = IntType(serialize_when_none=False)
+    replication_mode = StringType(serialize_when_none=False)
+    replication_state = StringType(choices=('CATCH_UP', 'PENDING', 'SEEDING', 'SUSPENDED'), serialize_when_none=False)
+    role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
+    start_time = DateTimeType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
 class Sku(Model):
     capacity = IntType(serialize_when_none=False)
     family = StringType(serialize_when_none=False)
@@ -215,6 +265,8 @@ class Database(Model):
         'Resuming', 'Scaling', 'Shutdown', 'Standby', 'Suspect'), serialize_when_none=False)
     storage_account_type = StringType(choices=('GRS', 'LRS', 'ZRS'), serialize_when_none=False)
     zone_redundant = BooleanType(serialize_when_none=False)
+    diagnostic_settings_resource = ListType(ModelType(DiagnosticSettingsResource), serialize_when_none=False)
+    replication_link = ListType(ModelType(ReplicationLink), serialize_when_none=False)
     sync_group = ListType(ModelType(SyncGroup), serialize_when_none=False)
     sync_agent = ListType(ModelType(SyncAgent), serialize_when_none=False)
     sync_group_display = ListType(StringType, serialize_when_none=False)
