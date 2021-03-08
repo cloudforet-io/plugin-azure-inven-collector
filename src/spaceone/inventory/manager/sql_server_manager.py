@@ -16,7 +16,8 @@ import copy
 class SqlServerManager(AzureManager):
     sql_connector_name = 'SqlConnector'
     monitor_connector_name = 'MonitorConnector'
-    cloud_service_types = [CLOUD_SERVICE_TYPES, CLOUD_SERVICE_TYPES_SQL_DB]
+
+    cloud_service_types = CLOUD_SERVICE_TYPES + CLOUD_SERVICE_TYPES_SQL_DB
     # cloud_service_types_db = CLOUD_SERVICE_TYPES_SQL_DB
 
     def collect_cloud_service(self, params):
