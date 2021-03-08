@@ -106,7 +106,6 @@ class Sku(Model):
     size = StringType(serialize_when_none=False)
     tier = StringType(serialize_when_none=False)
 
-
 class Database(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()
@@ -118,11 +117,11 @@ class Database(Model):
     resource_group = StringType(serialize_when_none=False)
     auto_pause_delay = IntType(serialize_when_none=False)
     catalog_collation = StringType(choices=('DATABASE_DEFAULT', 'SQL_Latin1_General_CP1_CI_AS'),
-                                   serialize_when_none=False)
+                                       serialize_when_none=False)
     collation = StringType(serialize_when_none=False)
     create_mode = StringType(choices=(
-        'Copy', 'Default', 'OnlineSecondary', 'PointInTimeRestore', 'Recovery', 'Restore', 'RestoreExternalBackup',
-        'RestoreExternalBackupSecondary', 'RestoreLongTermRetentionBackup', 'Secondary'), serialize_when_none=False)
+            'Copy', 'Default', 'OnlineSecondary', 'PointInTimeRestore', 'Recovery', 'Restore', 'RestoreExternalBackup',
+            'RestoreExternalBackupSecondary', 'RestoreLongTermRetentionBackup', 'Secondary'), serialize_when_none=False)
     creation_date = DateTimeType(serialize_when_none=False)
     current_service_objective_name = StringType(serialize_when_none=False)
     current_sku = ModelType(Sku, serialize_when_none=False)
@@ -147,20 +146,20 @@ class Database(Model):
     restorable_dropped_database_id = StringType(serialize_when_none=False)
     restore_point_in_time = StringType(serialize_when_none=False)
     resumed_date = DateTimeType(serialize_when_none=False)
-    replication_link = ListType(ModelType(ReplicationLink), serialize_when_none=False)
     sample_name = StringType(choices=('AdventureWorksLT', 'WideWorldImportersFull', 'WideWorldImportersStd'),
-                             serialize_when_none=False)
+                                 serialize_when_none=False)
     secondary_type = StringType(choices=('Geo', 'Named'), serialize_when_none=False)
     source_database_deletion_date = StringType(serialize_when_none=False)
     source_database_id = StringType(serialize_when_none=False)
     status = StringType(choices=(
-        'AutoClosed', 'Copying', 'Creating', 'Disabled', 'EmergencyMode', 'Inaccessible', 'Offline',
-        'OfflineChangingDwPerformanceTiers', 'OfflineSecondary', 'Online',
-        'OnlineChangingDwPerformanceTiers', 'Paused', 'Pausing', 'Recovering', 'RecoveryPending', 'Restoring',
-        'Resuming', 'Scaling', 'Shutdown', 'Standby', 'Suspect'), serialize_when_none=False)
+            'AutoClosed', 'Copying', 'Creating', 'Disabled', 'EmergencyMode', 'Inaccessible', 'Offline',
+            'OfflineChangingDwPerformanceTiers', 'OfflineSecondary', 'Online',
+            'OnlineChangingDwPerformanceTiers', 'Paused', 'Pausing', 'Recovering', 'RecoveryPending', 'Restoring',
+            'Resuming', 'Scaling', 'Shutdown', 'Standby', 'Suspect'), serialize_when_none=False)
     storage_account_type = StringType(choices=('GRS', 'LRS', 'ZRS'), serialize_when_none=False)
     zone_redundant = BooleanType(serialize_when_none=False)
     diagnostic_settings_resource = ListType(ModelType(DiagnosticSettingsResource), serialize_when_none=False)
+    replication_link = ListType(ModelType(ReplicationLink), serialize_when_none=False)
     sync_group = ListType(ModelType(SyncGroup), serialize_when_none=False)
     sync_agent = ListType(ModelType(SyncAgent), serialize_when_none=False)
     sync_group_display = ListType(StringType, serialize_when_none=False)
@@ -171,6 +170,7 @@ class Database(Model):
     compute_tier = StringType(serialize_when_none=False)
     tags = (ModelType(Tags))
     type = StringType(serialize_when_none=False)
+
 
     def reference(self):
         return {
