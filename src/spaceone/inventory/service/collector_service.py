@@ -90,7 +90,11 @@ class CollectorService(BaseService):
             try:
                 for future in concurrent.futures.as_completed(future_executors):
                     for result in future.result():
-                        yield result.to_primitive()
+                        if type(result) == list:
+                            for result_individual in result:
+                                yield result_individual.to_primitive()
+                        else:
+                            yield result.to_primitive()
 
             except Exception as e:
                 _LOGGER.error(f'failed to result {e}')
