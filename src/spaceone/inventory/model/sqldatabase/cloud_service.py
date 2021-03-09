@@ -1,7 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType
 
 from spaceone.inventory.model.sqldatabase.data import Database
-from spaceone.inventory.model.sqlserver.data import SqlServer
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \

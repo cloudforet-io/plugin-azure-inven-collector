@@ -106,6 +106,7 @@ class Sku(Model):
     size = StringType(serialize_when_none=False)
     tier = StringType(serialize_when_none=False)
 
+
 class Database(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()

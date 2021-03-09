@@ -18,7 +18,6 @@ class SqlServerManager(AzureManager):
     monitor_connector_name = 'MonitorConnector'
 
     cloud_service_types = CLOUD_SERVICE_TYPES + CLOUD_SERVICE_TYPES_SQL_DB
-    # cloud_service_types_db = CLOUD_SERVICE_TYPES_SQL_DB
 
     def collect_cloud_service(self, params):
         print("** Sql Servers START **")
@@ -37,7 +36,7 @@ class SqlServerManager(AzureManager):
         """
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
-
+        
         sql_servers_conn: SqlConnector = self.locator.get_connector(self.sql_connector_name, **params)
         sql_servers_monitor_conn: MonitorConnector = self.locator.get_connector(self.monitor_connector_name, **params)
         sql_servers = []

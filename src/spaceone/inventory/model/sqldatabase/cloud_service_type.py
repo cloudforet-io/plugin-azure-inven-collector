@@ -18,7 +18,7 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Status', 'data.status'),
         TextDyField.data_source('Replication Partner Server', 'data.replication_link.partner_server'),
-        TextDyField.data_source('Server', 'server_name'),
+        TextDyField.data_source('Server', 'data.server_name'),
         TextDyField.data_source('Pricing Tier', 'data.pricing_tier_display'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
