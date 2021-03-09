@@ -16,7 +16,15 @@ cst_sql_database.tags = {
 cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Status', 'data.status'),
+        EnumDyField.data_source('Status', 'data.status', default_state={
+            'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring',
+                     'Resuming', 'Scaling', 'Standby'],
+            'warning': ['AutoClosed', 'Inaccessible', 'Offline', 'OfflineChangingDwPerformanceTiers',
+                        'OfflineSecondary',
+                        'Pausing', 'Recovering', 'RecoveryPending', 'Suspect'],
+            'disable': ['Disabled', 'Paused', 'Shutdown'],
+            'alert': ['EmergencyMode']
+        }),
         TextDyField.data_source('Replication Partner Server', 'data.replication_link.partner_server'),
         TextDyField.data_source('Server', 'data.server_name'),
         TextDyField.data_source('Pricing Tier', 'data.pricing_tier_display'),

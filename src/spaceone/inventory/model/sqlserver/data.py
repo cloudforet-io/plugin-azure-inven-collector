@@ -196,7 +196,7 @@ class ReplicationLink(Model):
     partner_database = StringType(serialize_when_none=False)
     partner_location = StringType(serialize_when_none=False)
     partner_role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
-    partner_server = StringType(serialize_when_none=False)
+    partner_server = StringType(default='-')
     percent_complete = IntType(serialize_when_none=False)
     replication_mode = StringType(serialize_when_none=False)
     replication_state = StringType(choices=('CATCH_UP', 'PENDING', 'SEEDING', 'SUSPENDED'), serialize_when_none=False)
@@ -222,6 +222,7 @@ class Database(Model):
     server_name = StringType(serialize_when_none=False)
     subscription_id = StringType(serialize_when_none=False)
     resource_group = StringType(serialize_when_none=False)
+    administrator_login = StringType(default='-')
     auto_pause_delay = IntType(serialize_when_none=False)
     catalog_collation = StringType(choices=('DATABASE_DEFAULT', 'SQL_Latin1_General_CP1_CI_AS'),
                                    serialize_when_none=False)

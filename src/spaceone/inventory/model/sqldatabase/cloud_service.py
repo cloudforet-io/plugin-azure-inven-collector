@@ -16,7 +16,7 @@ SQL DATABASES
 # Load balancing rule, NAT Rules, Public IP Addresses, Load Balancing Type
 sql_databases_info_meta = ItemDynamicLayout.set_fields('SQL Databases', fields=[
     TextDyField.data_source('Database Name', 'data.name'),
-    EnumDyField.data_source('Status', 'status', default_state={
+    EnumDyField.data_source('Status', 'data.status', default_state={
         'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring',
                  'Resuming', 'Scaling', 'Standby'],
         'warning': ['AutoClosed', 'Inaccessible', 'Offline', 'OfflineChangingDwPerformanceTiers', 'OfflineSecondary',
@@ -40,7 +40,7 @@ sql_databases_info_meta = ItemDynamicLayout.set_fields('SQL Databases', fields=[
 
 # TAB - Configure
 sql_databases_configure = ItemDynamicLayout.set_fields('Configure', fields=[
-    TextDyField.data_source('Service Tier', 'service_tier_display'),
+    TextDyField.data_source('Service Tier', 'data.service_tier_display'),
     TextDyField.data_source('Compute Tier', 'data.compute_tier'),
     TextDyField.data_source('Compute Hardware', 'data.sku.family'),
     TextDyField.data_source('Licence Type', 'data.license_type'),
@@ -69,7 +69,7 @@ sql_databases_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fie
 ])
 
 sql_databases_meta = CloudServiceMeta.set_layouts(
-    [sql_databases_info_meta, sql_databases_info_tags])
+    [sql_databases_info_meta, sql_databases_configure, sql_databases_diagnostic_settings, sql_databases_info_tags])
 
 
 class DatabaseResource(CloudServiceResource):
