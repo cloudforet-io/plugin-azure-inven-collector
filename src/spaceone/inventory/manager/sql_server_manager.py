@@ -36,7 +36,7 @@ class SqlServerManager(AzureManager):
         """
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
-
+        
         sql_servers_conn: SqlConnector = self.locator.get_connector(self.sql_connector_name, **params)
         sql_servers_monitor_conn: MonitorConnector = self.locator.get_connector(self.monitor_connector_name, **params)
         sql_servers = []
@@ -203,7 +203,7 @@ class SqlServerManager(AzureManager):
 
             # Get Diagnostic Settings
             database_dict.update({
-                'diagnostic_settings': self.list_diagnostics_settings(self, sql_monitor_conn, database_dict['id'])
+                'diagnostic_settings_resource': self.list_diagnostics_settings(self, sql_monitor_conn, database_dict['id'])
             })
 
             # Get Database Replication Type

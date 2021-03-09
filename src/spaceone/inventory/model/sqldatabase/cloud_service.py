@@ -28,7 +28,7 @@ sql_databases_info_meta = ItemDynamicLayout.set_fields('SQL Databases', fields=[
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription ID', 'data.subscription_id'),
-    TextDyField.data_source('Server Name', 'data.sku.name'),
+    TextDyField.data_source('Server Name', 'data.server_name'),
     TextDyField.data_source('Elastic Pool', 'data.elastic_pool_id'),
     TextDyField.data_source('Pricing Tier', 'data.pricing_tier_display'),
     DateTimeDyField.data_source('Earliest Restore Point', 'data.earliest_restore_date'),
@@ -54,7 +54,7 @@ sql_databases_configure = ItemDynamicLayout.set_fields('Configure', fields=[
 ])
 
 # TAB - Diagnostic Settings
-sql_databases_diagnostic_settings = SimpleTableDynamicLayout.set_fields('Diagnostic Settings', 'data.diagnostic_settings', fields=[
+sql_databases_diagnostic_settings = SimpleTableDynamicLayout.set_fields('Diagnostic Settings', 'data.diagnostic_settings_resource', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Storage Account', 'storage_account_id'),
     TextDyField.data_source('Event Hub', 'event_hub_name'),
