@@ -136,7 +136,7 @@ class SyncGroup(Model):
     hub_database_password = StringType(serialize_when_none=False)
     hub_database_user_name = StringType(serialize_when_none=False)
     interval = IntType(serialize_when_none=False)
-    last_sync_time = StringType(serialize_when_none=False)
+    last_sync_time = DateTimeType(serialize_when_none=False)
     schema = ModelType(SyncGroupSchema, serialize_when_none=False)
     sync_database_id = StringType(serialize_when_none=False)
     sync_state = StringType(choices=('Error', 'Good', 'NotReady', 'Progressing', 'Warning'), serialize_when_none=False)
@@ -222,6 +222,7 @@ class Database(Model):
     server_name = StringType(serialize_when_none=False)
     subscription_id = StringType(serialize_when_none=False)
     resource_group = StringType(serialize_when_none=False)
+
     administrator_login = StringType(default='-')
     auto_pause_delay = IntType(serialize_when_none=False)
     catalog_collation = StringType(choices=('DATABASE_DEFAULT', 'SQL_Latin1_General_CP1_CI_AS'),

@@ -176,13 +176,13 @@ class SqlServerManager(AzureManager):
 
             # Get Sync Groups by databases
             database_dict.update({
-                'sync_groups': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name,
+                'sync_group': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name,
                                                                 database_dict['name']),
             })
 
-            if database_dict['sync_groups'] is not None:
+            if database_dict['sync_group'] is not None:
                 database_dict.update({
-                    'sync_groups_display': self.get_sync_group_display(self, database_dict['sync_groups'])
+                    'sync_group_display': self.get_sync_group_display(self, database_dict['sync_group'])
                 })
 
             # Get Sync Agents by servers
