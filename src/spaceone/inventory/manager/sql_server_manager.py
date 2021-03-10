@@ -36,7 +36,7 @@ class SqlServerManager(AzureManager):
         """
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
-        
+
         sql_servers_conn: SqlConnector = self.locator.get_connector(self.sql_connector_name, **params)
         sql_servers_monitor_conn: MonitorConnector = self.locator.get_connector(self.monitor_connector_name, **params)
         sql_servers = []
@@ -58,7 +58,7 @@ class SqlServerManager(AzureManager):
                                                                               sql_server_dict['name'])
             failover_group_list = self.list_failover_groups(self, sql_servers_conn, sql_server_dict['resource_group'],
                                                             sql_server_dict['name'])
-            # transparent_data_encryption_dict = self.get_transparent_data_encryption_dict(self, sql_servers_conn, sql_server_dict['resource_group'], sql_server_dict['name'])
+            transparent_data_encryption_dict = self.list_encryption_protectors(self, sql_servers_conn, sql_server_dict['resource_group'], sql_server_dict['name'])
             azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn,
                                                                     sql_server_dict['resource_group'],
                                                                     sql_server_dict['name'])
@@ -89,7 +89,8 @@ class SqlServerManager(AzureManager):
                 'elastic_pools': elastic_pools_list,
                 'deleted_databases': deleted_databases_list,
                 'virtual_network_rules': virtual_network_rules_list,
-                'firewall_rules': firewall_rules_list
+                'firewall_rules': firewall_rules_list,
+                'encryption_protectors': transparent_data_encryption_dict
             })
 
             if sql_server_dict.get('azure_ad_administrators') is not None:
@@ -318,6 +319,17 @@ class SqlServerManager(AzureManager):
                 })
 
         return private_endpoint_connection_list
+
+    @staticmethod
+    def list_encryption_protectors(self, sql_servers_conn, rg_name, server_name):
+        encryption_protectors_list = list()
+        encryption_protectors_obj = sql_servers_conn.list_encryption_protectors(resource_group=rg_name, server_name=server_name)
+
+        for encryption_protector in encryption_protectors_obj:
+            encryption_protectors_dict = self.convert_nested_dictionary(self, encryption_protector)
+            encryption_protectors_list.append(encryption_protectors_dict)
+
+        return encryption_protectors_list
 
     @staticmethod
     def get_per_db_settings(per_database_settings_dict):

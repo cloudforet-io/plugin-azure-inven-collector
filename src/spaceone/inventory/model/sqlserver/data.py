@@ -311,6 +311,21 @@ class ElasticPool(Model):
     type = StringType(serialize_when_none=False)
 
 
+class EncryptionProtector(Model):
+    id = StringType()
+    kind = StringType(serialize_when_none=False)
+    location = StringType()
+    name = StringType()
+    server_key_name = StringType(serialize_when_none=False)
+    server_key_type = StringType(choices=('AzureKeyVault', 'ServiceManaged'), default='ServiceManaged')
+    subregion = StringType(serialize_when_none=False)
+    thumbprint = StringType(serialize_when_none=False)
+    uri = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+
+
 class RestorableDroppedDatabase(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()
@@ -361,6 +376,7 @@ class SqlServer(Model):
     administrator_login = StringType(serialize_when_none=False)
     azure_ad_admin_name = StringType(default='Not configured')
     administrator_login_password = StringType(serialize_when_none=False)
+    encryption_protectors = ListType(ModelType(EncryptionProtector), serialize_when_none=False)
     fully_qualified_domain_name = StringType(serialize_when_none=False)
     minimal_tls_version = StringType(choices=('1.0', '1.1', '1.2'), serialize_when_none=False)
     private_endpoint_connections = ListType(ModelType(ServerPrivateEndpointConnection))

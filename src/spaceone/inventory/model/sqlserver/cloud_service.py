@@ -168,6 +168,7 @@ sql_servers_firewall_rules = TableDynamicLayout.set_fields('Firewall Rules', 'da
     TextDyField.data_source('End IP', 'end_ip_address')
 ])
 
+
 sql_servers_virtual_network_rules = TableDynamicLayout.set_fields('Virtual Network Rules', 'data.virtual_network_rules',
                                                                   fields=[
                                                                       TextDyField.data_source('Rule Name', 'name'),
@@ -203,7 +204,15 @@ sql_servers_private_endpoint_connections = TableDynamicLayout.set_fields('Privat
         TextDyField.data_source('State', 'status'),
         TextDyField.data_source('Private Endpoint Name', 'private_endpoint_name'),
         TextDyField.data_source('Request / Response Message', 'description')
-    ])
+])
+
+# TAB - Transparent Data Encryption
+sql_servers_transparent_data_encryption = TableDynamicLayout.set_fields('Transparent Data Encryption', 'data.encryption_protectors', fields=[
+    TextDyField.data_source('Transparent Data Encryption', 'kind'),
+    TextDyField.data_source('Key', 'server_key_name'),
+    TextDyField.data_source('Key Type', 'server_key_type'),
+    TextDyField.data_source('Uri', 'uri')
+])
 
 # TAB - Automatic Tuning
 sql_servers_automatic_tuning_options = TableDynamicLayout.set_fields('Tuning Options',
@@ -223,7 +232,7 @@ sql_servers_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', field
 sql_servers_meta = CloudServiceMeta.set_layouts(
     [sql_servers_info_meta, sql_server_failover_group, sql_server_backups, sql_servers_active_directory_admin, sql_servers_databases_info,
      sql_servers_elastic_pools,
-     sql_servers_deleted_databases, sql_servers_auditing, sql_servers_network, sql_servers_automatic_tuning_options,
+     sql_servers_deleted_databases, sql_servers_auditing, sql_servers_network, sql_servers_transparent_data_encryption, sql_servers_automatic_tuning_options,
      sql_servers_firewalls_and_vn,
      sql_servers_private_endpoint_connections, sql_servers_info_tags])
 
