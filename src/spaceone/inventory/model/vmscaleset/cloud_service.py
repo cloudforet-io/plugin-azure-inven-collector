@@ -159,7 +159,7 @@ vm_scale_set_info_os_profile = ItemDynamicLayout.set_fields('Operating System', 
     ])
 
 vm_scale_set_meta = CloudServiceMeta.set_layouts(
-    [vm_scale_set_info_meta, vm_scale_set_info_tags, vm_scale_set_instance, vm_scale_set_info_network, vm_scale_set_info_scaling
+    [vm_scale_set_info_meta, vm_scale_set_info_tags, vm_scale_set_instance, vm_scale_set_info_network, vm_scale_set_info_scaling,
      vm_scale_set_info_disk, vm_scale_set_info_os_profile])
 
 
