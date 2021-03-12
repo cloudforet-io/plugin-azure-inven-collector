@@ -21,6 +21,107 @@ class AutomaticRepairsPolicy(Model):  # belongs to VmScaleSet
     grace_period = StringType(serialize_when_none=False)
 
 
+class EmailNotification(Model):
+    custom_emails = ListType(StringType, serialize_when_none=False)
+    send_to_subscription_administrator = BooleanType(serialize_when_none=False)
+    send_to_subscription_co_administrators = BooleanType(serialize_when_none=False)
+
+
+class OperationType(Model):
+    scale = StringType(serialize_when_none=False)
+
+
+class WebhookNotification(Model):
+    properties = StringType(serialize_when_none=False)
+
+
+class AutoscaleNotification(Model):
+    email = ModelType(EmailNotification, serialize_when_none=False)
+    operation = ModelType(OperationType, serialize_when_none=False)
+    webhooks = ListType(ModelType(WebhookNotification), serialize_when_none=False)
+
+
+class ScaleRuleMetricDimension(Model):
+    dimension_name = StringType(serialize_when_none=False)
+    operator = StringType(choices=('Equals', 'NotEquals'), serialize_when_none=False)
+    values = ListType(StringType, serialize_when_none=False)
+
+
+class MetricTrigger(Model):
+    dimensions = ListType(ModelType(ScaleRuleMetricDimension), serialize_when_none=False)
+    metric_name = StringType(serialize_when_none=False)
+    metric_namespace = StringType(serialize_when_none=False)
+    metric_resource_uri = StringType(serialize_when_none=False)
+    operator = StringType(choices=('Equals', 'GreaterThan', 'GreaterThanOrEqual', 'LessThan', 'LessThanOrEqual', 'NotEquals'), serialize_when_none=False)
+    statistic = StringType(choices=('Average', 'Max', 'Min', 'Sum'), serialize_when_none=False)
+    threshold = NumberType(serialize_when_none=False)
+    time_aggregation = StringType(choices=('Average', 'Count', 'Last', 'Maximum', 'Minimum', 'Total'), serialize_when_none=False)
+    time_grain = StringType(serialize_when_none=False)
+    time_window = StringType(serialize_when_none=False)
+
+
+class ScaleCapacity(Model):
+    default = StringType(serialize_when_none=False)
+    maximum = StringType(serialize_when_none=False)
+    minimum = StringType(serialize_when_none=False)
+
+
+class TimeWindow(Model):
+    end = StringType(serialize_when_none=False)
+    start = StringType(serialize_when_none=False)
+    time_zone = StringType(serialize_when_none=False)
+
+
+class RecurrentSchedule(Model):
+    days = ListType(StringType, serialize_when_none=False)
+    hours = ListType(IntType, serialize_when_none=False)
+    minutes = ListType(IntType, serialize_when_none=False)
+    time_zone = StringType(serialize_when_none=False)
+
+
+class Recurrence(Model):
+    frequency = StringType(choices= ('Day', 'Hour', 'Minute', 'Month', 'None', 'Second', 'Week', 'Year'), serialize_when_none=False)
+    schedule = ModelType(RecurrentSchedule)
+
+
+class ScaleAction(Model):
+    cooldown = StringType(serialize_when_none=False)
+    direction = StringType(choices=('Decrease', 'Increase', 'None'), serialize_when_none=False)
+    type = StringType(choices=('ChangeCount', 'ExactCount', 'PercentChangeCount'), serialize_when_none=False)
+    value = StringType(serialize_when_none=False)
+
+
+class ScaleRule(Model):
+    metric_trigger = ModelType(MetricTrigger)
+    scale_action = ModelType(ScaleAction)
+
+
+class AutoscaleProfile(Model):
+    capacity = ModelType(ScaleCapacity, serialize_when_none=False)
+    fixed_date = ModelType(TimeWindow, serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    recurrence = ModelType(Recurrence, serialize_when_none=False)
+    rules = ListType(ModelType(ScaleRule), serialize_when_none=False)
+
+
+class AutoscaleSettingResource(Model):  # belongs to VmScaleSet
+    id = StringType(serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    enabled = BooleanType(default=True)
+    notifications = ListType(ModelType(AutoscaleNotification), serialize_when_none=False)
+    profiles = ListType(ModelType(AutoscaleProfile), serialize_when_none=False)
+    profiles_display = ListType(StringType, serialize_when_none=False)
+    target_resource_uri = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class AutoscaleSettingResourceCollection(Model):
+    next_link = StringType(serialize_when_none=False)
+    value = autoscale_settings = ListType(ModelType(AutoscaleSettingResource), serialize_when_none=False)
+
+
 class ApiEntityReference(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
     id = StringType(serialize_when_none=False)
 
@@ -107,6 +208,7 @@ class Settings(Model):
     protocol = StringType(serialize_when_none=False)
     port = IntType(serialize_when_none=False)
     requestPath = StringType(serialize_when_none=False)
+
 
 class Sku(Model):  # belongs to VmScaleSet
     capacity = IntType(serialize_when_none=False)
@@ -522,9 +624,19 @@ class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     zones = ListType(StringType, serialize_when_none=False)
 
 
+class VirtualMachineScaleSetPowerState(Model):
+    id = StringType()
+    vm_instances = ListType(ModelType(VirtualMachineScaleSetVM), serialize_when_none=False)
+    instance_count = IntType()
+    mode = StringType(choices=('Custom', 'Manual'), serialize_when_none=False)
+    profiles = ListType(ModelType(AutoscaleProfile), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Failed', 'Succeeded'))
+
+
 class VirtualMachineScaleSet(Model):
     id = StringType(serialize_when_none=False)
     subscription_id = StringType(serialize_when_none=False)
+    autoscale_setting_resource_collection = ModelType(AutoscaleSettingResourceCollection, serialize_when_none=False)
     subscription_name = StringType(serialize_when_none=False)
     resource_group = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
@@ -546,6 +658,7 @@ class VirtualMachineScaleSet(Model):
     unique_id = StringType(serialize_when_none=False)
     upgrade_policy = ModelType(UpgradePolicy, serialize_when_none=False)
     virtual_machine_profile = ModelType(VirtualMachineScaleSetVMProfile, serialize_when_none=False)
+    virtual_machine_scale_set_power_state = ModelType(VirtualMachineScaleSetPowerState)
     zone_balance = BooleanType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ListType(ModelType(Tags), default=[], serialize_when_none=False)
