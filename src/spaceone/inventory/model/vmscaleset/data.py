@@ -119,7 +119,7 @@ class AutoscaleSettingResource(Model):  # belongs to VmScaleSet
 
 class AutoscaleSettingResourceCollection(Model):
     next_link = StringType(serialize_when_none=False)
-    value = autoscale_settings = ListType(ModelType(AutoscaleSettingResource), serialize_when_none=False)
+    value = ListType(ModelType(AutoscaleSettingResource), serialize_when_none=False)
 
 
 class ApiEntityReference(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile

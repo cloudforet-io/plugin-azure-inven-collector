@@ -109,7 +109,7 @@ vm_scale_set_scaling_info = ItemDynamicLayout.set_fields('Scaling', fields=[
     })
 ])
 
-vm_scale_set_scaling_rules = TableDynamicLayout.set_fields('Autoscale Settings', 'data.autoscale_settings', fields=[
+vm_scale_set_scaling_rules = SimpleTableDynamicLayout.set_fields('Autoscale Settings', 'data.autoscale_setting_resource_collection.value', fields=[
     TextDyField.data_source('Name', 'name'),
     ListDyField.data_source('Profiles', 'profiles_display', options={
         'delimiter': '<br>'
