@@ -101,9 +101,23 @@ class VmScaleSetManager(AzureManager):
             vm_scale_set_dict['vm_instances'] = vm_instances_list
 
             # Get auto scale settings by resource group and vm id
+            vm_scale_set_dict.update({
+                # 'autoscale_settings': self.list_auto_scale_settings(self, vm_scale_set_conn, vm_scale_set_dict['resource_group'], vm_scale_set_dict['id']),
+                'autoscale_settings': self.list_auto_scale_settings_obj(self, vm_scale_set_conn,
+                                                                    vm_scale_set_dict['resource_group'],
+                                                                    vm_scale_set_dict['id'])
+            })
+
+            # Set virtual_machine_scale_set_power_state information
+            if vm_scale_set_dict.get('autoscale_settings') is not None:
+                vm_scale_set_dict.update({
+                    'virtual_machine_scale_set_power_state': self.list_virtual_machine_scale_set_power_state(self, vm_scale_set_dict['autoscale_settings']),
+                })
 
             vm_scale_set_dict.update({
-                'autoscale_settings': self.list_auto_scale_settings(self, vm_scale_set_conn, vm_scale_set_dict['resource_group'], vm_scale_set_dict['id'])
+                'autoscale_settings': self.list_auto_scale_settings(self, vm_scale_set_conn,
+                                                                    vm_scale_set_dict['resource_group'],
+                                                                    vm_scale_set_dict['id'])
             })
 
             # switch tags form
@@ -113,8 +127,8 @@ class VmScaleSetManager(AzureManager):
                 'tags': _tags
             })
 
-            # print("vm_scale_set_dict")
-            # print(vm_scale_set_dict)
+            print("vm_scale_set_dict")
+            print(vm_scale_set_dict)
 
             vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
             vm_scale_set_resource = VmScaleSetResource({
@@ -185,6 +199,7 @@ class VmScaleSetManager(AzureManager):
         vm_instance_dict['vm_instance_status_profile'] = vm_instance_status_dict  # Get instance view of a virtual machine from a VM scale set instance
 
         # Get Primary Vnet display
+
         if getattr(vm_instance, 'network_profile_configuration') is not None:
             vm_instance_dict.update({
                 'primary_vnet': self.get_primary_vnet(vm_instance_dict['network_profile_configuration']['network_interface_configurations'])
@@ -223,9 +238,56 @@ class VmScaleSetManager(AzureManager):
         return auto_scale_settings_list
 
     @staticmethod
+    def list_auto_scale_settings_obj(self, vm_scale_set_conn, resource_group_name, vm_scale_set_id):
+        auto_scale_settings_obj_list = list()
+        auto_scale_settings_obj = vm_scale_set_conn.list_auto_scale_settings(resource_group=resource_group_name)  # List all of the Auto scaling Rules in this resource group
+
+        for auto_scale_setting in auto_scale_settings_obj:
+            if auto_scale_setting.target_resource_uri.lower() == vm_scale_set_id.lower():
+                auto_scale_settings_obj_list.append(auto_scale_setting)
+
+        return auto_scale_settings_obj_list
+
+    @staticmethod
     def get_autoscale_profiles_display(autoscale_settings_profiles):
         profiles_list = list()
         for profile in autoscale_settings_profiles:
             profiles_list.append('minimum : ' + str(profile['capacity']['minimum']) + ' / ' + 'maximum : ' + str(profile['capacity']['maximum'] + ' / ' + 'default : ' + profile['capacity']['default']))
 
         return profiles_list
+
+    @staticmethod
+    def get_autoscale_rules(self, rules_dict):
+        rule_list = list()
+        for rule in rules_dict:
+            rule_dict = self.convert_nested_dictionary(self, rule)
+            rule_list.append(rule_dict)
+        return rule_list
+
+    @staticmethod
+    def get_autoscale_profiles_list(self, autoscale_setting):
+        profiles_list = list()
+        for profile in autoscale_setting.profiles:
+            profile_dict = self.convert_nested_dictionary(self, profile)
+            profiles_list.append(profile_dict)
+
+        return profiles_list
+
+    @staticmethod
+    def list_virtual_machine_scale_set_power_state(self, autoscale_obj_list):
+        power_state_dict = dict()
+        power_state_list = list()
+
+        for autoscale_setting in autoscale_obj_list:
+            power_state_dict.update({
+                'location': autoscale_setting.location,
+                'profiles': self.get_autoscale_profiles_list(self, autoscale_setting),  # profiles_list
+                'enabled': autoscale_setting.enabled,
+                'name': autoscale_setting.name,
+                'notifications': autoscale_setting.notifications,
+                'target_resource_uri': autoscale_setting.target_resource_uri,
+                'tags': autoscale_setting.tags
+            })
+            power_state_list.append(power_state_dict)
+
+        return power_state_list

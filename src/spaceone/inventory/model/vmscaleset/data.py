@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, TimestampType, UTCDateTimeType, TimedeltaType
 
 
 class Tags(Model):
@@ -54,10 +54,10 @@ class MetricTrigger(Model):
     metric_resource_uri = StringType(serialize_when_none=False)
     operator = StringType(choices=('Equals', 'GreaterThan', 'GreaterThanOrEqual', 'LessThan', 'LessThanOrEqual', 'NotEquals'), serialize_when_none=False)
     statistic = StringType(choices=('Average', 'Max', 'Min', 'Sum'), serialize_when_none=False)
-    threshold = NumberType(serialize_when_none=False)
+    threshold = IntType(serialize_when_none=False)
     time_aggregation = StringType(choices=('Average', 'Count', 'Last', 'Maximum', 'Minimum', 'Total'), serialize_when_none=False)
-    time_grain = StringType(serialize_when_none=False)
-    time_window = StringType(serialize_when_none=False)
+    time_grain = TimedeltaType(serialize_when_none=False)
+    time_window = TimedeltaType(serialize_when_none=False)
 
 
 class ScaleCapacity(Model):
@@ -85,15 +85,15 @@ class Recurrence(Model):
 
 
 class ScaleAction(Model):
-    cooldown = StringType(serialize_when_none=False)
     direction = StringType(choices=('Decrease', 'Increase', 'None'), serialize_when_none=False)
     type = StringType(choices=('ChangeCount', 'ExactCount', 'PercentChangeCount'), serialize_when_none=False)
     value = StringType(serialize_when_none=False)
+    cooldown = TimedeltaType(serialize_when_none=False)
 
 
 class ScaleRule(Model):
-    metric_trigger = ModelType(MetricTrigger)
-    scale_action = ModelType(ScaleAction)
+    metric_trigger = ModelType(MetricTrigger, serialize_when_none=False)
+    scale_action = ModelType(ScaleAction, serialize_when_none=False)
 
 
 class AutoscaleProfile(Model):
@@ -625,12 +625,17 @@ class VirtualMachineScaleSetVM(Model):  # data model for actual instances
 
 
 class VirtualMachineScaleSetPowerState(Model):
-    id = StringType()
-    vm_instances = ListType(ModelType(VirtualMachineScaleSetVM), serialize_when_none=False)
-    instance_count = IntType()
-    mode = StringType(choices=('Custom', 'Manual'), serialize_when_none=False)
+    # id = StringType()
+    # vm_instances = ListType(ModelType(VirtualMachineScaleSetVM), serialize_when_none=False)
+    # instance_count = IntType()
+    # mode = StringType(choices=('Custom', 'Manual'), serialize_when_none=False)
+    location = StringType()
     profiles = ListType(ModelType(AutoscaleProfile), serialize_when_none=False)
-    provisioning_state = StringType(choices=('Failed', 'Succeeded'))
+    enabled = BooleanType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    notifications = ListType(ModelType(AutoscaleNotification), serialize_when_none=False)
+    target_resource_uri = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
 
 
 class VirtualMachineScaleSet(Model):
@@ -658,7 +663,7 @@ class VirtualMachineScaleSet(Model):
     unique_id = StringType(serialize_when_none=False)
     upgrade_policy = ModelType(UpgradePolicy, serialize_when_none=False)
     virtual_machine_profile = ModelType(VirtualMachineScaleSetVMProfile, serialize_when_none=False)
-    virtual_machine_scale_set_power_state = ModelType(VirtualMachineScaleSetPowerState)
+    virtual_machine_scale_set_power_state = ListType(ModelType(VirtualMachineScaleSetPowerState))
     zone_balance = BooleanType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ListType(ModelType(Tags), default=[], serialize_when_none=False)
