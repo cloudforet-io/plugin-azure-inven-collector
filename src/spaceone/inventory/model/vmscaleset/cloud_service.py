@@ -11,7 +11,7 @@ from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, C
 VM_SCALE_SET
 '''
 # TAB - Default
-# TODO : instance termination notification(Configuration Tab), over provisioning, proximity placement group, Termination Notification
+# instance termination notification(Configuration Tab), over provisioning, proximity placement group, Termination Notification
 #        application health monitoring(Health and repair Tab), Upgrade Policy(Upgrade Policy Tab),
 vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSet', fields=[
     TextDyField.data_source('Name', 'data.name'),
@@ -101,13 +101,22 @@ vm_scale_set_info_network = ListDynamicLayout.set_layouts('Networking', layouts=
                                                                                  vm_scale_set_info_ip_configurations])
 
 # TAB - Scaling
-# TODO: Instance Count, Scale-in policy
-vm_scale_set_info_scaling = ItemDynamicLayout.set_fields('Scaling', fields=[
+# Instance Count, Scale-in policy
+vm_scale_set_scaling_info = ItemDynamicLayout.set_fields('Scaling', fields=[
     TextDyField.data_source('Instance Count', 'data.instance_count'),
     ListDyField.data_source('Scale-in Policy', 'data.scale_in_policy.rules', options={
         'delimiter': '<br>'
-    }),
+    })
 ])
+
+vm_scale_set_scaling_rules = SimpleTableDynamicLayout.set_fields('Autoscale Settings', 'data.autoscale_setting_resource_collection.value', fields=[
+    TextDyField.data_source('Name', 'name'),
+    ListDyField.data_source('Profiles', 'profiles_display', options={
+        'delimiter': '<br>'
+    })
+])
+vm_scale_set_info_scaling = ListDynamicLayout.set_layouts('Scaling', layouts=[vm_scale_set_scaling_info, vm_scale_set_scaling_rules])
+
 
 # TAB - Disks OS Disks and Data Disks
 #  Image reference, Storage Type, Size, MAX iops, max throughput, encryption, host caching
@@ -150,8 +159,8 @@ vm_scale_set_info_os_profile = ItemDynamicLayout.set_fields('Operating System', 
     ])
 
 vm_scale_set_meta = CloudServiceMeta.set_layouts(
-    [vm_scale_set_info_meta, vm_scale_set_info_tags, vm_scale_set_instance, vm_scale_set_info_network,
-     vm_scale_set_info_scaling, vm_scale_set_info_disk, vm_scale_set_info_os_profile])
+    [vm_scale_set_info_meta, vm_scale_set_info_tags, vm_scale_set_instance, vm_scale_set_info_network, vm_scale_set_info_scaling,
+     vm_scale_set_info_disk, vm_scale_set_info_os_profile])
 
 
 class ComputeResource(CloudServiceResource):
