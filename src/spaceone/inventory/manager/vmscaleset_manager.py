@@ -102,7 +102,6 @@ class VmScaleSetManager(AzureManager):
 
             # Get auto scale settings by resource group and vm id
             vm_scale_set_dict.update({
-                # 'autoscale_settings': self.list_auto_scale_settings(self, vm_scale_set_conn, vm_scale_set_dict['resource_group'], vm_scale_set_dict['id']),
                 'autoscale_settings': self.list_auto_scale_settings_obj(self, vm_scale_set_conn,
                                                                     vm_scale_set_dict['resource_group'],
                                                                     vm_scale_set_dict['id'])
@@ -114,10 +113,16 @@ class VmScaleSetManager(AzureManager):
                     'virtual_machine_scale_set_power_state': self.list_virtual_machine_scale_set_power_state(self, vm_scale_set_dict['autoscale_settings']),
                 })
 
-            vm_scale_set_dict.update({
-                'autoscale_settings': self.list_auto_scale_settings(self, vm_scale_set_conn,
+            # update auto_scale_settings to autoscale_setting_resource_collection
+            auto_scale_setting_resource_col_dict = dict()
+            auto_scale_setting_resource_col_dict.update({
+                'value': self.list_auto_scale_settings(self, vm_scale_set_conn,
                                                                     vm_scale_set_dict['resource_group'],
                                                                     vm_scale_set_dict['id'])
+            })
+
+            vm_scale_set_dict.update({
+                'autoscale_setting_resource_collection': auto_scale_setting_resource_col_dict
             })
 
             # switch tags form
@@ -127,8 +132,8 @@ class VmScaleSetManager(AzureManager):
                 'tags': _tags
             })
 
-            print("vm_scale_set_dict")
-            print(vm_scale_set_dict)
+            # print("vm_scale_set_dict")
+            # print(vm_scale_set_dict)
 
             vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
             vm_scale_set_resource = VmScaleSetResource({
