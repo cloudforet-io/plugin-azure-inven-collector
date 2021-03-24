@@ -225,7 +225,8 @@ class InGuestPatchMode(Model):  # belongs to  VmScaleSet >> PatchSettings
 
 
 class PatchSettings(Model):  # belongs to  VmScaleSet
-    patch_mode = ModelType(InGuestPatchMode, serialize_when_none=False)
+    # patch_mode = ModelType(InGuestPatchMode, serialize_when_none=False)
+    patch_mode = StringType(choices=('AutomaticByOS', 'Manual', 'AutomaticByPlatform'), serialize_when_none=False)
 
 
 class AdditionalUnattendedContent(Model):  # belongs to VmScaleSet
@@ -613,6 +614,7 @@ class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     os_profile = ModelType(OSProfile, serialize_when_none=False)
     protection_policy = ModelType(VirtualMachineScaleSetVMProtectionPolicy, serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
+    vm_instance_status_display = StringType(serialize_when_none=False)
     security_profile = ModelType(SecurityProfile, serialize_when_none=False)
     storage_profile = ModelType(StorageProfile, serialize_when_none=False)
     vm_id = StringType(serialize_when_none=False)
