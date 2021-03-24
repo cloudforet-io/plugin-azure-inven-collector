@@ -200,11 +200,16 @@ class VmScaleSetManager(AzureManager):
     @staticmethod
     def get_vm_instance_dict(self, vm_instance, vm_instance_conn, resource_group, vm_scale_set_name):
         vm_instance_dict = self.convert_nested_dictionary(self, vm_instance)
-        vm_instance_status_dict = self.get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, vm_instance.instance_id)
-        vm_instance_dict['vm_instance_status_profile'] = vm_instance_status_dict  # Get instance view of a virtual machine from a VM scale set instance
+
+        # Get instance view of a virtual machine from a VM scale set instance
+        vm_instance_dict.update({
+            'vm_instance_status_profile': self.get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, vm_instance.instance_id)
+        })
+        vm_instance_dict.update({
+            'vm_instance_status_display': vm_instance_dict['vm_instance_status_profile']['vm_agent']['display_status']
+        })
 
         # Get Primary Vnet display
-
         if getattr(vm_instance, 'network_profile_configuration') is not None:
             vm_instance_dict.update({
                 'primary_vnet': self.get_primary_vnet(vm_instance_dict['network_profile_configuration']['network_interface_configurations'])
