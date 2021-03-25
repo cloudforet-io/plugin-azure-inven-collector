@@ -21,6 +21,10 @@ cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Instances', 'data.instance_count'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
+        TextDyField.data_source('Default', 'data.virtual_machine_scale_set_power_state.profiles.capacity.default'),
+        TextDyField.data_source('Max', 'data.virtual_machine_scale_set_power_state.profiles.capacity.maximum'),
+        TextDyField.data_source('Min', 'data.virtual_machine_scale_set_power_state.profiles.capacity.minimum'),
+
         TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy'),
         TextDyField.data_source('Subscription', 'data.subscription_name')
     ],

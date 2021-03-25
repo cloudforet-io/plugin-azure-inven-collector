@@ -109,11 +109,15 @@ vm_scale_set_scaling_info = ItemDynamicLayout.set_fields('Scaling', fields=[
     })
 ])
 
-vm_scale_set_scaling_rules = SimpleTableDynamicLayout.set_fields('Autoscale Settings', 'data.autoscale_setting_resource_collection.value', fields=[
+vm_scale_set_scaling_rules = SimpleTableDynamicLayout.set_fields('Autoscale Settings', 'data.virtual_machine_scale_set_power_state', fields=[
     TextDyField.data_source('Name', 'name'),
     ListDyField.data_source('Profiles', 'profiles_display', options={
         'delimiter': '<br>'
-    })
+    }),
+    TextDyField.data_source('Default', 'profiles.capacity.default'),
+    TextDyField.data_source('Max', 'profiles.capacity.maximum'),
+    TextDyField.data_source('Min', 'profiles.capacity.minimum'),
+
 ])
 vm_scale_set_info_scaling = ListDynamicLayout.set_layouts('Scaling', layouts=[vm_scale_set_scaling_info, vm_scale_set_scaling_rules])
 
