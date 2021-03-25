@@ -205,9 +205,11 @@ class VmScaleSetManager(AzureManager):
         vm_instance_dict.update({
             'vm_instance_status_profile': self.get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, vm_instance.instance_id)
         })
-        vm_instance_dict.update({
-            'vm_instance_status_display': vm_instance_dict['vm_instance_status_profile']['vm_agent']['display_status']
-        })
+
+        if vm_instance_dict['vm_instance_status_profile'].get('vm_agent') is not None:
+            vm_instance_dict.update({
+                'vm_instance_status_display': vm_instance_dict['vm_instance_status_profile']['vm_agent']['display_status']
+            })
 
         # Get Primary Vnet display
         if getattr(vm_instance, 'network_profile_configuration') is not None:
@@ -222,13 +224,13 @@ class VmScaleSetManager(AzureManager):
     def get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, instance_id):
         vm_instance_status_profile = vm_instance_conn.get_vm_scale_set_instance_view(resource_group, vm_scale_set_name, instance_id)
         vm_instance_status_profile_dict = self.convert_nested_dictionary(self, vm_instance_status_profile)
+        if vm_instance_status_profile.vm_agent is not None:
+            for status in vm_instance_status_profile_dict.get('vm_agent').get('statuses'):
+                status_str = status['display_status']
 
-        for status in vm_instance_status_profile_dict['vm_agent']['statuses']:
-            status_str = status['display_status']
-
-        vm_instance_status_profile_dict['vm_agent'].update({
-                'display_status': status_str
-        })
+            vm_instance_status_profile_dict['vm_agent'].update({
+                    'display_status': status_str
+            })
 
         return vm_instance_status_profile_dict
 
