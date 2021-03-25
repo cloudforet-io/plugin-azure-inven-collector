@@ -102,9 +102,7 @@ class VmScaleSetManager(AzureManager):
 
             # Get auto scale settings by resource group and vm id
             vm_scale_set_dict.update({
-                'autoscale_settings': self.list_auto_scale_settings_obj(self, vm_scale_set_conn,
-                                                                    vm_scale_set_dict['resource_group'],
-                                                                    vm_scale_set_dict['id'])
+                'autoscale_settings': self.list_auto_scale_settings_obj(self, vm_scale_set_conn, vm_scale_set_dict['resource_group'],vm_scale_set_dict['id'])
             })
 
             # Set virtual_machine_scale_set_power_state information
@@ -302,4 +300,9 @@ class VmScaleSetManager(AzureManager):
                 'tags': autoscale_setting.tags
             })
 
+            if power_state_dict.get('profiles') is not None:
+                power_state_dict.update({
+                   'profiles_display': self.get_autoscale_profiles_display(power_state_dict['profiles'])
+                })
+            power_state_list.append(power_state_dict)
         return power_state_list
