@@ -9,6 +9,8 @@ cst_sql_server.name = 'SqlServer'
 cst_sql_server.group = 'Sql'
 cst_sql_server.service_code = 'Microsoft.Sql/servers'
 cst_sql_server.labels = ['Server']
+cst_sql_server.is_primary = True
+cst_sql_server.is_major = True
 cst_sql_server.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-servers.svg',
 }

@@ -140,7 +140,7 @@ class VmScaleSetManager(AzureManager):
                 'reference': ReferenceModel(vm_scale_set_data.reference()),
                 'tags': _tags
             })
-
+            
             # Must set_region_code method for region collection
             self.set_region_code(vm_scale_set_data['location'])
             vm_scale_sets.append(VmScaleSetResponse({'resource': vm_scale_set_resource}))
