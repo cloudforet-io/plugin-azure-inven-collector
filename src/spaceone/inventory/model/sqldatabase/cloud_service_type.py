@@ -9,6 +9,7 @@ cst_sql_database.name = 'SqlDatabase'
 cst_sql_database.group = 'Sql'
 cst_sql_database.service_code = 'Microsoft.Sql/servers/databases'
 cst_sql_database.labels = ['Databases']
+cst_sql_database.is_major = True
 cst_sql_database.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-databases.svg',
 }
