@@ -13,7 +13,7 @@ VM_SCALE_SET
 # TAB - Default
 # instance termination notification(Configuration Tab), over provisioning, proximity placement group, Termination Notification
 #        application health monitoring(Health and repair Tab), Upgrade Policy(Upgrade Policy Tab),
-vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSet', fields=[
+vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSets', fields=[
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -172,7 +172,7 @@ class ComputeResource(CloudServiceResource):
 
 
 class VmScaleSetResource(ComputeResource):
-    cloud_service_type = StringType(default='VmScaleSet')
+    cloud_service_type = StringType(default='VmScaleSets')
     data = ModelType(VirtualMachineScaleSet)
     _metadata = ModelType(CloudServiceMeta, default=vm_scale_set_meta, serialized_name='metadata')
 

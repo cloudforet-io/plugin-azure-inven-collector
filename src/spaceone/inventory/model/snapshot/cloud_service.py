@@ -10,7 +10,7 @@ from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, C
 SNAPSHOT
 '''
 # TAB - Default
-snapshot_info_meta = ItemDynamicLayout.set_fields('Snapshot', fields=[
+snapshot_info_meta = ItemDynamicLayout.set_fields('Snapshots', fields=[
 
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Storage Type', 'data.sku.name'),
@@ -46,7 +46,7 @@ class ComputeResource(CloudServiceResource):
 
 
 class SnapshotResource(ComputeResource):
-    cloud_service_type = StringType(default='Snapshot')
+    cloud_service_type = StringType(default='Snapshots')
     data = ModelType(Snapshot)
     _metadata = ModelType(CloudServiceMeta, default=snapshot_meta, serialized_name='metadata')
 
