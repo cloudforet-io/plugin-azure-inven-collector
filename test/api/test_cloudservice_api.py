@@ -32,6 +32,8 @@ class TestCollector(TestCase):
         print_json(v_info)
 
     def test_collect(self):
+
+        print(self.inventory)
         options = {}
         filter = {}
         resource_stream = self.inventory.Collector.collect({'options': options, 'secret_data': self.azure_credentials,

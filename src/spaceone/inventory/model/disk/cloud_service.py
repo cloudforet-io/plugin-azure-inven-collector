@@ -9,7 +9,7 @@ from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, C
 DISK
 '''
 # TAB - Default
-disk_info_meta = ItemDynamicLayout.set_fields('Disk', fields=[
+disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Storage Account Type', 'data.sku.name'),
     SizeField.data_source('Size', 'data.size'),
@@ -48,7 +48,7 @@ class ComputeResource(CloudServiceResource):
 
 
 class DiskResource(ComputeResource):
-    cloud_service_type = StringType(default='Disk')
+    cloud_service_type = StringType(default='Disks')
     data = ModelType(Disk)
     _metadata = ModelType(CloudServiceMeta, default=disk_meta, serialized_name='metadata')
 

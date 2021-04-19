@@ -33,19 +33,14 @@ class VmScaleSetManager(AzureManager):
         vm_scale_set_conn: VmScaleSetConnector = self.locator.get_connector(self.connector_name, **params)
         vm_scale_sets = []
         for vm_scale_set in vm_scale_set_conn.list_vm_scale_sets():
-            # vm_scale_set_dict = self.convert_nested_dictionary(self, self.convert_dictionary(vm_scale_set))
             vm_scale_set_dict = self.convert_nested_dictionary(self, vm_scale_set)
+
             # update vm_scale_set_dict
             vm_scale_set_dict.update({
                 'resource_group': self.get_resource_group_from_id(vm_scale_set_dict['id']),  # parse resource_group from ID
                 'subscription_id': subscription_info['subscription_id'],
                 'subscription_name': subscription_info['subscription_name'],
             })
-
-            '''
-            hasattr : object 에 name 의 속성이 존재하면 True, 아니면 False
-            get(key) : key 가 "없으면" None 리턴 -> key 자체는 있음, 단지 우리 dict 의 value 값이 NoneType 일뿐.. / key 가 없거나 value 자체가 NoneType 인 경우(우리 케이스) 모두 포함함
-            '''
 
             if vm_scale_set_dict.get('proximity_placement_group'):  # key 있으면 -> value 가져옴 -> None 아닌지 검사 / key 없으면 -> None return
                 vm_scale_set_dict.update({
@@ -105,6 +100,29 @@ class VmScaleSetManager(AzureManager):
 
             vm_scale_set_dict['vm_instances'] = vm_instances_list
 
+            # Get auto scale settings by resource group and vm id
+            vm_scale_set_dict.update({
+                'autoscale_settings': self.list_auto_scale_settings_obj(self, vm_scale_set_conn, vm_scale_set_dict['resource_group'],vm_scale_set_dict['id'])
+            })
+
+            # Set virtual_machine_scale_set_power_state information
+            if vm_scale_set_dict.get('autoscale_settings') is not None:
+                vm_scale_set_dict.update({
+                    'virtual_machine_scale_set_power_state': self.list_virtual_machine_scale_set_power_state(self, vm_scale_set_dict['autoscale_settings']),
+                })
+
+            # update auto_scale_settings to autoscale_setting_resource_collection
+            auto_scale_setting_resource_col_dict = dict()
+            auto_scale_setting_resource_col_dict.update({
+                'value': self.list_auto_scale_settings(self, vm_scale_set_conn,
+                                                                    vm_scale_set_dict['resource_group'],
+                                                                    vm_scale_set_dict['id'])
+            })
+
+            vm_scale_set_dict.update({
+                'autoscale_setting_resource_collection': auto_scale_setting_resource_col_dict
+            })
+
             # switch tags form
             tags = vm_scale_set_dict.get('tags', {})
             _tags = self.convert_tag_format(tags)
@@ -122,7 +140,7 @@ class VmScaleSetManager(AzureManager):
                 'reference': ReferenceModel(vm_scale_set_data.reference()),
                 'tags': _tags
             })
-
+            
             # Must set_region_code method for region collection
             self.set_region_code(vm_scale_set_data['location'])
             vm_scale_sets.append(VmScaleSetResponse({'resource': vm_scale_set_resource}))
@@ -180,8 +198,16 @@ class VmScaleSetManager(AzureManager):
     @staticmethod
     def get_vm_instance_dict(self, vm_instance, vm_instance_conn, resource_group, vm_scale_set_name):
         vm_instance_dict = self.convert_nested_dictionary(self, vm_instance)
-        vm_instance_status_dict = self.get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, vm_instance.instance_id)
-        vm_instance_dict['vm_instance_status_profile'] = vm_instance_status_dict  # Get instance view of a virtual machine from a VM scale set instance
+
+        # Get instance view of a virtual machine from a VM scale set instance
+        vm_instance_dict.update({
+            'vm_instance_status_profile': self.get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, vm_instance.instance_id)
+        })
+
+        if vm_instance_dict['vm_instance_status_profile'].get('vm_agent') is not None:
+            vm_instance_dict.update({
+                'vm_instance_status_display': vm_instance_dict['vm_instance_status_profile']['vm_agent']['display_status']
+            })
 
         # Get Primary Vnet display
         if getattr(vm_instance, 'network_profile_configuration') is not None:
@@ -196,12 +222,87 @@ class VmScaleSetManager(AzureManager):
     def get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, instance_id):
         vm_instance_status_profile = vm_instance_conn.get_vm_scale_set_instance_view(resource_group, vm_scale_set_name, instance_id)
         vm_instance_status_profile_dict = self.convert_nested_dictionary(self, vm_instance_status_profile)
+        if vm_instance_status_profile.vm_agent is not None:
+            for status in vm_instance_status_profile_dict.get('vm_agent').get('statuses'):
+                status_str = status['display_status']
 
-        for status in vm_instance_status_profile_dict['vm_agent']['statuses']:
-            status_str = status['display_status']
-
-        vm_instance_status_profile_dict['vm_agent'].update({
-                'display_status': status_str
-        })
+            vm_instance_status_profile_dict['vm_agent'].update({
+                    'display_status': status_str
+            })
 
         return vm_instance_status_profile_dict
+
+    @staticmethod
+    def list_auto_scale_settings(self, vm_scale_set_conn, resource_group_name, vm_scale_set_id):
+        auto_scale_settings_list = list()
+        auto_scale_settings_obj = vm_scale_set_conn.list_auto_scale_settings(resource_group=resource_group_name)  # List all of the Auto scaling Rules in this resource group
+
+        ''''''
+        for auto_scale_setting in auto_scale_settings_obj:
+            auto_scale_setting_dict = self.convert_nested_dictionary(self, auto_scale_setting)
+            auto_scale_setting_dict.update({
+                 'profiles_display': self.get_autoscale_profiles_display(auto_scale_setting_dict['profiles'])
+            })
+            if auto_scale_setting_dict['target_resource_uri'].lower() == vm_scale_set_id.lower():  # Compare resources' id
+                auto_scale_settings_list.append(auto_scale_setting_dict)
+
+        return auto_scale_settings_list
+
+    @staticmethod
+    def list_auto_scale_settings_obj(self, vm_scale_set_conn, resource_group_name, vm_scale_set_id):
+        auto_scale_settings_obj_list = list()
+        auto_scale_settings_obj = vm_scale_set_conn.list_auto_scale_settings(resource_group=resource_group_name)  # List all of the Auto scaling Rules in this resource group
+
+        for auto_scale_setting in auto_scale_settings_obj:
+            if auto_scale_setting.target_resource_uri.lower() == vm_scale_set_id.lower():
+                auto_scale_settings_obj_list.append(auto_scale_setting)
+
+        return auto_scale_settings_obj_list
+
+    @staticmethod
+    def get_autoscale_profiles_display(power_state_profiles):
+        profiles_list = list()
+        for profile in power_state_profiles:
+            profiles_list.append('minimum : ' + str(profile['capacity']['minimum']) + ' / ' + 'maximum : ' + str(profile['capacity']['maximum'] + ' / ' + 'default : ' + profile['capacity']['default']))
+
+        return profiles_list
+
+    @staticmethod
+    def get_autoscale_rules(self, rules_dict):
+        rule_list = list()
+        for rule in rules_dict:
+            rule_dict = self.convert_nested_dictionary(self, rule)
+            rule_list.append(rule_dict)
+        return rule_list
+
+    @staticmethod
+    def get_autoscale_profiles_list(self, autoscale_setting):
+        profiles_list = list()
+        for profile in autoscale_setting.profiles:
+            profile_dict = self.convert_nested_dictionary(self, profile)
+            profiles_list.append(profile_dict)
+
+        return profiles_list
+
+    @staticmethod
+    def list_virtual_machine_scale_set_power_state(self, autoscale_obj_list):
+        power_state_dict = dict()
+        power_state_list = list()
+
+        for autoscale_setting in autoscale_obj_list:
+            power_state_dict.update({
+                'location': autoscale_setting.location,
+                'profiles': self.get_autoscale_profiles_list(self, autoscale_setting),  # profiles_list
+                'enabled': autoscale_setting.enabled,
+                'name': autoscale_setting.name,
+                'notifications': autoscale_setting.notifications,
+                'target_resource_uri': autoscale_setting.target_resource_uri,
+                'tags': autoscale_setting.tags
+            })
+
+            if power_state_dict.get('profiles') is not None:
+                power_state_dict.update({
+                   'profiles_display': self.get_autoscale_profiles_display(power_state_dict['profiles'])
+                })
+            power_state_list.append(power_state_dict)
+        return power_state_list

@@ -14,7 +14,7 @@ LOAD_BALANCER
 # TAB - Default
 # Resource Group, Location, Subscription, Subscription ID, SKU, Backend pool, Health probe,
 # Load balancing rule, NAT Rules, Public IP Addresses, Load Balancing Type
-load_balancer_info_meta = ItemDynamicLayout.set_fields('LoadBalancer', fields=[
+load_balancer_info_meta = ItemDynamicLayout.set_fields('LoadBalancers', fields=[
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Resource ID', 'data.id'),
