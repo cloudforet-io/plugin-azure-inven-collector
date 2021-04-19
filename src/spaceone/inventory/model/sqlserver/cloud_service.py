@@ -40,7 +40,7 @@ sql_server_failover_group = TableDynamicLayout.set_fields('Failover Groups', 'da
     TextDyField.data_source('Secondary Server', 'secondary_server'),
     TextDyField.data_source('Read/Write Failover Policy', 'failover_policy_display'),
     TextDyField.data_source('Grace Period (minutes)', 'grace_period_display'),
-    # TextDyField.data_source('Database count', ''),  # TODO: Confirm!!  Failover Group 당 total / active database count
+    # TextDyField.data_source('Database count', ''),
 ])
 
 # TAB - Backups
@@ -242,7 +242,7 @@ class DatabaseResource(CloudServiceResource):
 
 
 class SqlServerResource(DatabaseResource):
-    cloud_service_type = StringType(default='SqlServer')
+    cloud_service_type = StringType(default='SqlServers')
     data = ModelType(SqlServer)
     _metadata = ModelType(CloudServiceMeta, default=sql_servers_meta, serialized_name='metadata')
 
