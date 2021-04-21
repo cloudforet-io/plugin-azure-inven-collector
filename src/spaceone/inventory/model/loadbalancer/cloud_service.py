@@ -156,7 +156,7 @@ class NetworkResource(CloudServiceResource):
 
 
 class LoadBalancerResource(NetworkResource):
-    cloud_service_type = StringType(default='LoadBalancers')
+    cloud_service_type = StringType(default='LoadBalancer')
     data = ModelType(LoadBalancer)
     _metadata = ModelType(CloudServiceMeta, default=load_balancer_meta, serialized_name='metadata')
 

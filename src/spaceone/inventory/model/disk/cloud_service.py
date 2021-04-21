@@ -48,7 +48,7 @@ class ComputeResource(CloudServiceResource):
 
 
 class DiskResource(ComputeResource):
-    cloud_service_type = StringType(default='Disks')
+    cloud_service_type = StringType(default='Disk')
     data = ModelType(Disk)
     _metadata = ModelType(CloudServiceMeta, default=disk_meta, serialized_name='metadata')
 

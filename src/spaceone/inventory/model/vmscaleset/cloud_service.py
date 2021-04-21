@@ -172,7 +172,7 @@ class ComputeResource(CloudServiceResource):
 
 
 class VmScaleSetResource(ComputeResource):
-    cloud_service_type = StringType(default='VmScaleSets')
+    cloud_service_type = StringType(default='VmScaleSet')
     data = ModelType(VirtualMachineScaleSet)
     _metadata = ModelType(CloudServiceMeta, default=vm_scale_set_meta, serialized_name='metadata')
 

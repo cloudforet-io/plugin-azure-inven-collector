@@ -46,7 +46,7 @@ class ComputeResource(CloudServiceResource):
 
 
 class SnapshotResource(ComputeResource):
-    cloud_service_type = StringType(default='Snapshots')
+    cloud_service_type = StringType(default='Snapshot')
     data = ModelType(Snapshot)
     _metadata = ModelType(CloudServiceMeta, default=snapshot_meta, serialized_name='metadata')
 

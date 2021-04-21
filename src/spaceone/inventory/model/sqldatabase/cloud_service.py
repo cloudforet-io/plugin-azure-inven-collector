@@ -77,7 +77,7 @@ class DatabaseResource(CloudServiceResource):
 
 
 class SqlDatabaseResource(DatabaseResource):
-    cloud_service_type = StringType(default='SqlDatabases')
+    cloud_service_type = StringType(default='SqlDatabase')
     data = ModelType(Database)
     _metadata = ModelType(CloudServiceMeta, default=sql_databases_meta, serialized_name='metadata')
 
