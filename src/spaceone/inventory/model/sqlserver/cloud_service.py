@@ -242,7 +242,7 @@ class DatabaseResource(CloudServiceResource):
 
 
 class SqlServerResource(DatabaseResource):
-    cloud_service_type = StringType(default='SqlServers')
+    cloud_service_type = StringType(default='SqlServer')
     data = ModelType(SqlServer)
     _metadata = ModelType(CloudServiceMeta, default=sql_servers_meta, serialized_name='metadata')
 
