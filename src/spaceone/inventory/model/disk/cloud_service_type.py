@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 
 cst_disk = CloudServiceTypeResource()
-cst_disk.name = 'Disks'
+cst_disk.name = 'Disk'
 cst_disk.provider = 'azure'
 cst_disk.group = 'Compute'
 cst_disk.labels = ['Compute', 'Storage']

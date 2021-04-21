@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 
 cst_snapshot = CloudServiceTypeResource()
-cst_snapshot.name = 'Snapshots'
+cst_snapshot.name = 'Snapshot'
 cst_snapshot.group = 'Compute'
 cst_snapshot.service_code = 'Microsoft.Compute/snapshots'
 cst_snapshot.labels = ['Compute', 'Storage']

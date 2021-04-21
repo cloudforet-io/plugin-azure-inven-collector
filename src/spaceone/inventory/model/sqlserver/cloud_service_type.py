@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 
 cst_sql_server = CloudServiceTypeResource()
-cst_sql_server.name = 'SqlServers'
+cst_sql_server.name = 'SqlServer'
 cst_sql_server.group = 'Sql'
 cst_sql_server.service_code = 'Microsoft.Sql/servers'
 cst_sql_server.labels = ['Server']

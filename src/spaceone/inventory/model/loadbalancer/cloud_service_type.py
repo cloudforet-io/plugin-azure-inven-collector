@@ -4,7 +4,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 cst_load_balancer = CloudServiceTypeResource()
-cst_load_balancer.name = 'LoadBalancers'
+cst_load_balancer.name = 'LoadBalancer'
 cst_load_balancer.group = 'Network'
 cst_load_balancer.service_code = 'Microsoft.Network/loadBalancers'
 cst_load_balancer.labels = ['Network']
