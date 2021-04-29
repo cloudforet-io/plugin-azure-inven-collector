@@ -5,8 +5,8 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 
 cst_sql_database = CloudServiceTypeResource()
-cst_sql_database.name = 'SqlDatabase'
-cst_sql_database.group = 'Sql'
+cst_sql_database.name = 'SQLDatabase'
+cst_sql_database.group = 'SQL'
 cst_sql_database.service_code = 'Microsoft.Sql/servers/databases'
 cst_sql_database.labels = ['Database']
 cst_sql_database.is_major = False
