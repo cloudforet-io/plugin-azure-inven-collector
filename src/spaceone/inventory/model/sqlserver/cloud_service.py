@@ -238,11 +238,11 @@ sql_servers_meta = CloudServiceMeta.set_layouts(
 
 
 class DatabaseResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Sql')
+    cloud_service_group = StringType(default='SQL')
 
 
 class SqlServerResource(DatabaseResource):
-    cloud_service_type = StringType(default='SqlServer')
+    cloud_service_type = StringType(default='SQLServer')
     data = ModelType(SqlServer)
     _metadata = ModelType(CloudServiceMeta, default=sql_servers_meta, serialized_name='metadata')
 
