@@ -161,7 +161,8 @@ class LoadBalancerManager(AzureManager):
                 'data': load_balancer_data,
                 'region_code': load_balancer_data.location,
                 'reference': ReferenceModel(load_balancer_data.reference()),
-                'tags': _tags
+                'tags': _tags,
+                'name': load_balancer_data.name
             })
 
             # Must set_region_code method for region collection

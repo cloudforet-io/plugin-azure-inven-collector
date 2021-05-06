@@ -141,7 +141,8 @@ class VmScaleSetManager(AzureManager):
                 'data': vm_scale_set_data,
                 'region_code': vm_scale_set_data.location,
                 'reference': ReferenceModel(vm_scale_set_data.reference()),
-                'tags': _tags
+                'tags': _tags,
+                'name' : vm_scale_set_data.name
             })
             
             # Must set_region_code method for region collection
