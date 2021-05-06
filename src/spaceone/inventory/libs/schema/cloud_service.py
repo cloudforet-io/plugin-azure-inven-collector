@@ -24,6 +24,7 @@ class CloudServiceResource(Model):
     provider = StringType(default="azure")
     cloud_service_type = StringType()
     cloud_service_group = StringType()
+    name = StringType()
     tags = ListType(ModelType(Tags), serialize_when_none=False)
     data = PolyModelType(Model, default=lambda: {})
     reference = ModelType(ReferenceModel)

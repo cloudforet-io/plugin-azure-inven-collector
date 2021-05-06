@@ -119,7 +119,8 @@ class SqlServerManager(AzureManager):
                 'data': sql_servers_data,
                 'region_code': sql_servers_data.location,
                 'reference': ReferenceModel(sql_servers_data.reference()),
-                'tags': _tags
+                'tags': _tags,
+                'name': sql_servers_data.name
             })
             sql_servers.append(SqlServerResponse({'resource': sql_servers_resource}))
 
@@ -129,7 +130,8 @@ class SqlServerManager(AzureManager):
                     'data': sql_database_data,
                     'region_code': sql_database_data.location,
                     'reference': ReferenceModel(sql_database_data.reference()),
-                    'tags': _tags
+                    'tags': _tags,
+                    'name' : sql_database_data.name
                 })
                 sql_servers.append(SqlDatabaseResponse({'resource': sql_databases_resource}))
 

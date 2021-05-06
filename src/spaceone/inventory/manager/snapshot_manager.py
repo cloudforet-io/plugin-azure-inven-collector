@@ -123,7 +123,8 @@ class SnapshotManager(AzureManager):
                 'data': snapshot_data,
                 'region_code': snapshot_data.location,
                 'reference': ReferenceModel(snapshot_data.reference()),
-                'tags': _tags
+                'tags': _tags,
+                'name': snapshot_data.name
             })
 
             # print("snapshot_dict")

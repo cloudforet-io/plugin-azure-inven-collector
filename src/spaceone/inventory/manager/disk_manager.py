@@ -91,7 +91,8 @@ class DiskManager(AzureManager):
                 'data': disk_data,
                 'region_code': disk_data.location,
                 'reference': ReferenceModel(disk_data.reference()),
-                'tags':  _tags
+                'tags':  _tags,
+                'name': disk_data.name
             })
 
             # Must set_region_code method for region collection
