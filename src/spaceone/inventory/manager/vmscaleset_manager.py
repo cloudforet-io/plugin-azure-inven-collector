@@ -42,48 +42,51 @@ class VmScaleSetManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
             })
 
-            if vm_scale_set_dict.get('proximity_placement_group'):  # key 있으면 -> value 가져옴 -> None 아닌지 검사 / key 없으면 -> None return
+            if vm_scale_set_dict.get('proximity_placement_group'):  # if it has a key -> get value -> check if it isn't None / if no 'Key' ->  return None
                 vm_scale_set_dict.update({
                     'proximity_placement_group_display':  self.get_proximity_placement_group_name(vm_scale_set_dict['proximity_placement_group']['id'])
                 })
 
             # Get Instance termination notification display
-            if vm_scale_set_dict['virtual_machine_profile'].get('scheduled_events_profile'):
-                if vm_scale_set.virtual_machine_profile.scheduled_events_profile.terminate_notification_profile.enable:
-                    terminate_notification_display = 'On'
-                else:
-                    terminate_notification_display = 'Off'
-                vm_scale_set_dict.update({
-                    'terminate_notification_display': terminate_notification_display
-                })
-
-            # Convert disks' sku-dict to string display
-            if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('image_reference'):
-                image_reference_dict = vm_scale_set_dict['virtual_machine_profile']['storage_profile']['image_reference']
-                image_reference_str = \
-                    str(image_reference_dict['publisher']) + " / " + str(image_reference_dict['offer']) + " / " + str(image_reference_dict['sku']) + " / " + str(image_reference_dict['version'])
-                vm_scale_set_dict['virtual_machine_profile']['storage_profile'].update({
-                    'image_reference_display': image_reference_str
-                })
-
-            # switch storage_account_type to storage_account_type for user-friendly words.
-            # (ex.Premium LRS -> Premium SSD, Standard HDD..)
-            if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('data_disks'):
-                for data_disk in vm_scale_set_dict['virtual_machine_profile']['storage_profile']['data_disks']:
-                    data_disk['managed_disk'].update({
-                        'storage_type': self.get_disk_storage_type(data_disk['managed_disk']['storage_account_type'])
+            if vm_scale_set_dict.get('virtual_machine_profile') is not None:
+                if vm_scale_set_dict['virtual_machine_profile'].get('scheduled_events_profile'):
+                    if vm_scale_set.virtual_machine_profile.scheduled_events_profile.terminate_notification_profile.enable:
+                        terminate_notification_display = 'On'
+                    else:
+                        terminate_notification_display = 'Off'
+                    vm_scale_set_dict.update({
+                        'terminate_notification_display': terminate_notification_display
                     })
 
-            # Get VM Profile's operating_system type (Linux or Windows)
-            vm_scale_set_dict['virtual_machine_profile']['os_profile'].update({
-                'operating_system': self.get_operating_system(vm_scale_set_dict['virtual_machine_profile']['os_profile'])
-            })
+                # Convert disks' sku-dict to string display
+                if vm_scale_set_dict['virtual_machine_profile'].get('storage_profile') is not None:
+                    if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('image_reference'):
+                        image_reference_dict = vm_scale_set_dict['virtual_machine_profile']['storage_profile']['image_reference']
+                        image_reference_str = \
+                            str(image_reference_dict['publisher']) + " / " + str(image_reference_dict['offer']) + " / " + str(image_reference_dict['sku']) + " / " + str(image_reference_dict['version'])
+                        vm_scale_set_dict['virtual_machine_profile']['storage_profile'].update({
+                            'image_reference_display': image_reference_str
+                        })
 
-            # Get VM Profile's primary Vnet
-            vmss_vm_network_profile_dict = vm_scale_set_dict['virtual_machine_profile']['network_profile']
-            vmss_vm_network_profile_dict.update({
-                'primary_vnet': self.get_primary_vnet(vmss_vm_network_profile_dict['network_interface_configurations'])
-            })
+                    # switch storage_account_type to storage_account_type for user-friendly words.
+                    # (ex.Premium LRS -> Premium SSD, Standard HDD..)
+                    if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('data_disks'):
+                        for data_disk in vm_scale_set_dict['virtual_machine_profile']['storage_profile']['data_disks']:
+                            data_disk['managed_disk'].update({
+                                'storage_type': self.get_disk_storage_type(data_disk['managed_disk']['storage_account_type'])
+                            })
+                # Get VM Profile's operating_system type (Linux or Windows)
+                if vm_scale_set_dict['virtual_machine_profile'].get('os_profile') is not None:
+                    vm_scale_set_dict['virtual_machine_profile']['os_profile'].update({
+                        'operating_system': self.get_operating_system(vm_scale_set_dict['virtual_machine_profile']['os_profile'])
+                    })
+
+                # Get VM Profile's primary Vnet\
+                if vm_scale_set_dict['virtual_machine_profile'].get('network_profile') is not None:
+                    vmss_vm_network_profile_dict = vm_scale_set_dict['virtual_machine_profile']['network_profile']
+                    vmss_vm_network_profile_dict.update({
+                        'primary_vnet': self.get_primary_vnet(vmss_vm_network_profile_dict['network_interface_configurations'])
+                    })
 
             # Add vm instances list attached to VMSS
             vm_instances_list = list()
@@ -200,14 +203,15 @@ class VmScaleSetManager(AzureManager):
         vm_instance_dict = self.convert_nested_dictionary(self, vm_instance)
 
         # Get instance view of a virtual machine from a VM scale set instance
-        vm_instance_dict.update({
-            'vm_instance_status_profile': self.get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, vm_instance.instance_id)
-        })
-
-        if vm_instance_dict['vm_instance_status_profile'].get('vm_agent') is not None:
+        if vm_instance_dict.get('instance_id') is not None:
             vm_instance_dict.update({
-                'vm_instance_status_display': vm_instance_dict['vm_instance_status_profile']['vm_agent']['display_status']
+                'vm_instance_status_profile': self.get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, vm_instance.instance_id)
             })
+        if vm_instance_dict.get('vm_instance_status_profile') is not None:
+            if vm_instance_dict['vm_instance_status_profile'].get('vm_agent') is not None:
+                vm_instance_dict.update({
+                    'vm_instance_status_display': vm_instance_dict['vm_instance_status_profile']['vm_agent']['display_status']
+                })
 
         # Get Primary Vnet display
         if getattr(vm_instance, 'network_profile_configuration') is not None:

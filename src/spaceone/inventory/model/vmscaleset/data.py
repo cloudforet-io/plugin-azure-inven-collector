@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, TimestampType, UTCDateTimeType, TimedeltaType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, TimestampType, UTCDateTimeType, TimedeltaType, FloatType
 
 
 class Tags(Model):
@@ -127,7 +127,7 @@ class ApiEntityReference(Model):  # belongs to VmScaleSet >> VirtualMachineScale
 
 
 class BillingProfile(Model):  # belongs to VmScaleSet >> VirtualMachineScaleSetVMProfile
-    max_price = NumberType(serialize_when_none=False)
+    max_price = FloatType(serialize_when_none=False)
 
 
 class BootDiagnostics(Model):
