@@ -28,6 +28,7 @@ vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSets', fields=[
     TextDyField.data_source('Ephemeral OS Disk',
                             'data.virtual_machine_profile.storage_profile.os_disk.diff_disk_settings.option.local'),
     TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy'),
+    TextDyField.data_source('Azure Spot Max Price', 'data.virtual_machine_profile.billing_profile.max_price'),
     TextDyField.data_source('Termination Notification', 'data.virtual_machine_profile.terminate_notification_display'),
     TextDyField.data_source('OverProvisioning', 'data.overprovision'),
     TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_display'),
