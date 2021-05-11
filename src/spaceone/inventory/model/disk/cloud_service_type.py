@@ -30,6 +30,27 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Network Access Policy', 'data.network_access_policy', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Hyper V Generation', 'data.hyper_v_generation', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Encryption Type', 'data.encryption.type', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Unique ID', 'data.unique_id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Managed By', 'data.managed_by', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Max Share', 'data.max_shares', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Disk Mbps Read Only', '', options={
+            'is_optional': True
+        })
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
