@@ -53,7 +53,7 @@ vm_scale_set_instance = TableDynamicLayout.set_fields('Instances', 'data.vm_inst
     TextDyField.data_source('Location', 'location'),
     EnumDyField.data_source('Status', 'vm_instance_status_profile.statuses.code', default_state={
         'safe': ['PowerState/running', 'PowerState/starting'],
-        'warning':['PowerState/deallocated', 'PowerState/deallocating','PowerState/stopped', 'PowerState/stopping', 'PowerState/unknown']
+        'warning':['PowerState/deallocated', 'PowerState/deallocating', 'PowerState/stopped', 'PowerState/stopping', 'PowerState/unknown']
     }),
     TextDyField.data_source('Provisioning State', 'provisioning_state'),
     TextDyField.data_source('Protection From Scale-in', 'protection_policy.protect_from_scale_in'),
