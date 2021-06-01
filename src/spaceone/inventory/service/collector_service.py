@@ -76,7 +76,7 @@ class CollectorService(BaseService):
         })
 
         print("[ EXECUTOR START: Azure Cloud Service ]")
-
+        '''
         # TODO: Thread per cloud services
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
             # print("[ EXECUTOR START ]")
@@ -94,12 +94,14 @@ class CollectorService(BaseService):
 
             except Exception as e:
                 _LOGGER.error(f'failed to result {e}')
+        '''
 
-        # for manager in self.execute_managers:
-        #     _manager = self.locator.get_manager(manager)
-        #
-        #     for resource in _manager.collect_resources(params):
-        #         yield resource.to_primitive()
+        for manager in self.execute_managers:
+            print(f'@@@ {manager} @@@')
+            _manager = self.locator.get_manager(manager)
+
+            for resource in _manager.collect_resources(params):
+                yield resource.to_primitive()
 
         print(f'TOTAL TIME : {time.time() - start_time} Seconds')
 

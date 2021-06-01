@@ -9,7 +9,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
-> Latest stable version : 1.1.9
+> Latest stable version : 1.1.10
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
