@@ -125,6 +125,8 @@ class SqlServerManager(AzureManager):
             sql_servers.append(SqlServerResponse({'resource': sql_servers_resource}))
 
             for sql_database in sql_server_dict.get('databases', []):
+                print("sql_database")
+                print(sql_database)
                 sql_database_data = Database(sql_database, strict=False)
                 sql_databases_resource = SqlDatabaseResource({
                     'data': sql_database_data,
