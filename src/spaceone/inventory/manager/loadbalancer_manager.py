@@ -173,8 +173,9 @@ class LoadBalancerManager(AzureManager):
         return load_balancers
 
     @staticmethod
-    def get_resource_group_from_id(disk_id):
-        resource_group = disk_id.split('/')[4].lower()
+    def get_resource_group_from_id(dict_id):
+        resource_group = dict_id.split('/')[4]
+        print(f'RESOURCE_GROUP_NAME: {resource_group}')
         return resource_group
 
     @staticmethod
@@ -185,11 +186,13 @@ class LoadBalancerManager(AzureManager):
         # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
             network_interface_dict = self.convert_nested_dictionary(self, nil)
+            nic_rg_name = network_interface_dict.get('id', '').split('/')[4]
+            print(f'[NIC_RG_NAME : {nic_rg_name}]  ')
             # 1) Since this sdk doesn't give the full ip configurations list, use another API for getting the whole ip configs
             if network_interface_dict.get('ip_configurations') is not None:
                 network_interface_dict['ip_configurations'].clear()
                 network_interface_dict.update({
-                    'ip_configurations': self.get_ip_configurations_list(self, load_balancer_conn, rg_name,
+                    'ip_configurations': self.get_ip_configurations_list(self, load_balancer_conn, nic_rg_name,
                                                                         network_interface_dict.get('name', ''))
                 })
 
@@ -221,21 +224,31 @@ class LoadBalancerManager(AzureManager):
 
     @staticmethod
     def get_ip_configurations_list(self, load_balancer_conn, rg_name, network_interface_name):
-        print(f' rg_name:{rg_name}')
         print(f' network_interface_name:{network_interface_name}')
+        print(f' rg_name:{rg_name}')
         ip_configuration_list = []
         ip_configurations_object_list = []
         if network_interface_name:
             try:
-                ip_configurations_object_list = load_balancer_conn.list_network_interface_ip_configurations(rg_name,
-                                                                                                            network_interface_name)
+                ip_configurations_object = load_balancer_conn.list_network_interface_ip_configurations(rg_name, network_interface_name)
+                ip_configurations_object_list = list(ip_configurations_object)
+
             except Exception as e:
                 print(f'[ERROR: List load balancer Network IP configurations list]: {e}')
 
-        for ip_configuration_object in ip_configurations_object_list:
-            print(f' ip_configuration_object:{ip_configuration_object}')
-            ip_configuration_list.append(self.convert_nested_dictionary(self, ip_configuration_object))
+            try:
+                for ip_configuration_object in ip_configurations_object_list:
+                    print(f' ip_configuration_object:{ip_configuration_object}')
+                    type_obj = type(ip_configuration_object)
+                    print(f' ip_configuration_object_type:{type_obj}')
+                    ip_object_dict = self.convert_nested_dictionary(self, ip_configuration_object)
+                    ip_configuration_list.append(ip_object_dict)
 
+            except Exception as e:
+                print(f'[ERROR: list IP configuration object]: {e}')
+
+        print("RETURN IP Configuration List")
+        print(ip_configuration_list)
         return ip_configuration_list
 
     @staticmethod
@@ -310,8 +323,7 @@ class LoadBalancerManager(AzureManager):
     def get_matched_vm_info(self, find_key, find_list_pool):
         matched_vm_list = list()
         for find_object in find_list_pool:
-            if find_object[
-                'id'] in find_key:  # if network interface card's id matches to the backend configuration's id
+            if find_object['id'] in find_key:  # if network interface card's id matches to the backend configuration's id
                 if find_object.get('virtual_machine') is not None:
                     matched_vm_list.append((find_object['virtual_machine']['id']).split('/')[8])
         return matched_vm_list
