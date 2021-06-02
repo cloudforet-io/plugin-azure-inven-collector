@@ -247,8 +247,6 @@ class LoadBalancerManager(AzureManager):
             except Exception as e:
                 print(f'[ERROR: list IP configuration object]: {e}')
 
-        print("RETURN IP Configuration List")
-        print(ip_configuration_list)
         return ip_configuration_list
 
     @staticmethod
