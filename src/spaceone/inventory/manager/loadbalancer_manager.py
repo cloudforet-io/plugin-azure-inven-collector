@@ -180,7 +180,7 @@ class LoadBalancerManager(AzureManager):
     @staticmethod
     def get_network_interfaces(self, load_balancer_conn, rg_name, lb_name):
         network_interface_object_list = list(load_balancer_conn.list_load_balancer_network_interfaces(rg_name, lb_name))
-        network_interface_list = list()  # list for return values
+        network_interface_list = []  # list for return values
 
         # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
@@ -190,10 +190,10 @@ class LoadBalancerManager(AzureManager):
                 network_interface_dict['ip_configurations'].clear()
                 network_interface_dict.update({
                     'ip_configurations': self.get_ip_configurations_list(self, load_balancer_conn, rg_name,
-                                                                        network_interface_dict['name'])
+                                                                        network_interface_dict.get('name', ''))
                 })
 
-                # Loop for getting LB's name VMs name attached to Backend Pool
+                # Loop for getting LB's name, VMs name attached to Backend Pool
                 for ip_configuration in network_interface_dict['ip_configurations']:
                     if ip_configuration.get('load_balancer_backend_address_pools') is not None:
                         for ic in ip_configuration['load_balancer_backend_address_pools']:
@@ -221,10 +221,19 @@ class LoadBalancerManager(AzureManager):
 
     @staticmethod
     def get_ip_configurations_list(self, load_balancer_conn, rg_name, network_interface_name):
-        ip_configuration_list = list()
-        ip_configurations_object_list = load_balancer_conn.list_network_interface_ip_configurations(rg_name,
-                                                                                                    network_interface_name)
+        print(f' rg_name:{rg_name}')
+        print(f' network_interface_name:{network_interface_name}')
+        ip_configuration_list = []
+        ip_configurations_object_list = []
+        if network_interface_name:
+            try:
+                ip_configurations_object_list = load_balancer_conn.list_network_interface_ip_configurations(rg_name,
+                                                                                                            network_interface_name)
+            except Exception as e:
+                print(f'[ERROR: List load balancer Network IP configurations list]: {e}')
+
         for ip_configuration_object in ip_configurations_object_list:
+            print(f' ip_configuration_object:{ip_configuration_object}')
             ip_configuration_list.append(self.convert_nested_dictionary(self, ip_configuration_object))
 
         return ip_configuration_list
