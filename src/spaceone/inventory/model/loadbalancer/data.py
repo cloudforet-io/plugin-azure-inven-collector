@@ -417,7 +417,7 @@ class PrivateEndpointRef(Model):
     name = StringType(serialize_when_none=False)
     custom_dns_configs = ListType(ModelType(CustomDnsConfigPropertiesFormat), serialize_when_none=False)
     manual_private_link_service_connections = ListType(ModelType(PrivateLinkServiceConnection), serialize_when_none=False)
-    network_interfaces = ListType(ModelType(NetworkInterface), serialize_when_none=False) # 아래에 있음
+    network_interfaces = ListType(ModelType(NetworkInterface), serialize_when_none=False)  # 아래에 있음
     private_link_service_connections = ListType(ModelType(PrivateLinkServiceConnection), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     subnet = ListType(StringType(), default=[], serialize_when_none=False)
