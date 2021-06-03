@@ -153,8 +153,7 @@ class LoadBalancerManager(AzureManager):
                 'tags': _tags
             })
 
-            # print("load_balancer_dict")
-            # print(load_balancer_dict)
+            print(f'[LOAD BALANCER INFO] {load_balancer_dict}')
 
             load_balancer_data = LoadBalancer(load_balancer_dict, strict=False)
             load_balancer_resource = LoadBalancerResource({
@@ -186,16 +185,10 @@ class LoadBalancerManager(AzureManager):
         # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
             network_interface_dict = self.convert_nested_dictionary(self, nil)
+            print(f'[NETWORK_INTERFACE_DICT] {network_interface_dict}')
             nic_rg_name = network_interface_dict.get('id', '').split('/')[4]
-            print(f'[NIC_RG_NAME : {nic_rg_name}]  ')
-            # 1) Since this sdk doesn't give the full ip configurations list, use another API for getting the whole ip configs
-            if network_interface_dict.get('ip_configurations') is not None:
-                network_interface_dict['ip_configurations'].clear()
-                network_interface_dict.update({
-                    'ip_configurations': self.get_ip_configurations_list(self, load_balancer_conn, nic_rg_name,
-                                                                        network_interface_dict.get('name', ''))
-                })
 
+            if network_interface_dict.get('ip_configurations') is not None:
                 # Loop for getting LB's name, VMs name attached to Backend Pool
                 for ip_configuration in network_interface_dict['ip_configurations']:
                     if ip_configuration.get('load_balancer_backend_address_pools') is not None:
