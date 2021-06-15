@@ -50,11 +50,12 @@ class CollectorService(BaseService):
                 - options
                 - secret_data
         """
+        print(f'[PARAMS in COLLECTOR SERVICE] {params}')
         options = params['options']
         secret_data = params.get('secret_data', {})
         if secret_data != {}:
-            google_manager = AzureManager()
-            active = google_manager.verify({}, secret_data)
+            azure_manager = AzureManager()
+            active = azure_manager.verify({}, secret_data)
 
         return {}
 

@@ -12,11 +12,14 @@ import time
 class SubscriptionManager(AzureManager):
     connector_name = 'SubscriptionConnector'
 
-    def get_subscription_info(self, params):  # id 정제 된 애
+    def get_subscription_info(self, params):
         secret_data = params['secret_data']
+        print(f'[PARAMS in SUBSCRIPTION MANAGER] {params}')
+        print(f'[SECRET DATA in SUBSCRIPTION MANAGER]{secret_data}')
         subscription_connector: SubscriptionConnector = self.locator.get_connector(self.connector_name,
                                                                                    secret_data=secret_data)
-        subscription_info = subscription_connector.get_subscription_info(secret_data['subscription_id'])  # subscription_info = disk_conn.get_subscription_info(subscription)
+        subscription_info = subscription_connector.get_subscription_info(secret_data['subscription_id'])
+        # subscription_info = disk_conn.get_subscription_info(subscription)
 
         return {
             'subscription_id': subscription_info.subscription_id,
