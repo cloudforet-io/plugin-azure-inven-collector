@@ -30,7 +30,7 @@ class AzureConnector(BaseConnector):
             - ...
         """
 
-        super().__init__(transaction=None, config=None)
+        super().__init__(transaction=None, connector_conf=None)
         self.compute_client = None
         self.resource_client = None
         self.subscription_client = None
