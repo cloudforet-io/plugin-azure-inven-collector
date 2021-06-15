@@ -25,7 +25,8 @@ class CollectorService(BaseService):
             'SnapshotManager',
             'VmScaleSetManager',
             'LoadBalancerManager',
-            'SqlServerManager'
+            'SqlServerManager',
+            'VirtualNetworkManager'
         ]
 
     @check_required(['options'])

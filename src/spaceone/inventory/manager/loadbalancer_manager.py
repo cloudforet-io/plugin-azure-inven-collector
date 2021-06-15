@@ -34,7 +34,7 @@ class LoadBalancerManager(AzureManager):
         load_balancers = []
         for load_balancer in load_balancer_conn.list_load_balancers():
             load_balancer_dict = self.convert_nested_dictionary(self, load_balancer)
-            # update vm_scale_set_dict
+            # update load_balancer_dict
             load_balancer_dict.update({
                 'resource_group': self.get_resource_group_from_id(load_balancer_dict['id']),
                 # parse resource_group from ID

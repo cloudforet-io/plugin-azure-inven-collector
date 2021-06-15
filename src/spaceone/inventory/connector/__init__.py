@@ -5,4 +5,4 @@ from spaceone.inventory.connector.vmscaleset import VmScaleSetConnector
 from spaceone.inventory.connector.loadbalncer import LoadBalancerConnector
 from spaceone.inventory.connector.sql import SqlConnector
 from spaceone.inventory.connector.monitor import MonitorConnector
-from spaceone.inventory.connector.vnet import VnetConnector
+from spaceone.inventory.connector.virtualnetwork import VirtualNetworkConnector
