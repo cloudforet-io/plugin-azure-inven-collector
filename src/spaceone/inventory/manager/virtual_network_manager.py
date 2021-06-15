@@ -7,8 +7,6 @@ from spaceone.inventory.model.virtualnetwork.cloud_service_type import CLOUD_SER
 from spaceone.inventory.model.virtualnetwork.data import *
 import time
 import ipaddress
-from netaddr import IPNetwork
-from netaddr import IPRange
 
 class VirtualNetworkManager(AzureManager):
     connector_name = 'VirtualNetworkConnector'
