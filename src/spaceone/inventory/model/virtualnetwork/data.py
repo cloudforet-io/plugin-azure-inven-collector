@@ -102,11 +102,12 @@ class DhcpOptions(Model):
 class Delegation(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType()
-    name = StringType(serialize_when_none=False)
+    name = StringType(default='-', serialize_when_none=False)
     actions = ListType(StringType, serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     service_name = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+
 
 class FlowLogFormatType(Model):
     json = StringType(serialize_when_none=False)
@@ -634,7 +635,7 @@ class NetworkSecurityGroup(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     location = ModelType(ExtendedLocation, serialize_when_none=False)
-    name = StringType(serialize_when_none=False)
+    name = StringType(default='-', serialize_when_none=False)
     default_security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
     flow_logs = ListType(ModelType(FlowLog), serialize_when_none=False)
     network_interfaces = StringType(serialize_when_none=False)  # Change to Network interfaces' Id
@@ -807,7 +808,7 @@ class AzureFirewall(Model):
     id = StringType()
     location = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    subnet_name = StringType(serialize_when_none=False)
+    subnet = StringType(serialize_when_none=False)
     application_rule_collections = ListType(ModelType(AzureFirewallApplicationRuleCollection), serialize_when_none=False)
     firewall_policy = ModelType(SubResource, serialize_when_none=False)
     hub_ip_addresses = ModelType(HubIPAddresses, serialize_when_none=False)
@@ -895,8 +896,10 @@ class VirtualNetwork(Model):  # Main Class
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     service_endpoints = ListType(ModelType(ServiceEndpointPropertiesFormat), serialize_when_none=False)
+    private_endpoints = ListType(ModelType(PrivateEndpoint), serialize_when_none=False)
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     virtual_network_peerings = ListType(ModelType(VirtualNetworkPeering), serialize_when_none=False)
+    azure_firewall = ListType(ModelType(AzureFirewall), serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 

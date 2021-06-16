@@ -59,6 +59,10 @@ class VirtualNetworkManager(AzureManager):
                     'private_endpoints': self.get_private_endpoints(self, vnet_dict['subnets'])
                 })
 
+                vnet_dict.update({
+                    'azure_firewall': self.get_azure_firewall(self, vnet_conn, vnet_dict['subnets'], vnet_dict['resource_group'])
+                })
+
             # If not 'custom dns servers', add default azure dns server dict to vnet
             if vnet_dict.get('dhcp_options') is None:
                 dhcp_option_dict = {
@@ -162,21 +166,6 @@ class VirtualNetworkManager(AzureManager):
             if subnet.get('network_security_group') is not None:
                 subnet['network_security_group']['name'] = subnet['network_security_group']['id'].split('/')[8]
 
-            # Get Azure firewall information
-            if subnet.get('connected_devices_list'):
-                for device in subnet['connected_devices_list']:
-                    if device['type'] == 'azureFirewalls':  # The subnet which has 'AzureFirewall' is typed as 'azureFirewalls'
-                        firewall_obj = vnet_conn.list_all_firewalls(resource_group_name)
-                        firewall_list = []
-                        for firewall in firewall_obj:
-                            firewall_dict = self.convert_nested_dictionary(self, firewall)
-                            for ip_configuration in firewall_dict['ip_configurations']:
-                                if ip_configuration.get('subnet') is not None:
-                                    if subnet['id'] in ip_configuration['subnet']['id']:
-                                        firewall_list.append(firewall_dict)
-
-                        subnet['azure_firewall'] = firewall_list
-
             # Get private endpoints
             if subnet.get('private_endpoints') is not None:
                 for private_endpoint in subnet['private_endpoints']:
@@ -209,3 +198,22 @@ class VirtualNetworkManager(AzureManager):
                     private_endpoint_list.append(private_endpoint)
 
         return private_endpoint_list
+
+    @staticmethod
+    def get_azure_firewall(self, vnet_conn, subnets_dict, resource_group_name):
+        # Get Azure firewall information
+        azure_firewall_list = []
+        for subnet in subnets_dict:
+            if subnet.get('connected_devices_list'):
+                for device in subnet['connected_devices_list']:
+                    if device['type'] == 'azureFirewalls':  # The subnet which has 'AzureFirewall' is typed as 'azureFirewalls'
+                        firewall_obj = vnet_conn.list_all_firewalls(resource_group_name)  # List all firewalls in the resource group
+                        for firewall in firewall_obj:
+                            firewall_dict = self.convert_nested_dictionary(self, firewall)
+                            for ip_configuration in firewall_dict['ip_configurations']:
+                                if ip_configuration.get('subnet') is not None:
+                                    if subnet['id'] in ip_configuration['subnet']['id']:  # If subnet id matches the firewall's subnet id
+                                        firewall_dict['subnet'] = subnet['id'].split('/')[10]
+                                        azure_firewall_list.append(firewall_dict)
+
+        return azure_firewall_list

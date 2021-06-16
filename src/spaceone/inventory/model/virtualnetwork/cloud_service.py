@@ -18,7 +18,6 @@ virtual_network_info_meta = ItemDynamicLayout.set_fields('Virtual Network', fiel
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
     TextDyField.data_source('Subscription ID', 'data.subscription_id'),
-    TextDyField.data_source('Address Space', 'data.address_space.address_prefixes'),
     ListDyField.data_source('DNS servers', 'data.dhcp_options.dns_servers'),
     EnumDyField.data_source('DDoS Protection Standard', 'data.enable_ddos_protection', default_state={
         'safe': ['True'],
@@ -59,10 +58,10 @@ virtual_network_subnets = SimpleTableDynamicLayout.set_fields('Subnets', 'data.s
 
 # TAB - Firewall
 # Name, IP Address, Subnet
-virtual_network_firewall = SimpleTableDynamicLayout.set_fields('Firewall', 'data.subnets', fields=[
-    TextDyField.data_source('Name', 'azure_firewall.name'),
-    TextDyField.data_source('IP Address', 'azure_firewall.ip_configurations.private_ip_address'),
-    TextDyField.data_source('Subnet', 'name'),
+virtual_network_firewall = SimpleTableDynamicLayout.set_fields('Firewall', 'data.azure_firewall', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('IP Address', 'ip_configurations.private_ip_address'),
+    TextDyField.data_source('Subnet', 'subnet')
 ])
 
 # TAB - Peerings
