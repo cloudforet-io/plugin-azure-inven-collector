@@ -78,7 +78,7 @@ class ApplicationGatewayIPConfiguration(Model):
     type = StringType(serialize_when_none=False)
 
 
-class ConnectedDeviceList(Model):  # Customized class, model for connected device lists attached to this virtual network
+class ConnectedDevice(Model):  # Customized class, model for connected device lists attached to this virtual network
     name = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     device = StringType(serialize_when_none=False)
@@ -850,7 +850,6 @@ class Subnet(Model):
     service_association_links = ListType(ModelType(ServiceAssociationLink), serialize_when_none=False)
     service_endpoint_policies = ListType(ModelType(ServiceEndpointPolicy), serialize_when_none=False)
     service_endpoints = ListType(ModelType(ServiceEndpointPropertiesFormat), serialize_when_none=False)
-    connected_devices_list = ListType(ModelType(ConnectedDeviceList), serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -897,6 +896,7 @@ class VirtualNetwork(Model):  # Main Class
     resource_guid = StringType(serialize_when_none=False)
     service_endpoints = ListType(ModelType(ServiceEndpointPropertiesFormat), serialize_when_none=False)
     private_endpoints = ListType(ModelType(PrivateEndpoint), serialize_when_none=False)
+    connected_devices = ListType(ModelType(ConnectedDevice), serialize_when_none=False)
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     virtual_network_peerings = ListType(ModelType(VirtualNetworkPeering), serialize_when_none=False)
     azure_firewall = ListType(ModelType(AzureFirewall), serialize_when_none=False)
