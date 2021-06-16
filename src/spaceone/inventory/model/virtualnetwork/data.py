@@ -878,6 +878,7 @@ class VirtualNetworkPeering(Model):
 
 class VirtualNetwork(Model):  # Main Class
     id = StringType(serialize_when_none=False)
+    resource_group = StringType(serialize_when_none=False)
     subscription_id = StringType(serialize_when_none=False)
     subscription_name = StringType(serialize_when_none=False)
     etag = StringType(serialize_when_none=False)
@@ -893,6 +894,7 @@ class VirtualNetwork(Model):  # Main Class
     ip_allocations = ListType(ModelType(SubResource), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
+    service_endpoints = ListType(ModelType(ServiceEndpointPropertiesFormat), serialize_when_none=False)
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     virtual_network_peerings = ListType(ModelType(VirtualNetworkPeering), serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
