@@ -70,29 +70,28 @@ virtual_network_firewall = SimpleTableDynamicLayout.set_fields('Firewall', 'data
 virtual_network_peerings = SimpleTableDynamicLayout.set_fields('Peerings', 'data.virtual_network_peerings', fields=[
     TextDyField.data_source('Name', 'name'),
     EnumDyField.data_source('Peering Status', 'peering_state', default_state={
-        'safe': ['True'],
-        'warning': ['False']
+        'safe': ['Connected'],
+        'warning': ['Disconnected', 'Initiated']
     }),
     TextDyField.data_source('Peer', 'remote_virtual_network.id'),
     TextDyField.data_source('Gateway Transit', 'allow_gateway_transit')
 ])
 
-virtual_network_service_endpoints = SimpleTableDynamicLayout.set_fields('Service Endpoints', 'data.subnets.service_endpoints', fields=[
+virtual_network_service_endpoints = SimpleTableDynamicLayout.set_fields('Service Endpoints', 'data.service_endpoints', fields=[
     TextDyField.data_source('Service', 'service'),
     TextDyField.data_source('Subnet', 'subnet'),
     EnumDyField.data_source('Status', 'provisioning_state', default_state={
         'safe': ['Succeeded'],
         'warning': ['Failed', 'Deleting', 'Updating']
     }),
-    TextDyField.data_source('Locations', 'locations'),
+    TextDyField.data_source('Locations', 'locations')
 ])
 
 # TAB - Private Endpoints
-virtual_network_private_endpoints = SimpleTableDynamicLayout.set_fields('Private Endpoints', 'data.subnets.private_endpoints', fields=[
+virtual_network_private_endpoints = SimpleTableDynamicLayout.set_fields('Private Endpoints', 'data.private_endpoints', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Subnet', 'subnet'),
     TextDyField.data_source('Resource Group', 'resource_group')
-
 ])
 
 # TAB - tags

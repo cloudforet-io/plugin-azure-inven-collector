@@ -50,6 +50,24 @@ class VirtualNetworkManager(AzureManager):
                 vnet_dict.update({
                   'subnets': self.update_subnet_info(self, vnet_dict['subnets'], vnet_conn, vnet_dict['resource_group'])
                 })
+
+                vnet_dict.update({
+                    'service_endpoints': self.get_service_endpoints(self, vnet_dict['subnets'])
+                })
+
+                vnet_dict.update({
+                    'private_endpoints': self.get_private_endpoints(self, vnet_dict['subnets'])
+                })
+
+            # If not 'custom dns servers', add default azure dns server dict to vnet
+            if vnet_dict.get('dhcp_options') is None:
+                dhcp_option_dict = {
+                    'dns_servers': ['Azure provided DNS service']
+                }
+                vnet_dict.update({
+                    'dhcp_options': dhcp_option_dict
+                })
+
             '''
             # Get IP Address Range, Count
             if vnet_dict.get('address_space') is not None:
@@ -59,7 +77,7 @@ class VirtualNetworkManager(AzureManager):
                         # vnet_dict['address_space']['address_count'] = ip.size
             '''
 
-            # print(f'[VNET INFO] {vnet_dict}')
+            print(f'[VNET INFO] {vnet_dict}')
 
             vnet_data = VirtualNetwork(vnet_dict, strict=False)
             vnet_resource = VirtualNetworkResource({
@@ -129,6 +147,8 @@ class VirtualNetworkManager(AzureManager):
         connected_devices_list = list()
         for subnet in subnets_dict:
             device_dict = {}
+            service_endpoint_list = []
+
             if subnet.get('ip_configurations') is not None:
                 for ip_configuration in subnet['ip_configurations']:
                     device_dict['name'] = subnet['name']
@@ -157,11 +177,6 @@ class VirtualNetworkManager(AzureManager):
 
                         subnet['azure_firewall'] = firewall_list
 
-            # Put subnet name to service endpoints dictionary
-            if subnet.get('service_endpoints') is not None:
-                for service_endpoint in subnet['service_endpoints']:
-                    service_endpoint['subnet'] = subnet['name']
-
             # Get private endpoints
             if subnet.get('private_endpoints') is not None:
                 for private_endpoint in subnet['private_endpoints']:
@@ -172,3 +187,25 @@ class VirtualNetworkManager(AzureManager):
                     })
 
         return subnets_dict
+
+    @staticmethod
+    def get_service_endpoints(self, subnets_dict):
+        service_endpoint_list = []
+        for subnet in subnets_dict:
+            # Put subnet name to service endpoints dictionary
+            if subnet.get('service_endpoints') is not None:
+                for service_endpoint in subnet['service_endpoints']:
+                    service_endpoint['subnet'] = subnet['name']
+                    service_endpoint_list.append(service_endpoint)
+
+        return service_endpoint_list
+
+    @staticmethod
+    def get_private_endpoints(self, subnets_dict):
+        private_endpoint_list = []
+        for subnet in subnets_dict:
+            if subnet.get('private_endpoints') is not None:
+                for private_endpoint in subnet['private_endpoints']:
+                    private_endpoint_list.append(private_endpoint)
+
+        return private_endpoint_list

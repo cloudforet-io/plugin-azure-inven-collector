@@ -159,8 +159,8 @@ class AzureManager(BaseManager):
         for k, v in vm_dict.items():
             if isinstance(v, object):  # object
                 if isinstance(v, list):  # if vm_object is list
+                    vm_converse_list = list()
                     for list_obj in v:
-                        vm_converse_list = list()
                         if hasattr(list_obj, '__dict__'):
                             vm_converse_dict = self.convert_nested_dictionary(self, list_obj)
                             vm_converse_list.append(vm_converse_dict)
