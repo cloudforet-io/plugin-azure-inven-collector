@@ -39,7 +39,7 @@ virtual_network_address_space = ItemDynamicLayout.set_fields('Address Space', 'd
 '''
 
 # TAB - Connected Devices
-virtual_network_connected_devices = SimpleTableDynamicLayout.set_fields('Connected Devices', 'data.subnets.connected_devices_list', fields=[
+virtual_network_connected_devices = SimpleTableDynamicLayout.set_fields('Connected Devices', 'data.connected_devices', fields=[
     TextDyField.data_source('Device', 'device'),
     TextDyField.data_source('Type', 'type'),
     # TextDyField.data_source('IP Address', ''),

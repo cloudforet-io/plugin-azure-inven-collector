@@ -63,6 +63,10 @@ class VirtualNetworkManager(AzureManager):
                     'azure_firewall': self.get_azure_firewall(self, vnet_conn, vnet_dict['subnets'], vnet_dict['resource_group'])
                 })
 
+                vnet_dict.update({
+                    'connected_devices': self.get_connected_devices(self, vnet_dict['subnets'])
+                })
+
             # If not 'custom dns servers', add default azure dns server dict to vnet
             if vnet_dict.get('dhcp_options') is None:
                 dhcp_option_dict = {
@@ -119,7 +123,7 @@ class VirtualNetworkManager(AzureManager):
         return subnet_id_list
 
     @staticmethod
-    def update_subnet_info(self, subnets_dict, vnet_conn, resource_group_name):
+    def update_subnet_info(self, subnet_list, vnet_conn, resource_group_name):
         '''
         : subnets_dict = {
             ip_configurations= [
@@ -149,19 +153,9 @@ class VirtualNetworkManager(AzureManager):
 
         '''
         connected_devices_list = list()
-        for subnet in subnets_dict:
-            device_dict = {}
-            service_endpoint_list = []
 
-            if subnet.get('ip_configurations') is not None:
-                for ip_configuration in subnet['ip_configurations']:
-                    device_dict['name'] = subnet['name']
-                    device_dict['type'] = ip_configuration['id'].split('/')[7]
-                    device_dict['device'] = ip_configuration['id'].split('/')[8]
-                    connected_devices_list.append(device_dict)
-
-                subnet['connected_devices_list'] = connected_devices_list
-
+        service_endpoint_list = []
+        for subnet in subnet_list:
             # Get network security group's name
             if subnet.get('network_security_group') is not None:
                 subnet['network_security_group']['name'] = subnet['network_security_group']['id'].split('/')[8]
@@ -175,12 +169,12 @@ class VirtualNetworkManager(AzureManager):
                         'resource_group': private_endpoint['id'].split('/')[4]
                     })
 
-        return subnets_dict
+        return subnet_list
 
     @staticmethod
-    def get_service_endpoints(self, subnets_dict):
+    def get_service_endpoints(self, subnet_list):
         service_endpoint_list = []
-        for subnet in subnets_dict:
+        for subnet in subnet_list:
             # Put subnet name to service endpoints dictionary
             if subnet.get('service_endpoints') is not None:
                 for service_endpoint in subnet['service_endpoints']:
@@ -190,9 +184,9 @@ class VirtualNetworkManager(AzureManager):
         return service_endpoint_list
 
     @staticmethod
-    def get_private_endpoints(self, subnets_dict):
+    def get_private_endpoints(self, subnet_list):
         private_endpoint_list = []
-        for subnet in subnets_dict:
+        for subnet in subnet_list:
             if subnet.get('private_endpoints') is not None:
                 for private_endpoint in subnet['private_endpoints']:
                     private_endpoint_list.append(private_endpoint)
@@ -200,10 +194,10 @@ class VirtualNetworkManager(AzureManager):
         return private_endpoint_list
 
     @staticmethod
-    def get_azure_firewall(self, vnet_conn, subnets_dict, resource_group_name):
+    def get_azure_firewall(self, vnet_conn, subnet_list, resource_group_name):
         # Get Azure firewall information
         azure_firewall_list = []
-        for subnet in subnets_dict:
+        for subnet in subnet_list:
             if subnet.get('connected_devices_list'):
                 for device in subnet['connected_devices_list']:
                     if device['type'] == 'azureFirewalls':  # The subnet which has 'AzureFirewall' is typed as 'azureFirewalls'
@@ -217,3 +211,18 @@ class VirtualNetworkManager(AzureManager):
                                         azure_firewall_list.append(firewall_dict)
 
         return azure_firewall_list
+
+    @staticmethod
+    def get_connected_devices(self, subnet_list):
+        connected_devices_list = []
+        for subnet in subnet_list:
+            device_dict = {}
+
+            if subnet.get('ip_configurations') is not None:
+                for ip_configuration in subnet['ip_configurations']:
+                    device_dict['name'] = subnet['name']
+                    device_dict['type'] = ip_configuration['id'].split('/')[7]
+                    device_dict['device'] = ip_configuration['id'].split('/')[8]
+                    connected_devices_list.append(device_dict)
+
+        return connected_devices_list
