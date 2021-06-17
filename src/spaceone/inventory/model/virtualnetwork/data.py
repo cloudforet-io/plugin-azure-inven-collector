@@ -368,7 +368,7 @@ class ServiceEndpointPolicy(Model):
 
 
 class ServiceEndpointPropertiesFormat(Model):
-    locations = ListType(ModelType(ExtendedLocation), serialize_when_none=False)
+    locations = ListType(StringType, serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     service = StringType(serialize_when_none=False)
     subnet = StringType(serialize_when_none=False)

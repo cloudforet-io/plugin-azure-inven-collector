@@ -36,7 +36,6 @@ class VirtualNetworkManager(AzureManager):
 
         for vnet in vnet_list:
             vnet_dict = self.convert_nested_dictionary(self, vnet)
-
             # update vnet_dict
             vnet_dict.update({
                 'resource_group': self.get_resource_group_from_id(vnet_dict['id']),  # parse resource_group from ID
