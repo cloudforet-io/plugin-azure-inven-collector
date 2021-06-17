@@ -50,6 +50,7 @@ virtual_network_connected_devices = SimpleTableDynamicLayout.set_fields('Connect
 # Name, IPv4, IPv6, Available Ips, Delegated To, Security Group
 virtual_network_subnets = SimpleTableDynamicLayout.set_fields('Subnets', 'data.subnets', fields=[
     TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('IP Address Prefix', 'address_prefix'),
     ListDyField.data_source('IP Address Prefixes', 'address_prefixes'),
     TextDyField.data_source('Delegated To', 'delegations.name'),
     TextDyField.data_source('Security Group', 'network_security_group.name')

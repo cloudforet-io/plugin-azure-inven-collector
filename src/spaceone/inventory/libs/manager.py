@@ -2,6 +2,7 @@ from spaceone.core.manager import BaseManager
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.libs.schema.region import RegionResource, RegionResponse
 from collections.abc import Iterable
+import json
 
 REGION_INFO = {
     'eastus': {'name': 'US East (Virginia)', 'tags': {'latitude': '37.3719', 'longitude': '-79.8164'}},
@@ -158,15 +159,20 @@ class AzureManager(BaseManager):
         vm_dict = self.convert_dictionary(vm_object)
         for k, v in vm_dict.items():
             if isinstance(v, object):  # object
-                if isinstance(v, list):  # if vm_object is list
+                if 'azure' in str(type(v)):  # 1) if vm_object is azure defined model class
+                    vm_dict[k] = self.convert_nested_dictionary(self, v)
+                elif isinstance(v, list):  # 2) if vm_object is list
                     vm_converse_list = list()
-                    for list_obj in v:
-                        if hasattr(list_obj, '__dict__'):
+                    for list_obj in v:  # if vm object's child value is Azure defined model class or dict class
+                        if hasattr(list_obj, '__dict__') or 'azure' in str(type(list_obj)):
                             vm_converse_dict = self.convert_nested_dictionary(self, list_obj)
                             vm_converse_list.append(vm_converse_dict)
+                        else:  # if vm object's child value is simple list
+                            vm_converse_list.append(list_obj)
+
                         vm_dict[k] = vm_converse_list
 
-                elif hasattr(v, '__dict__'):  # if vm_object is not a list type, just an object
+                elif hasattr(v, '__dict__'):  # if vm_object is not a list type, just a dict
                     vm_converse_dict = self.convert_nested_dictionary(self, v)
                     vm_dict[k] = vm_converse_dict
 
