@@ -9,8 +9,8 @@ from spaceone.core import config
 from spaceone.core.transaction import Transaction
 from spaceone.core import utils
 from spaceone.inventory.error import *
-from spaceone.inventory.connector.virtual_network import VirtualNetworkConnector
-from spaceone.inventory.manager.virtual_network_manager import VirtualNetworkManager
+from spaceone.inventory.connector.application_gateway import ApplicationGatewayConnector
+from spaceone.inventory.manager.application_gateway_manager import ApplicationGatewayManager
 
 
 class TestVirtualNetworkManager(unittest.TestCase):
@@ -25,8 +25,8 @@ class TestVirtualNetworkManager(unittest.TestCase):
         cls.schema = 'azure_client_secret'
         cls.azure_credentials = test_config.get('AZURE_CREDENTIALS', {})
 
-        cls.vnet_connector = VirtualNetworkConnector(transaction=Transaction(), config={}, secret_data=cls.azure_credentials)
-        cls.vnet_manager = VirtualNetworkManager(Transaction())
+        cls.application_gateway_connector = ApplicationGatewayConnector(transaction=Transaction(), config={}, secret_data=cls.azure_credentials)
+        cls.application_gateway_manager = ApplicationGatewayManager(Transaction())
 
         super().setUpClass()
 
@@ -39,10 +39,10 @@ class TestVirtualNetworkManager(unittest.TestCase):
 
         params = {'options': {}, 'secret_data': secret_data, 'filter': {}}
 
-        virtual_networks = self.vnet_manager.collect_cloud_service(params)
+        application_gateways = self.application_gateway_manager.collect_cloud_service(params)
 
-        for virtual_network in virtual_networks:
-            print(virtual_network.to_primitive())
+        for applicaiton_gateway in application_gateways:
+            print(applicaiton_gateway.to_primitive())
 
 
 if __name__ == "__main__":
