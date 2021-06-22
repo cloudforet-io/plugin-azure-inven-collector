@@ -21,13 +21,13 @@ class CollectorService(BaseService):
 
         self.execute_managers = [
             # set MS Azure cloud service manager
-            # 'DiskManager',
-            # 'SnapshotManager',
-            # 'VmScaleSetManager',
-            # 'LoadBalancerManager',
-            # 'SqlServerManager',
-            # 'VirtualNetworkManager',
-            'ApplicationManager'
+            'DiskManager',
+            'SnapshotManager',
+            'VmScaleSetManager',
+            'LoadBalancerManager',
+            'SqlServerManager',
+            'VirtualNetworkManager',
+            'ApplicationGatewayManager'
         ]
 
     @check_required(['options'])

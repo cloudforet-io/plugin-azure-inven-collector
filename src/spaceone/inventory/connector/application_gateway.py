@@ -14,13 +14,13 @@ class ApplicationGatewayConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_all_application_gateways(self):
-        '''
+
         obj = self.network_client.virtual_networks.list_all()
         for i in obj:
             print("#####")
             print(i)
         print(obj)
-        '''
+
         return self.network_client.application_gateways.list_all()
 
     def get_public_ip_addresses(self, public_ip_address_name, resource_group_name):

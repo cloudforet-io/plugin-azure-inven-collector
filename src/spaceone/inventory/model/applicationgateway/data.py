@@ -582,6 +582,7 @@ class ApplicationGatewayBackendAddressPool(Model):
     backend_ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    associated_rules = ListType(StringType, serialize_when_none=False)
 
 
 class ApplicationGatewayConnectionDraining(Model):
@@ -603,6 +604,7 @@ class ApplicationGatewayBackendHttpSettings(Model):
     port = IntType(serialize_when_none=False)
     probe = ModelType(SubResource, serialize_when_none=False)
     probe_enabled = BooleanType(serialize_when_none=False)
+    custom_probe = StringType(serialize_when_none=False)
     protocol = StringType(choices=('Http', 'Https'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     request_timeout = IntType(serialize_when_none=False)
@@ -619,11 +621,15 @@ class ApplicationGatewayFrontendIPConfiguration(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(default='-', serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
     private_ip_address = StringType(serialize_when_none=False)
     private_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
     private_link_configuration = ModelType(SubResource, serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     public_ip_address = ModelType(SubResource, serialize_when_none=False)
+    ip_type = StringType(choices=('Public', 'Private'), serialize_when_none=False)
+    ip_address = StringType(serialize_when_none=False)
+    associated_listener = StringType(default='-')
     subnet = ModelType(SubResource, serialize_when_none=False)
 
 
@@ -653,13 +659,15 @@ class ApplicationGatewayHttpListener(Model):
     firewall_policy = ModelType(SubResource)
     frontend_ip_configuration = ModelType(SubResource)
     frontend_port = ModelType(SubResource)
-    host_name = StringType(serialize_when_none=False)
+    port = IntType(serialize_when_none=False)
+    host_name = StringType(default='-')
     host_names = ListType(StringType, serialize_when_none=False)
     protocol = StringType(choices=('Http', 'Https'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     require_server_name_indication = BooleanType(serialize_when_none=False)
     ssl_certificate = ModelType(SubResource, serialize_when_none=False)
     ssl_profile = ModelType(SubResource, serialize_when_none=False)
+    associated_rules = ListType(StringType, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -740,6 +748,7 @@ class ApplicationGatewayRequestRoutingRule(Model):
     backend_address_pool = ModelType(SubResource, serialize_when_none=False)
     backend_http_settings = ModelType(SubResource, serialize_when_none=False)
     http_listener = ModelType(SubResource, serialize_when_none=False)
+    http_listener_name = StringType(default='-')
     priority = IntType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     redirect_configuration = ModelType(SubResource, serialize_when_none=False)
@@ -785,7 +794,8 @@ class ApplicationGatewayRewriteRuleSet(Model):
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
-    rewriteRules = ListType(ModelType(ApplicationGatewayRewriteRule), serialize_when_none=False)
+    rewrite_rules = ListType(ModelType(ApplicationGatewayRewriteRule), serialize_when_none=False)
+    rules_applied = ListType(StringType, serialize_when_none=False)
 
 
 class ApplicationGatewaySku(Model):

@@ -28,7 +28,7 @@ application_gateway_info_meta = ItemDynamicLayout.set_fields('Application Gatewa
 # TAB - Configuration
 application_gateway_configuration = ItemDynamicLayout.set_fields('Configuration', fields=[
     TextDyField.data_source('Capacity ', 'data.sku.tier'),
-    TextDyField.data_source('Capacity Type', ''), # TODO
+    # TextDyField.data_source('Capacity Type', ''),
     TextDyField.data_source('Minimum Instance Count', 'autoscale_configuration.min_capacity'),
     TextDyField.data_source('Maximum Instance Count', 'autoscale_configuration.max_capacity'),
     TextDyField.data_source('Enable HTTP2', 'enable_http2')
@@ -58,39 +58,85 @@ application_gateway_web_app_firewall_exclusions = SimpleTableDynamicLayout.set_f
     TextDyField.data_source('Selector', 'selector')
 ])
 
-application_gateway_web_app_firewall_meta = ListDynamicLayout.set_layouts('Web Application Firewall',
-                                                                           layouts=[
+application_gateway_web_app_firewall_meta = ListDynamicLayout.set_layouts('Web Application Firewall', layouts=[
                                                                                application_gateway_web_app_firewall,
                                                                                application_gateway_web_app_firewall_exclusions
                                                                                ])
 
-# TAB - Peerings
-# Name, Peering Status, Peer, Gateway Transit
-virtual_network_peerings = SimpleTableDynamicLayout.set_fields('Peerings', 'data.virtual_network_peerings', fields=[
+# TAB - Backend Pools
+# Name,Rule Associated, Targets
+application_gateway_backend_pools = SimpleTableDynamicLayout.set_fields('Backend Pools', 'data.backend_address_pools', fields=[
     TextDyField.data_source('Name', 'name'),
-    EnumDyField.data_source('Peering Status', 'peering_state', default_state={
-        'safe': ['Connected'],
-        'warning': ['Disconnected', 'Initiated']
-    }),
-    TextDyField.data_source('Peer', 'remote_virtual_network.id'),
-    TextDyField.data_source('Gateway Transit', 'allow_gateway_transit')
+    ListDyField.data_source('Rule Associated', 'associated_rules'),
+    # TextDyField.data_source('Targets', '')
 ])
 
-virtual_network_service_endpoints = SimpleTableDynamicLayout.set_fields('Service Endpoints', 'data.service_endpoints', fields=[
-    TextDyField.data_source('Service', 'service'),
-    TextDyField.data_source('Subnet', 'subnet'),
-    EnumDyField.data_source('Status', 'provisioning_state', default_state={
-        'safe': ['Succeeded'],
-        'warning': ['Failed', 'Deleting', 'Updating']
+# TAB - HTTP Settings
+application_gateway_http_settings = SimpleTableDynamicLayout.set_fields('HTTP Settings', 'data.backend_http_settings_collection', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Port', 'port'),
+    TextDyField.data_source('Protocol', 'protocol'),
+    EnumDyField.data_source('Cookie Based Affinity', 'cookie_based_affinity', default_state={
+        'safe': ['Enabled'],
+        'warning': ['Disabled']
     }),
-    TextDyField.data_source('Locations', 'locations')
+    TextDyField.data_source('Custom Probe', 'custom_probe')
 ])
 
-# TAB - Private Endpoints
-virtual_network_private_endpoints = SimpleTableDynamicLayout.set_fields('Private Endpoints', 'data.private_endpoints', fields=[
+# TAB - SSL Settings
+application_gateway_ssl_settings = SimpleTableDynamicLayout.set_fields('SSL Settings', 'data.ssl_profiles', fields=[
     TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Subnet', 'subnet'),
-    TextDyField.data_source('Resource Group', 'resource_group')
+    ListDyField.data_source('Client Certificates', 'trusted_client_certificates.id'),
+    TextDyField.data_source('SSL Policy Type', 'ssl_policy.policy_type'),
+])
+
+# TAB - Frontend IP Configurations
+application_gateway_frontend_ip_configurations = SimpleTableDynamicLayout.set_fields('Frontend IP Configurations', 'data.frontend_ip_configurations', fields=[
+    TextDyField.data_source('Type', 'ip_type'),
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('IP Address', 'ip_address'),
+    TextDyField.data_source('Associated Listeners', 'associated_listeners')
+])
+
+# TAB - Listeners TODO
+application_gateway_listeners = SimpleTableDynamicLayout.set_fields('Listeners', 'data.http_listeners', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Protocol', 'protocol'),
+    TextDyField.data_source('Port', 'frontend_port.port'),
+    TextDyField.data_source('Associated Rule', ''),
+    TextDyField.data_source('Host name', 'host_name')
+])
+
+application_gateway_listeners_custom = SimpleTableDynamicLayout.set_fields('Custom Error Configurations', 'data.http_listeners.custom_error_configurations', fields=[
+    TextDyField.data_source('Status Code', 'status_code'),
+    TextDyField.data_source('Custom Error Page URL', 'custom_error_page_url')
+])
+# 1 + 2) TAB - Listeners
+application_gateway_listeners_info = ListDynamicLayout.set_layouts('Listeners', layouts=[
+                                                                               application_gateway_listeners,
+                                                                               application_gateway_listeners_custom])
+
+# TAB - Rules
+application_gateway_rules = SimpleTableDynamicLayout.set_fields('Rules', 'data.request_routing_rules', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Type', 'rule_type'),
+    TextDyField.data_source('Listener', 'http_listener_name')
+])
+
+# TAB - Rewrites
+application_gateway_rules = SimpleTableDynamicLayout.set_fields('Rules', 'data.rewrite_rule_sets', fields=[
+    TextDyField.data_source('Rewrite Sets', 'name'),
+    TextDyField.data_source('Rewrites', 'rule_type'),
+    TextDyField.data_source('Rules Applied', 'rules_applied')
+])
+
+# TAB - Health Probes
+application_gateway_health_probes = SimpleTableDynamicLayout.set_fields('Health Probes', 'data.probes', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Protocol', 'protocol'),
+    TextDyField.data_source('Host', 'host'),
+    TextDyField.data_source('Path', 'path'),
+    TextDyField.data_source('Timeout(Seconds)', 'timeout')
 ])
 
 # TAB - tags
@@ -101,7 +147,7 @@ virtual_network_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields
 
 application_gateway_meta = CloudServiceMeta.set_layouts(
     [application_gateway_info_meta, application_gateway_configuration,
-     application_gateway_web_app_firewall, virtual_network_peerings, virtual_network_service_endpoints, virtual_network_private_endpoints, virtual_network_tags])
+     application_gateway_web_app_firewall_meta, application_gateway_backend_pools, application_gateway_frontend_ip_configurations, application_gateway_listeners_info])
 
 
 class ComputeResource(CloudServiceResource):

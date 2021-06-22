@@ -83,7 +83,6 @@ class VirtualNetworkManager(AzureManager):
                         ip = IPNetwork(address_space)
                         # vnet_dict['address_space']['address_count'] = ip.size
             '''
-            print('V')
             print(f'[VNET INFO] {vnet_dict}')
 
             vnet_data = VirtualNetwork(vnet_dict, strict=False)
