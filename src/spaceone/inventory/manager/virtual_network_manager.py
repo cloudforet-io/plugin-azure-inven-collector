@@ -1,7 +1,7 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from pprint import pprint
-from spaceone.inventory.connector.virtualnetwork import VirtualNetworkConnector
+from spaceone.inventory.connector.virtual_network import VirtualNetworkConnector
 from spaceone.inventory.model.virtualnetwork.cloud_service import *
 from spaceone.inventory.model.virtualnetwork.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.virtualnetwork.data import *
@@ -83,7 +83,6 @@ class VirtualNetworkManager(AzureManager):
                         ip = IPNetwork(address_space)
                         # vnet_dict['address_space']['address_count'] = ip.size
             '''
-
             print(f'[VNET INFO] {vnet_dict}')
 
             vnet_data = VirtualNetwork(vnet_dict, strict=False)
