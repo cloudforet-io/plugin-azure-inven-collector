@@ -613,6 +613,7 @@ class ApplicationGatewayBackendHttpSettings(Model):
 
 
 class ApplicationGatewayCustomError(Model):
+    listener_name = StringType(serialize_when_none=False)
     custom_error_page_url = StringType(serialize_when_none=False)
     status_code = StringType(choices=('HttpStatus403', 'HttpStatus502'))
 
@@ -664,6 +665,7 @@ class ApplicationGatewayHttpListener(Model):
     host_names = ListType(StringType, serialize_when_none=False)
     protocol = StringType(choices=('Http', 'Https'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    port = IntType(serialize_when_none=False)
     require_server_name_indication = BooleanType(serialize_when_none=False)
     ssl_certificate = ModelType(SubResource, serialize_when_none=False)
     ssl_profile = ModelType(SubResource, serialize_when_none=False)
@@ -795,6 +797,7 @@ class ApplicationGatewayRewriteRuleSet(Model):
     name = StringType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     rewrite_rules = ListType(ModelType(ApplicationGatewayRewriteRule), serialize_when_none=False)
+    rewrite_rules_display = ListType(StringType, serialize_when_none=False)
     rules_applied = ListType(StringType, serialize_when_none=False)
 
 

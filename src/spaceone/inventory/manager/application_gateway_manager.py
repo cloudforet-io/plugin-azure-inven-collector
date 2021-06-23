@@ -84,22 +84,47 @@ class ApplicationGatewayManager(AzureManager):
                         })
 
             if application_gateway_dict.get('http_listeners') is not None:
+                custom_error_configurations_list = []
+
                 for http_listener in application_gateway_dict['http_listeners']:
+
+                    # Update Port information
                     if http_listener.get('frontend_port') is not None:
                         frontend_port_id = http_listener['frontend_port']['id']
                         http_listener['frontend_port'].update({
                             'port': self.get_port(frontend_port_id, application_gateway_dict.get('frontend_ports', []))
                         })
+                        http_listener.update({
+                            'port': http_listener.get('frontend_port', {}).get('port', '')
+                        })
 
-                    # if http_listener.get('custom_error_configurations') is not None:
+                    # Update custom error configuration
+                    if http_listener.get('custom_error_configurations') is not None:
+                        for custom_error_conf in http_listener['custom_error_configurations']:
+                            custom_error_conf.update({'listener_name': http_listener['name']})
+                            custom_error_configurations_list.append(custom_error_conf)
 
+                        application_gateway_dict.update({
+                            'custom_error_configurations': custom_error_configurations_list
+                        })
+            if application_gateway_dict.get('rewrite_rule_sets'):
+                for rewrite_rule in application_gateway_dict['rewrite_rule_sets']:
+                    rewrite_rule_list = rewrite_rule.get('rewrite_rules', [])
+                    rewrite_rule_str_list = []
+                    for rule in rewrite_rule_list:
+                        rewrite_rule_str_list.append(str(rule.get('name')) + ", " + str(rule.get('rule_sequence')))
+
+                    rewrite_rule.update({
+                        'rewrite_rules_display': rewrite_rule_str_list
+                    })
+
+            # Update request routing rules
             if application_gateway_dict.get('request_routing_rules') is not None:
                 for request_routing_rule in application_gateway_dict['request_routing_rules']:
                     if request_routing_rule.get('http_listener') is not None:
                         request_routing_rule.update({
                             'http_listener_name': request_routing_rule['http_listener']['id'].split('/')[10]
                         })
-
                         # Find http listener attached to this rule, and put rule's name to http_listeners dict
                         http_applied_rules_list = []
                         http_listener_id = request_routing_rule['http_listener']['id']
