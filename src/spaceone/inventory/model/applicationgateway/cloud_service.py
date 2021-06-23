@@ -31,7 +31,7 @@ application_gateway_configuration = ItemDynamicLayout.set_fields('Configuration'
     # TextDyField.data_source('Capacity Type', ''),
     TextDyField.data_source('Minimum Instance Count', 'data.autoscale_configuration.min_capacity'),
     TextDyField.data_source('Maximum Instance Count', 'data.autoscale_configuration.max_capacity'),
-    TextDyField.data_source('Enable HTTP2', 'enable_http2')
+    TextDyField.data_source('Enable HTTP2', 'data.enable_http2')
 ])
 
 # TAB - Subnets
