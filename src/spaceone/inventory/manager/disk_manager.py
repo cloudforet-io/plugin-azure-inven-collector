@@ -30,27 +30,21 @@ class DiskManager(AzureManager):
         """
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
-
         disk_conn: DiskConnector = self.locator.get_connector(self.connector_name, **params)
         disks = []
         for disk in disk_conn.list_disks():
-            disk_dict = self.convert_dictionary(disk)
-            sku_dict = self.convert_dictionary(disk.sku)
-            creation_data_dict = self.convert_dictionary(disk.creation_data)
-            encryption_dict = self.convert_dictionary(disk.encryption)
+            disk_dict = self.convert_nested_dictionary(self, disk)
 
             # update sku_dict
             # switch DiskStorageAccountType to disk_sku_name for user-friendly words.
             # (ex.Premium SSD, Standard HDD..)
-            sku_dict.update({
-                'name': self.get_disk_sku_name(sku_dict['name'])
-            })
-
-            # update creation_data dict
-            if disk.creation_data.image_reference is not None:
-                image_reference_dict = self.convert_dictionary(disk.creation_data.image_reference)
-                creation_data_dict.update({
-                    'image_reference': image_reference_dict
+            if disk_dict.get('sku') is not None:
+                sku_dict = disk_dict['sku']
+                sku_dict.update({
+                    'name': self.get_disk_sku_name(sku_dict['name'])
+                })
+                disk_dict.update({
+                    'sku': sku_dict
                 })
 
             # update disk_data dict
@@ -59,23 +53,21 @@ class DiskManager(AzureManager):
                 'subscription_id': subscription_info['subscription_id'],
                 'subscription_name': subscription_info['subscription_name'],
                 'size': disk_dict['disk_size_bytes'],
-                'sku': sku_dict,
-                'creation_data': creation_data_dict,
-                'encryption': encryption_dict,
                 'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
                                                       disk_dict['disk_m_bps_read_write']),
             })
 
-            if 'network_access_policy' in disk_dict:
+            # Update Network access policy to user-friendly words
+            if disk_dict.get('network_access_policy') is not None:
                 disk_dict.update({
                     'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
                 })
 
             # get attached vm's name
-            managed_by = disk_dict['managed_by']
-            if managed_by:
+            if disk_dict.get('managed_by') is not None:
+                managed_by = disk_dict['managed_by']
                 disk_dict.update({
-                    'managed_by': self.get_attached_vm_name_from_managed_by(disk_dict['managed_by'])
+                    'managed_by': self.get_attached_vm_name_from_managed_by(managed_by)
                 })
 
             # switch tags form
