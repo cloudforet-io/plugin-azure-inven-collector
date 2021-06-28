@@ -18,7 +18,7 @@ cst_public_ip_address.tags = {
 cst_public_ip_address._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Resource Group', 'data.publicipaddress.ip_address'),
+        TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name')
     ],

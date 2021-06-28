@@ -6,3 +6,4 @@ from spaceone.inventory.manager.loadbalancer_manager import LoadBalancerManager
 from spaceone.inventory.manager.sql_server_manager import SqlServerManager
 from spaceone.inventory.manager.virtual_network_manager import VirtualNetworkManager
 from spaceone.inventory.manager.application_gateway_manager import ApplicationGatewayManager
+from spaceone.inventory.manager.public_ip_address_manager import PublicIPAddressManager
