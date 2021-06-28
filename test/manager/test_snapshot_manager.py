@@ -40,10 +40,10 @@ class TestSnapshotManager(unittest.TestCase):
 
         params = {'options': {}, 'secret_data': secret_data, 'filter': {}}
 
-        disks = self.snapshot_manager.collect_cloud_service(params)
+        snapshots = self.snapshot_manager.collect_cloud_service(params)
 
-        for disk in disks:
-            print(disk.to_primitive())
+        for snapshot in snapshots:
+            print(snapshot.to_primitive())
 
 
 if __name__ == "__main__":

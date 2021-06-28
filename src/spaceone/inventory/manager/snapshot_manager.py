@@ -38,44 +38,34 @@ class SnapshotManager(AzureManager):
         snapshot_conn: SnapshotConnector = self.locator.get_connector(self.connector_name, **params)
         snapshots = []
         for snapshot in snapshot_conn.list_snapshots():
-            snapshot_dict = self.convert_dictionary(snapshot)
-            sku_dict = self.convert_dictionary(snapshot.sku)
-            creation_data_dict = self.convert_dictionary(snapshot.creation_data)
-            encryption_dict = self.convert_dictionary(snapshot.encryption)
+            snapshot_dict = self.convert_nested_dictionary(self, snapshot)
+
+            # snapshot_dict = self.convert_dictionary(snapshot)
+            # sku_dict = self.convert_dictionary(snapshot.sku)
+            # creation_data_dict = self.convert_dictionary(snapshot.creation_data)
+            # encryption_dict = self.convert_dictionary(snapshot.encryption)
 
             # update sku_dict
             # switch SnapshotStorageAccountType to snapshot_sku_name for user-friendly words.
             # (ex.Premium_LRS -> Premium SSD, Standard HDD..)
+            sku_dict = snapshot_dict.get('sku', {})
             sku_dict.update({
-                'name': self.get_disk_sku_name(sku_dict['name'])
+                'name': self.get_disk_sku_name(sku_dict.get('name', ''))
             })
-
-            # update creation_data dict
-            # update creation_data_dict >> image_reference_dict
-            if snapshot.creation_data.image_reference in snapshot_dict:
-                image_reference_dict = self.convert_dictionary(snapshot.creation_data.image_reference)
-                creation_data_dict.update({
-                    'image_reference': image_reference_dict
-                })
-
-            # update creation_data_dict >> gallery_image_reference_dict
-            if snapshot.creation_data.gallery_image_reference in snapshot_dict:
-                gallery_image_dict = self.convert_dictionary(snapshot.creation_data.gallery_image_reference)
-                creation_data_dict.update({
-                    'gallery_image_reference': gallery_image_dict
-                })
 
             # update encryption_dict type to user-friendly words
             # (ex.EncryptionAtRestWithPlatformKey -> Platform-managed key...)
-            if snapshot.encryption.type is not None:
-                if snapshot.encryption.type == 'EncryptionAtRestWithPlatformKey':
+            if snapshot_dict.get('encryption', {}).get('type') is not None:
+                type = snapshot_dict['encryption']['type']
+                encryption_type = ''
+                if type == 'EncryptionAtRestWithPlatformKey':
                     encryption_type = 'Platform-managed key'
-                elif snapshot.encryption.type == 'EncryptionAtRestWithPlatformAndCustomerKeys':
+                elif type == 'EncryptionAtRestWithPlatformAndCustomerKeys':
                     encryption_type = 'Platform and customer managed key'
-                elif snapshot.encryption.type == 'EncryptionAtRestWithCustomerKey':
+                elif type == 'EncryptionAtRestWithCustomerKey':
                     encryption_type = 'Customer-managed key'
 
-                encryption_dict.update({
+                snapshot_dict['encryption'].update({
                     'type_display': encryption_type
                 })
 
@@ -86,29 +76,25 @@ class SnapshotManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
                 'size': snapshot_dict['disk_size_bytes'],
                 'sku': sku_dict,
-                'creation_data': creation_data_dict,
-                'encryption': encryption_dict,
                 'incremental_display': self.get_incremental_display(snapshot_dict['incremental'])
             })
 
-            if 'network_access_policy' in snapshot_dict:
+            if snapshot_dict.get('network_access_policy') is not None:
                 snapshot_dict.update({
-                    'network_access_policy_display': self.get_network_access_policy(
-                        snapshot_dict['network_access_policy'])
+                    'network_access_policy_display': self.get_network_access_policy(snapshot_dict['network_access_policy'])
                 })
-
+            
             # get attached vm's name
-            managed_by = snapshot_dict['managed_by']
-            if managed_by:
+            if snapshot_dict.get('managed_by') is not None:
                 snapshot_dict.update({
                     'managed_by': self.get_attached_vm_name_from_managed_by(snapshot_dict['managed_by'])
                 })
 
             # get source_disk_name from source_resource_id
-            source_disk_name = creation_data_dict['source_resource_id']
-            if source_disk_name:
+            if snapshot_dict.get('creation_data') is not None:
+                source_resource_id = snapshot_dict['creation_data'].get('source_resource_id', '')
                 snapshot_dict.update({
-                    'source_disk_name': self.get_source_disk_name(creation_data_dict['source_resource_id'])
+                    'source_disk_name': self.get_source_disk_name(source_resource_id)
                 })
 
             # switch tags form
@@ -127,8 +113,7 @@ class SnapshotManager(AzureManager):
                 'name': snapshot_data.name
             })
 
-            # print("snapshot_dict")
-            # print(snapshot_dict)
+            # print(f'[SNAPSHOT DICT]{snapshot_dict}')
 
             # Must set_region_code method for region collection
             self.set_region_code(snapshot_data['location'])
@@ -144,12 +129,14 @@ class SnapshotManager(AzureManager):
 
     @staticmethod
     def get_attached_vm_name_from_managed_by(managed_by):
+        attached_vm_name = ''
         if managed_by:
             attached_vm_name = managed_by.split('/')[8]  # parse attached_ from ID
         return attached_vm_name
 
     @staticmethod
     def get_disk_sku_name(sku_tier):
+        sku_name = ''
         if sku_tier == 'Premium_LRS':
             sku_name = 'Premium SSD'
         elif sku_tier == 'Standard_ZRS':
@@ -161,6 +148,7 @@ class SnapshotManager(AzureManager):
 
     @staticmethod
     def get_network_access_policy(network_access_policy):
+        network_access_policy_display = ''
         if network_access_policy == 'AllowAll':
             network_access_policy_display = 'Public endpoint (all network)'
         elif network_access_policy == 'AllowPrivate':
@@ -181,5 +169,7 @@ class SnapshotManager(AzureManager):
 
     @staticmethod
     def get_source_disk_name(source_resource_id):
-        source_disk_name = source_resource_id.split('/')[8]  # parse source_disk_name from source_resource_id
+        source_disk_name = ''
+        if source_resource_id:
+            source_disk_name = source_resource_id.split('/')[8]  # parse source_disk_name from source_resource_id
         return source_disk_name

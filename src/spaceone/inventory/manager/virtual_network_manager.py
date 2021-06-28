@@ -150,9 +150,7 @@ class VirtualNetworkManager(AzureManager):
                 ...
 
         '''
-        connected_devices_list = list()
 
-        service_endpoint_list = []
         for subnet in subnet_list:
             # Get network security group's name
             if subnet.get('network_security_group') is not None:

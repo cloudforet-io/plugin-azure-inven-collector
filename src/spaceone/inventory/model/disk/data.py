@@ -10,7 +10,7 @@ class Sku(Model):
 
 class ImageDiskReference(Model):
     id = StringType(serialize_when_none=False)
-    Lun = IntType(serialize_when_none=False)
+    lun = IntType(serialize_when_none=False)
 
 
 class CreationData(Model):

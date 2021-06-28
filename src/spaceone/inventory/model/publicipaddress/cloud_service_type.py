@@ -4,21 +4,21 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 
-cst_virtual_network = CloudServiceTypeResource()
-cst_virtual_network.name = 'VirtualNetwork'
-cst_virtual_network.group = 'Network'
-cst_virtual_network.service_code = 'Microsoft.Network/virtualNetworks'
-cst_virtual_network.labels = ['Network']
-cst_virtual_network.is_major = True
-cst_virtual_network.is_primary = True
-cst_virtual_network.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/assets/icons/cloud-services/azure/azure-virtual-networks.svg',
+cst_public_ip_address = CloudServiceTypeResource()
+cst_public_ip_address.name = 'PublicIPAddress'
+cst_public_ip_address.group = 'Network'
+cst_public_ip_address.service_code = 'Microsoft.Network/publicIPAddresses'
+cst_public_ip_address.labels = ['Network']
+cst_public_ip_address.is_major = False
+cst_public_ip_address.is_primary = False
+cst_public_ip_address.tags = {
+    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-public-ip-address.svg',
 }
 
-cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
+cst_public_ip_address._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Resource Group', 'data.resource_group'),
+        TextDyField.data_source('Resource Group', 'data.publicipaddress.ip_address'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name')
     ],
@@ -28,12 +28,12 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
+        SearchField.set(name='Location', key='data.location', data_type='string')
     ]
 
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_virtual_network}),
+    CloudServiceTypeResponse({'resource': cst_public_ip_address}),
 ]
