@@ -24,7 +24,7 @@ class DdosSettings(Model):
 
 
 class PublicIPAddressDnsSettings(Model):
-    domain_name_label = StringType(serialize_when_none=False)
+    domain_name_label = StringType(default='-')
     fqdn = StringType(serialize_when_none=False)
     reverse_fqdn = StringType(serialize_when_none=False)
 
@@ -66,7 +66,6 @@ class NatGateway(Model):
     zones = ListType(StringType, serialize_when_none=False)
 
 
-
 class PublicIPAddressSku(Model):
     name = StringType(choices=('Basic', 'Standard'), serialize_when_none=False)
     tier = StringType(choices=('Global', 'Regional'), serialize_when_none=False)
@@ -77,7 +76,7 @@ class PublicIPAddress(Model):  # Main Class
     extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    location = ModelType(ExtendedLocation, serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
     ddos_settings = ModelType(DdosSettings, serialize_when_none=False)
     dns_settings = ModelType(PublicIPAddressDnsSettings, serialize_when_none=False)
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
