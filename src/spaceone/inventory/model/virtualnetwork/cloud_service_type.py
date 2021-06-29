@@ -12,7 +12,7 @@ cst_virtual_network.labels = ['Network']
 cst_virtual_network.is_major = True
 cst_virtual_network.is_primary = True
 cst_virtual_network.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/assets/icons/cloud-services/azure/azure-virtual-networks.svg',
+    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-virtual-networks.svg',
 }
 
 cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
