@@ -14,5 +14,4 @@ class PublicIPAddressConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_all_public_ip_addresses(self):
-        # obj = self.network_client.public_ip_addresses.list_all()
         return self.network_client.public_ip_addresses.list_all()
