@@ -29,6 +29,25 @@ class PublicIPAddressDnsSettings(Model):
     reverse_fqdn = StringType(serialize_when_none=False)
 
 
+class NetworkInterface(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    location = ModelType(ExtendedLocation, serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
+    dscp_configuration = ModelType(SubResource, serialize_when_none=False)
+    enable_accelerated_networking = BooleanType(serialize_when_none=False)
+    enable_ip_forwarding = BooleanType(serialize_when_none=False)
+    migration_phase = StringType(choices=('Abort', 'Commit', 'Committed', 'None', 'Prepare'), serialize_when_none=False)
+    nic_type = StringType(choices=('Elastic', 'Standard'), serialize_when_none=False)
+    primary = BooleanType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    resource_guid = StringType(serialize_when_none=False)
+    virtual_machine = ModelType(SubResource, serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
 class IPConfiguration(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -37,7 +56,7 @@ class IPConfiguration(Model):
     private_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     public_ip_address = StringType(serialize_when_none=False)
-    subnet = StringType(serialize_when_none=False)
+    network_interface = ModelType(NetworkInterface, serialize_when_none=False)
 
 
 class IpTag(Model):
@@ -85,13 +104,12 @@ class PublicIPAddress(Model):  # Main Class
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
     ip_address = StringType(serialize_when_none=False)
     ip_configuration = ModelType(IPConfiguration, serialize_when_none=False)
+    associated_to = StringType(serialize_when_none=False)
     ip_tags = ListType(ModelType(IpTag), serialize_when_none=False)
     # linked_public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
-    migration_phase = StringType(choices=('Abort', 'Commit', 'Committed', 'None', 'Prepare'),
-                                 serialize_when_none=False)
+    migration_phase = StringType(choices=('Abort', 'Commit', 'Committed', 'None', 'Prepare'), serialize_when_none=False)
     nat_gateway = ModelType(NatGateway, serialize_when_none=False)
-    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'),
-                                    serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     public_ip_address_version = StringType(choices=('IPv4', 'IPv6'), serialize_when_none=False)
     public_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
     public_ip_prefix = ModelType(SubResource, serialize_when_none=False)

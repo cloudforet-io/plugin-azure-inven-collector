@@ -48,6 +48,13 @@ class PublicIPAddressManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
             })
 
+            if public_ip_address_dict.get('ip_configuration') is not None:
+                associated_to = public_ip_address_dict['ip_configuration']['id'].split('/')[8]
+                if associated_to:
+                    public_ip_address_dict.update({
+                        'associated_to': associated_to
+                    })
+
             # print(f'[PUBLIC IP ADDRESS INFO] {public_ip_address_dict}')
 
             public_ip_address_data = PublicIPAddress(public_ip_address_dict, strict=False)

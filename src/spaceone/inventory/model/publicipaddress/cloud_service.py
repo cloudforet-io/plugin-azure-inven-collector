@@ -21,8 +21,8 @@ public_ip_address_meta = ItemDynamicLayout.set_fields('Public IP Address', field
     TextDyField.data_source('SKU', 'data.sku.name'),
     TextDyField.data_source('Tier', 'data.sku.tier'),
     TextDyField.data_source('IP Address', 'data.ip_address'),
-    TextDyField.data_source('DNS Name', 'data.dns_settings.fqdn')
-    # TextDyField.data_source('Associated To', ''),
+    TextDyField.data_source('DNS Name', 'data.dns_settings.fqdn'),
+    TextDyField.data_source('Associated To', 'data.associated_to')
     # TextDyField.data_source('Routing Preference', ''),
 
 ])
