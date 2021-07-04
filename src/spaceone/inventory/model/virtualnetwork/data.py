@@ -711,6 +711,7 @@ class AzureFirewallApplicationRule(Model):
     source_ip_groups = ListType(StringType, serialize_when_none=False)
     target_fqdns = ListType(StringType, serialize_when_none=False)
 
+
 class AzureFirewallApplicationRuleCollection(Model):
     etag = StringType()
     id = StringType()
@@ -719,6 +720,7 @@ class AzureFirewallApplicationRuleCollection(Model):
     priority = IntType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     rules = ListType(ModelType(AzureFirewallApplicationRule), serialize_when_none=False)
+
 
 class AzureFirewallIPConfiguration(Model):
     etag = StringType()

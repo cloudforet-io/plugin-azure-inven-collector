@@ -360,6 +360,28 @@ class FlowLog(Model):
     type = StringType(serialize_when_none=False)
 
 
+class SecurityRule(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    access = StringType(choices=('Allow', 'Deny'), serialize_when_none=False)
+    description = StringType(serialize_when_none=False)
+    destination_address_prefix = StringType(serialize_when_none=False)
+    destination_address_prefixes = ListType(StringType, serialize_when_none=False)
+    destination_application_security_groups = ListType(ModelType(ApplicationSecurityGroup), serialize_when_none=False)
+    destination_port_range = StringType(serialize_when_none=False)
+    destination_port_ranges = ListType(StringType, serialize_when_none=False)
+    direction = StringType(choices=('Inbound', 'Outbound'), serialize_when_none=False)
+    priority = IntType(serialize_when_none=False)
+    protocol = StringType(choices=('*', 'Ah', 'Esp', 'Icmp', 'Tcp', 'Udp'), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    source_address_prefix = StringType(serialize_when_none=False)
+    source_address_prefixes = ListType(StringType, serialize_when_none=False)
+    source_application_security_groups = ListType(ModelType(ApplicationSecurityGroup), serialize_when_none=False)
+    source_port_range = StringType(serialize_when_none=False)
+    source_port_ranges = ListType(StringType, serialize_when_none=False)
+
+
 class NetworkSecurityGroup(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
