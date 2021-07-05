@@ -21,7 +21,9 @@ cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
-        TextDyField.data_source('Subscription Name', 'data.subscription_name')
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
+        TextDyField.data_source('Flow Log', '')
+
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
@@ -29,7 +31,9 @@ cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string')
+        SearchField.set(name='Location', key='data.location', data_type='string'),
+        SearchField.set(name='Flow Log', key='data', data_type='string')
+
     ]
 )
 

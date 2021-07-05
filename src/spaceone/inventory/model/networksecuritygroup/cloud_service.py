@@ -18,11 +18,44 @@ network_security_group_info_meta = ItemDynamicLayout.set_fields('Network Securit
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
     TextDyField.data_source('Subscription ID', 'data.subscription_id'),
-    TextDyField.data_source('Virtual Network', 'data.virtual_network'),
-    TextDyField.data_source('Subnet', 'data.subnet'),
-    TextDyField.data_source('Frontend public IP Address', 'data.public_ip_address.ip_address'),
-    TextDyField.data_source('Frontend private IP Address', 'data.private_ip_address'),
-    TextDyField.data_source('Tier', 'data.sku.tier')
+
+])
+
+# TAB - Inbound Security Rules
+network_security_group_inbound_security_rules = TableDynamicLayout.set_fields('Inbound Security Rules', 'data.inbound_security_rules', fields=[
+    TextDyField.data_source('Priority', 'priority'),
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Port', 'destination_port_range'),
+    TextDyField.data_source('Protocol', 'protocol'),
+    TextDyField.data_source('Source', 'source_address_prefix'),
+    TextDyField.data_source('Destination', 'destination_address_prefix'),
+    TextDyField.data_source('Action', 'access')
+])
+
+# TAB - Outbound Security Rules
+network_security_group_outbound_security_rules = TableDynamicLayout.set_fields('Outbound Security Rules', 'data.outbound_security_rules', fields=[
+    TextDyField.data_source('Priority', 'priority'),
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Port', 'destination_port_range'),
+    TextDyField.data_source('Protocol', 'protocol'),
+    TextDyField.data_source('Source', 'source_address_prefix'),
+    TextDyField.data_source('Destination', 'destination_address_prefix'),
+    TextDyField.data_source('Action', 'access')
+])
+
+# TAB - Network Interfaces
+network_security_group_network_interfaces = TableDynamicLayout.set_fields('Network Interfaces', 'data.network_interfaces', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Public IP Address', 'public_ip_address'),
+    TextDyField.data_source('Private IP Address', 'private_ip_address'),
+    TextDyField.data_source('Virtual Machine', 'virtual_machine_display')
+])
+
+# TAB - Subnets
+network_subnets = TableDynamicLayout.set_fields('Subnets', 'data.subnets', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Address Range', ''),
+    TextDyField.data_source('Virtual Network', '')
 ])
 
 # TAB - tags
@@ -32,7 +65,8 @@ network_security_group_tags = TableDynamicLayout.set_fields('Tags', 'data.tags',
 ])
 
 network_security_group_meta = CloudServiceMeta.set_layouts(
-    [network_security_group_info_meta, network_security_group_tags])
+    [network_security_group_info_meta, network_security_group_inbound_security_rules, network_security_group_outbound_security_rules,
+     network_security_group_network_interfaces, network_subnets, network_security_group_tags])
 
 
 class ComputeResource(CloudServiceResource):
