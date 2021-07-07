@@ -28,7 +28,8 @@ class CollectorService(BaseService):
             'SqlServerManager',
             'VirtualNetworkManager',
             'ApplicationGatewayManager',
-            'PublicIPAddressManager'
+            'PublicIPAddressManager',
+            'NetworkSecurityGroupManager'
         ]
 
     @check_required(['options'])

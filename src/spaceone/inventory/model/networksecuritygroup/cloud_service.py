@@ -54,8 +54,8 @@ network_security_group_network_interfaces = TableDynamicLayout.set_fields('Netwo
 # TAB - Subnets
 network_subnets = TableDynamicLayout.set_fields('Subnets', 'data.subnets', fields=[
     TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Address Range', ''),
-    TextDyField.data_source('Virtual Network', '')
+    TextDyField.data_source('Address Range', 'address_prefix'),
+    TextDyField.data_source('Virtual Network', 'virtual_network')
 ])
 
 # TAB - tags

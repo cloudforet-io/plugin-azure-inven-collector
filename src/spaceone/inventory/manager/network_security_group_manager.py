@@ -29,12 +29,8 @@ class NetworkSecurityGroupManager(AzureManager):
             CloudServiceResponse
         """
         secret_data = params['secret_data']
-        # subscription_info = params['subscription_info']
-        subscription_info = {
-            'subscription_id': '3ec64e1e-1ce8-4f2c-82a0-a7f6db0899ca',
-            'subscription_name': 'Azure subscription 1',
-            'tenant_id': '35f43e22-0c0b-4ff3-90aa-b2c04ef1054c'
-        }
+        subscription_info = params['subscription_info']
+
         network_security_group_conn: NetworkSecurityGroupConnector = self.locator.get_connector(self.connector_name,**params)
         network_security_groups = []
         network_security_group_list = network_security_group_conn.list_all_network_security_groups()
@@ -91,6 +87,15 @@ class NetworkSecurityGroupManager(AzureManager):
             # Get Subnet information
             if network_security_group_dict.get('subnets') is not None:
                 network_security_group_dict['subnets'] = self.get_subnet(self, network_security_group_conn, network_security_group_dict['subnets'])
+
+                if network_security_group_dict.get('subnets'):
+                    try:
+                        for subnet in network_security_group_dict['subnets']:
+                            subnet.update({
+                                'virtual_network': self.get_virtual_network(subnet['id'])
+                            })
+                    except ValueError as e:
+                        print(f'[ERROR: Azure Network Security Group Manager Get Virtual Network from Subnets]: {e}')
 
             # update application_gateway_dict
             network_security_group_dict.update({
@@ -233,3 +238,12 @@ class NetworkSecurityGroupManager(AzureManager):
             except Exception as e:
                 print(f'[ERROR: Azure Network Security Group Manager Get Subnets]: {e}')
         return
+
+    @staticmethod
+    def get_virtual_network(subnet_id):
+        try:
+            virtual_network = subnet_id.split('/')[8]
+            return virtual_network
+
+        except Exception as e:
+            print(f'[ERROR: Azure Network Security Group Manager Get Virtual Network Name from Subnets]: {e}')

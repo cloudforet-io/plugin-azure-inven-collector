@@ -453,7 +453,7 @@ class NetworkInterfaceTapConfiguration(Model):
 class NetworkInterface(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
-    location = ModelType(ExtendedLocation, serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
     dns_settings = ModelType(NetworkInterfaceDnsSettings, serialize_when_none=False)
@@ -473,7 +473,294 @@ class NetworkInterface(Model):
     resource_guid = StringType(serialize_when_none=False)
     tap_configurations = ListType(ModelType(NetworkInterfaceTapConfiguration), serialize_when_none=False)
     virtual_machine = ModelType(SubResource, serialize_when_none=False)
+    virtual_machine_display = StringType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+### Subnet Class ###
+class ServiceEndpointPropertiesFormat(Model):
+    locations = ListType(StringType, serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    service = StringType(serialize_when_none=False)
+    subnet = StringType(serialize_when_none=False)
+
+
+class ApplicationGatewayIPConfiguration(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    subnet = ModelType(SubResource, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class Delegation(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType()
+    name = StringType(default='-', serialize_when_none=False)
+    actions = ListType(StringType, serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    service_name = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class IPConfigurationProfile(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    subnet = StringType(serialize_when_none=False)  # Change to Subnet ID
+    type = StringType(serialize_when_none=False)
+
+
+class AzureFirewallRCAction(Model):
+    type = StringType(choices=('Allow', 'Deny'), serialize_when_none=False)
+
+
+class AzureFirewallApplicationRuleProtocol(Model):
+    port = IntType(serialize_when_none=False)
+    protocol_type = StringType(choices=('Http', 'Https', 'Mssql'), serialize_when_none=False)
+
+
+class AzureFirewallApplicationRule(Model):
+    description = StringType(serialize_when_none=False)
+    fqdn_tags = ListType(StringType, serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    protocols = ListType(ModelType(AzureFirewallApplicationRuleProtocol), serialize_when_none=False)
+    source_addresses = ListType(StringType, serialize_when_none=False)
+    source_ip_groups = ListType(StringType, serialize_when_none=False)
+    target_fqdns = ListType(StringType, serialize_when_none=False)
+
+
+class AzureFirewallApplicationRuleCollection(Model):
+    etag = StringType()
+    id = StringType()
+    name = StringType(serialize_when_none=False)
+    action = ModelType(AzureFirewallRCAction, serialize_when_none=False)
+    priority = IntType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    rules = ListType(ModelType(AzureFirewallApplicationRule), serialize_when_none=False)
+
+
+class AzureFirewallPublicIPAddress(Model):
+    address = StringType(serialize_when_none=False)
+
+
+class HubPublicIPAddresses(Model):
+    address = ListType(ModelType(AzureFirewallPublicIPAddress), serialize_when_none=False)
+    count = IntType(serialize_when_none=False)
+
+
+class HubIPAddresses(Model):
+    private_ip_address = StringType(serialize_when_none=False)
+    public_ips = ModelType(HubPublicIPAddresses, serialize_when_none=False)
+
+
+class AzureFirewallIPConfiguration(Model):
+    etag = StringType()
+    id = StringType()
+    name = StringType(serialize_when_none=False)
+    private_ip_address = StringType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    public_ip_address = ModelType(SubResource, serialize_when_none=False)
+    subnet = ModelType(SubResource, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class AzureFirewallIpGroups(Model):
+    change_number = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+
+
+class AzureFirewallNatRule(Model):
+    description = StringType(serialize_when_none=False)
+    destination_addresses = ListType(StringType, serialize_when_none=False)
+    destination_ports = ListType(StringType, serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    protocols = ListType(StringType, serialize_when_none=False)
+    source_addresses = ListType(StringType, serialize_when_none=False)
+    source_ip_groups = ListType(StringType, serialize_when_none=False)
+    translated_address = StringType(serialize_when_none=False)
+    translated_fqdn = StringType(serialize_when_none=False)
+    translated_port = StringType(serialize_when_none=False)
+
+
+class AzureFirewallNatRuleCollection(Model):
+    etag = StringType()
+    id = StringType()
+    name = StringType(serialize_when_none=False)
+    action = StringType(choices=('Dnat', 'Snat'), serialize_when_none=False)
+    priority = IntType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    rules = ListType(ModelType(AzureFirewallNatRule), serialize_when_none=False)
+
+
+class AzureFirewallNetworkRule(Model):
+    description = StringType(serialize_when_none=False)
+    destination_addresses = ListType(StringType, serialize_when_none=False)
+    destination_ports = ListType(StringType, serialize_when_none=False)
+    destination_fqdns = ListType(StringType, serialize_when_none=False)
+    destination_ip_groups = ListType(StringType, serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    protocols = ListType(StringType, serialize_when_none=False)
+    source_addresses = ListType(StringType, serialize_when_none=False)
+    source_ip_groups = ListType(StringType, serialize_when_none=False)
+    translated_address = StringType(serialize_when_none=False)
+    translated_fqdn = StringType(serialize_when_none=False)
+    translated_port = StringType(serialize_when_none=False)
+
+
+class AzureFirewallNetworkRuleCollection(Model):
+    etag = StringType()
+    id = StringType()
+    name = StringType(serialize_when_none=False)
+    action = ModelType(AzureFirewallRCAction, serialize_when_none=False)
+    priority = IntType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    rules = ListType(ModelType(AzureFirewallNetworkRule), serialize_when_none=False)
+
+
+class AzureFirewallSku(Model):
+    name = StringType(choices=('AZFW_Hub', 'AZFW_VNet'), serialize_when_none=False)
+    tier = StringType(choices=('Premium', 'Standard'), serialize_when_none=False)
+
+
+class AzureFirewall(Model):
+    etag = StringType()
+    id = StringType()
+    location = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    subnet = StringType(serialize_when_none=False)
+    application_rule_collections = ListType(ModelType(AzureFirewallApplicationRuleCollection), serialize_when_none=False)
+    firewall_policy = ModelType(SubResource, serialize_when_none=False)
+    hub_ip_addresses = ModelType(HubIPAddresses, serialize_when_none=False)
+    ip_configurations = ListType(ModelType(AzureFirewallIPConfiguration), serialize_when_none=False)
+    ip_groups = ListType(ModelType(AzureFirewallIpGroups), serialize_when_none=False)
+    management_ip_configuration = ModelType(AzureFirewallIPConfiguration, serialize_when_none=False)
+    nat_rule_collections = ListType(ModelType(AzureFirewallNatRuleCollection), serialize_when_none=False)
+    network_rule_collections = ListType(ModelType(AzureFirewallNetworkRuleCollection), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    sku = ModelType(AzureFirewallSku, serialize_when_none=False)
+    threat_intel_mode = StringType(choices=('Alert', 'Deny', 'Off'), serialize_when_none=False)
+    virtual_hub = ModelType(SubResource, serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+    zones = ListType(StringType, serialize_when_none=False)
+
+
+class ResourceNavigationLink(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    link = StringType(serialize_when_none=False)
+    linked_resource_type = StringType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class Route(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    address_prefix = StringType(serialize_when_none=False)
+    next_hop_ip_address = StringType(serialize_when_none=False)
+    next_hop_type = StringType(choices=('Internet', 'None', 'VirtualAppliance', 'VirtualNetworkGateway', 'VnetLocal'),
+                               serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+
+
+class RouteTable(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    location = ModelType(ExtendedLocation, serialize_when_none=False)
+    disable_bgp_route_propagation = BooleanType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    routes = ListType(ModelType(Route), serialize_when_none=False)
+    subnets = ListType(StringType, default=[], serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class PrivateEndpoint(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    location = ModelType(ExtendedLocation, serialize_when_none=False)
+    extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    custom_dns_configs = ListType(ModelType(CustomDnsConfigPropertiesFormat), serialize_when_none=False)
+    manual_private_link_service_connections = ListType(ModelType(PrivateLinkServiceConnection),
+                                                       serialize_when_none=False)
+    network_interfaces = ListType(ModelType(NetworkInterface), serialize_when_none=False)
+    private_link_service_connections = ListType(ModelType(PrivateLinkServiceConnection), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    subnet = StringType(serialize_when_none=False)
+    resource_group = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class ServiceAssociationLink(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    allow_delete = BooleanType(serialize_when_none=False)
+    link = StringType(serialize_when_none=False)
+    linked_resource_type = StringType(serialize_when_none=False)
+    locations = ListType(ModelType(ExtendedLocation), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class ServiceEndpointPolicyDefinition(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    description = StringType(serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    service = StringType(serialize_when_none=False)
+    service_resources = ListType(StringType)
+
+
+class ServiceEndpointPolicy(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    location = ModelType(ExtendedLocation, serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    resource_guid = StringType(serialize_when_none=False)
+    service_endpoint_policy_definitions = ListType(ModelType(ServiceEndpointPolicyDefinition),
+                                                   serialize_when_none=False)
+    subnets = ListType(StringType, serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+
+
+class Subnet(Model):
+    etag = StringType(serialize_when_none=False)
+    id = StringType()
+    virtual_network = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    address_prefix = StringType(serialize_when_none=False)
+    address_prefixes = ListType(StringType, serialize_when_none=False)
+    application_gateway_ip_configurations = ModelType(ApplicationGatewayIPConfiguration, serialize_when_none=False)
+    delegations = ListType(ModelType(Delegation), serialize_when_none=False)
+    ip_allocations = ListType(ModelType(SubResource), serialize_when_none=False)
+    ip_configuration_profiles = ListType(ModelType(IPConfigurationProfile), serialize_when_none=False)
+    ip_configurations = ListType(ModelType(IPConfiguration), serialize_when_none=False)
+    azure_firewall = ListType(ModelType(AzureFirewall), serialize_when_none=False)
+    nat_gateway = ModelType(SubResource, serialize_when_none=False)
+    network_security_group = ModelType(NetworkSecurityGroup, serialize_when_none=False)
+    private_endpoint_network_policies = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
+    private_endpoints = ListType(ModelType(PrivateEndpoint), serialize_when_none=False)
+    private_link_service_network_policies = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    purpose = StringType(serialize_when_none=False)
+    resource_navigation_links = ListType(ModelType(ResourceNavigationLink, serialize_when_none=False))
+    route_table = ModelType(RouteTable, serialize_when_none=False)
+    service_association_links = ListType(ModelType(ServiceAssociationLink), serialize_when_none=False)
+    service_endpoint_policies = ListType(ModelType(ServiceEndpointPolicy), serialize_when_none=False)
+    service_endpoints = ListType(ModelType(ServiceEndpointPropertiesFormat), serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -488,7 +775,7 @@ class NetworkSecurityGroup(Model):
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
-    subnets = ListType(StringType, serialize_when_none=False)  # Change to Subnet IDs
+    subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
