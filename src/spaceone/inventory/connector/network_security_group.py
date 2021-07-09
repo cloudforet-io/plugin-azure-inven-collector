@@ -23,9 +23,9 @@ class NetworkSecurityGroupConnector(AzureConnector):
     def get_network_interfaces(self, network_interface_name, resource_group):
         try:
             obj = self.network_client.network_interfaces.get(network_interface_name=network_interface_name, resource_group_name=resource_group)
+            return obj
         except ConnectionError as e:
             print(f'[ERROR: Azure Connector Get Network Interfaces]: {e}')
-        return obj
 
     def get_subnet(self, resource_group_name, subnet_name, virtual_network_name):
         try:

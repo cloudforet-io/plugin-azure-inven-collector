@@ -74,7 +74,8 @@ class NetworkSecurityGroupManager(AzureManager):
 
             # get network interfaces
             if network_security_group_dict.get('network_interfaces') is not None:
-                self.get_network_interfaces(self, network_security_group_conn, network_security_group_dict['network_interfaces'])
+                new_network_interfaces_list = self.get_network_interfaces(self, network_security_group_conn, network_security_group_dict['network_interfaces'])
+                network_security_group_dict['network_interfaces'] = new_network_interfaces_list  # Remove existing list, append new list
 
             # Change Subnet models to ID
             if network_security_group_dict.get('network_interfaces') is not None:
@@ -165,54 +166,54 @@ class NetworkSecurityGroupManager(AzureManager):
 
     @staticmethod
     def get_network_interfaces(self, network_security_group_conn, network_interfaces_list):
+        network_interfaces_new_list = []
         try:
             for network_interface in network_interfaces_list:
-                try:
-                    resource_group = network_interface['id'].split('/')[4]
-                    network_interface_name = network_interface['id'].split('/')[8]
-                    network_interface_obj = network_security_group_conn.get_network_interfaces(network_interface_name,
-                                                                                               resource_group)
-                    network_interface_dict = self.convert_nested_dictionary(self, network_interface_obj)
+                resource_group = network_interface['id'].split('/')[4]
+                network_interface_name = network_interface['id'].split('/')[8]
+                network_interface_obj = network_security_group_conn.get_network_interfaces(network_interface_name, resource_group)
+                network_interface_dict = self.convert_nested_dictionary(self, network_interface_obj)
 
-                    if network_interface_dict['id'] == network_interface['id']:
-                        network_interfaces_list.remove(network_interface)
-                        network_interfaces_list.append(network_interface_dict)  # Replace empty dictionary with full dict
+                if network_interface_dict['id'] == network_interface['id']:
+                    # Get virtual machine display
+                    if network_interface_dict.get('virtual_machine') is not None:
+                        try:
+                            virtual_machine_display = network_interface_dict['virtual_machine']['id'].split('/')[8]
+                            network_interface_dict.update({
+                                'virtual_machine_display': virtual_machine_display
+                            })
+                        except Exception as e:
+                            print(f'[ERROR: Azure Network Security Group Manager Get Virtual Machine]: {e}')
 
-                except ValueError as e:
-                    print(f'[ERROR: Azure Network Security Group Manager Get Network Interfaces Detail Info]: {e}')
+                    network_interfaces_new_list.append(network_interface_dict)
+            return network_interfaces_new_list
 
         except Exception as e:
-            print(f'[ERROR: Azure Network Security Group Manager Get Network Interfaces]: {e}')
+            print(f'[ERROR: Azure Network Security Group Manager Network Interface List]: {e}')
 
     @staticmethod
     def get_ip_addresses(network_interfaces_list):
         if network_interfaces_list is not []:
             try:
-                private_ip_address = ''
-                public_ip_address = ''
-                virtual_machine_display = ''
                 for network_interface in network_interfaces_list:
                     if network_interface.get('ip_configurations') is not None:
                         for ip_configuration in network_interface['ip_configurations']:
                             private_ip_address = ip_configuration['private_ip_address']
+                            network_interface.update({
+                                'private_ip_address': private_ip_address
+                            })
 
                             if ip_configuration.get('public_ip_address') is not None:
                                 try:
                                     public_ip_address = ip_configuration['public_ip_address']['id'].split('/')[8]
+                                    network_interface.update({
+                                        'public_ip_address': public_ip_address,
+                                    })
                                 except Exception as e:
                                     print(f'[ERROR: Azure Network Security Group Manager Get Public IP Addresses]: {e}')
 
-                            if ip_configuration.get('virtual_machine') is not None:
-                                try:
-                                    virtual_machine_display = ip_configuration['virtual_machine']['id'].split('/')[8]
-                                except Exception as e:
-                                    print(f'[ERROR: Azure Network Security Group Manager Get Virtual Machine]: {e}')
 
-                    network_interface.update({
-                        'private_ip_address': private_ip_address,
-                        'public_ip_address': public_ip_address,
-                        'virtual_machine_display': virtual_machine_display
-                    })
+
             except Exception as e:
                 print(f'[ERROR: Azure Network Security Group Manager Get IP Addresses]: {e}')
         return

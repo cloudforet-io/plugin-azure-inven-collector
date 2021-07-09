@@ -462,6 +462,8 @@ class NetworkInterface(Model):
     enable_ip_forwarding = BooleanType(serialize_when_none=False)
     hosted_workloads = ListType(StringType, serialize_when_none=False)
     ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)
+    private_ip_address = StringType(serialize_when_none=False)
+    public_ip_address = StringType(serialize_when_none=False)
     mac_address = StringType(serialize_when_none=False)
     migration_phase = StringType(choices=('Abort', 'Commit', 'Committed', 'None', 'Prepare'), serialize_when_none=False)
     nic_type = StringType(choices=('Elastic', 'Standard'), serialize_when_none=False)
@@ -473,9 +475,10 @@ class NetworkInterface(Model):
     resource_guid = StringType(serialize_when_none=False)
     tap_configurations = ListType(ModelType(NetworkInterfaceTapConfiguration), serialize_when_none=False)
     virtual_machine = ModelType(SubResource, serialize_when_none=False)
-    virtual_machine_display = StringType(serialize_when_none=False)
+    virtual_machine_display = StringType(default='-')
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+
 
 ### Subnet Class ###
 class ServiceEndpointPropertiesFormat(Model):
@@ -768,8 +771,13 @@ class NetworkSecurityGroup(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
+    resource_group = StringType(serialize_when_none=False)
     name = StringType(default='-', serialize_when_none=False)
+    subscription_id = StringType(serialize_when_none=False)
+    subscription_name = StringType(serialize_when_none=False)
     default_security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
+    inbound_security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
+    outbound_security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
     flow_logs = ListType(ModelType(FlowLog), serialize_when_none=False)
     network_interfaces = ListType(ModelType(NetworkInterface), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
