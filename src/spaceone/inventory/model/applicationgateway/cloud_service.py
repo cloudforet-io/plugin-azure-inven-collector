@@ -12,7 +12,9 @@ APPLICATION_GATEWAY
 '''
 # TAB - Default
 application_gateway_info_meta = ItemDynamicLayout.set_fields('Application Gateway', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'data.name', options={
+        'is_optional': True
+    }),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
