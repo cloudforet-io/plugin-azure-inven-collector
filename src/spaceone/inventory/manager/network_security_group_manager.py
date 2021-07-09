@@ -30,7 +30,6 @@ class NetworkSecurityGroupManager(AzureManager):
         """
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
-
         network_security_group_conn: NetworkSecurityGroupConnector = self.locator.get_connector(self.connector_name,**params)
         network_security_groups = []
         network_security_group_list = network_security_group_conn.list_all_network_security_groups()
@@ -74,8 +73,11 @@ class NetworkSecurityGroupManager(AzureManager):
 
             # get network interfaces
             if network_security_group_dict.get('network_interfaces') is not None:
-                new_network_interfaces_list = self.get_network_interfaces(self, network_security_group_conn, network_security_group_dict['network_interfaces'])
+                new_network_interfaces_list, virtual_machines_display_str = self.get_network_interfaces(self, network_security_group_conn, network_security_group_dict['network_interfaces'])
                 network_security_group_dict['network_interfaces'] = new_network_interfaces_list  # Remove existing list, append new list
+                network_security_group_dict.update({
+                    'virtual_machines_display': virtual_machines_display_str
+                })
 
             # Change Subnet models to ID
             if network_security_group_dict.get('network_interfaces') is not None:
@@ -167,6 +169,8 @@ class NetworkSecurityGroupManager(AzureManager):
     @staticmethod
     def get_network_interfaces(self, network_security_group_conn, network_interfaces_list):
         network_interfaces_new_list = []
+        virtual_machines_display_list = []
+        virtual_machines_str = ''
         try:
             for network_interface in network_interfaces_list:
                 resource_group = network_interface['id'].split('/')[4]
@@ -179,6 +183,7 @@ class NetworkSecurityGroupManager(AzureManager):
                     if network_interface_dict.get('virtual_machine') is not None:
                         try:
                             virtual_machine_display = network_interface_dict['virtual_machine']['id'].split('/')[8]
+                            virtual_machines_display_list.append(virtual_machine_display)
                             network_interface_dict.update({
                                 'virtual_machine_display': virtual_machine_display
                             })
@@ -186,7 +191,8 @@ class NetworkSecurityGroupManager(AzureManager):
                             print(f'[ERROR: Azure Network Security Group Manager Get Virtual Machine]: {e}')
 
                     network_interfaces_new_list.append(network_interface_dict)
-            return network_interfaces_new_list
+                    virtual_machines_str = ', '.join(virtual_machines_display_list)
+            return network_interfaces_new_list, virtual_machines_str
 
         except Exception as e:
             print(f'[ERROR: Azure Network Security Group Manager Network Interface List]: {e}')
