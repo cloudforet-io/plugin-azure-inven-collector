@@ -29,11 +29,19 @@ application_gateway_info_meta = ItemDynamicLayout.set_fields('Application Gatewa
 
 # TAB - Configuration
 application_gateway_configuration = ItemDynamicLayout.set_fields('Configuration', fields=[
-    TextDyField.data_source('Capacity ', 'data.sku.tier'),
+    TextDyField.data_source('Capacity ', 'data.sku.tier', options={
+        'is_optional': True
+    }),
     # TextDyField.data_source('Capacity Type', ''),
-    TextDyField.data_source('Minimum Instance Count', 'data.autoscale_configuration.min_capacity'),
-    TextDyField.data_source('Maximum Instance Count', 'data.autoscale_configuration.max_capacity'),
-    TextDyField.data_source('Enable HTTP2', 'data.enable_http2')
+    TextDyField.data_source('Minimum Instance Count', 'data.autoscale_configuration.min_capacity', options= {
+        'is_optional': True
+    }),
+    TextDyField.data_source('Maximum Instance Count', 'data.autoscale_configuration.max_capacity', options= {
+        'is_optional': True
+    }),
+    TextDyField.data_source('Enable HTTP2', 'data.enable_http2',  options={
+        'is_optional': True
+    })
 ])
 
 # TAB - Subnets
@@ -48,18 +56,32 @@ application_gateway_web_app_firewall = ItemDynamicLayout.set_fields('Web Applica
         'safe': [True],
         'warning':[False]
     }),
-    TextDyField.data_source('Max Request Body Size(KB)', 'max_request_body_size_in_kb'),
-    TextDyField.data_source('File Upload Limit(MB)', 'file_upload_limit_in_mb'),
-    TextDyField.data_source('Rule Set Type', 'rule_set_type'),
-    TextDyField.data_source('Rule Set Version', 'rule_set_version')
+    TextDyField.data_source('Max Request Body Size(KB)', 'max_request_body_size_in_kb',  options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('File Upload Limit(MB)', 'file_upload_limit_in_mb',  options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Rule Set Type', 'rule_set_type',  options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Rule Set Version', 'rule_set_version', options={
+        'is_optional': True
+    })
     # TextDyField.data_source('Advanced Rule Configuration', ''),
 
 ])
 
 application_gateway_web_app_firewall_exclusions = SimpleTableDynamicLayout.set_fields('Exclusions', 'data.web_application_firewall_configuration.exclusions', fields=[
-    TextDyField.data_source('Field', 'match_variable'),
-    TextDyField.data_source('Operator', 'selector_match_operator'),
-    TextDyField.data_source('Selector', 'selector')
+    TextDyField.data_source('Field', 'match_variable', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Operator', 'selector_match_operator', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Selector', 'selector', options={
+        'is_optional': True
+    })
 ])
 
 application_gateway_web_app_firewall_meta = ListDynamicLayout.set_layouts('Web Application Firewall', layouts=[
@@ -70,16 +92,26 @@ application_gateway_web_app_firewall_meta = ListDynamicLayout.set_layouts('Web A
 # TAB - Backend Pools
 # Name,Rule Associated, Targets
 application_gateway_backend_pools = SimpleTableDynamicLayout.set_fields('Backend Pools', 'data.backend_address_pools', fields=[
-    TextDyField.data_source('Name', 'name'),
-    ListDyField.data_source('Rule Associated', 'associated_rules'),
+    TextDyField.data_source('Name', 'name', options={
+        'is_optional': True
+    }),
+    ListDyField.data_source('Rule Associated', 'associated_rules', options={
+        'is_optional': True
+    }),
     # TextDyField.data_source('Targets', '')
 ])
 
 # TAB - HTTP Settings
 application_gateway_http_settings = SimpleTableDynamicLayout.set_fields('HTTP Settings', 'data.backend_http_settings_collection', fields=[
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Port', 'port'),
-    TextDyField.data_source('Protocol', 'protocol'),
+    TextDyField.data_source('Name', 'name', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Port', 'port', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Protocol', 'protocol', options={
+        'is_optional': True
+    }),
     EnumDyField.data_source('Cookie Based Affinity', 'cookie_based_affinity', default_state={
         'safe': ['Enabled'],
         'warning': ['Disabled']
@@ -89,32 +121,62 @@ application_gateway_http_settings = SimpleTableDynamicLayout.set_fields('HTTP Se
 
 # TAB - SSL Settings
 application_gateway_ssl_settings = SimpleTableDynamicLayout.set_fields('SSL Settings', 'data.ssl_profiles', fields=[
-    TextDyField.data_source('Name', 'name'),
-    ListDyField.data_source('Client Certificates', 'trusted_client_certificates.id'),
-    TextDyField.data_source('SSL Policy Type', 'ssl_policy.policy_type'),
+    TextDyField.data_source('Name', 'name', options={
+        'is_optional': True
+    }),
+    ListDyField.data_source('Client Certificates', 'trusted_client_certificates.id', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('SSL Policy Type', 'ssl_policy.policy_type', options={
+        'is_optional': True
+    }),
 ])
 
 # TAB - Frontend IP Configurations
 application_gateway_frontend_ip_configurations = SimpleTableDynamicLayout.set_fields('Frontend IP Configurations', 'data.frontend_ip_configurations', fields=[
-    TextDyField.data_source('Type', 'ip_type'),
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('IP Address', 'ip_address'),
-    TextDyField.data_source('Associated Listeners', 'associated_listeners')
+    TextDyField.data_source('Type', 'ip_type', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Name', 'name', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('IP Address', 'ip_address', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Associated Listeners', 'associated_listeners', options={
+        'is_optional': True
+    })
 ])
 
 # TAB - Listeners
 application_gateway_listeners = SimpleTableDynamicLayout.set_fields('Listeners', 'data.http_listeners', fields=[
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Protocol', 'protocol'),
-    TextDyField.data_source('Port', 'port'),
-    TextDyField.data_source('Associated Rule', 'associated_rules'),
-    TextDyField.data_source('Host name', 'host_name')
+    TextDyField.data_source('Name', 'name', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Protocol', 'protocol', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Port', 'port', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Associated Rule', 'associated_rules', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Host name', 'host_name', options={
+        'is_optional': True
+    })
 ])
 
 application_gateway_listeners_custom = SimpleTableDynamicLayout.set_fields('Custom Error Configurations', 'data.custom_error_configurations', fields=[
-    TextDyField.data_source('Listener Name', 'listener_name'),
-    TextDyField.data_source('Status Code', 'status_code'),
-    TextDyField.data_source('Custom Error Page URL', 'custom_error_page_url')
+    TextDyField.data_source('Listener Name', 'listener_name', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Status Code', 'status_code', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Custom Error Page URL', 'custom_error_page_url', options={
+        'is_optional': True
+    })
 ])
 
 # 1 + 2) TAB - Listeners
@@ -124,27 +186,51 @@ application_gateway_listeners_info = ListDynamicLayout.set_layouts('Listeners', 
 
 # TAB - Rules
 application_gateway_rules = SimpleTableDynamicLayout.set_fields('Rules', 'data.request_routing_rules', fields=[
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Type', 'rule_type'),
-    TextDyField.data_source('Listener', 'http_listener_name'),
+    TextDyField.data_source('Name', 'name', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Type', 'rule_type', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Listener', 'http_listener_name', options={
+        'is_optional': True
+    }),
     ListDyField.data_source('Rule Configuration', 'rule_configuration')
 ])
 
 # TAB - Rewrites
 application_gateway_rewrites = SimpleTableDynamicLayout.set_fields('Rewrites', 'data.rewrite_rule_sets', fields=[
-    TextDyField.data_source('Rewrite Sets', 'name'),
-    TextDyField.data_source('Type', 'rule_type'),
-    TextDyField.data_source('Rules Applied', 'rules_applied'),
-    ListDyField.data_source('Rewrite Rule Configuration', 'rewrite_rules_display')
+    TextDyField.data_source('Rewrite Sets', 'name', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Type', 'rule_type', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Rules Applied', 'rules_applied', options={
+        'is_optional': True
+    }),
+    ListDyField.data_source('Rewrite Rule Configuration', 'rewrite_rules_display', options={
+        'is_optional': True
+    })
 ])
 
 # TAB - Health Probes
 application_gateway_health_probes = SimpleTableDynamicLayout.set_fields('Health Probes', 'data.probes', fields=[
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Protocol', 'protocol'),
-    TextDyField.data_source('Host', 'host'),
-    TextDyField.data_source('Path', 'path'),
-    TextDyField.data_source('Timeout(Seconds)', 'timeout')
+    TextDyField.data_source('Name', 'name', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Protocol', 'protocol', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Host', 'host', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Path', 'path', options={
+        'is_optional': True
+    }),
+    TextDyField.data_source('Timeout(Seconds)', 'timeout', options={
+        'is_optional': True
+    })
 ])
 
 # TAB - tags
