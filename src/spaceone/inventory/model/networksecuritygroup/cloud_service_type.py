@@ -31,8 +31,7 @@ cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Flow Log', key='data', data_type='string')
-
+        SearchField.set(name='Virtual Machines', key='data.virtual_machines_display', data_type='string')
     ]
 )
 
