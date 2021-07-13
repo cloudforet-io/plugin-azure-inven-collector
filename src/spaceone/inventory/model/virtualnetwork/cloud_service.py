@@ -43,7 +43,7 @@ virtual_network_connected_devices = SimpleTableDynamicLayout.set_fields('Connect
     TextDyField.data_source('Device', 'device'),
     TextDyField.data_source('Type', 'type'),
     # TextDyField.data_source('IP Address', ''),
-    TextDyField.data_source('Subnet', 'name')
+    TextDyField.data_source('Subnet', 'name')  # TODO : 210713
 ])
 
 # TAB - Subnets

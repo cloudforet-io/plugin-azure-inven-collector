@@ -24,7 +24,18 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        DateTimeDyField.data_source('Time created', 'data.time_created')
+        DateTimeDyField.data_source('Time created', 'data.time_created'),
+
+        # is_optional fields - Default
+        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Encryption Type', 'data.encryption.type_display', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Network Access Policy', 'data.network_access_policy_display', options={
+            'is_optional': True
+        })
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),

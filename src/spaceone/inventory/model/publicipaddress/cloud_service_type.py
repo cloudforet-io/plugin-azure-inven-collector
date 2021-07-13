@@ -21,7 +21,36 @@ cst_public_ip_address._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        TextDyField.data_source('Associated To', 'data.associated_to')
+        TextDyField.data_source('Associated To', 'data.associated_to'),
+
+        # is_optional fields - Default
+        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('SKU', 'data.sku.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Tier', 'data.sku.tier', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('IP Address', 'data.ip_address', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('DNS Name', 'data.dns_settings.fqdn', options={
+            'is_optional': True
+        }),
+
+        # is_optional fields - Configuration
+        TextDyField.data_source('IP Address Assignment', 'data.public_ip_allocation_method', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Idle Timeout(Minutes)', 'data.idle_timeout_in_minutes', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('DNS Name Label(Optional)', 'data.dns_settings.domain_name_label', options={
+            'is_optional': True
+        })
+
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),

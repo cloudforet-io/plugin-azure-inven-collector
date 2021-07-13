@@ -22,7 +22,71 @@ cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
         TextDyField.data_source('Subscription Name', 'data.subscription_name'),
-        TextDyField.data_source('Virtual Machines', 'data.virtual_machines_display')
+        TextDyField.data_source('Virtual Machines', 'data.virtual_machines_display'),
+        # is_optional fields - Inbound Security Rules
+        TextDyField.data_source('Inbound Security Rule Priority', 'data.inbound_security_rules.priority', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Inbound Security Rule Name', 'data.inbound_security_rules.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Inbound Security Rule Port', 'data.inbound_security_rules.destination_port_range', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Inbound Security Rule Protocol', 'data.inbound_security_rules.protocol', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Inbound Security Rule Source', 'data.inbound_security_rules.source_address_prefix', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Inbound Security Rule Destination', 'data.inbound_security_rules.destination_address_prefix', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Inbound Security Rule Action', 'data.inbound_security_rules.access', options={
+            'is_optional': True
+        }),
+        # is_optional fields - Outbound Security Rules
+        TextDyField.data_source('Priority', 'data.outbound_security_rules.priority', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Name', 'data.outbound_security_rules.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Port', 'data.outbound_security_rules.destination_port_range', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Protocol', 'data.outbound_security_rules.protocol', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Source', 'data.outbound_security_rules.source_address_prefix', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Destination', 'data.outbound_security_rules.destination_address_prefix', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Action', 'data.outbound_security_rules.access', options={
+            'is_optional': True
+        }),
+        # is_optional_field - Network Interfaces
+        TextDyField.data_source('Network Interface Name', 'data.network_interfaces.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Network Interface Public IP Address', 'data.network_interfaces.public_ip_address', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Network Interface Private IP Address', 'data.network_interfaces.private_ip_address', options={
+            'is_optional': True
+        }),
+        # is_optional field - Subnets
+        TextDyField.data_source('Subnet Name', 'data.subnets.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Subnet Address Range', 'data.subnets.address_prefix', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Virtual Network', 'data.subnets.virtual_network', options={
+            'is_optional': True
+        })
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),

@@ -17,7 +17,7 @@ cst_sql_database.tags = {
 
 cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Database Name', 'data.name'),
         EnumDyField.data_source('Status', 'data.status', default_state={
             'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring',
                      'Resuming', 'Scaling', 'Standby'],
@@ -33,6 +33,72 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
+
+        # is_optional fields - Default
+        TextDyField.data_source('Resource ID', 'data.id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Server Name', 'data.server_name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Elastic Pool', 'data.elastic_pool_id', options={
+            'is_optional': True
+        }),
+        DateTimeDyField.data_source('Earliest Restore Point', 'data.earliest_restore_date', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Collation', 'data.collation', options={
+            'is_optional': True
+        }),
+        DateTimeDyField.data_source('Creation Date', 'data.creation_date', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Server Admin Login', 'data.administrator_login', options={
+            'is_optional': True
+        }),
+
+        # is_optional fields - Configure
+        TextDyField.data_source('Service Tier', 'data.service_tier_display', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Compute Tier', 'data.compute_tier', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Compute Hardware', 'data.sku.family', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Licence Type', 'data.license_type', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('vCores', 'data.current_sku.capacity', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Data max size', 'data.max_size_gb', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Zone Redundant', 'data.zone_redundant', options={
+            'is_optional': True
+        }),
+        ListDyField.data_source('Sync Groups', 'data.sync_group_display', options={
+            'is_optional': True
+        }),
+        ListDyField.data_source('Sync Agents', 'data.sync_agent_display', options={
+            'is_optional': True
+        }),
+
+        # is_optional fields - Diagnostic Settings
+        TextDyField.data_source('Diagnostic Setting Name', 'data.diagnostic_settings_resource.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Diagnostic Setting Storage Account', 'data.diagnostic_settings_resource.storage_account_id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Event Hub', 'data.diagnostic_settings_resource.event_hub_name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Log Analytics Workspace', 'data.diagnostic_settings_resource.workspace_id', options={
+            'is_optional': True
+        })
 
     ],
     search=[
