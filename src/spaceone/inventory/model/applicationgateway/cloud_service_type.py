@@ -22,7 +22,16 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Private IP Address', 'data.private_ip_address'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name')
+        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Virtual Network', 'data.virtual_network', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Subnet', 'data.subnet', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Tier', 'data.sku.tier', options={
+            'is_optional': True
+        })
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
