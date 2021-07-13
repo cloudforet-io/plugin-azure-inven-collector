@@ -29,9 +29,7 @@ application_gateway_info_meta = ItemDynamicLayout.set_fields('Application Gatewa
 
 # TAB - Configuration
 application_gateway_configuration = ItemDynamicLayout.set_fields('Configuration', fields=[
-    TextDyField.data_source('Capacity ', 'data.sku.tier', options={
-        'is_optional': True
-    }),
+    TextDyField.data_source('Capacity ', 'data.sku.tier'),
     # TextDyField.data_source('Capacity Type', ''),
     TextDyField.data_source('Minimum Instance Count', 'data.autoscale_configuration.min_capacity', options= {
         'is_optional': True
