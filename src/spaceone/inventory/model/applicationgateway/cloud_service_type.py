@@ -45,6 +45,12 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('File Upload Limit(MB)', 'data.web_application_firewall_configuration.file_upload_limit_in_mb', options={
             'is_optional': True
         }),
+        TextDyField.data_source('Name', 'data.backend_address_pools.name', options={
+            'is_optional': True
+        }),
+        ListDyField.data_source('Rule Associated', 'data.backend_address_pools.associated_rules', options={
+            'is_optional': True
+        }),
 
 
     ],
