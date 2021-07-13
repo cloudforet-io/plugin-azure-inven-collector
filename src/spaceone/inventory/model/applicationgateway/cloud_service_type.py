@@ -23,7 +23,7 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        # is_optional fields
+        # is_optional fields - Configuration
         TextDyField.data_source('Capacity ', 'data.sku.tier', options={
             'is_optional': True
         }),
@@ -36,6 +36,7 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Enable HTTP2', 'data.enable_http2',  options={
             'is_optional': True
         }),
+        # is_optional fields - Firewall
         TextDyField.data_source('Firewall Mode', 'data.web_application_firewall_configuration.firewall_mode', options={
             'is_optional': True
         }),
@@ -45,13 +46,94 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('File Upload Limit(MB)', 'data.web_application_firewall_configuration.file_upload_limit_in_mb', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Name', 'data.backend_address_pools.name', options={
+        TextDyField.data_source('Rule Set Type', 'data.web_application_firewall_configuration.rule_set_type',  options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Rule Set Version', 'data.web_application_firewall_configuration.rule_set_version', options={
+            'is_optional': True
+        }),
+        # is_optional fields - Firewall
+        TextDyField.data_source('Backend Pool Name', 'data.backend_address_pools.name', options={
             'is_optional': True
         }),
         ListDyField.data_source('Rule Associated', 'data.backend_address_pools.associated_rules', options={
             'is_optional': True
         }),
-
+        # is_optional fields - HTTP Settings
+        TextDyField.data_source('Name', 'data.backend_http_settings_collection.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Port', 'data.backend_http_settings_collection.port', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Protocol', 'data.backend_http_settings_collection.protocol', options={
+            'is_optional': True
+        }),
+        # is_optional fields - SSL settings
+        TextDyField.data_source('SSL Profile Name', 'data.ssl_profiles.name', options={
+            'is_optional': True
+        }),
+        ListDyField.data_source('Client Certificates', 'data.ssl_profiles.trusted_client_certificates.id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('SSL Policy Type', 'data.ssl_profiles.ssl_policy.policy_type', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Type', 'ip_type', options={
+            'is_optional': True
+        }),
+        # is_optional fields - Frontend IP Configurations
+        TextDyField.data_source('Frontend IP Configuration Name', 'data.frontend_ip_configurations.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Frontend IP Address', 'data.frontend_ip_configurations.ip_address', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Frontend Associated Listeners', 'data.frontend_ip_configurations.associated_listeners', options={
+            'is_optional': True
+        }),
+        # is_optional fields - Listeners
+        TextDyField.data_source('Listener Name', 'data.http_listeners.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Listener Protocol', 'data.http_listeners.protocol', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Listener Port', 'data.http_listeners.port', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Listener Associated Rule', 'data.http_listeners.associated_rules', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Listener Host name', 'data.http_listeners.host_name', options={
+            'is_optional': True
+        }),
+        # is_optional fields - Rules
+        TextDyField.data_source('Rule Name', 'data.request_routing_rules.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Rule Type', 'data.request_routing_rules.rule_type', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Rule Listener', 'data.request_routing_rules.http_listener_name', options={
+            'is_optional': True
+        }),
+        # is_optional fields - Health Probes
+        TextDyField.data_source('Health Probes Name', 'data.probes.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Health Probes Protocol', 'data.probes.protocol', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Health Probes Host', 'data.probes.host', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Health Probes Path', 'data.probes.path', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Health Probes Timeout(Seconds)', 'data.probes.timeout', options={
+            'is_optional': True
+        })
 
     ],
     search=[
