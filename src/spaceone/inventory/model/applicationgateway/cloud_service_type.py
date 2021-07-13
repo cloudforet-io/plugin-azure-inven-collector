@@ -23,15 +23,30 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        TextDyField.data_source('Virtual Network', 'data.virtual_network', options={
+        # is_optional fields
+        TextDyField.data_source('Capacity ', 'data.sku.tier', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subnet', 'data.subnet', options={
+        TextDyField.data_source('Minimum Instance Count', 'data.autoscale_configuration.min_capacity', options= {
             'is_optional': True
         }),
-        TextDyField.data_source('Tier', 'data.sku.tier', options={
+        TextDyField.data_source('Maximum Instance Count', 'data.autoscale_configuration.max_capacity', options= {
             'is_optional': True
-        })
+        }),
+        TextDyField.data_source('Enable HTTP2', 'data.enable_http2',  options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Firewall Mode', 'data.web_application_firewall_configuration.firewall_mode', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Max Request Body Size(KB)', 'data.web_application_firewall_configuration.max_request_body_size_in_kb', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('File Upload Limit(MB)', 'data.web_application_firewall_configuration.file_upload_limit_in_mb', options={
+            'is_optional': True
+        }),
+
+
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
