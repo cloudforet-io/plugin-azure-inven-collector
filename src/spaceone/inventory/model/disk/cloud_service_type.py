@@ -29,7 +29,27 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Owner', 'data.managed_by'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name')
+        TextDyField.data_source('Subscription', 'data.subscription_name'),
+
+        # is_optional - Default
+        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+            'is_optional': True
+        }),
+        ListDyField.data_source('Zones', 'data.zones', options={
+            'delimiter': '<br>',
+            'is_optional': True
+        }),
+        TextDyField.data_source('Encryption Type', 'data.encryption.type', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Networking', 'data.network_access_policy_display', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Max Shares', 'data.max_shares', options={
+            'is_optional': True
+        })
+
+
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
