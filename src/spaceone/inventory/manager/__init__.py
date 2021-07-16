@@ -8,3 +8,4 @@ from spaceone.inventory.manager.virtual_network_manager import VirtualNetworkMan
 from spaceone.inventory.manager.application_gateway_manager import ApplicationGatewayManager
 from spaceone.inventory.manager.public_ip_address_manager import PublicIPAddressManager
 from spaceone.inventory.manager.network_security_group_manager import NetworkSecurityGroupManager
+from spaceone.inventory.manager.nat_gateway_manager import NATGatewayManager

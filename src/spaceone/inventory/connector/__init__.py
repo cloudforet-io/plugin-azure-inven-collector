@@ -9,3 +9,4 @@ from spaceone.inventory.connector.virtual_network import VirtualNetworkConnector
 from spaceone.inventory.connector.application_gateway import ApplicationGatewayConnector
 from spaceone.inventory.connector.public_ip_address import PublicIPAddressConnector
 from spaceone.inventory.connector.network_security_group import NetworkSecurityGroupConnector
+from spaceone.inventory.connector.nat_gateway import NATGatewayConnector
