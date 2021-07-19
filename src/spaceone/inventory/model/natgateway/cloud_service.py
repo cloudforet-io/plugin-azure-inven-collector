@@ -67,7 +67,7 @@ class ComputeResource(CloudServiceResource):
 
 
 class NatGatewayResource(ComputeResource):
-    cloud_service_type = StringType(default='NatGateway')
+    cloud_service_type = StringType(default='NATGateway')
     data = ModelType(NatGateway)
     _metadata = ModelType(CloudServiceMeta, default=nat_gateway_meta, serialized_name='metadata')
     name = StringType()
