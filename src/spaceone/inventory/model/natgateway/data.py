@@ -508,12 +508,44 @@ class PublicIPAddressSku(Model):
     tier = StringType(choices=('Global', 'Regional'), serialize_when_none=False)
 
 
+class ReferencedPublicIPAddress(Model):
+    id = StringType(serialize_when_none=False)
+
+
+class PublicIPPrefix(Model):
+    etag = StringType(serialize_when_none=False)
+    extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
+    custom_ip_prefix = ModelType(SubResource)
+    ip_prefix = StringType(serialize_when_none=False)
+    ip_tags = ListType(ModelType(IpTag), serialize_when_none=False)
+    load_balancer_frontend_ip_configuration = ModelType(SubResource)
+    nat_gateway = StringType(serialize_when_none=False),  # Change to NAT id
+    prefix_length = IntType(serialize_when_none=False),
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    public_ip_address_version = StringType(choices=('IPv4', 'IPv6'), serialize_when_none=False)
+    public_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
+    public_ip_addresses = ListType(ModelType(ReferencedPublicIPAddress), serialize_when_none=False)
+    resource_guid = StringType(serialize_when_none=False)
+    sku = ModelType(PublicIPAddressSku, serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+    zones = ListType(StringType, serialize_when_none=False)
+
+
+class PublicIPPrefixSku(Model):
+    name = StringType(serialize_when_none=False)
+    tier = StringType(choices=('Global', 'Regional'), serialize_when_none=False)
+
+
 class PublicIPAddress(Model):
     etag = StringType(serialize_when_none=False)
     extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    location = ModelType(ExtendedLocation, serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
     ddos_settings = ModelType(DdosSettings, serialize_when_none=False)
     dns_settings = ModelType(PublicIPAddressDnsSettings, serialize_when_none=False)
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
@@ -528,7 +560,7 @@ class PublicIPAddress(Model):
     public_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
     public_ip_prefix = ModelType(SubResource, serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
-    sku = ModelType(PublicIPAddressSku, serialize_when_none=False)
+    sku = ModelType(PublicIPPrefixSku, serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
@@ -875,9 +907,9 @@ class NatGateway(Model):  # Main class
     location = StringType(serialize_when_none=False)
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
-    public_ip_addresses = ListType(ModelType(SubResource), serialize_when_none=False)
+    public_ip_addresses = ListType(ModelType(PublicIPAddress), serialize_when_none=False)
     public_ip_addresses_count = IntType(default=0)
-    public_ip_prefixes = ListType(ModelType(SubResource), serialize_when_none=False)
+    public_ip_prefixes = ListType(ModelType(PublicIPPrefix), serialize_when_none=False)
     public_ip_prefixes_count = IntType(default=0)
     resource_guid = StringType(serialize_when_none=False)
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
