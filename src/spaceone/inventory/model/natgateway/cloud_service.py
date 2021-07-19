@@ -18,91 +18,48 @@ virtual_network_info_meta = ItemDynamicLayout.set_fields('NAT Gateway', fields=[
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
     TextDyField.data_source('Subscription ID', 'data.subscription_id'),
-    ListDyField.data_source('DNS servers', 'data.dhcp_options.dns_servers'),
-    EnumDyField.data_source('DDoS Protection Standard', 'data.enable_ddos_protection', default_state={
-        'safe': ['True'],
-        'warning': ['False']
+    TextDyField.data_source('Subnets', 'data.subnets_count'),
+    TextDyField.data_source('Public IP Addresses', 'data.public_ip_addresses_count'),
+    TextDyField.data_source('Public IP Prefixes', 'data.public_ip_prefixes_count'),
+    TextDyField.data_source('Idle Timeout (minutes)', 'data.idle_timeout_in_minutes'),
+])
+
+# TAB - Outbound IP
+nat_gateway_outbound_ip_public_ip_addresses = SimpleTableDynamicLayout.set_fields('Public IP Addresses', 'data.public_ip_addresses', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('IP Address', 'ip_address'),
+    TextDyField.data_source('DNS Name', 'dns_settings.domain_name_label')
+])
+
+nat_gateway_outbound_ip_public_ip_prefixes = SimpleTableDynamicLayout.set_fields('Public IP Prefixes', 'data.public_ip_prefixes', fields=[
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('IP Prefix', 'ip_prefix')
+])
+nat_gateway_outbound_ip_info = ListDynamicLayout.set_layouts('Outbound IP', layouts=[nat_gateway_outbound_ip_public_ip_addresses, nat_gateway_outbound_ip_public_ip_prefixes])
+
+nat_gateway_subnets = SimpleTableDynamicLayout.set_fields('Subnets', 'data.subnets', fields=[
+    TextDyField.data_source('Subnet Name', 'name'),
+    TextDyField.data_source('Subnet Address ', 'address_prefix'),
+    TextDyField.data_source('Subnet Addresses', 'address_prefixes'),
+    TextDyField.data_source('Virtual Network', 'virtual_network'),
+    EnumDyField.data_source('Private Endpoint Network Policies', 'private_endpoint_network_policies', default_state={
+        'safe': ['Enabled'],
+        'warning': ['Disabled']
     }),
-    TextDyField.data_source('Resource GUID', 'data.resource_guid'),
-    ListDyField.data_source('Address Space', 'data.address_space.address_prefixes')
-])
-
-
-'''
-# TAB - Address Space - 
-# Address space, Address range, Address count
-virtual_network_address_space = ItemDynamicLayout.set_fields('Address Space', 'data.address_space', fields=[
-    ListDyField.data_source('Address Space', 'address_prefixes'),
-    TextDyField.data_source('Address Range', ''),
-    TextDyField.data_source('Address Count', '')
-])
-'''
-
-# TAB - Connected Devices
-virtual_network_connected_devices = SimpleTableDynamicLayout.set_fields('Connected Devices', 'data.connected_devices', fields=[
-    TextDyField.data_source('Device', 'device'),
-    TextDyField.data_source('Type', 'type'),
-    # TextDyField.data_source('IP Address', ''),
-    TextDyField.data_source('Subnet', 'name')
-])
-
-# TAB - Subnets
-# Name, IPv4, IPv6, Available Ips, Delegated To, Security Group
-virtual_network_subnets = SimpleTableDynamicLayout.set_fields('Subnets', 'data.subnets', fields=[
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('IP Address Prefix', 'address_prefix'),
-    ListDyField.data_source('IP Address Prefixes', 'address_prefixes'),
-    TextDyField.data_source('Delegated To', 'delegations.name'),
-    TextDyField.data_source('Security Group', 'network_security_group.name')
-])
-
-
-# TAB - Firewall
-# Name, IP Address, Subnet
-virtual_network_firewall = SimpleTableDynamicLayout.set_fields('Firewall', 'data.azure_firewall', fields=[
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('IP Address', 'ip_configurations.private_ip_address'),
-    TextDyField.data_source('Subnet', 'subnet')
-])
-
-# TAB - Peerings
-# Name, Peering Status, Peer, Gateway Transit
-virtual_network_peerings = SimpleTableDynamicLayout.set_fields('Peerings', 'data.virtual_network_peerings', fields=[
-    TextDyField.data_source('Name', 'name'),
-    EnumDyField.data_source('Peering Status', 'peering_state', default_state={
-        'safe': ['Connected'],
-        'warning': ['Disconnected', 'Initiated']
-    }),
-    TextDyField.data_source('Peer', 'remote_virtual_network.id'),
-    TextDyField.data_source('Gateway Transit', 'allow_gateway_transit')
-])
-
-virtual_network_service_endpoints = SimpleTableDynamicLayout.set_fields('Service Endpoints', 'data.service_endpoints', fields=[
-    TextDyField.data_source('Service', 'service'),
-    TextDyField.data_source('Subnet', 'subnet'),
-    EnumDyField.data_source('Status', 'provisioning_state', default_state={
-        'safe': ['Succeeded'],
-        'warning': ['Failed', 'Deleting', 'Updating']
-    }),
-    TextDyField.data_source('Locations', 'locations')
-])
-
-# TAB - Private Endpoints
-virtual_network_private_endpoints = SimpleTableDynamicLayout.set_fields('Private Endpoints', 'data.private_endpoints', fields=[
-    TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Subnet', 'subnet'),
-    TextDyField.data_source('Resource Group', 'resource_group')
+    EnumDyField.data_source('Private Link Service Network Policies', 'private_link_service_network_policies', default_state={
+        'safe': ['Enabled'],
+        'warning': ['Disabled']
+    })
 ])
 
 # TAB - tags
-virtual_network_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
+nat_gateway_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
     TextDyField.data_source('Key', 'key'),
     TextDyField.data_source('Value', 'value')
 ])
 
 nat_gateway_meta = CloudServiceMeta.set_layouts(
-    [virtual_network_info_meta, virtual_network_connected_devices,
-     virtual_network_subnets, virtual_network_firewall, virtual_network_peerings, virtual_network_service_endpoints, virtual_network_private_endpoints, virtual_network_tags])
+    [virtual_network_info_meta, nat_gateway_outbound_ip_info, nat_gateway_subnets, nat_gateway_tags])
 
 
 class ComputeResource(CloudServiceResource):

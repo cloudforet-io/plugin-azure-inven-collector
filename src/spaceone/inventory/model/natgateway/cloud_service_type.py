@@ -18,96 +18,47 @@ cst_nat_gateway.tags = {
 cst_nat_gateway._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+        TextDyField.data_source('Subnets', 'data.subnets_count'),
+        TextDyField.data_source('Public IP Addresses', 'data.public_ip_prefixes_count'),
+        TextDyField.data_source('Public IP Prefixes', 'data.public_ip_prefixes_count'),
 
-        # is_optional fields - Default
-        TextDyField.data_source('Resource ID', 'data.id', options={
+        # is_optional fields - Public IP Addresses
+        TextDyField.data_source('Name', 'data.public_ip_addresses.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+        TextDyField.data_source('IP Address', 'data.public_ip_addresses.ip_address', options={
             'is_optional': True
         }),
-        ListDyField.data_source('DNS servers', 'data.dhcp_options.dns_servers', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Resource GUID', 'data.resource_guid', options={
-            'is_optional': True
-        }),
-        ListDyField.data_source('Address Space', 'data.address_space.address_prefixes', options={
+        TextDyField.data_source('DNS Name', 'data.public_ip_addresses.dns_settings.domain_name_label', options={
             'is_optional': True
         }),
 
-        # is_optional fields - Connected Devices
-        TextDyField.data_source('Connected Device', 'data.connected_devices.device', options={
+        # is_optional fields - Public IP Prefixes
+        TextDyField.data_source('Name', 'data.public_ip_prefixes.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Connected Device Type', 'data.connected_devices.type', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Connected Subnet', 'data.connected_devices.name', options={
+        TextDyField.data_source('IP Prefix', 'data.public_ip_prefixes.ip_prefix', options={
             'is_optional': True
         }),
 
-        # is_optional fields -Subnets
+        # is_optional fields - Subnets
         TextDyField.data_source('Subnet Name', 'data.subnets.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('IP Address Prefix', 'data.subnets.address_prefix', options={
+        TextDyField.data_source('Subnet Address ', 'data.subnets.address_prefix', options={
             'is_optional': True
         }),
-        ListDyField.data_source('IP Address Prefixes', 'data.subnets.address_prefixes', options={
+        TextDyField.data_source('Subnet Addresses', 'data.subnets.address_prefixes', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Delegated To', 'data.subnets.delegations.name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Security Group', 'data.subnets.network_security_group.name', options={
-            'is_optional': True
-        }),
-
-        # is optional fields - Firewall
-        TextDyField.data_source('Firewall Name', 'data.azure_firewall.name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Firewall IP Address', 'data.azure_firewall.ip_configurations.private_ip_address', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Firewall Subnet', 'data.azure_firewall.subnet', options={
-            'is_optional': True
-        }),
-
-        # is_optional fields - Peerings
-        TextDyField.data_source('Peering Name', 'data.virtual_network_peerings.name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Peer', 'data.virtual_network_peerings.remote_virtual_network.id', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Peer Gateway Transit', 'data.virtual_network_peerings.allow_gateway_transit', options={
-            'is_optional': True
-        }),
-
-        # is optional fields - Service Endpoints
-        TextDyField.data_source('Service', 'data.service_endpoints.service', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Subnet', 'data.service_endpoints.subnet', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Locations', 'data.service_endpoints.locations', options={
-            'is_optional': True
-        }),
-
-        # is optional fields - Private Endpoints
-        TextDyField.data_source('Private Endpoint', 'data.private_endpoints.name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Private Endpoint Subnet', 'data.private_endpoints.subnet', options={
+        TextDyField.data_source('Virtual Network', 'data.subnets.virtual_network', options={
             'is_optional': True
         })
-
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),

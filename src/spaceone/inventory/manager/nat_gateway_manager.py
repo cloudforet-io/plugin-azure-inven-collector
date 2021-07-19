@@ -45,7 +45,64 @@ class NATGatewayManager(AzureManager):
                 'subscription_id': subscription_info['subscription_id'],
                 'subscription_name': subscription_info['subscription_name'],
             })
-            # if nat_gateway_dict.get('public_ip_addresses') is not None:
+            if nat_gateway_dict.get('public_ip_addresses') is not None:
+                # Get Count of Public IP Address
+                try:
+                    nat_gateway_dict.update({
+                        'public_ip_addresses_count': len(nat_gateway_dict['public_ip_addresses'])
+                    })
+                except Exception as e:
+                    print(f'[ERROR]: Azure NAT Gateway Manager]: Get Public IP Addresses Count: {e}')
+
+                # Get Public IP Address Dictionary
+                try:
+                    if not nat_gateway_dict['public_ip_addresses']:
+                        break
+
+                    pip_list = []
+
+                    for pip in nat_gateway_dict['public_ip_addresses']:
+                        public_ip_prefixes_id = pip['id']
+                        pip_dict = self.get_public_ip_address_dict(self, nat_gateway_conn, public_ip_prefixes_id)
+                        pip_list.append(pip_dict)
+
+                    nat_gateway_dict['public_ip_addresses'] = pip_list
+
+                except Exception as e:
+                    print(f'[ERROR: Azure NAT Gateway Manager Get Public IP Addresses Dictionary]: {e}')
+
+            if nat_gateway_dict.get('public_ip_prefixes') is not None:
+                try:
+                    nat_gateway_dict.update({
+                        'public_ip_prefixes_count':  len(nat_gateway_dict['public_ip_addresses'])
+                    })
+                except Exception as e:
+                    print(f'[ERROR: Azure NAT Gateway Manager Get Public IP Prefixes Count]: {e}')
+
+                # Get Public IP Address Dictionary
+                try:
+                    if not nat_gateway_dict['public_ip_prefixes']:
+                        break
+
+                    pip_list = []
+
+                    for pip in nat_gateway_dict['public_ip_prefixes']:
+                        public_ip_prefixes_id = pip['id']
+                        pip_dict = self.get_public_ip_prefixes_dict(self, nat_gateway_conn, public_ip_prefixes_id)
+                        pip_list.append(pip_dict)
+
+                    nat_gateway_dict['public_ip_prefixes'] = pip_list
+
+                except Exception as e:
+                    print(f'[ERROR: Azure NAT Gateway Manager Get Public IP Prefixes Dictionary]: {e}')
+
+            if nat_gateway_dict.get('subnets') is not None:
+                try:
+                    nat_gateway_dict.update({
+                        'subnets': self.get_subnets(self, nat_gateway_conn, nat_gateway_dict['subnets'])
+                    })
+                except Exception as e:
+                    print(f'[ERROR: Azure NAT Gateway Manager Get Subnet]: {e}')
 
             print(f'[NAT GATEWAYS INFO] {nat_gateway_dict}')
 
@@ -68,3 +125,51 @@ class NATGatewayManager(AzureManager):
     def get_resource_group_from_id(dict_id):
         resource_group = dict_id.split('/')[4]
         return resource_group
+
+    @staticmethod
+    def get_public_ip_address_dict(self, nat_gateway_conn, pip_id):
+        try:
+            pip_name = pip_id.split('/')[8]
+            resource_group_name = pip_id.split('/')[4]
+            pip_obj = nat_gateway_conn.get_public_ip_addresses(resource_group_name=resource_group_name, public_ip_address_name=pip_name)
+
+            pip_dict = self.convert_nested_dictionary(self, pip_obj)
+            return pip_dict
+
+        except Exception as e:
+            print(f'[ERROR: Azure NAT Gateway Manager Get Public IP Addresses Dictionary]: {e}')
+
+    @staticmethod
+    def get_public_ip_prefixes_dict(self, nat_gateway_conn, pip_id):
+        try:
+            pip_name = pip_id.split('/')[8]
+            resource_group_name = pip_id.split('/')[4]
+            pip_obj = nat_gateway_conn.get_public_ip_prefixes(resource_group_name=resource_group_name, public_ip_prefixes_name=pip_name)
+
+            pip_dict = self.convert_nested_dictionary(self, pip_obj)
+            return pip_dict
+
+        except Exception as e:
+            print(f'[ERROR: Azure NAT Gateway Manager Get Public IP Prefixes Dictionary]: {e}')
+
+    @staticmethod
+    def get_subnets(self, nat_gateway_conn, subnets):
+        subnet_list = []
+        try:
+            for subnet in subnets:
+                resource_group_name = subnet['id'].split('/')[4]
+                subnet_name = subnet['id'].split('/')[10]
+                vnet_name = subnet['id'].split('/')[8]
+
+                subnet_obj = nat_gateway_conn.get_subnet(resource_group_name=resource_group_name, subnet_name=subnet_name, vnet_name=vnet_name)
+                subnet_dict = self.convert_nested_dictionary(self, subnet_obj)
+                subnet_dict.update({
+                    'virtual_network': vnet_name
+                })
+
+                subnet_list.append(subnet_dict)
+
+            return subnet_list
+
+        except Exception as e:
+            print(f'[ERROR: Azure NAT Gateway Manager Get Subnets]: {e}')
