@@ -29,7 +29,8 @@ class CollectorService(BaseService):
             'VirtualNetworkManager',
             'ApplicationGatewayManager',
             'PublicIPAddressManager',
-            'NetworkSecurityGroupManager'
+            'NetworkSecurityGroupManager',
+            'NATGatewayManager'
         ]
 
     @check_required(['options'])

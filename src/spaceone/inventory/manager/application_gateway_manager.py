@@ -14,7 +14,7 @@ class ApplicationGatewayManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Vnet START **")
+        print("** Application Gateway START **")
         start_time = time.time()
         """
         Args:
