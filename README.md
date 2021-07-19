@@ -23,10 +23,10 @@ Please contact us if you need any further information.
     * [Disks](#disks)
     * [Snapshots](#Snapshots)
     * [Load Balancers](#Load_Balancer)
-    * [SQL Servers](#SQL Servers)
-    * [Application Gateways](#Application Gateways)
+    * [SQL Servers](#SQL_Servers)
+    * [Application Gateways](#Application_Gateways)
     * [Public IP Addresses](#PublicIPAddresses)
-    * [NAT Gateways](#NAT Gateways)
+    * [NAT Gateways](#NAT_Gateways)
     
 
 ---
