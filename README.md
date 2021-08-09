@@ -9,7 +9,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
-> Latest stable version : 1.1.10
+> Latest stable version : 1.2.3
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -22,7 +22,13 @@ Please contact us if you need any further information.
     * [Virtual Machine Scale Sets](#Virtual_Machine_Scale_Sets)
     * [Disks](#disks)
     * [Snapshots](#Snapshots)
-    * [Load Balancer](#Load_Balancer)
+    * [Load Balancers](#Load_Balancer)
+    * [SQL Servers](#SQL_Servers)
+    * [Application Gateways](#Application_Gateways)
+    * [Public IP Addresses](#PublicIPAddresses)
+    * [NAT Gateways](#NAT_Gateways)
+    
+
 ---
 ## SETTING
 You should insert information about account in SpaceONE's **Service Account** initially.
@@ -93,8 +99,15 @@ Please, set authentication privilege for followings:
     - Permissions
         - Microsoft.Compute/snapshots/*/read	
 
+#### [SQL Servers](https://docs.microsoft.com/en-us/rest/api/sql/2021-02-01-preview/servers)
+- SQL Servers
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/sql/2021-02-01-preview/servers
 
-#### [Load Balancer](https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall)
+    - Permissions
+        - Microsoft.Sql/servers/*/read
+
+#### [Load Balancers](https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall)
 - Load Balancer
     - Scope 
         - https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall
@@ -103,6 +116,51 @@ Please, set authentication privilege for followings:
     - Permissions
         - Microsoft.Network/loadBalancers/*/read
         - Microsoft.Network/virtualNetworks/subnets/*/read		
+
+#### [Public IP Addresses](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/public-ip-addresses/list-all)
+- Public IP Address
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/public-ip-addresses/list-all
+
+    - Permissions
+        - Microsoft.Network/publicIPAddresses/*/read
+
+
+#### [NetworkSecurityGroups](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/network-security-groups/list-all)
+- Network Security Group
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/network-security-groups/list-all
+
+    - Permissions
+        - Microsoft.Network/networkSecurityGroups/read
+        - Microsoft.Network/virtualNetworks/subnets/*/read	
+        - Microsoft.Network/networkInterfaces/read
+
+#### [Application Gateways](https://docs.microsoft.com/en-us/rest/api/application-gateway/application-gateways/list-all)
+- Application Gateways
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/application-gateway/application-gateways/list-all
+
+    - Permissions
+        - Microsoft.Network/applicationGateways/read
+        - Microsoft.Network/publicIPAddresses/read
+
+#### [NAT Gateways](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/nat-gateways/list-all)
+- NAT Gateways
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/nat-gateways/list-all
+
+    - Permissions
+        - Microsoft.Network/natGateways/read
+        - Microsoft.Network/virtualNetworks/subnets/*/read	
+        - Microsoft.Network/publicIPAddresses/read
+        - Microsoft.Network/publicIPPrefixes/read
+
+
+	
+
+
+            
 
             
 

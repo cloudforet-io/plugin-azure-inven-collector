@@ -10,3 +10,5 @@ from spaceone.inventory.connector.application_gateway import ApplicationGatewayC
 from spaceone.inventory.connector.public_ip_address import PublicIPAddressConnector
 from spaceone.inventory.connector.network_security_group import NetworkSecurityGroupConnector
 from spaceone.inventory.connector.nat_gateway import NATGatewayConnector
+from spaceone.inventory.connector.storage_account import StorageAccountConnector
+
