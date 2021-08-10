@@ -45,16 +45,16 @@ cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Is Public', 'data.allow_blob_public_access', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Virtual Network', 'data.network_rule_set.virtual_networks', options={
+        TextDyField.data_source('Virtual Network', 'data.network_acls.virtual_networks', options={
             'is_optional': True
         }),
-        ListDyField.data_source('Firewall Address Range', 'data.network_rule_set.firewall_address_range', options={
+        ListDyField.data_source('Firewall Address Range', 'data.network_acls.firewall_address_range', options={
             'is_optional': True
         }),
-        ListDyField.data_source('Resource Instances', 'data.network_rule_set.resource_access_rules_display', options={
+        ListDyField.data_source('Resource Instances', 'data.network_acls.resource_access_rules_display', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Exceptions', 'data.network_rule_set.bypass', options={
+        TextDyField.data_source('Exceptions', 'data.network_acls.bypass', options={
             'is_optional': True
         }),
         TextDyField.data_source('Routing Preference', 'data.routing_preference_display', options={

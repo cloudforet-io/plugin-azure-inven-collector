@@ -120,9 +120,9 @@ class EncryptionIdentity(Model):
 
 class KeyVaultProperties(Model):
     current_versioned_key_identifier = StringType(serialize_when_none=False)
-    keyname = StringType(serialize_when_none=False)
-    keyvaulturi = StringType(serialize_when_none=False)
-    keyversion = StringType(serialize_when_none=False)
+    key_name = StringType(serialize_when_none=False)
+    key_vault_uri = StringType(serialize_when_none=False)
+    key_version = StringType(serialize_when_none=False)
     last_key_rotation_timestamp = StringType(serialize_when_none=False)
 
 
@@ -142,7 +142,7 @@ class EncryptionServices(Model):
 class Encryption(Model):
     identity = ModelType(EncryptionIdentity, serialize_when_none=False)
     key_source = StringType(choices=('Microsoft.Keyvault', 'Microsoft.Storage'))
-    keyvaultproperties = ModelType(KeyVaultProperties, serialize_when_none=False)
+    key_vault_properties = ModelType(KeyVaultProperties, serialize_when_none=False)
     require_infrastructure_encryption = BooleanType(serialize_when_none=False)
     services = ModelType(EncryptionServices, serialize_when_none=False)
 
