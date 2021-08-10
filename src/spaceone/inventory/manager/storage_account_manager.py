@@ -185,6 +185,7 @@ class StorageAccountManager(AzureManager):
 
         return blob_list
 
+
     @staticmethod
     def get_virtual_network_names(virtual_network_rules):
         names = []
