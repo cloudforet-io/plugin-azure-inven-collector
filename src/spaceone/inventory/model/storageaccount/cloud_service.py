@@ -30,10 +30,10 @@ storage_account_info_meta = ItemDynamicLayout.set_fields('Storage Account', fiel
 # TAB - Networking
 storage_group_networking = ItemDynamicLayout.set_fields('Networking', fields=[
     TextDyField.data_source('Is Public', 'data.allow_blob_public_access'),
-    TextDyField.data_source('Virtual Network', 'data.network_rule_set.virtual_networks'),
-    ListDyField.data_source('Firewall Address Range', 'data.network_rule_set.firewall_address_range'),
-    ListDyField.data_source('Resource Instances', 'data.network_rule_set.resource_access_rules_display'),
-    TextDyField.data_source('Exceptions', 'data.network_rule_set.bypass'),
+    TextDyField.data_source('Virtual Network', 'data.network_acls.virtual_networks'),
+    ListDyField.data_source('Firewall Address Range', 'data.network_acls.firewall_address_range'),
+    ListDyField.data_source('Resource Instances', 'data.network_acls.resource_access_rules_display'),
+    TextDyField.data_source('Exceptions', 'data.network_acls.bypass'),
     TextDyField.data_source('Routing Preference', 'data.routing_preference_display'),
     TextDyField.data_source('Publish Microsoft Endpoints', 'data.routing_preference.publish_microsoft_endpoints'),
     TextDyField.data_source('Publish Internet Endpoints', 'data.routing_preference.publish_internet_endpoints')
