@@ -39,7 +39,7 @@ class StorageAccountManager(AzureManager):
 
             if storage_account_dict.get('network_rule_set') is not None:
                 storage_account_dict.update({
-                    'network_rule_set': self.get_network_rule_set(storage_account_dict['network_rule_set'])
+                    'network_rule_set': self.get_network_rule_set(self, storage_account_dict['network_rule_set'])
                 })
             resource_group = self.get_resource_group_from_id(storage_account_dict['id'])
 
@@ -143,7 +143,12 @@ class StorageAccountManager(AzureManager):
                 })
 
     @staticmethod
-    def get_network_rule_set(network_rule_dict):
+    def get_network_rule_set(self, network_rule_dict):
+        if network_rule_dict.get('virtual_network_rules') is not None:
+            network_rule_dict.update({
+                'virtual_networks': self.get_virtual_network_names(network_rule_dict['virtual_network_rules'])
+            })
+
         if network_rule_dict.get('ip_rules') is not None:
             firewall_address_list = []
             for rule in network_rule_dict['ip_rules']:
@@ -178,3 +183,16 @@ class StorageAccountManager(AzureManager):
             blob_list.append(blob_dict)
 
         return blob_list
+
+    @staticmethod
+    def get_virtual_network_names(virtual_network_rules):
+        names = []
+        try:
+            for virtual_network_rule in virtual_network_rules:
+                name = virtual_network_rule['virtual_network_resource_id'].split('/')[8]
+                names.append(name)
+
+        except Exception as e:
+            print(f'[ERROR: Azure Storage Account Network Rule Get Name]: {e}')
+
+        return names
