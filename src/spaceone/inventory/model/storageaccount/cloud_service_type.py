@@ -24,69 +24,88 @@ cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
         TextDyField.data_source('Subscription Name', 'data.subscription_name'),
-
-        # is_optional fields - Inbound Security Rules
-        TextDyField.data_source('Inbound Security Rule Priority', 'data.inbound_security_rules.priority', options={
+        TextDyField.data_source('State of Primary', 'data.status_of_primary', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Name', 'data.inbound_security_rules.name', options={
+        TextDyField.data_source('Performance Tier', 'data.sku.tier', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Port', 'data.inbound_security_rules.destination_port_range', options={
+        TextDyField.data_source('Access Tier', 'data.access_tier', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Protocol', 'data.inbound_security_rules.protocol', options={
+        TextDyField.data_source('Replication', 'data.sku.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Source', 'data.inbound_security_rules.source_address_prefix', options={
+        TextDyField.data_source('Account Kind', 'data.kind', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Destination', 'data.inbound_security_rules.destination_address_prefix', options={
+        TextDyField.data_source('Provisioning State', 'data.provisioning_state', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Action', 'data.inbound_security_rules.access', options={
+        TextDyField.data_source('Is Public', 'data.allow_blob_public_access', options={
             'is_optional': True
         }),
-        # is_optional fields - Outbound Security Rules
-        TextDyField.data_source('Priority', 'data.outbound_security_rules.priority', options={
+        TextDyField.data_source('Virtual Network', 'data.network_rule_set.virtual_networks', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Name', 'data.outbound_security_rules.name', options={
+        ListDyField.data_source('Firewall Address Range', 'data.network_rule_set.firewall_address_range', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Port', 'data.outbound_security_rules.destination_port_range', options={
+        ListDyField.data_source('Resource Instances', 'data.network_rule_set.resource_access_rules_display', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Protocol', 'data.outbound_security_rules.protocol', options={
+        TextDyField.data_source('Exceptions', 'data.network_rule_set.bypass', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Source', 'data.outbound_security_rules.source_address_prefix', options={
+        TextDyField.data_source('Routing Preference', 'data.routing_preference_display', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Destination', 'data.outbound_security_rules.destination_address_prefix', options={
+        TextDyField.data_source('Publish Microsoft Endpoints', 'data.routing_preference.publish_microsoft_endpoints', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Action', 'data.outbound_security_rules.access', options={
+        TextDyField.data_source('Publish Internet Endpoints', 'data.routing_preference.publish_internet_endpoints', options={
             'is_optional': True
         }),
-        # is_optional_field - Network Interfaces
-        TextDyField.data_source('Network Interface Name', 'data.network_interfaces.name', options={
+        TextDyField.data_source('Blob', 'data.primary_endpoints.blob', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Network Interface Public IP Address', 'data.network_interfaces.public_ip_address', options={
+        TextDyField.data_source('Queue', 'data.primary_endpoints.queue', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Network Interface Private IP Address', 'data.network_interfaces.private_ip_address', options={
+        TextDyField.data_source('Table', 'data.primary_endpoints.table', options={
             'is_optional': True
         }),
-        # is_optional field - Subnets
-        TextDyField.data_source('Subnet Name', 'data.subnets.name', options={
+        TextDyField.data_source('File', 'data.primary_endpoints.file', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subnet Address Range', 'data.subnets.address_prefix', options={
+        TextDyField.data_source('Web', 'data.primary_endpoints.web', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Virtual Network', 'data.subnets.virtual_network', options={
+        TextDyField.data_source('DFS', 'data.primary_endpoints.dfs', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Microsoft Endpoints', 'data.routing_preference.publish_microsoft_endpoints', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Internet Endpoints', 'data.routing_preference.publish_internet_endpoints', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Container Name', 'data.container_item.name', options={
+            'is_optional': True
+        }),
+        DateTimeDyField.data_source('Container Last Modified', 'data.container_item.last_modified_time', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Container Public Access Level', 'data.container_item.public_access', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Container Lease State', 'data.container_item.lease_state', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Primary Location', 'data.primary_location', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Secondary Location', 'data.secondary_location', options={
             'is_optional': True
         })
     ],
