@@ -187,6 +187,7 @@ class NetworkRuleSet(Model):
     resource_access_rules = ListType(ModelType(ResourceAccessRule), serialize_when_none=False)
     resource_access_rules_display = ListType(StringType, serialize_when_none=False)
     virtual_network_rules = ListType(ModelType(VirtualNetworkRule), serialize_when_none=False)
+    virtual_networks = ListType(StringType, serialize_when_none=False)
 
 
 class StorageAccountInternetEndpoints(Model):
