@@ -123,7 +123,7 @@ class KeyVaultProperties(Model):
     key_name = StringType(serialize_when_none=False)
     key_vault_uri = StringType(serialize_when_none=False)
     key_version = StringType(serialize_when_none=False)
-    last_key_rotation_timestamp = StringType(serialize_when_none=False)
+    last_key_rotation_timestamp = DateTimeType(serialize_when_none=False)
 
 
 class EncryptionService(Model):
