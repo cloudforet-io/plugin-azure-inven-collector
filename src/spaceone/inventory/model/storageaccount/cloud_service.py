@@ -29,8 +29,8 @@ storage_account_info_meta = ItemDynamicLayout.set_fields('Storage Account', fiel
 
 # TAB - Networking
 storage_group_networking = ItemDynamicLayout.set_fields('Networking', fields=[
-    TextDyField.data_source('Is Public', 'allow_blob_public_access'),
-    TextDyField.data_source('Virtual Network', 'data.network_rule_set.virtual_network_rules.name'),
+    TextDyField.data_source('Is Public', 'data.allow_blob_public_access'),
+    TextDyField.data_source('Virtual Network', 'data.network_rule_set.virtual_networks'),
     ListDyField.data_source('Firewall Address Range', 'data.network_rule_set.firewall_address_range'),
     ListDyField.data_source('Resource Instances', 'data.network_rule_set.resource_access_rules_display'),
     TextDyField.data_source('Exceptions', 'data.network_rule_set.bypass'),
@@ -41,8 +41,8 @@ storage_group_networking = ItemDynamicLayout.set_fields('Networking', fields=[
 
 # TAB - Endpoints
 storage_account_primary_endpoints = ItemDynamicLayout.set_fields('Primary Endpoints', fields=[
-    TextDyField.data_source('Blob', 'data.primary_endpoints.'),
-    TextDyField.data_source('Queue', 'data.primary_endpoints..blob'),
+    TextDyField.data_source('Blob', 'data.primary_endpoints.blob'),
+    TextDyField.data_source('Queue', 'data.primary_endpoints.queue'),
     TextDyField.data_source('Table', 'data.primary_endpoints.table'),
     TextDyField.data_source('File', 'data.primary_endpoints.file'),
     TextDyField.data_source('Web', 'data.primary_endpoints.web'),
@@ -68,13 +68,13 @@ storage_account_encryption = ItemDynamicLayout.set_fields('Encryption', 'data.en
 
 # TAB - Geo-Replication
 storage_account_geo_replication = TableDynamicLayout.set_fields('Geo-Replication', fields=[
-    TextDyField.data_source('Primary Location', 'primary_location'),
-    EnumDyField.data_source('Status of Primary', 'status_of_primary', default_state={
+    TextDyField.data_source('Primary Location', 'data.primary_location'),
+    EnumDyField.data_source('Status of Primary', 'data.status_of_primary', default_state={
         'safe': ['available'],
         'warning': ['unavailable']
     }),
-    TextDyField.data_source('Secondary Location', 'secondary_location'),
-    EnumDyField.data_source('Status of Secondary', 'status_of_secondary', default_state={
+    TextDyField.data_source('Secondary Location', 'data.secondary_location'),
+    EnumDyField.data_source('Status of Secondary', 'data.status_of_secondary', default_state={
         'safe': ['available'],
         'warning': ['unavailable']
     })
@@ -87,7 +87,7 @@ network_security_group_tags = TableDynamicLayout.set_fields('Tags', 'data.tags',
 ])
 
 storage_account_meta = CloudServiceMeta.set_layouts(
-    [storage_account_info_meta, storage_group_networking, storage_account_encryption, storage_account_geo_replication, network_security_group_tags])
+    [storage_account_info_meta, storage_group_networking, storage_account_primary_endpoints, storage_account_containers, storage_account_encryption, storage_account_geo_replication, network_security_group_tags])
 
 
 class ComputeResource(CloudServiceResource):
