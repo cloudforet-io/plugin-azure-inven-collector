@@ -173,6 +173,7 @@ class StorageAccountManager(AzureManager):
             })
 
         return network_rule_dict
+    
 
     @staticmethod
     def list_containers(self, storage_conn, rg_name, account_name):
