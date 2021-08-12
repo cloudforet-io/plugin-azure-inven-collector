@@ -182,6 +182,7 @@ class VirtualNetworkRule(Model):
 class NetworkRuleSet(Model):
     bypass = StringType(choices=('AzureServices', 'Logging', 'Metrics', 'None'), serialize_when_none=False)
     default_action = StringType(choices=('Allow', 'Deny'), serialize_when_none=False)
+    is_public_access_allowed = BooleanType(serialize_when_none=False)
     firewall_address_range = ListType(StringType, serialize_when_none=False)
     ip_rules = ListType(ModelType(IPRule), serialize_when_none=False)
     resource_access_rules = ListType(ModelType(ResourceAccessRule), serialize_when_none=False)
@@ -270,7 +271,7 @@ class StorageAccount(Model):
     large_file_shares_state = StringType(choices=('Enabled','Disabled'), serialize_when_none=False)
     last_geo_failover_time = StringType(serialize_when_none=False)
     minimum_tls_version = StringType(choices=('TLS1_0', 'TLS1_1', 'TLS1_2'), serialize_when_none=False)
-    network_acls = ModelType(NetworkRuleSet, serialize_when_none=False)
+    network_rule_set = ModelType(NetworkRuleSet, serialize_when_none=False)
     primary_endpoints = ModelType(Endpoints, serialize_when_none=False)
     primary_location = StringType(serialize_when_none=False)
     private_endpoint_connections = ListType(ModelType(PrivateEndpointConnection), serialize_when_none=False)

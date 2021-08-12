@@ -146,7 +146,12 @@ class StorageAccountManager(AzureManager):
     def get_network_rule_set(self, network_rule_dict):
         if network_rule_dict.get('virtual_network_rules') is not None:
             network_rule_dict.update({
-                'virtual_networks': self.get_virtual_network_names(network_rule_dict['virtual_network_rules'])
+                'virtual_networks': self.get_virtual_network_names(network_rule_dict['virtual_network_rules']),
+                'is_public_access_allowed': False
+            })
+        if not network_rule_dict.get('virtual_network_rules'): # if virtual_network_rules are empty, this SA is public allowable
+            network_rule_dict.update({
+                'is_public_access_allowed': True
             })
 
         if network_rule_dict.get('ip_rules') is not None:
