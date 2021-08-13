@@ -9,7 +9,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
-> Latest stable version : 1.2.3
+> Latest stable version : 1.2.5
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -27,6 +27,8 @@ Please contact us if you need any further information.
     * [Application Gateways](#Application_Gateways)
     * [Public IP Addresses](#PublicIPAddresses)
     * [NAT Gateways](#NAT_Gateways)
+    * [Storage Accounts](#Storage_Accounts)
+
     
 
 ---
@@ -156,7 +158,12 @@ Please, set authentication privilege for followings:
         - Microsoft.Network/publicIPAddresses/read
         - Microsoft.Network/publicIPPrefixes/read
 
-
+#### [Storage Accounts](https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list#blobrestorerange)
+- Storage Accounts
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list
+    - Permissions
+        - Microsoft.Storage/storageAccounts/read
 	
 
 
