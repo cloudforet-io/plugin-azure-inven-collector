@@ -1,8 +1,7 @@
 import logging
 
 from spaceone.inventory.libs.connector import AzureConnector
-from spaceone.inventory.error import *
-
+from spaceone.inventory.error.custom import *
 __all__ = ['ApplicationGatewayConnector']
 _LOGGER = logging.getLogger(__name__)
 
@@ -14,14 +13,15 @@ class ApplicationGatewayConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_all_application_gateways(self):
+        try:
+            return self.network_client.application_gateways.list_all()
 
-        obj = self.network_client.virtual_networks.list_all()
-        for i in obj:
-            print("#####")
-            print(i)
-        print(obj)
-
-        return self.network_client.application_gateways.list_all()
+        except ConnectionError:
+            _LOGGER.error(ERROR_CONNECTOR(field='Application Gateway'))
 
     def get_public_ip_addresses(self, public_ip_address_name, resource_group_name):
-        return self.network_client.public_ip_addresses.get(public_ip_address_name, resource_group_name)
+        try:
+            return self.network_client.public_ip_addresses.get(public_ip_address_name, resource_group_name)
+
+        except ConnectionError:
+            _LOGGER.error(ERROR_CONNECTOR(field='Application Gateway'))
