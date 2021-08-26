@@ -13,7 +13,7 @@ from spaceone.inventory.connector.application_gateway import ApplicationGatewayC
 from spaceone.inventory.manager.application_gateway_manager import ApplicationGatewayManager
 
 
-class TestVirtualNetworkManager(unittest.TestCase):
+class TestApplicationGatewayManager(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
