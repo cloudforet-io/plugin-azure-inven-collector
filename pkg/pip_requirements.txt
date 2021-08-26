@@ -12,3 +12,6 @@ azure-mgmt-network==17.0.0
 azure-mgmt-sql==1.0.0
 azure-mgmt-monitor==2.0.0
 azure-mgmt-storage==18.0.0
+azure-mgmt-keyvault==9.0.0
+azure-keyvault-certificates==4.3.0
+azure-keyvault-secrets==4.3.0
