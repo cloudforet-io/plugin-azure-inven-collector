@@ -68,6 +68,12 @@ class KeyVaultManager(AzureManager):
                     'private_endpoint_connections': self.get_private_endpoint_name(key_vault_dict['properties']['private_endpoint_connections'])
                 })
 
+            # Change purge protection to user-friendly word
+            if key_vault_dict.get('properties', {}).get('enable_purge_protection') is not None:
+                key_vault_dict['properties'].update({
+                    'enable_purge_protection_str': 'Disabled' if key_vault_dict['properties']['enable_purge_protection'] is False else 'Enabled'
+                })
+
             print(f'[KEY VAULT INFO] {key_vault_dict}')
 
             key_vault_data = KeyVault(key_vault_dict, strict=False)
