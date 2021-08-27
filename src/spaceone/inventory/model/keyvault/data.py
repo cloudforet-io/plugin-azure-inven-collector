@@ -90,12 +90,12 @@ class VaultId(Model):
 
 
 class SecretItem(Model):
-    attributes = ModelType(SecretAttributes, serialize_when_none=False)
-    content_type = StringType(serialize_when_none=False)
-    id = StringType(serialize_when_none=False)
-    managed = BooleanType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
-    vault_id = ModelType(VaultId, serialize_when_none=False)
+    _attributes = ModelType(SecretAttributes, serialize_when_none=False)
+    _content_type = StringType(serialize_when_none=False)
+    _id = StringType(serialize_when_none=False)
+    _managed = BooleanType(serialize_when_none=False)
+    _tags = ModelType(Tags, serialize_when_none=False)
+    _vault_id = ModelType(VaultId, serialize_when_none=False)
 
 
 class CertificateAttributes(Model):
@@ -112,17 +112,18 @@ class CertificateAttributes(Model):
 
 
 class CertificateItem(Model):
-    attributes = ModelType(CertificateAttributes, serialize_when_none=False)
-    id = StringType(serialize_when_none=False)
-    x5t = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
-    vault_id = ModelType(VaultId, serialize_when_none=False)
+    _attributes = ModelType(CertificateAttributes, serialize_when_none=False)
+    _id = StringType(serialize_when_none=False)
+    _x5t = StringType(serialize_when_none=False)
+    _tags = ModelType(Tags, serialize_when_none=False)
+    _vault_id = ModelType(VaultId, serialize_when_none=False)
 
 
 class VaultProperties(Model):
     access_policies = ListType(ModelType(AccessPolicyEntry), serialize_when_none=False)
     create_mode = StringType(choices=('default', 'recover'), serialize_when_none=False)
-    enable_purge_protection = BooleanType(default=False)
+    enable_purge_protection = BooleanType(default=False, serialize_when_none=False)
+    enable_purge_protection_str = StringType(serialize_when_none=False, default='Disabled')
     enable_rbac_authorization = BooleanType(serialize_when_none=False)
     enable_soft_delete = BooleanType(serialize_when_none=False)
     enabled_for_deployment = BooleanType(serialize_when_none=False)
@@ -138,6 +139,26 @@ class VaultProperties(Model):
     vault_uri = StringType(serialize_when_none=False)
 
 
+class KeyAttributes(Model):
+    created = DateTimeType(serialize_when_none=False)
+    enabled = BooleanType(serialize_when_none=False)
+    exp = DateTimeType(serialize_when_none=False)
+    nbf = DateTimeType(serialize_when_none=False)
+    recoverable_days = IntType(serialize_when_none=False)
+    recovery_level = StringType(choices=('CustomizedRecoverable', 'CustomizedRecoverable+ProtectedSubscription',
+                                         'CustomizedRecoverable+Purgeable', 'Purgeable', 'Recoverable',
+                                         'Recoverable+ProtectedSubscription',
+                                         'Recoverable+Purgeable'), serialize_when_none=False)
+    updated = DateTimeType(serialize_when_none=False)
+
+
+class KeyItem(Model):
+    attributes = ModelType(KeyAttributes, serialize_when_none=False)
+    kid = StringType(serialize_when_none=False)
+    managed = BooleanType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
+
+
 class KeyVault(Model):  # Main class
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -147,6 +168,7 @@ class KeyVault(Model):  # Main class
     resource_group = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     properties = ModelType(VaultProperties, serialize_when_none=False)
+    keys = ListType(ModelType(KeyItem), serialize_when_none=False)
     secrets = ListType(ModelType(SecretItem), serialize_when_none=False)
     certificates = ListType(ModelType(CertificateItem), serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)

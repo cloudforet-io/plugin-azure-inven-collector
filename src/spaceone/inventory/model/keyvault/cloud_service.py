@@ -19,11 +19,11 @@ key_vault_info_meta = ItemDynamicLayout.set_fields('Key Vault', fields=[
     TextDyField.data_source('Subscription', 'data.subscription_name'),
     TextDyField.data_source('Subscription ID', 'data.subscription_id'),
     TextDyField.data_source('Vault URI', 'data.properties.vault_uri'),
-    TextDyField.data_source('Sku (Pricing Tier)', 'data.sku.name'),
+    TextDyField.data_source('Sku (Pricing Tier)', 'data.properties.sku.name'),
     TextDyField.data_source('Directory ID', 'data.properties.tenant_id'),
     # TextDyField.data_source('Directory Name', 'data.'),
     TextDyField.data_source('Soft-delete', 'data.properties.enable_soft_delete'),
-    TextDyField.data_source('Purge Protection', 'data.properties.enable_purge_protection'),
+    TextDyField.data_source('Purge Protection', 'data.properties.enable_purge_protection_str'),
 ])
 
 # TAB - Keys
