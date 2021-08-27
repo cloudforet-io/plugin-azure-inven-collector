@@ -50,13 +50,13 @@ class KeyVaultManager(AzureManager):
             subscription_id = key_vault_dict.get('subscription_id', '')
 
             # Get list of keys, secrets
-            if key_vault_dict.get('properties', {}).get('vault_uri', '') is not None:
+            if key_vault_dict.get('properties', {}).get('vault_uri') is not None:
                 vault_name = key_vault_dict['name']
                 vault_uri = key_vault_dict['properties']['vault_uri']
                 try:
                     key_vault_dict.update({
                         'keys': self.list_keys(self, key_vault_conn, resource_group_name, vault_name),
-                        'secrets': self.list_secrets(self, key_vault_conn, resource_group_name, vault_name, subscription_id,vault_uri),
+                        'secrets': self.list_secrets(self, key_vault_conn, subscription_id, vault_uri),
                         'certificates': self.list_certificates(self, key_vault_conn, subscription_id, vault_uri)
                     })
                 except PermissionError:
@@ -106,12 +106,12 @@ class KeyVaultManager(AzureManager):
             _LOGGER.error(ERROR_KEY_VAULTS(field='Key Vaults'))
 
     @staticmethod
-    def list_secrets(self, key_vault_conn, resource_group_name, vault_name, subscription_id, vault_uri):
+    def list_secrets(self, key_vault_conn, subscription_id, vault_uri):
         try:
-            key_vault_conn.init_key_vault_secret_client(subscription_id=subscription_id, vault_uri=vault_uri)
+            key_vault_secret_client = key_vault_conn.init_key_vault_secret_client(subscription_id=subscription_id, vault_uri=vault_uri)
 
             secrets = []
-            secrets_obj_list = key_vault_conn.list_secrets(resource_group_name=resource_group_name, vault_name=vault_name)
+            secrets_obj_list = key_vault_secret_client.list_properties_of_secrets()
 
             if secrets_obj_list:
                 for secret in secrets_obj_list:

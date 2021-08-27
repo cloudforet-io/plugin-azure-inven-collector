@@ -22,8 +22,8 @@ class KeyVaultConnector(AzureConnector):
     def init_key_vault_secret_client(self, subscription_id, vault_uri):
         try:
             credential = DefaultAzureCredential()
-            self.key_vault_secret_client = SecretClient(credential=credential,  subscription_id=subscription_id, vault_url=vault_uri)
-            return
+            key_vault_secret_client = SecretClient(credential=credential,  subscription_id=subscription_id, vault_url=vault_uri)
+            return key_vault_secret_client
         except ConnectionError:
             _LOGGER.error(ERROR_CONNECTOR_INITIALIZE(field='Key Vault Secret Client'))
 
