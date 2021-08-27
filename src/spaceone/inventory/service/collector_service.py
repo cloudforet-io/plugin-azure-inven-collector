@@ -31,7 +31,8 @@ class CollectorService(BaseService):
             'PublicIPAddressManager',
             'NetworkSecurityGroupManager',
             'NATGatewayManager',
-            'StorageAccountManager'
+            'StorageAccountManager',
+            'KeyVaultManager'
         ]
 
     @check_required(['options'])

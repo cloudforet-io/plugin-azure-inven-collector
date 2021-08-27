@@ -11,4 +11,4 @@ from spaceone.inventory.connector.public_ip_address import PublicIPAddressConnec
 from spaceone.inventory.connector.network_security_group import NetworkSecurityGroupConnector
 from spaceone.inventory.connector.nat_gateway import NATGatewayConnector
 from spaceone.inventory.connector.storage_account import StorageAccountConnector
-
+from spaceone.inventory.connector.key_vault import KeyVaultConnector

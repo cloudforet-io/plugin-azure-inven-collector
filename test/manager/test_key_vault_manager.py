@@ -9,11 +9,11 @@ from spaceone.core import config
 from spaceone.core.transaction import Transaction
 from spaceone.core import utils
 from spaceone.inventory.error import *
-from spaceone.inventory.connector.application_gateway import ApplicationGatewayConnector
-from spaceone.inventory.manager.application_gateway_manager import ApplicationGatewayManager
+from spaceone.inventory.connector.key_vault import KeyVaultConnector
+from spaceone.inventory.manager.key_vault_manager import KeyVaultManager
 
 
-class TestApplicationGatewayManager(unittest.TestCase):
+class TestKeyVaultManager(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -25,8 +25,8 @@ class TestApplicationGatewayManager(unittest.TestCase):
         cls.schema = 'azure_client_secret'
         cls.azure_credentials = test_config.get('AZURE_CREDENTIALS', {})
 
-        cls.application_gateway_connector = ApplicationGatewayConnector(transaction=Transaction(), config={}, secret_data=cls.azure_credentials)
-        cls.application_gateway_manager = ApplicationGatewayManager(Transaction())
+        cls.key_vault_connector = KeyVaultConnector(transaction=Transaction(), config={}, secret_data=cls.azure_credentials)
+        cls.key_vault_manager = KeyVaultManager(Transaction())
 
         super().setUpClass()
 
@@ -37,12 +37,18 @@ class TestApplicationGatewayManager(unittest.TestCase):
     def test_collect_cloud_service(self, *args):
         secret_data = self.azure_credentials
 
-        params = {'options': {}, 'secret_data': secret_data, 'filter': {}}
+        subscription_info = {
+            'subscription_id': '3ec64e1e-1ce8-4f2c-82a0-a7f6db0899ca',
+            'subscription_name': 'Azure subscription 1',
+            'tenant_id': '35f43e22-0c0b-4ff3-90aa-b2c04ef1054c'
+        }
 
-        application_gateways = self.application_gateway_manager.collect_cloud_service(params)
+        params = {'options': {}, 'secret_data': secret_data, 'filter': {}, 'subscription_info': subscription_info}
 
-        for applicaiton_gateway in application_gateways:
-            print(applicaiton_gateway.to_primitive())
+        key_vaults = self.key_vault_manager.collect_cloud_service(params)
+
+        for key_vault in key_vaults:
+            print(key_vault.to_primitive())
 
 
 if __name__ == "__main__":
