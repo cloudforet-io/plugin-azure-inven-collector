@@ -10,3 +10,4 @@ from spaceone.inventory.manager.public_ip_address_manager import PublicIPAddress
 from spaceone.inventory.manager.network_security_group_manager import NetworkSecurityGroupManager
 from spaceone.inventory.manager.nat_gateway_manager import NATGatewayManager
 from spaceone.inventory.manager.storage_account_manager import StorageAccountManager
+from spaceone.inventory.manager.key_vault_manager import KeyVaultManager

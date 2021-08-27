@@ -11,7 +11,7 @@ from spaceone.inventory.model.natgateway.data import NatGateway
 NAT GATEWAY
 '''
 # TAB - Default
-virtual_network_info_meta = ItemDynamicLayout.set_fields('NAT Gateway', fields=[
+nat_gateway_info_meta = ItemDynamicLayout.set_fields('NAT Gateway', fields=[
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -59,7 +59,7 @@ nat_gateway_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
 ])
 
 nat_gateway_meta = CloudServiceMeta.set_layouts(
-    [virtual_network_info_meta, nat_gateway_outbound_ip_info, nat_gateway_subnets, nat_gateway_tags])
+    [nat_gateway_info_meta, nat_gateway_outbound_ip_info, nat_gateway_subnets, nat_gateway_tags])
 
 
 class ComputeResource(CloudServiceResource):
