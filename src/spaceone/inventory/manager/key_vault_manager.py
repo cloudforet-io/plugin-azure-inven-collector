@@ -63,7 +63,7 @@ class KeyVaultManager(AzureManager):
                     _LOGGER.error(ERROR_KEY_VAULTS_PERMISSION(field='Key Vaults'))
 
             # Get name of private connection from ID
-            if key_vault_dict.get('properties', {}).get('private_endpoint_connections', []) is not None:
+            if key_vault_dict.get('properties', {}).get('private_endpoint_connections') is not None:
                 key_vault_dict['properties'].update({
                     'private_endpoint_connections': self.get_private_endpoint_name(key_vault_dict['properties']['private_endpoint_connections'])
                 })
