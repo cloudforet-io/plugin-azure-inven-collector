@@ -52,7 +52,6 @@ key_vault_secrets = SimpleTableDynamicLayout.set_fields('Secrets', 'data.secrets
 # TAB - Certificates
 key_vault_certificates = SimpleTableDynamicLayout.set_fields('Certificates', 'data.certificates', fields=[
     TextDyField.data_source('ID', '_id'),
-    TextDyField.data_source('Thumbprint', '_x509_thumbprint'),
     TextDyField.data_source('Status', '_attributes.enabled'),
     DateTimeDyField.data_source('Updated Date', '_attributes.updated'),
     DateTimeDyField.data_source('Creation Date', '_attributes.created'),
