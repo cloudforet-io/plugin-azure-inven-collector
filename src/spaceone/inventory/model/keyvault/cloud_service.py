@@ -40,24 +40,24 @@ key_vault_keys = SimpleTableDynamicLayout.set_fields('Keys', 'data.keys', fields
 
 # TAB - Secrets
 key_vault_secrets = SimpleTableDynamicLayout.set_fields('Secrets', 'data.secrets', fields=[
-    TextDyField.data_source('Name', 'vault_id.resource_id.name'),
-    TextDyField.data_source('Type', 'content_type'),
-    TextDyField.data_source('Location', 'location'),
-    TextDyField.data_source('Status', 'attributes.enabled'),
-    DateTimeDyField.data_source('Expiration Date', 'attributes.expires'),
-    DateTimeDyField.data_source('Creation Date', 'attributes.created'),
-    TextDyField.data_source('Recoverable Days', 'attributes.recoverable_days')
+    TextDyField.data_source('ID', '_id'),
+    TextDyField.data_source('Type', '_content_type'),
+    TextDyField.data_source('Status', '_attributes.enabled'),
+    DateTimeDyField.data_source('Updated Date', '_attributes.updated'),
+    DateTimeDyField.data_source('Creation Date', '_attributes.created'),
+    TextDyField.data_source('Recoverable Days', '_attributes.recoverable_days')
 ])
 
 
 # TAB - Certificates
 key_vault_certificates = SimpleTableDynamicLayout.set_fields('Certificates', 'data.certificates', fields=[
-    TextDyField.data_source('Name', 'vault_id.resource_id.name'),
-    TextDyField.data_source('Thumbprint', 'x5t'),
-    TextDyField.data_source('Status', 'attributes.enabled'),
-    DateTimeDyField.data_source('Expiration Date', 'attributes.expires'),
-    DateTimeDyField.data_source('Creation Date', 'attributes.created'),
-    TextDyField.data_source('Recoverable Days', 'attributes.recoverable_days')
+    TextDyField.data_source('ID', '_id'),
+    TextDyField.data_source('Thumbprint', '_x509_thumbprint'),
+    TextDyField.data_source('Status', '_attributes.enabled'),
+    DateTimeDyField.data_source('Updated Date', '_attributes.updated'),
+    DateTimeDyField.data_source('Creation Date', '_attributes.created'),
+    TextDyField.data_source('Recoverable Days', '_attributes.recoverable_days')
+
 ])
 
 # TAB - Access Policies
