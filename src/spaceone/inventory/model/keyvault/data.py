@@ -114,7 +114,8 @@ class CertificateAttributes(Model):
 class CertificateItem(Model):
     _attributes = ModelType(CertificateAttributes, serialize_when_none=False)
     _id = StringType(serialize_when_none=False)
-    _x5t = StringType(serialize_when_none=False)
+    _content_type = StringType(serialize_when_none=False)
+    _x509_thumbprint = StringType(serialize_when_none=False)
     _tags = ModelType(Tags, serialize_when_none=False)
     _vault_id = ModelType(VaultId, serialize_when_none=False)
 
@@ -153,6 +154,11 @@ class KeyAttributes(Model):
 
 
 class KeyItem(Model):
+    id = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+    location = StringType(serialize_when_none=False)
+    key_uri = StringType(serialize_when_none=False)
     attributes = ModelType(KeyAttributes, serialize_when_none=False)
     kid = StringType(serialize_when_none=False)
     managed = BooleanType(serialize_when_none=False)
