@@ -115,7 +115,6 @@ class CertificateItem(Model):
     _attributes = ModelType(CertificateAttributes, serialize_when_none=False)
     _id = StringType(serialize_when_none=False)
     _content_type = StringType(serialize_when_none=False)
-    _x509_thumbprint = StringType(serialize_when_none=False)
     _tags = ModelType(Tags, serialize_when_none=False)
     _vault_id = ModelType(VaultId, serialize_when_none=False)
 
