@@ -15,3 +15,4 @@ azure-mgmt-storage==18.0.0
 azure-mgmt-keyvault==9.0.0
 azure-keyvault-certificates==4.3.0
 azure-keyvault-secrets==4.3.0
+azure-mgmt-rdbms==9.1.0
