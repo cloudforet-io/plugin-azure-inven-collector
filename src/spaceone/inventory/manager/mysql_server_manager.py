@@ -45,8 +45,7 @@ class MySQLServerManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
             })
 
-            print(f'[MYSQL SERVER INFO] {mysql_server_dict}')
-
+            _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_dict}')
             mysql_server_data = MySQLServer(mysql_server_dict, strict=False)
             mysql_server_resource = MySQLServerResource({
                 'data': mysql_server_data,
@@ -59,7 +58,7 @@ class MySQLServerManager(AzureManager):
             self.set_region_code(mysql_server_data['location'])
             mysql_servers.append(MySQLServerResponse({'resource': mysql_server_resource}))
 
-        print(f'** MySQL Server Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** MySQL Server Finished {time.time() - start_time} Seconds **')
         return mysql_servers
 
     @staticmethod
