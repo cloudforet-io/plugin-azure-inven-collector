@@ -75,7 +75,7 @@ class MySQLServer(Model):  # Main class
     ssl_enforcement = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
     storage_profile = ModelType(StorageProfile, serialize_when_none=False)
     user_visible_state = StringType(choices=('Disabled', 'Dropping', 'Inaccessible', 'Ready'), serialize_when_none=False)
-    version = StringType(choices=('5.6', '5.7', '8.0'), serialize_when_none=False)
+    version = StringType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
