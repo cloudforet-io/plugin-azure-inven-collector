@@ -40,3 +40,8 @@ class ERROR_PARSE_ID_FROM_RESOURCE_GROUP(ERROR_BASE):
     status_code = 'INTERNAL'
     message = 'Parse resource name from resource ID is failed. Please check the variation.'
 
+
+class ERROR_GET_ADDITIONAL_RESOURCE_INFO(ERROR_BASE):
+    status_code = 'INTERNAL'
+    message = 'Get an additional information of the resource is failed. Please check the variation'
+
