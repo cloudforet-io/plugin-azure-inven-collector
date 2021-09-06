@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, DateTimeType
+from schematics.types import ModelType, ListType, StringType, IntType, DateTimeType, BooleanType, FloatType
 
 
 class Tags(Model):
@@ -43,6 +43,7 @@ class StorageProfile(Model):
     geo_redundant_backup = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
     storage_autogrow = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
     storage_mb = IntType(serialize_when_none=False)
+    storage_gb = IntType(serialize_when_none=False)
 
 
 class Sku(Model):
@@ -51,6 +52,14 @@ class Sku(Model):
     name = StringType(serialize_when_none=False)
     size = StringType(serialize_when_none=False)
     tier = StringType(choices=('Basic', 'GeneralPurpose', 'MemoryOptimized'), serialize_when_none=False)
+
+
+class FirewallRule(Model):
+    id = StringType()
+    name = StringType(serialize_when_none=False)
+    end_ip_address = StringType(serialize_when_none=False)
+    start_ip_address = StringType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
 
 
 class MySQLServer(Model):  # Main class
@@ -64,6 +73,8 @@ class MySQLServer(Model):  # Main class
     administrator_login = StringType(serialize_when_none=False)
     byok_enforcement = StringType(serialize_when_none=False)
     earliest_restore_date = DateTimeType(serialize_when_none=False)
+    firewall_rules = ListType(ModelType(FirewallRule), serialize_when_none=False)
+    allow_azure_services_access = BooleanType(default=True, serialize_when_none=False)
     fully_qualified_domain_name = StringType(serialize_when_none=False)
     infrastructure_encryption = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
     master_server_id = StringType(serialize_when_none=False)

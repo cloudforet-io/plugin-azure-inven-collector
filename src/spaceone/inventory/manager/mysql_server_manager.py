@@ -45,7 +45,24 @@ class MySQLServerManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
             })
 
+            if mysql_server_dict.get('name') is not None:
+                resource_group = mysql_server_dict.get('resource_group', '')
+                server_name = mysql_server_dict['name']
+                mysql_server_dict.update({
+                    'firewall_rules': self.get_firewall_rules_by_server(self, mysql_servers_conn, resource_group, server_name),
+                })
+
+            if mysql_server_dict.get('firewall_rules') is not None:
+                mysql_server_dict.update({
+                    'allow_azure_services_access': self.get_azure_service_access(mysql_server_dict['firewall_rules'])
+                })
+
+            if mysql_server_dict.get('storage_profile') is not None:
+                mysql_server_dict.update({
+                    'storage_gb': self.get_storage_gb(mysql_server_dict['storage_profile'].get('storage_mb', ''))
+                })
             _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_dict}')
+
             mysql_server_data = MySQLServer(mysql_server_dict, strict=False)
             mysql_server_resource = MySQLServerResource({
                 'data': mysql_server_data,
@@ -69,5 +86,42 @@ class MySQLServerManager(AzureManager):
         except IndexError:
             raise ERROR_PARSE_ID_FROM_RESOURCE_GROUP
 
+    @staticmethod
+    def get_firewall_rules_by_server(self, mysql_servers_conn, resource_group, server_name):
+        try:
+            firewall_rules = []
+            firewall_rules_obj = mysql_servers_conn.list_firewall_rules_by_server(resource_group_name=resource_group, server_name=server_name)
+            for firewall_rule in firewall_rules_obj:
+                firewall_dict = self.convert_nested_dictionary(self, firewall_rule)
+                firewall_rules.append(firewall_dict)
 
+            return firewall_rules
 
+        except Exception:
+            raise ERROR_GET_ADDITIONAL_RESOURCE_INFO()
+
+    @staticmethod
+    def get_azure_service_access(firewall_rules):
+        try:
+            firewall_rule_name_list = []
+
+            for firewall_rule in firewall_rules:
+                if firewall_rule.get('name') is not None:
+                    firewall_rule_name_list.append(firewall_rule['name'])
+
+            if 'AllowAllWindowsAzureIps' in firewall_rule_name_list:
+                return True
+
+            return False
+
+        except Exception:
+            raise ERROR_GET_ADDITIONAL_RESOURCE_INFO()
+
+    @staticmethod
+    def get_storage_gb(storage_mb):
+        if storage_mb:
+            try:
+                storage_gb = int(storage_mb / 1024)
+                return storage_gb
+            except TypeError:
+                raise ERROR_GET_ADDITIONAL_RESOURCE_INFO()

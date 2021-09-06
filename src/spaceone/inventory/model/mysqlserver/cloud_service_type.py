@@ -18,15 +18,15 @@ cst_mysql_server.tags = {
 cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Name', 'data.type'),
-        TextDyField.data_source('Resource ID', 'data.id'),
+        TextDyField.data_source('Type', 'data.type'),
+        TextDyField.data_source('Status', 'data.user_visible_state'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
 
         # is_optional fields - MySQL # TODO
-        TextDyField.data_source('Name', 'data.public_ip_addresses.name', options={
+        TextDyField.data_source('Name', 'data.name', options={
             'is_optional': True
         })
     ],
