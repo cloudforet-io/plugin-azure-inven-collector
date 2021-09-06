@@ -24,6 +24,7 @@ class TestMySQLServerManager(unittest.TestCase):
 
         cls.schema = 'azure_client_secret'
         cls.azure_credentials = test_config.get('AZURE_CREDENTIALS', {})
+        cls.subscription_info = test_config.get('SUBSCRIPTION_INFO', {})
 
         cls.mysql_servers_connector = MySQLServerConnector(transaction=Transaction(), config={}, secret_data=cls.azure_credentials)
         cls.mysql_servers_manager = MySQLServerManager(Transaction())
@@ -36,7 +37,7 @@ class TestMySQLServerManager(unittest.TestCase):
 
     def test_collect_cloud_service(self, *args):
         secret_data = self.azure_credentials
-        subscription_info = {}
+        subscription_info = self.subscription_info
         params = {'options': {}, 'secret_data': secret_data, 'filter': {}, 'subscription_info': subscription_info}
 
         mysql_servers = self.mysql_servers_manager.collect_cloud_service(params)
