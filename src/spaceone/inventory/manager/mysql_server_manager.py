@@ -1,6 +1,5 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.mysql_server import MySQLServerConnector
 from spaceone.inventory.model.mysqlserver.cloud_service import *
 from spaceone.inventory.model.mysqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
@@ -17,20 +16,22 @@ class MySQLServerManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** MySQL Servers START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of mysql servers data resource information
+        """
+
+        _LOGGER.debug(f'** MySQL Servers START **')
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
+
         subscription_info = params['subscription_info']
 
         mysql_servers_conn: MySQLServerConnector = self.locator.get_connector(self.connector_name, **params)
@@ -84,7 +85,7 @@ class MySQLServerManager(AzureManager):
             resource_group = dict_id.split('/')[4]
             return resource_group
         except IndexError:
-            raise ERROR_PARSE_ID_FROM_RESOURCE_GROUP
+            raise ERROR_PARSE_ID_FROM_RESOURCE_GROUP()
 
     @staticmethod
     def get_firewall_rules_by_server(self, mysql_servers_conn, resource_group, server_name):
