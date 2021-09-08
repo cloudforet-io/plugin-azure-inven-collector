@@ -32,7 +32,8 @@ class CollectorService(BaseService):
             'NetworkSecurityGroupManager',
             'NATGatewayManager',
             'StorageAccountManager',
-            'KeyVaultManager'
+            'KeyVaultManager',
+            'MySQLServerManager'
         ]
 
     @check_required(['options'])
