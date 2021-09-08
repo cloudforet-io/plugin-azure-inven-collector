@@ -7,6 +7,9 @@ from spaceone.inventory.model.applicationgateway.cloud_service_type import CLOUD
 from spaceone.inventory.model.applicationgateway.data import *
 import time
 import ipaddress
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class ApplicationGatewayManager(AzureManager):
@@ -14,20 +17,23 @@ class ApplicationGatewayManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Application Gateway START **")
+        """
+                Args:
+                    params (dict):
+                        - 'options' : 'dict'
+                        - 'schema' : 'str'
+                        - 'secret_data' : 'dict'
+                        - 'filter' : 'dict'
+                        - 'zones' : 'list'
+                        - 'subscription_info' :  'dict'
+                Response:
+                    CloudServiceResponse (dict) : dictionary of azure application gateway data resource information
+
+                """
+        _LOGGER.debug(f'** Application Gateway START **')
+
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
+
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
         application_gateway_conn: ApplicationGatewayConnector = self.locator.get_connector(self.connector_name,
@@ -157,13 +163,7 @@ class ApplicationGatewayManager(AzureManager):
 
                         self.update_backend_pool_dict(application_gateway_dict['backend_address_pools'], backend_address_pool_id, rule_name_list)
 
-            '''
-            if application_gateway_dict.get('subnets') is not None:
-                # Change attached network interfaces objects to id
-                self.change_subnet_object_to_ids_list(application_gateway_dict['subnets'])
-            '''
-            print(f'[APPLICATION GATEWAYS INFO] {application_gateway_dict}')
-
+            _LOGGER.debug(f'[APPLICATION GATEWAYS INFO] {application_gateway_dict}')
             application_gateway_data = ApplicationGateway(application_gateway_dict, strict=False)
             application_gateway_resource = ApplicationGatewayResource({
                 'data': application_gateway_data,
@@ -176,7 +176,8 @@ class ApplicationGatewayManager(AzureManager):
             self.set_region_code(application_gateway_data['location'])
             application_gateways.append(ApplicationGatewayResponse({'resource': application_gateway_resource}))
 
-        print(f'** Application Gateway Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Application Gateway Finished {time.time() - start_time} Seconds **')
+
         return application_gateways
 
     @staticmethod
@@ -189,7 +190,7 @@ class ApplicationGatewayManager(AzureManager):
         public_ip_address_obj = application_gateway_conn.get_public_ip_addresses(resource_group_name, pip_name)
         public_ip_address_dict = self.convert_nested_dictionary(self, public_ip_address_obj)
 
-        print(f'[Public IP Address]{public_ip_address_dict}')
+        _LOGGER.debug(f'[Public IP Address]{public_ip_address_dict}')
 
         return public_ip_address_dict
 
@@ -230,7 +231,6 @@ class ApplicationGatewayManager(AzureManager):
                 rewrite_rule.update({
                     'rules_applied': applied_rules_list
                 })
-
 
     @staticmethod
     def update_http_listeners_list(http_listeners_list, http_listener_id, http_applied_rules):

@@ -57,7 +57,7 @@ class CollectorService(BaseService):
                 - options
                 - secret_data
         """
-        print(f'[PARAMS in COLLECTOR SERVICE] {params}')
+        _LOGGER.debug(f'[PARAMS in COLLECTOR SERVICE] {params}')
         options = params['options']
         secret_data = params.get('secret_data', {})
         if secret_data != {}:
@@ -84,7 +84,7 @@ class CollectorService(BaseService):
             'subscription_info': self.get_subscription_info(params)
         })
 
-        print("[ EXECUTOR START: Azure Cloud Service ]")
+        _LOGGER.debug("[ EXECUTOR START: Azure Cloud Service ]")
         '''
         # TODO: Thread per cloud services
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
@@ -106,13 +106,13 @@ class CollectorService(BaseService):
         '''
 
         for manager in self.execute_managers:
-            print(f'@@@ {manager} @@@')
+            _LOGGER.debug(f'@@@ {manager} @@@')
             _manager = self.locator.get_manager(manager)
 
             for resource in _manager.collect_resources(params):
                 yield resource.to_primitive()
 
-        print(f'TOTAL TIME : {time.time() - start_time} Seconds')
+        _LOGGER.debug(f'TOTAL TIME : {time.time() - start_time} Seconds')
 
     def get_subscription_info(self, params):
         subscription_manager: SubscriptionManager = self.locator.get_manager('SubscriptionManager')

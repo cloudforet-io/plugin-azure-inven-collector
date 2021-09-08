@@ -1,11 +1,13 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.vmscaleset import VmScaleSetConnector
 from spaceone.inventory.model.vmscaleset.cloud_service import *
 from spaceone.inventory.model.vmscaleset.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.vmscaleset.data import *
 import time
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class VmScaleSetManager(AzureManager):
@@ -13,21 +15,21 @@ class VmScaleSetManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** VmScaleSet START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of azure vm scale set data resource information
+        """
+        _LOGGER.debug("** VmScaleSet START **")
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
-        secret_data = params['secret_data']
+
         subscription_info = params['subscription_info']
 
         vm_scale_set_conn: VmScaleSetConnector = self.locator.get_connector(self.connector_name, **params)
@@ -133,8 +135,7 @@ class VmScaleSetManager(AzureManager):
                 'tags': _tags
             })
 
-            # print("vm_scale_set_dict")
-            # print(vm_scale_set_dict)
+            _LOGGER.debug(f'[VM_SCALE_SET_INFO] {vm_scale_set_dict}')
 
             vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
             vm_scale_set_resource = VmScaleSetResource({
@@ -149,7 +150,7 @@ class VmScaleSetManager(AzureManager):
             self.set_region_code(vm_scale_set_data['location'])
             vm_scale_sets.append(VmScaleSetResponse({'resource': vm_scale_set_resource}))
 
-        print(f'** VmScaleSet Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** VmScaleSet Finished {time.time() - start_time} Seconds **')
         return vm_scale_sets
 
     @staticmethod

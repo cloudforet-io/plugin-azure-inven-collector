@@ -1,6 +1,5 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.public_ip_address import PublicIPAddressConnector
 from spaceone.inventory.model.publicipaddress.cloud_service import *
 from spaceone.inventory.model.publicipaddress.cloud_service_type import CLOUD_SERVICE_TYPES
@@ -8,6 +7,9 @@ from spaceone.inventory.model.publicipaddress.data import *
 import json
 import time
 import ipaddress
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class PublicIPAddressManager(AzureManager):
@@ -15,21 +17,21 @@ class PublicIPAddressManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Public IP Address START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of azure public ip address data resource information
+        """
+        _LOGGER.debug("** Public IP Address START **")
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
-        secret_data = params['secret_data']
+
         subscription_info = params['subscription_info']
 
         public_ip_address_conn: PublicIPAddressConnector = self.locator.get_connector(self.connector_name,**params)
@@ -37,7 +39,6 @@ class PublicIPAddressManager(AzureManager):
         public_ip_addresses_list = public_ip_address_conn.list_all_public_ip_addresses()
 
         for public_ip_address in public_ip_addresses_list:
-            # print(f'[public_ip_address_json]{public_ip_address_json}')
             public_ip_address_dict = self.convert_nested_dictionary(self, public_ip_address)
 
             # update application_gateway_dict
@@ -69,7 +70,7 @@ class PublicIPAddressManager(AzureManager):
             self.set_region_code(public_ip_address_data['location'])
             public_ip_addresses.append(PublicIPAddressResponse({'resource': public_ip_address_resource}))
 
-        print(f'** Public IP Address Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Public IP Address Finished {time.time() - start_time} Seconds **')
         return public_ip_addresses
 
     @staticmethod

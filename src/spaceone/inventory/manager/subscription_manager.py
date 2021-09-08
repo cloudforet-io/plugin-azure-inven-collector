@@ -7,6 +7,7 @@ from spaceone.inventory.connector.disk import DiskConnector
 from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
 from datetime import datetime
 import time
+import logging
 
 
 class SubscriptionManager(AzureManager):

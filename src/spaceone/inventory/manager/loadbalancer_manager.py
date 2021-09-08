@@ -1,11 +1,13 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.loadbalncer import LoadBalancerConnector
 from spaceone.inventory.model.loadbalancer.cloud_service import *
 from spaceone.inventory.model.loadbalancer.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.loadbalancer.data import *
 import time
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class LoadBalancerManager(AzureManager):
@@ -13,7 +15,19 @@ class LoadBalancerManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** LoadBalancer START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of azure load balancer data resource information
+        """
+        _LOGGER.debug(f'** LoadBalancer START **')
         start_time = time.time()
         """
         Args:
@@ -27,7 +41,6 @@ class LoadBalancerManager(AzureManager):
         Response:
             CloudServiceResponse
         """
-        secret_data = params['secret_data']
         subscription_info = params['subscription_info']
 
         load_balancer_conn: LoadBalancerConnector = self.locator.get_connector(self.connector_name, **params)
@@ -153,7 +166,7 @@ class LoadBalancerManager(AzureManager):
                 'tags': _tags
             })
 
-            print(f'[LOAD BALANCER INFO] {load_balancer_dict}')
+            _LOGGER.debug(f'[LOAD BALANCER INFO] {load_balancer_dict}')
 
             load_balancer_data = LoadBalancer(load_balancer_dict, strict=False)
             load_balancer_resource = LoadBalancerResource({
@@ -168,13 +181,12 @@ class LoadBalancerManager(AzureManager):
             self.set_region_code(load_balancer_data['location'])
             load_balancers.append(LoadBalancerResponse({'resource': load_balancer_resource}))
 
-        print(f'** LoadBalancer Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** LoadBalancer Finished {time.time() - start_time} Seconds **')
         return load_balancers
 
     @staticmethod
     def get_resource_group_from_id(dict_id):
         resource_group = dict_id.split('/')[4]
-        print(f'RESOURCE_GROUP_NAME: {resource_group}')
         return resource_group
 
     @staticmethod
@@ -185,7 +197,7 @@ class LoadBalancerManager(AzureManager):
         # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
             network_interface_dict = self.convert_nested_dictionary(self, nil)
-            print(f'[NETWORK_INTERFACE_DICT] {network_interface_dict}')
+            _LOGGER.debug(f'[NETWORK_INTERFACE_DICT] {network_interface_dict}')
             nic_rg_name = network_interface_dict.get('id', '').split('/')[4]
 
             if network_interface_dict.get('ip_configurations') is not None:
@@ -217,8 +229,6 @@ class LoadBalancerManager(AzureManager):
 
     @staticmethod
     def get_ip_configurations_list(self, load_balancer_conn, rg_name, network_interface_name):
-        print(f' network_interface_name:{network_interface_name}')
-        print(f' rg_name:{rg_name}')
         ip_configuration_list = []
         ip_configurations_object_list = []
         if network_interface_name:
@@ -227,18 +237,16 @@ class LoadBalancerManager(AzureManager):
                 ip_configurations_object_list = list(ip_configurations_object)
 
             except Exception as e:
-                print(f'[ERROR: List load balancer Network IP configurations list]: {e}')
+                _LOGGER.error(f'[ERROR: List load balancer Network IP configurations list]: {e}')
 
             try:
                 for ip_configuration_object in ip_configurations_object_list:
-                    print(f' ip_configuration_object:{ip_configuration_object}')
                     type_obj = type(ip_configuration_object)
-                    print(f' ip_configuration_object_type:{type_obj}')
                     ip_object_dict = self.convert_nested_dictionary(self, ip_configuration_object)
                     ip_configuration_list.append(ip_object_dict)
 
             except Exception as e:
-                print(f'[ERROR: list IP configuration object]: {e}')
+                _LOGGER.error(f'[ERROR: list IP configuration object]: {e}')
 
         return ip_configuration_list
 

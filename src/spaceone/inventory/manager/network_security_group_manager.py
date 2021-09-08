@@ -7,6 +7,9 @@ from spaceone.inventory.model.networksecuritygroup.cloud_service_type import CLO
 from spaceone.inventory.model.networksecuritygroup.data import *
 import time
 import ipaddress
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class NetworkSecurityGroupManager(AzureManager):
@@ -14,21 +17,21 @@ class NetworkSecurityGroupManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Network Security Group START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of azure network security group data resource information
+        """
+        _LOGGER.debug("** Network Security Group START **")
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
-        secret_data = params['secret_data']
+
         subscription_info = params['subscription_info']
         network_security_group_conn: NetworkSecurityGroupConnector = self.locator.get_connector(self.connector_name,**params)
         network_security_groups = []
@@ -51,7 +54,7 @@ class NetworkSecurityGroupManager(AzureManager):
                         outbound_rules.append(ob)
 
                 except Exception as e:
-                    print(f'[ERROR: Azure Network Security Group Manager Split Security Rules]: {e}')
+                    _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Split Security Rules]: {e}')
 
             # update default security rules
             if network_security_group_dict.get('default_security_rules') is not None:
@@ -64,7 +67,7 @@ class NetworkSecurityGroupManager(AzureManager):
                         outbound_rules.append(ob)
 
                 except ValueError as e:
-                    print(f'[ERROR: Azure Network Security Group Manager Split Security Rules]: {e}')
+                    _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Split Security Rules]: {e}')
 
             network_security_group_dict.update({
                 'inbound_security_rules': inbound_rules,
@@ -98,7 +101,7 @@ class NetworkSecurityGroupManager(AzureManager):
                                 'virtual_network': self.get_virtual_network(subnet['id'])
                             })
                     except ValueError as e:
-                        print(f'[ERROR: Azure Network Security Group Manager Get Virtual Network from Subnets]: {e}')
+                        _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Get Virtual Network from Subnets]: {e}')
 
             # update application_gateway_dict
             network_security_group_dict.update({
@@ -108,7 +111,7 @@ class NetworkSecurityGroupManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
             })
 
-            print(f'[NETWORK SECURITY GROUP INFO] {network_security_group_dict}')
+            _LOGGER.debug(f'[NETWORK SECURITY GROUP INFO] {network_security_group_dict}')
 
             network_security_group_data = NetworkSecurityGroup(network_security_group_dict, strict=False)
             network_security_group_resource = NetworkSecurityGroupResource({
@@ -122,7 +125,7 @@ class NetworkSecurityGroupManager(AzureManager):
             self.set_region_code(network_security_group_data['location'])
             network_security_groups.append(NetworkSecurityGroupResponse({'resource': network_security_group_resource}))
 
-        print(f'** Network Security Group Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Network Security Group Finished {time.time() - start_time} Seconds **')
         return network_security_groups
 
     @staticmethod
@@ -131,7 +134,7 @@ class NetworkSecurityGroupManager(AzureManager):
         try:
             resource_group = dict_id.split('/')[4]
         except ValueError as e:
-            print(f'[ERROR: Azure Manager Get Resource Group Info]')
+            _LOGGER.error(f'[ERROR: Azure Manager Get Resource Group Info]')
         return resource_group
 
     @staticmethod
@@ -150,7 +153,7 @@ class NetworkSecurityGroupManager(AzureManager):
                 elif security_rule.get('direction', '') == 'Outbound':
                     outbound_security_rules.append(security_rule)
         except ValueError as e:
-            print(f'[ERROR: Azure Manager Split Network Security Group Info]: {e}')
+            _LOGGER.error(f'[ERROR: Azure Manager Split Network Security Group Info]: {e}')
 
         return inbound_security_rules, outbound_security_rules
 
@@ -162,7 +165,7 @@ class NetworkSecurityGroupManager(AzureManager):
                     for ip_configuration in network_interface['ip_configurations']:
                         ip_configuration['subnet'] = ip_configuration.get('subnet', {}).get('id', '')
         except Exception as e:
-            print(f'[ERROR: Azure Network Security Group Manager Get Network IP Configuration Subnets]: {e}')
+            _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Get Network IP Configuration Subnets]: {e}')
 
         return
 
@@ -195,7 +198,7 @@ class NetworkSecurityGroupManager(AzureManager):
             return network_interfaces_new_list, virtual_machines_str
 
         except Exception as e:
-            print(f'[ERROR: Azure Network Security Group Manager Network Interface List]: {e}')
+            _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Network Interface List]: {e}')
 
     @staticmethod
     def get_ip_addresses(network_interfaces_list):
@@ -216,12 +219,10 @@ class NetworkSecurityGroupManager(AzureManager):
                                         'public_ip_address': public_ip_address,
                                     })
                                 except Exception as e:
-                                    print(f'[ERROR: Azure Network Security Group Manager Get Public IP Addresses]: {e}')
-
-
+                                    _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Get Public IP Addresses]: {e}')
 
             except Exception as e:
-                print(f'[ERROR: Azure Network Security Group Manager Get IP Addresses]: {e}')
+                _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Get IP Addresses]: {e}')
         return
 
     @staticmethod
@@ -239,11 +240,11 @@ class NetworkSecurityGroupManager(AzureManager):
                         subnet_dict = self.convert_nested_dictionary(self, subnet_obj)
                         subnets_full_list.append(subnet_dict)
                     except ValueError as e:
-                        print(f'[ERROR: Azure Network Security Group Manager Split Subnet Info]: {e}')
+                        _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Split Subnet Info]: {e}')
                 return subnets_full_list
 
             except Exception as e:
-                print(f'[ERROR: Azure Network Security Group Manager Get Subnets]: {e}')
+                _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Get Subnets]: {e}')
         return
 
     @staticmethod
@@ -253,4 +254,4 @@ class NetworkSecurityGroupManager(AzureManager):
             return virtual_network
 
         except Exception as e:
-            print(f'[ERROR: Azure Network Security Group Manager Get Virtual Network Name from Subnets]: {e}')
+            _LOGGER.error(f'[ERROR: Azure Network Security Group Manager Get Virtual Network Name from Subnets]: {e}')
