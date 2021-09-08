@@ -9,10 +9,10 @@ _LOGGER = logging.getLogger(__name__)
 
 class MySQLServerConnector(AzureConnector):
 
-    def __init__(self, **kwargs):
+    def __init__(self, secret_data=None, **kwargs):
         super().__init__(**kwargs)
 
-        self.set_connect(kwargs.get('secret_data'))
+        self.set_connect(secret_data)
 
     def list_servers(self):
         try:
