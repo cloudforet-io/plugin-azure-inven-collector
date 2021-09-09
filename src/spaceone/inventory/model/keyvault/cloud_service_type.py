@@ -18,7 +18,7 @@ cst_key_vault.tags = {
 cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Name', 'data.type'),
+        TextDyField.data_source('Type', 'data.type'),
         TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),

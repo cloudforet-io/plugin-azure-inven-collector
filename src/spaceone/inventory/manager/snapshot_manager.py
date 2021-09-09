@@ -7,6 +7,9 @@ from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.snapshot.cloud_service_type import CLOUD_SERVICE_TYPES
 from datetime import datetime
 import time
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class SnapshotManager(AzureManager):
@@ -14,36 +17,27 @@ class SnapshotManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Snapshot START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of azure snapshot data resource information
+        """
+        _LOGGER.debug("** Snapshot START **")
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
-        secret_data = params['secret_data']
-        # subscription_info = params['subscription_info']
-        subscription_info = {
-            'subscription_id': '3ec64e1e-1ce8-4f2c-82a0-a7f6db0899ca',
-            'subscription_name': 'Azure subscription 1',
-            'tenant_id': '35f43e22-0c0b-4ff3-90aa-b2c04ef1054c'
-        }
+
+        subscription_info = params['subscription_info']
+
         snapshot_conn: SnapshotConnector = self.locator.get_connector(self.connector_name, **params)
         snapshots = []
         for snapshot in snapshot_conn.list_snapshots():
             snapshot_dict = self.convert_nested_dictionary(self, snapshot)
-
-            # snapshot_dict = self.convert_dictionary(snapshot)
-            # sku_dict = self.convert_dictionary(snapshot.sku)
-            # creation_data_dict = self.convert_dictionary(snapshot.creation_data)
-            # encryption_dict = self.convert_dictionary(snapshot.encryption)
 
             # update sku_dict
             # switch SnapshotStorageAccountType to snapshot_sku_name for user-friendly words.
@@ -113,13 +107,13 @@ class SnapshotManager(AzureManager):
                 'name': snapshot_data.name
             })
 
-            # print(f'[SNAPSHOT DICT]{snapshot_dict}')
+            _LOGGER.debug(f'[SNAPSHOT DICT]{snapshot_dict}')
 
             # Must set_region_code method for region collection
             self.set_region_code(snapshot_data['location'])
             snapshots.append(SnapshotResponse({'resource': snapshot_resource}))
 
-        print(f'** Snapshot Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Snapshot Finished {time.time() - start_time} Seconds **')
         return snapshots
 
     @staticmethod

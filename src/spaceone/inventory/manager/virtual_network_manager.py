@@ -1,32 +1,36 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.virtual_network import VirtualNetworkConnector
 from spaceone.inventory.model.virtualnetwork.cloud_service import *
 from spaceone.inventory.model.virtualnetwork.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.virtualnetwork.data import *
 import time
 import ipaddress
+import logging
+
+_LOGGER = logging.getLogger(__name__)
+
 
 class VirtualNetworkManager(AzureManager):
     connector_name = 'VirtualNetworkConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Vnet START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of virtual network data resource information
+        """
+        _LOGGER.debug("** Vnet START **")
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
+
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
 
@@ -83,7 +87,7 @@ class VirtualNetworkManager(AzureManager):
                         ip = IPNetwork(address_space)
                         # vnet_dict['address_space']['address_count'] = ip.size
             '''
-            print(f'[VNET INFO] {vnet_dict}')
+            _LOGGER.debug(f'[VNET INFO] {vnet_dict}')
 
             vnet_data = VirtualNetwork(vnet_dict, strict=False)
             vnet_resource = VirtualNetworkResource({
@@ -97,7 +101,7 @@ class VirtualNetworkManager(AzureManager):
             self.set_region_code(vnet_data['location'])
             virtual_networks.append(VirtualNetworkResponse({'resource': vnet_resource}))
 
-        print(f'** Virtual Network Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Virtual Network Finished {time.time() - start_time} Seconds **')
         return virtual_networks
 
     @staticmethod
