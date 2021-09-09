@@ -72,8 +72,3 @@ class PublicIPAddressManager(AzureManager):
 
         _LOGGER.debug(f'** Public IP Address Finished {time.time() - start_time} Seconds **')
         return public_ip_addresses
-
-    @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = dict_id.split('/')[4]
-        return resource_group

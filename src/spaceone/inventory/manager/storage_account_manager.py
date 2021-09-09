@@ -84,11 +84,6 @@ class StorageAccountManager(AzureManager):
         return storage_accounts
 
     @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = dict_id.split('/')[4]
-        return resource_group
-
-    @staticmethod
     def get_public_ip_address(self, application_gateway_conn, resource_group_name, pip_name):
         public_ip_address_obj = application_gateway_conn.get_public_ip_addresses(resource_group_name, pip_name)
         public_ip_address_dict = self.convert_nested_dictionary(self, public_ip_address_obj)

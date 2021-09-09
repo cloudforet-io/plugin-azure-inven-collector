@@ -105,11 +105,6 @@ class VirtualNetworkManager(AzureManager):
         return virtual_networks
 
     @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = dict_id.split('/')[4]
-        return resource_group
-
-    @staticmethod
     def change_subnet_object_to_ids_list(subnets_dict):
         subnet_id_list = []
         for subnet in subnets_dict:

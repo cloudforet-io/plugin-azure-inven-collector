@@ -49,7 +49,7 @@ mysql_servers_connection_security = ListDynamicLayout.set_layouts('Connection Se
                                                                                mysql_servers_ssl_tls])
 
 
-mysql_servers_parameters = TableDynamicLayout.set_fields('MySQL Server', fields=[
+mysql_servers_parameters = TableDynamicLayout.set_fields('MySQL Parameters', fields=[
     TextDyField.data_source('Allow Access To Azure Services', 'data.allow_azure_services_access'),
     TextDyField.data_source('Enforce SSL Connection', 'data.ssl_enforcement'),
     TextDyField.data_source('Minimum TLS Version', 'data.minimal_tls_version')
@@ -58,7 +58,7 @@ mysql_servers_parameters = TableDynamicLayout.set_fields('MySQL Server', fields=
 mysql_servers_pricing_tiers = ItemDynamicLayout.set_fields('Pricing Tier', fields=[
     TextDyField.data_source('Tier', 'data.sku.tier'),
     TextDyField.data_source('Compute Generation', 'data.sku.family'),
-    TextDyField.data_source('vCore', 'data.capacity'),
+    TextDyField.data_source('vCore', 'data.sku.capacity'),
     TextDyField.data_source('Storage', 'data.storage_profile.storage_gb'),
     EnumDyField.data_source('Storage Auto-Growth', 'data.storage_profile.storage_autogrow', default_state={
         'safe': ['Enabled'],

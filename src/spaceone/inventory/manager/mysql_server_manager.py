@@ -59,7 +59,7 @@ class MySQLServerManager(AzureManager):
                 })
 
             if mysql_server_dict.get('storage_profile') is not None:
-                mysql_server_dict.update({
+                mysql_server_dict['storage_profile'].update({
                     'storage_gb': self.get_storage_gb(mysql_server_dict['storage_profile'].get('storage_mb', ''))
                 })
             _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_dict}')
@@ -78,14 +78,6 @@ class MySQLServerManager(AzureManager):
 
         _LOGGER.debug(f'** MySQL Server Finished {time.time() - start_time} Seconds **')
         return mysql_servers
-
-    @staticmethod
-    def get_resource_group_from_id(dict_id):
-        try:
-            resource_group = dict_id.split('/')[4]
-            return resource_group
-        except IndexError:
-            raise ERROR_PARSE_ID_FROM_RESOURCE_GROUP()
 
     @staticmethod
     def get_firewall_rules_by_server(self, mysql_servers_conn, resource_group, server_name):

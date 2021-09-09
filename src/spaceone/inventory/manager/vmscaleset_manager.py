@@ -154,11 +154,6 @@ class VmScaleSetManager(AzureManager):
         return vm_scale_sets
 
     @staticmethod
-    def get_resource_group_from_id(disk_id):
-        resource_group = disk_id.split('/')[4].lower()
-        return resource_group
-
-    @staticmethod
     def get_proximity_placement_group_name(placement_group_id):
         placement_group_name = placement_group_id.split('/')[8]  # parse placement_group_name from placement_group_id
         return placement_group_name

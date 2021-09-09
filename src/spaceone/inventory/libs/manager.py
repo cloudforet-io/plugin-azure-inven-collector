@@ -1,8 +1,13 @@
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.libs.schema.region import RegionResource, RegionResponse
+from spaceone.inventory.error.custom import *
 from collections.abc import Iterable
 import json
+import logging
+
+
+_LOGGER = logging.getLogger(__name__)
 
 REGION_INFO = {
     'eastus': {'name': 'US East (Virginia)', 'tags': {'latitude': '37.3719', 'longitude': '-79.8164'}},
@@ -155,25 +160,33 @@ class AzureManager(BaseManager):
         return vars(obj)
 
     @staticmethod
-    def convert_nested_dictionary(self, vm_object):
-        vm_dict = self.convert_dictionary(vm_object)
-        for k, v in vm_dict.items():
+    def convert_nested_dictionary(self, cloud_svc_object):
+        cloud_svc_dict = self.convert_dictionary(cloud_svc_object)
+        for k, v in cloud_svc_dict.items():
             if isinstance(v, object):  # object
-                if 'azure' in str(type(v)):  # 1) if vm_object is azure defined model class
-                    vm_dict[k] = self.convert_nested_dictionary(self, v)
-                elif isinstance(v, list):  # 2) if vm_object is list
-                    vm_converse_list = list()
-                    for list_obj in v:  # if vm object's child value is Azure defined model class or dict class
+                if 'azure' in str(type(v)):  # 1) if cloud_svc_object is azure defined model class
+                    cloud_svc_dict[k] = self.convert_nested_dictionary(self, v)
+                elif isinstance(v, list):  # 2) if cloud_svc_object is list
+                    cloud_svc_converse_list = list()
+                    for list_obj in v:  # if cloud_svc object's child value is Azure defined model class or dict class
                         if hasattr(list_obj, '__dict__') or 'azure' in str(type(list_obj)):
-                            vm_converse_dict = self.convert_nested_dictionary(self, list_obj)
-                            vm_converse_list.append(vm_converse_dict)
-                        else:  # if vm object's child value is simple list
-                            vm_converse_list.append(list_obj)
+                            cloud_svc_converse_dict = self.convert_nested_dictionary(self, list_obj)
+                            cloud_svc_converse_list.append(cloud_svc_converse_dict)
+                        else:  # if cloud_svc_object's child value is simple list
+                            cloud_svc_converse_list.append(list_obj)
 
-                        vm_dict[k] = vm_converse_list
+                        cloud_svc_dict[k] = cloud_svc_converse_list
 
-                elif hasattr(v, '__dict__'):  # if vm_object is not a list type, just a dict
-                    vm_converse_dict = self.convert_nested_dictionary(self, v)
-                    vm_dict[k] = vm_converse_dict
+                elif hasattr(v, '__dict__'):  # if cloud_svc_object is not a list type, just a dict
+                    cloud_svc_converse_dict = self.convert_nested_dictionary(self, v)
+                    cloud_svc_dict[k] = cloud_svc_converse_dict
 
-        return vm_dict
+        return cloud_svc_dict
+
+    @staticmethod
+    def get_resource_group_from_id(dict_id):
+        try:
+            resource_group = dict_id.split('/')[4]
+            return resource_group
+        except IndexError:
+            raise ERROR_PARSE_ID_FROM_RESOURCE_GROUP()

@@ -185,11 +185,6 @@ class LoadBalancerManager(AzureManager):
         return load_balancers
 
     @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = dict_id.split('/')[4]
-        return resource_group
-
-    @staticmethod
     def get_network_interfaces(self, load_balancer_conn, rg_name, lb_name):
         network_interface_object_list = list(load_balancer_conn.list_load_balancer_network_interfaces(rg_name, lb_name))
         network_interface_list = []  # list for return values
