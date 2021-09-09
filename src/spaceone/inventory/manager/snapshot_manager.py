@@ -117,11 +117,6 @@ class SnapshotManager(AzureManager):
         return snapshots
 
     @staticmethod
-    def get_resource_group_from_id(disk_id):
-        resource_group = disk_id.split('/')[4].lower()
-        return resource_group
-
-    @staticmethod
     def get_attached_vm_name_from_managed_by(managed_by):
         attached_vm_name = ''
         if managed_by:

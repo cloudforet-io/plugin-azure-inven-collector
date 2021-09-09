@@ -80,14 +80,6 @@ class MySQLServerManager(AzureManager):
         return mysql_servers
 
     @staticmethod
-    def get_resource_group_from_id(dict_id):
-        try:
-            resource_group = dict_id.split('/')[4]
-            return resource_group
-        except IndexError:
-            raise ERROR_PARSE_ID_FROM_RESOURCE_GROUP()
-
-    @staticmethod
     def get_firewall_rules_by_server(self, mysql_servers_conn, resource_group, server_name):
         try:
             firewall_rules = []

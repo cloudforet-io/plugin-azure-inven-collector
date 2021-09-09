@@ -143,11 +143,6 @@ class SqlServerManager(AzureManager):
         return sql_servers
 
     @staticmethod
-    def get_resource_group_from_id(sql_server_id):
-        resource_group = sql_server_id.split('/')[4].lower()
-        return resource_group
-
-    @staticmethod
     def list_databases(self, sql_servers_conn, sql_monitor_conn, rg_name, server_name, server_admin_name):
         databases_list = list()
         databases = sql_servers_conn.list_databases_by_server(resource_group=rg_name, server_name=server_name)

@@ -129,15 +129,6 @@ class NetworkSecurityGroupManager(AzureManager):
         return network_security_groups
 
     @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = ''
-        try:
-            resource_group = dict_id.split('/')[4]
-        except ValueError as e:
-            _LOGGER.error(f'[ERROR: Azure Manager Get Resource Group Info]')
-        return resource_group
-
-    @staticmethod
     def split_security_rules(network_security_group_dict, mode):
         inbound_security_rules = []
         outbound_security_rules = []
