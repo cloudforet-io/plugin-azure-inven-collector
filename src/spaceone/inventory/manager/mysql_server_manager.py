@@ -59,7 +59,7 @@ class MySQLServerManager(AzureManager):
                 })
 
             if mysql_server_dict.get('storage_profile') is not None:
-                mysql_server_dict.update({
+                mysql_server_dict['storage_profile'].update({
                     'storage_gb': self.get_storage_gb(mysql_server_dict['storage_profile'].get('storage_mb', ''))
                 })
             _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_dict}')
