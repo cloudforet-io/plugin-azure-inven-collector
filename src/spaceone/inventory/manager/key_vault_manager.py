@@ -92,11 +92,6 @@ class KeyVaultManager(AzureManager):
         return key_vaults
 
     @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = dict_id.split('/')[4]
-        return resource_group
-
-    @staticmethod
     def list_keys(self, key_vault_conn, resource_group_name, vault_name):
         try:
             keys = []

@@ -124,11 +124,6 @@ class NATGatewayManager(AzureManager):
         return nat_gateways
 
     @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = dict_id.split('/')[4]
-        return resource_group
-
-    @staticmethod
     def get_public_ip_address_dict(self, nat_gateway_conn, pip_id):
         try:
             pip_name = pip_id.split('/')[8]
