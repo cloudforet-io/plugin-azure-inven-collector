@@ -12,3 +12,4 @@ from spaceone.inventory.connector.network_security_group import NetworkSecurityG
 from spaceone.inventory.connector.nat_gateway import NATGatewayConnector
 from spaceone.inventory.connector.storage_account import StorageAccountConnector
 from spaceone.inventory.connector.key_vault import KeyVaultConnector
+from spaceone.inventory.connector.mysql_server import MySQLServerConnector

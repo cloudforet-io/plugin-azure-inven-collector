@@ -1,6 +1,5 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.key_vault import KeyVaultConnector
 from spaceone.inventory.model.keyvault.cloud_service import *
 from spaceone.inventory.model.keyvault.cloud_service_type import CLOUD_SERVICE_TYPES
@@ -17,20 +16,21 @@ class KeyVaultManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Key Vault START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of azure key vault data resource information
+        """
+        _LOGGER.debug(f'** Key Vault START **')
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
+
         subscription_info = params['subscription_info']
 
         key_vault_conn: KeyVaultConnector = self.locator.get_connector(self.connector_name, **params)
@@ -74,7 +74,7 @@ class KeyVaultManager(AzureManager):
                     'enable_purge_protection_str': 'Disabled' if key_vault_dict['properties']['enable_purge_protection'] is False else 'Enabled'
                 })
 
-            print(f'[KEY VAULT INFO] {key_vault_dict}')
+            _LOGGER.debug(f'[KEY VAULT INFO] {key_vault_dict}')
 
             key_vault_data = KeyVault(key_vault_dict, strict=False)
             key_vault_resource = KeyVaultResource({
@@ -88,7 +88,7 @@ class KeyVaultManager(AzureManager):
             self.set_region_code(key_vault_data['location'])
             key_vaults.append(KeyVaultResponse({'resource': key_vault_resource}))
 
-        print(f'** Key Vault Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Key Vault Finished {time.time() - start_time} Seconds **')
         return key_vaults
 
     @staticmethod

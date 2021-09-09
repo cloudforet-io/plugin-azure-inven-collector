@@ -34,3 +34,14 @@ class ERROR_KEY_VAULTS(ERROR_BASE):
 class ERROR_KEY_VAULTS_PERMISSION(ERROR_BASE):
     status_code = 'INTERNAL'
     message = 'KeyVault secret and certification information is failed. Please check the permission.'
+
+
+class ERROR_PARSE_ID_FROM_RESOURCE_GROUP(ERROR_BASE):
+    status_code = 'INTERNAL'
+    message = 'Parse resource name from resource ID is failed. Please check the variation.'
+
+
+class ERROR_GET_ADDITIONAL_RESOURCE_INFO(ERROR_BASE):
+    status_code = 'INTERNAL'
+    message = 'Get an additional information of the resource is failed. Please check the variation'
+

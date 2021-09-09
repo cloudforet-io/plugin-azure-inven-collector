@@ -11,6 +11,9 @@ from spaceone.inventory.model.sqldatabase.cloud_service_type import CLOUD_SERVIC
 from datetime import datetime
 import time
 import copy
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class SqlServerManager(AzureManager):
@@ -20,21 +23,21 @@ class SqlServerManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES + CLOUD_SERVICE_TYPES_SQL_DB
 
     def collect_cloud_service(self, params):
-        print("** Sql Servers START **")
+        """
+           Args:
+               params (dict):
+                   - 'options' : 'dict'
+                   - 'schema' : 'str'
+                   - 'secret_data' : 'dict'
+                   - 'filter' : 'dict'
+                   - 'zones' : 'list'
+                   - 'subscription_info' :  'dict'
+           Response:
+               CloudServiceResponse (dict) : dictionary of azure sql servers data resource information
+        """
+        _LOGGER.debug(f'** Sql Servers START **')
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
-        secret_data = params['secret_data']
+
         subscription_info = params['subscription_info']
 
         sql_servers_conn: SqlConnector = self.locator.get_connector(self.sql_connector_name, **params)
@@ -111,9 +114,6 @@ class SqlServerManager(AzureManager):
                 'tags': _tags
             })
 
-            # print("sql_dict")
-            # print(sql_server_dict)
-
             sql_servers_data = SqlServer(sql_server_dict, strict=False)
             sql_servers_resource = SqlServerResource({
                 'data': sql_servers_data,
@@ -125,22 +125,21 @@ class SqlServerManager(AzureManager):
             sql_servers.append(SqlServerResponse({'resource': sql_servers_resource}))
 
             for sql_database in sql_server_dict.get('databases', []):
-                print("sql_database")
-                print(sql_database)
                 sql_database_data = Database(sql_database, strict=False)
                 sql_databases_resource = SqlDatabaseResource({
                     'data': sql_database_data,
                     'region_code': sql_database_data.location,
                     'reference': ReferenceModel(sql_database_data.reference()),
                     'tags': _tags,
-                    'name' : sql_database_data.name
+                    'name': sql_database_data.name
                 })
                 sql_servers.append(SqlDatabaseResponse({'resource': sql_databases_resource}))
 
             # Must set_region_code method for region collection
             self.set_region_code(sql_servers_data['location'])
 
-        print(f'** Sql Servers Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Sql Servers Finished {time.time() - start_time} Seconds **')
+
         return sql_servers
 
     @staticmethod

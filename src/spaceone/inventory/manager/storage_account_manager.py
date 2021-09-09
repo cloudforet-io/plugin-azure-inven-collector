@@ -1,12 +1,14 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.storage_account import StorageAccountConnector
 from spaceone.inventory.model.storageaccount.cloud_service import *
 from spaceone.inventory.model.storageaccount.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.storageaccount.data import *
 import time
 import ipaddress
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class StorageAccountManager(AzureManager):
@@ -14,21 +16,21 @@ class StorageAccountManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Storage Account START **")
+        """
+            Args:
+                params (dict):
+                    - 'options' : 'dict'
+                    - 'schema' : 'str'
+                    - 'secret_data' : 'dict'
+                    - 'filter' : 'dict'
+                    - 'zones' : 'list'
+                    - 'subscription_info' :  'dict'
+            Response:
+                CloudServiceResponse (dict) : dictionary of azure storage account data resource information
+        """
+        _LOGGER.debug("** Storage Account START **")
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
-        secret_data = params['secret_data']
+
         subscription_info = params['subscription_info']
         storage_account_conn: StorageAccountConnector = self.locator.get_connector(self.connector_name, **params)
         storage_accounts = []
@@ -64,7 +66,7 @@ class StorageAccountManager(AzureManager):
                 'subscription_name': subscription_info['subscription_name'],
             })
 
-            print(f'[STORAGE ACCOUNT INFO] {storage_account_dict}')
+            _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_dict}')
 
             storage_account_data = StorageAccount(storage_account_dict, strict=False)
             storage_account_resource = StorageAccountResource({
@@ -78,7 +80,7 @@ class StorageAccountManager(AzureManager):
             self.set_region_code(storage_account_data['location'])
             storage_accounts.append(StorageAccountResponse({'resource': storage_account_resource}))
 
-        print(f'** Storage Account Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** Storage Account Finished {time.time() - start_time} Seconds **')
         return storage_accounts
 
     @staticmethod
@@ -91,7 +93,7 @@ class StorageAccountManager(AzureManager):
         public_ip_address_obj = application_gateway_conn.get_public_ip_addresses(resource_group_name, pip_name)
         public_ip_address_dict = self.convert_nested_dictionary(self, public_ip_address_obj)
 
-        print(f'[Public IP Address]{public_ip_address_dict}')
+        _LOGGER.debug(f'[Public IP Address]{public_ip_address_dict}')
 
         return public_ip_address_dict
 
@@ -171,7 +173,7 @@ class StorageAccountManager(AzureManager):
                     resource_access_rules_list.append(resource_type)
 
                 except Exception as e:
-                    print(f'[ERROR: Azure Storage Account Network Rules]: {e}')
+                    _LOGGER.error(f'[ERROR: Azure Storage Account Network Rules]: {e}')
 
             network_rule_dict.update({
                 'resource_access_rules_display': resource_access_rules_list
@@ -199,6 +201,6 @@ class StorageAccountManager(AzureManager):
                 names.append(name)
 
         except Exception as e:
-            print(f'[ERROR: Azure Storage Account Network Rule Get Name]: {e}')
+            _LOGGER.error(f'[ERROR: Azure Storage Account Network Rule Get Name]: {e}')
 
         return names
