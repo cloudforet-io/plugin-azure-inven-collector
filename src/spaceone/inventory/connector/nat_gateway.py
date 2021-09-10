@@ -26,7 +26,7 @@ class NATGatewayConnector(AzureConnector):
             return obj
 
         except Exception as e:
-            print(f'[ERROR: Azure NAT Gateway Connector Get Public IP Prefixes]: {e}')
+            _LOGGER.error(f'[ERROR: Azure NAT Gateway Connector Get Public IP Prefixes]: {e}')
 
     def get_subnet(self, resource_group_name, subnet_name, vnet_name):
         try:
@@ -34,4 +34,4 @@ class NATGatewayConnector(AzureConnector):
             return obj
 
         except Exception as e:
-            print(f'[ERROR: Azure NAT Gateway Connector Get Subnet]: {e}')
+            _LOGGER.error(f'[ERROR: Azure NAT Gateway Connector Get Subnet]: {e}')
