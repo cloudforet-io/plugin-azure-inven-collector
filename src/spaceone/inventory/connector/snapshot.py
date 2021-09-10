@@ -2,7 +2,7 @@ import logging
 
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error import *
-
+from spaceone.inventory.error.custom import *
 __all__ = ['SnapshotConnector']
 _LOGGER = logging.getLogger(__name__)
 
@@ -14,4 +14,7 @@ class SnapshotConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_snapshots(self):
-        return self.compute_client.snapshots.list()
+        try:
+            return self.compute_client.snapshots.list()
+        except ConnectionError:
+            _LOGGER.error(ERROR_CONNECTOR(field='Public IP Address'))
