@@ -19,14 +19,81 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Type', 'data.type'),
-        TextDyField.data_source('Status', 'data.user_visible_state'),
+        EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
+            'safe': ['Ready'],
+            'warning': ['Dropping'],
+            'disable': ['Disabled', 'Inaccessible']
+        }),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
 
-        # is_optional fields - MySQL # TODO
+        # is_optional fields - MySQL
         TextDyField.data_source('Name', 'data.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Type', 'data.type', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Resource Group', 'data.resource_group', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Location', 'data.location', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Subscription', 'data.subscription_name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Server Admin Login Name', 'data.administrator_login', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('MySQL Version', 'data.version', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Performance Configuration (Tier)', 'data.sku.tier', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Performance Configuration (Name)', 'data.sku.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('SSL Enforce Status', 'data.ssl_enforcement', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Firewall Rule Name', 'data.firewall_rules.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Start IP', 'data.firewall_rules.start_ip_address', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('End IP', 'data.firewall_rules.end_ip_address', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Allow Access To Azure Services', 'data.allow_azure_services_access', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Enforce SSL Connection', 'data.ssl_enforcement', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Minimum TLS Version', 'data.minimal_tls_version', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Tier', 'data.sku.tier', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Compute Generation', 'data.sku.family', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('vCore', 'data.sku.capacity', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Storage', 'data.storage_profile.storage_gb', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Backup Retention Period', 'data.storage_profile.backup_retention_days', options={
             'is_optional': True
         })
     ],
