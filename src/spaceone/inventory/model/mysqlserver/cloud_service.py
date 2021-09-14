@@ -14,7 +14,6 @@ mysql_servers_info_meta = ItemDynamicLayout.set_fields('MySQL Server', fields=[
     TextDyField.data_source('Name', 'data.name'),
     TextDyField.data_source('Server Name', 'data.fully_qualified_domain_name'),
     TextDyField.data_source('Type', 'data.type'),
-    TextDyField.data_source('Status', 'data.user_visible_state'),
     EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
         'safe': ['Ready'],
         'warning': ['Dropping'],
@@ -64,7 +63,7 @@ mysql_servers_pricing_tiers = ItemDynamicLayout.set_fields('Pricing Tier', field
         'safe': ['Enabled'],
         'warning': ['Disabled']
     }),
-    TextDyField.data_source('Geo Redundant Backup', 'data.storage_profile.geo_redundant_backup', default_state={
+    EnumDyField.data_source('Geo Redundant Backup', 'data.storage_profile.geo_redundant_backup', default_state={
         'safe': ['Enabled'],
         'warning': ['Disabled']
     }),
