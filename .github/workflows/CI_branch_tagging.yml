@@ -178,7 +178,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.ECR_REPO }}/spaceone/${{ env.SERVICE }}:${{ env.VERSION }}
+          tags: ${{ secrets.ECR_REPO }}/${{ env.SERVICE }}:${{ env.VERSION }}
 
 
   notify_to_slack:
