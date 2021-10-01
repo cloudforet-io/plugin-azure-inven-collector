@@ -42,12 +42,12 @@ class TestCosmosDBManager(unittest.TestCase):
             'tenant_id': '35f43e22-0c0b-4ff3-90aa-b2c04ef1054c'
         }
 
-        params = {'options': {}, 'secret_data': secret_data, 'filter': {}, 'subscription_info':subscription_info}
+        params = {'options': {}, 'secret_data': secret_data, 'filter': {}, 'subscription_info': subscription_info}
 
-        application_gateways = self.cosmos_db_manager.collect_cloud_service(params)
+        cosmos_dbs = self.cosmos_db_manager.collect_cloud_service(params)
 
-        for applicaiton_gateway in application_gateways:
-            print(applicaiton_gateway.to_primitive())
+        for cosmos_db in cosmos_dbs:
+            print(cosmos_db.to_primitive())
 
 
 if __name__ == "__main__":
