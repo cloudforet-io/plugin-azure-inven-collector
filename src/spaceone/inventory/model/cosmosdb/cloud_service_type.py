@@ -18,11 +18,10 @@ cst_cosmos_db.tags = {
 cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        # TextDyField.data_source('Status', 'data.'),
-        TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Subscription ID', 'data.subscription_id')
     ],
     search=[
@@ -31,9 +30,7 @@ cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Public IP Address', key='data.public_ip_address.ip_address', data_type='string'),
-        SearchField.set(name='Private IP Address', key='data.private_ip_address', data_type='string')
+        SearchField.set(name='Location', key='data.location', data_type='string')
     ]
 
 )

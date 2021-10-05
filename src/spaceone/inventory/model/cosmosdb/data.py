@@ -30,7 +30,7 @@ class PeriodicModeProperties(Model):
 
 
 class PeriodicModeBackupPolicy(Model):
-    periodicModeProperties = ModelType(PeriodicModeProperties, serialize_when_none=False)
+    periodic_mode_properties = ModelType(PeriodicModeProperties, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -87,7 +87,7 @@ class PrivateEndpointConnection(Model):
     name = StringType(serialize_when_none=False)
     group_id = StringType(serialize_when_none=False)
     private_endpoint = ModelType(PrivateEndpointProperty, serialize_when_none=False)
-    privateLinkServiceConnectionState = ModelType(PrivateLinkServiceConnectionStateProperty, serialize_when_none=False)
+    private_link_service_connection_state = ModelType(PrivateLinkServiceConnectionStateProperty, serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
@@ -148,7 +148,7 @@ class DatabaseAccountGetResults(Model):  # Main Class
     subscription_id = StringType(serialize_when_none=False)
     subscription_name = StringType(serialize_when_none=False)
     api_properties = ModelType(ApiProperties, serialize_when_none=False)
-    backup_policy = ModelType(PeriodicModeBackupPolicy, serialize_when_none=False)  # TODO :ASK Multiple modeltype
+    backup_policy = ModelType(PeriodicModeBackupPolicy, serialize_when_none=False)
     capabilities = ListType(ModelType(Capability), serialize_when_none=False)
     capability_display = StringType(serialize_when_none=False)
     connector_offer = StringType(serialize_when_none=False)
