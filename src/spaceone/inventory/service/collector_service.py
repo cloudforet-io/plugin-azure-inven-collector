@@ -34,7 +34,8 @@ class CollectorService(BaseService):
             'StorageAccountManager',
             'KeyVaultManager',
             'MySQLServerManager',
-            'CosmosDBManager'
+            'CosmosDBManager',
+            'PostgreSQLServerManager'
         ]
 
     @check_required(['options'])
