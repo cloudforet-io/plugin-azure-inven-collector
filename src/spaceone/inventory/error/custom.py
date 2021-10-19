@@ -51,3 +51,6 @@ class ERROR_GET_RESOURCE_NAME_FROM_ID(ERROR_BASE):
     message = 'Get resource name from id is failed. field = {e}.'
 
 
+class ERROR_CONNECTOR_GET_ADDITIONAL_RESOURCE_INFO(ERROR_BASE):
+    status_code = 'INTERNAL'
+    message = 'Get an additional information of the resource  is failed. Please check the variation. Connector = {field}'
