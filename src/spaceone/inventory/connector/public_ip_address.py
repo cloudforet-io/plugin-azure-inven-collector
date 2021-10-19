@@ -2,6 +2,7 @@ import logging
 
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error import *
+from spaceone.inventory.error.custom import *
 
 __all__ = ['PublicIPAddressConnector']
 _LOGGER = logging.getLogger(__name__)
@@ -14,4 +15,8 @@ class PublicIPAddressConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_all_public_ip_addresses(self):
-        return self.network_client.public_ip_addresses.list_all()
+        try:
+            return self.network_client.public_ip_addresses.list_all()
+        except ConnectionError:
+            _LOGGER.error(ERROR_CONNECTOR(field='Public IP Address'))
+

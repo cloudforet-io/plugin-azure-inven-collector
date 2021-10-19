@@ -18,17 +18,17 @@ class ERROR_NOT_INITIALIZED_EXCEPTION(ERROR_BASE):
 
 class ERROR_CONNECTOR_INITIALIZE(ERROR_BASE):
     status_code = 'INTERNAL'
-    message = 'Connector is failed to initialized. Connector = {e}.'
+    message = 'Connector is failed to initialized. Connector = {field}.'
 
 
 class ERROR_CONNECTOR(ERROR_BASE):
     status_code = 'INTERNAL'
-    message = 'Connector is failed to connect. Connector = {e}.'
+    message = 'Connector is failed to connect. Connector = {field}.'
 
 
 class ERROR_KEY_VAULTS(ERROR_BASE):
     status_code = 'INTERNAL'
-    message = 'KeyVault manager is failed to get sub resources. Manager = {e}.'
+    message = 'KeyVault manager is failed to get sub resources. {field}.'
 
 
 class ERROR_KEY_VAULTS_PERMISSION(ERROR_BASE):
@@ -41,9 +41,9 @@ class ERROR_PARSE_ID_FROM_RESOURCE_GROUP(ERROR_BASE):
     message = 'Parse resource name from resource ID is failed. Please check the variation.'
 
 
-class ERROR_GET_ADDITIONAL_RESOURCE_INFO(ERROR_BASE):
+class ERROR_MANAGER_GET_ADDITIONAL_RESOURCE_INFO(ERROR_BASE):
     status_code = 'INTERNAL'
-    message = 'Get an additional information of the resource is failed. Please check the variation'
+    message = 'Get an additional information of the resource is failed. Please check the variation. Manager = {field}'
 
 
 class ERROR_GET_RESOURCE_NAME_FROM_ID(ERROR_BASE):

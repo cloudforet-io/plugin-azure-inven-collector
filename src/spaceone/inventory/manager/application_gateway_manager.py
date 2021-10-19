@@ -33,9 +33,8 @@ class ApplicationGatewayManager(AzureManager):
         _LOGGER.debug(f'** Application Gateway START **')
 
         start_time = time.time()
-
-        secret_data = params['secret_data']
         subscription_info = params['subscription_info']
+
         application_gateway_conn: ApplicationGatewayConnector = self.locator.get_connector(self.connector_name,
                                                                                            **params)
         application_gateways = []
