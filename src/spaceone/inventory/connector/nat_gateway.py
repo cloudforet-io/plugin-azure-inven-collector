@@ -17,8 +17,10 @@ class NATGatewayConnector(AzureConnector):
         return self.network_client.nat_gateways.list_all()
 
     def get_public_ip_addresses(self, resource_group_name, public_ip_address_name):
-        obj = self.network_client.public_ip_addresses.get(resource_group_name, public_ip_address_name)
-        return obj
+        try:
+            return self.network_client.public_ip_addresses.get(resource_group_name, public_ip_address_name)
+        except Exception as e:
+            _LOGGER.error(f'[ERROR: Azure NAT Gateway Connector Get Public IP Addresses]: {e}')
 
     def get_public_ip_prefixes(self, resource_group_name, public_ip_prefixes_name):
         try:
