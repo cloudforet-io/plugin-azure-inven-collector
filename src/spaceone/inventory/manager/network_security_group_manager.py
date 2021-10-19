@@ -193,7 +193,7 @@ class NetworkSecurityGroupManager(AzureManager):
 
     @staticmethod
     def get_ip_addresses(network_interfaces_list):
-        if network_interfaces_list is not []:
+        if network_interfaces_list:
             try:
                 for network_interface in network_interfaces_list:
                     if network_interface.get('ip_configurations') is not None:
@@ -219,7 +219,7 @@ class NetworkSecurityGroupManager(AzureManager):
     @staticmethod
     def get_subnet(self, network_security_group_conn, subnets_list):
         subnets_full_list = []
-        if subnets_list is not []:
+        if subnets_list:
             try:
                 for subnet in subnets_list:
                     try:

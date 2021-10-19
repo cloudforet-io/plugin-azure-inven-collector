@@ -33,7 +33,9 @@ class CollectorService(BaseService):
             'NATGatewayManager',
             'StorageAccountManager',
             'KeyVaultManager',
-            'MySQLServerManager'
+            'MySQLServerManager',
+            'CosmosDBManager',
+            'PostgreSQLServerManager'
         ]
 
     @check_required(['options'])

@@ -13,3 +13,5 @@ from spaceone.inventory.connector.nat_gateway import NATGatewayConnector
 from spaceone.inventory.connector.storage_account import StorageAccountConnector
 from spaceone.inventory.connector.key_vault import KeyVaultConnector
 from spaceone.inventory.connector.mysql_server import MySQLServerConnector
+from spaceone.inventory.connector.cosmos_db import CosmosDBConnector
+from spaceone.inventory.connector.postgresql_server import PostgreSQLServerConnector

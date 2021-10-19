@@ -10,6 +10,8 @@ from azure.mgmt.monitor import MonitorManagementClient
 from azure.mgmt.storage import StorageManagementClient
 from azure.mgmt.keyvault import KeyVaultManagementClient
 from azure.mgmt.rdbms.mysql import MySQLManagementClient
+from azure.mgmt.cosmosdb import CosmosDBManagementClient
+from azure.mgmt.rdbms.postgresql import PostgreSQLManagementClient
 from spaceone.core.connector import BaseConnector
 
 DEFAULT_SCHEMA = 'azure_client_secret'
@@ -42,6 +44,8 @@ class AzureConnector(BaseConnector):
         self.blob_client = None
         self.key_vault_client = None
         self.mysql_client = None
+        self.cosmosdb_client = None
+        self.postgre_sql_client = None
 
     def set_connect(self, secret_data):
         subscription_id = secret_data['subscription_id']
@@ -62,6 +66,8 @@ class AzureConnector(BaseConnector):
         self.storage_client = StorageManagementClient(credential=credential, subscription_id=subscription_id)
         self.key_vault_client = KeyVaultManagementClient(credential=credential, subscription_id=subscription_id)
         self.mysql_client = MySQLManagementClient(credential=credential, subscription_id=subscription_id)
+        self.cosmosdb_client = CosmosDBManagementClient(credential=credential, subscription_id=subscription_id)
+        self.postgre_sql_client = PostgreSQLManagementClient(credential=credential, subscription_id=subscription_id)
 
     def verify(self, **kwargs):
         self.set_connect(**kwargs)
