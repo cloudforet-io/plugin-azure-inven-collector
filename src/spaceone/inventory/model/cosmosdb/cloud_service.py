@@ -91,8 +91,8 @@ cosmos_db_keys = ItemDynamicLayout.set_fields('Keys', 'data.keys', fields=[
 
 # TAB - Database
 cosmos_db_database = TableDynamicLayout.set_fields('Database', 'data.sql_databases', fields=[
-    TextDyField.data_source('Database', 'name')
-    TextDyField.data_source('ID', 'id'),
+    TextDyField.data_source('Database', 'name'),
+    TextDyField.data_source('ID', 'id')
 ])
 
 # TAB - tags
