@@ -49,7 +49,7 @@ class KeyVaultConnector(AzureConnector):
         except ConnectionError:
             _LOGGER.error(ERROR_CONNECTOR(field='Key Vaults'))
 
-    def list_secrets(self, resource_group_name, vault_name):
+    def list_secrets(self):
         try:
             return self.key_vault_secret_client.list_properties_of_secrets()
 

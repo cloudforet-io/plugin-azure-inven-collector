@@ -13,3 +13,4 @@ from spaceone.inventory.manager.storage_account_manager import StorageAccountMan
 from spaceone.inventory.manager.key_vault_manager import KeyVaultManager
 from spaceone.inventory.manager.mysql_server_manager import MySQLServerManager
 from spaceone.inventory.manager.cosmos_db_manager import CosmosDBManager
+from spaceone.inventory.manager.postgresql_server_manager import PostgreSQLServerManager

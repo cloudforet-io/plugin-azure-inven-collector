@@ -24,4 +24,5 @@ class ApplicationGatewayConnector(AzureConnector):
             return self.network_client.public_ip_addresses.get(public_ip_address_name, resource_group_name)
 
         except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='Application Gateway'))
+            raise ERROR_CONNECTOR_GET_ADDITIONAL_RESOURCE_INFO(field='Application Gateway')
+
