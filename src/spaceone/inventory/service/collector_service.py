@@ -34,7 +34,8 @@ class CollectorService(BaseService):
             'StorageAccountManager',
             'KeyVaultManager',
             'MySQLServerManager',
-            'CosmosDBManager'
+            'CosmosDBManager',
+            'PostgreSQLServerManager'
         ]
 
     @check_required(['options'])
@@ -86,14 +87,13 @@ class CollectorService(BaseService):
         })
 
         _LOGGER.debug("[ EXECUTOR START: Azure Cloud Service ]")
-        '''
-        # TODO: Thread per cloud services
+
+        # Thread per cloud services
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
-            # print("[ EXECUTOR START ]")
             future_executors = []
 
             for execute_manager in self.execute_managers:
-                print(f'@@@ {execute_manager} @@@')
+                _LOGGER.info(f'@@@ {execute_manager} @@@')
                 _manager = self.locator.get_manager(execute_manager)
                 future_executors.append(executor.submit(_manager.collect_resources, params))
 
@@ -104,15 +104,15 @@ class CollectorService(BaseService):
 
             except Exception as e:
                 _LOGGER.error(f'failed to result {e}')
-        '''
 
+        '''
         for manager in self.execute_managers:
             _LOGGER.debug(f'@@@ {manager} @@@')
             _manager = self.locator.get_manager(manager)
 
             for resource in _manager.collect_resources(params):
                 yield resource.to_primitive()
-
+        '''
         _LOGGER.debug(f'TOTAL TIME : {time.time() - start_time} Seconds')
 
     def get_subscription_info(self, params):

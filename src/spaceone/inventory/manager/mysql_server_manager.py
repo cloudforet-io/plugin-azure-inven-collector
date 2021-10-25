@@ -91,7 +91,7 @@ class MySQLServerManager(AzureManager):
             return firewall_rules
 
         except Exception:
-            raise ERROR_GET_ADDITIONAL_RESOURCE_INFO()
+            raise ERROR_MANAGER_GET_ADDITIONAL_RESOURCE_INFO()
 
     @staticmethod
     def get_azure_service_access(firewall_rules):
@@ -108,7 +108,7 @@ class MySQLServerManager(AzureManager):
             return False
 
         except Exception:
-            raise ERROR_GET_ADDITIONAL_RESOURCE_INFO()
+            raise ERROR_MANAGER_GET_ADDITIONAL_RESOURCE_INFO()
 
     @staticmethod
     def get_storage_gb(storage_mb):
@@ -117,4 +117,4 @@ class MySQLServerManager(AzureManager):
                 storage_gb = int(storage_mb / 1024)
                 return storage_gb
             except TypeError:
-                raise ERROR_GET_ADDITIONAL_RESOURCE_INFO()
+                raise ERROR_MANAGER_GET_ADDITIONAL_RESOURCE_INFO()

@@ -86,11 +86,11 @@ cosmos_db_keys = ItemDynamicLayout.set_fields('Keys', 'data.keys', fields=[
     TextDyField.data_source('Primary Readonly Master Key', 'primary_readonly_master_key'),
     TextDyField.data_source('Secondary Readonly Master Key', 'secondary_readonly_master_key'),
     TextDyField.data_source('Primary Master Key', 'primary_master_key'),
-    TextDyField.data_source('Primary Master Key', 'secondary_master_key'),
+    TextDyField.data_source('Primary Master Key', 'secondary_master_key')
 ])
 
 # TAB - Database
-cosmos_db_database = TableDynamicLayout.set_fields('Database', 'data.sql_databases', fields=[
+cosmos_db_database = SimpleTableDynamicLayout.set_fields('Database', 'data.sql_databases', fields=[
     TextDyField.data_source('Database', 'name'),
     TextDyField.data_source('ID', 'id')
 ])

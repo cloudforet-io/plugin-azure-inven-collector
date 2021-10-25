@@ -30,6 +30,7 @@ class MySQLServerConnector(AzureConnector):
         try:
             return self.mysql_client.server_parameters._list_update_configurations_initial(resource_group_name=resource_group_name, server_name=server_name, value=[])
         except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='MySQL Servers Firewall'))
+            raise ERROR_CONNECTOR_GET_ADDITIONAL_RESOURCE_INFO(field='MySQL Servers Firewall')
+
 
 
