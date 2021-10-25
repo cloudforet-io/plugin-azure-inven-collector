@@ -18,17 +18,17 @@ cst_postgre_sql_server.tags = {
 cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Type', 'data.'),
-        EnumDyField.data_source('Status', 'data.status', default_state={
-            'safe': [],
-            'warning': []
+        TextDyField.data_source('Type', 'data.type'),
+        EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
+            'safe': ['Ready'],
+            'warning': ['Disabled', 'Dropping', 'Inaccessible']
         }),
-        TextDyField.data_source('High Availability', 'data.resource_group'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
 
-        # is_optional fields - Default TODO
+        # is_optional fields - Default
         TextDyField.data_source('Resource ID', 'data.id', options={
             'is_optional': True
         })

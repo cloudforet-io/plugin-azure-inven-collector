@@ -18,7 +18,7 @@ postgresql_servers_info_meta = ItemDynamicLayout.set_fields('PostgreSQL Servers'
     TextDyField.data_source('Resource ID', 'data.id'),
     EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
         'safe': ['Ready'],
-        'warning': ['Disabled']
+        'warning': ['Disabled', 'Dropping', 'Inaccessible']
     }),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
@@ -94,7 +94,7 @@ postgresql_servers_server_admin = SimpleTableDynamicLayout.set_fields('Active Di
 postgresql_servers_pricing_tier = ItemDynamicLayout.set_fields('Pricing Tier', fields=[
     TextDyField.data_source('Compute Generation', 'data.sku.name'),
     TextDyField.data_source('vCore', 'data.sku.capacity'),
-    EnumDyField.data_source('Storage', 'data.storage_profile.storage_autogrow', default_state={
+    EnumDyField.data_source('Storage Auto Grow', 'data.storage_profile.storage_autogrow', default_state={
         'safe': ['Enabled'],
         'warning': ['Disabled']
     }),
