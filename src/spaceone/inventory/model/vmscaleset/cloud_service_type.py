@@ -25,9 +25,45 @@ cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Default', 'data.virtual_machine_scale_set_power_state.profiles.capacity.default'),
         TextDyField.data_source('Max', 'data.virtual_machine_scale_set_power_state.profiles.capacity.maximum'),
         TextDyField.data_source('Min', 'data.virtual_machine_scale_set_power_state.profiles.capacity.minimum'),
-
         TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy'),
-        TextDyField.data_source('Subscription', 'data.subscription_name')
+        TextDyField.data_source('Subscription', 'data.subscription_name'),
+
+        # is_optional fields
+        TextDyField.data_source('Virtual network/subnet', 'data.virtual_machine_profile.network_profile.primary_vnet', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Host group', 'data.host_group.id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Ephemeral OS Disk',
+                                'data.virtual_machine_profile.storage_profile.os_disk.diff_disk_settings.option.local', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Azure Spot Max Price', 'data.virtual_machine_profile.billing_profile.max_price', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Termination Notification',
+                                'data.virtual_machine_profile.terminate_notification_display', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('OverProvisioning', 'data.overprovision', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_display', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Automatic Repairs', 'data.automatic_repairs_policy.enabled', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Upgrade Policy', 'data.upgrade_policy.mode', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Fault Domains', 'data.platform_fault_domain_count', options={
+            'is_optional': True
+        })
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
