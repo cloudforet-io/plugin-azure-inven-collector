@@ -23,13 +23,103 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
             'safe': ['Ready'],
             'warning': ['Disabled', 'Dropping', 'Inaccessible']
         }),
-        TextDyField.data_source('Resource Group', 'data.resource_group'),
-        TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+        TextDyField.data_source('Resource Group', 'data.resource_group', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Location', 'data.location', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Subscription', 'data.subscription_name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+            'is_optional': True
+        }),
 
         # is_optional fields - Default
         TextDyField.data_source('Resource ID', 'data.id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Server Name', 'data.fully_qualified_domain_name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Admin Username', 'data.administrator_login', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('PostgreSQL Version', 'data.version', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Performance Configuration Tier', 'data.sku.tier', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Performance Configuration Name', 'data.sku.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Performance Configuration Capacity', 'data.sku.capacity', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('SSL Enforce Status', 'data.ssl_enforcement', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Public Network Access', 'data.public_network_access', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('SSL Enforcement', 'data.ssl_enforcement', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('TLS Setting', 'data.minimal_tls_version', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Firewall Rule Name', 'data.firewall_rules.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Start IP', 'data.firewall_rules.start_ip_address', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('End IP', 'data.firewall_rules.end_ip_address', options={
+            'is_optional': True
+        }),
+
+        # VNet Rules
+        TextDyField.data_source('Rule Name', 'data.virtual_network_rules.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Virtual Network', 'data.virtual_network_rules.virtual_network_name_display', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Subnet', 'data.virtual_network_rules.subnet_name', options={
+            'is_optional': True
+        }),
+
+        # Replicas
+        TextDyField.data_source('Replicas Name', 'data.replicas.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Location', 'data.replicas.location', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Master Server Name', 'data.replicas.master_server_name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Active Directory Name', 'data.server_administrators.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Login', 'data.server_administrators.login', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('SID', 'data.server_administrators.sid', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Tenant ID', 'data.server_administrators.tenant_id', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Compute Generation', 'data.sku.name', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('vCore', 'data.sku.capacity', options={
+            'is_optional': True
+        }),
+        TextDyField.data_source('Backup Retention Period (Days)', 'data.storage_profile.backup_retention_days', options={
             'is_optional': True
         })
     ],
