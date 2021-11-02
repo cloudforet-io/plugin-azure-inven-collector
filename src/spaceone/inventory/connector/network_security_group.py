@@ -16,7 +16,7 @@ class NetworkSecurityGroupConnector(AzureConnector):
     def list_all_network_security_groups(self):
         try:
             return self.network_client.network_security_groups.list_all()
-        except ConnectionError as e:
+        except Exception as e:
             _LOGGER.error(f'[ERROR: Azure Connector List Network Security Info]: {e}')
 
     def get_network_interfaces(self, network_interface_name, resource_group):
