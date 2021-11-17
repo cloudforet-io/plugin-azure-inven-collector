@@ -43,4 +43,9 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "[CI/CD] release version ${{ env.VERSION }}"
-          git push
+      - name: Push changes
+        if: ${{ env.LATEST_TAG }} == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: master
