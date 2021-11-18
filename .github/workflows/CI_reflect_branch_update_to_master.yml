@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.TOKEN_BYPASS_PROTECTION_TEST }}
       - name: check version format
         run: |
           if [[ !(${{ env.VERSION }} =~ ^v[0-9]\.[0-9](.*)$) ]];
@@ -49,5 +49,5 @@ jobs:
         if: ${{ env.LATEST_TAG }} == 'true'
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.TOKEN_BYPASS_PROTECTION_TEST }}
           branch: master
