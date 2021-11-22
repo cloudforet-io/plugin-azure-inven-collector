@@ -83,6 +83,7 @@ REGION_INFO = {
                     'tags': {'latitude': '-23.55', 'longitude': '-46.633'}},
     'brazilsoutheast': {'name': 'South America Brazil South East (Rio)',
                         'tags': {'latitude': '-22.90278', 'longitude': '-43.2075'}},
+    'swedencentral': {'name': 'Sweden Central', 'tags': {'latitude': '60.67488', 'longitude': '17.14127'}}
 }
 
 
