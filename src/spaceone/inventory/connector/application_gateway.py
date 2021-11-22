@@ -16,13 +16,13 @@ class ApplicationGatewayConnector(AzureConnector):
         try:
             return self.network_client.application_gateways.list_all()
 
-        except ConnectionError:
+        except Exception as e:
             _LOGGER.error(ERROR_CONNECTOR(field='Application Gateway'))
 
     def get_public_ip_addresses(self, public_ip_address_name, resource_group_name):
         try:
             return self.network_client.public_ip_addresses.get(public_ip_address_name, resource_group_name)
 
-        except ConnectionError:
+        except Exception as e:
             raise ERROR_CONNECTOR_GET_ADDITIONAL_RESOURCE_INFO(field='Application Gateway')
 

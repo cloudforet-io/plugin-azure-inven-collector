@@ -9,7 +9,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
-> Latest stable version : 1.2.5
+> Latest stable version : 1.2.12
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -17,20 +17,25 @@ Please contact us if you need any further information.
 
 ## Contents
 
-* Table of Contents
-    * [Virtual Machines](#Azure_VM_(Instance))
-    * [Virtual Machine Scale Sets](#Virtual_Machine_Scale_Sets)
-    * [Disks](#disks)
-    * [Snapshots](#Snapshots)
-    * [Load Balancers](#Load_Balancer)
-    * [SQL Servers](#SQL_Servers)
-    * [Application Gateways](#Application_Gateways)
-    * [Public IP Addresses](#PublicIPAddresses)
-    * [NAT Gateways](#NAT_Gateways)
-    * [Storage Accounts](#Storage_Accounts)
-
+|Cloud Service Type|Cloud Service|
+|---|---|
+|Network|[Application Gateways](#Application_Gateways)|
+|Database|[CosmosDBs](#cosmos_dbs)|
+|Compute|[Disks](#disks)|
+|KeyVault|[KeyVaults](#key_vaults)|
+|Network|[Load Balancers](#Load_Balancer)|
+|Database|[MySQL Servers](#my_sql_server)|
+|Network|[NAT Gateways](#NAT_Gateways)|
+|Network|[Network Security Groups](#Network_security_groups)|
+|Database|[PostgreSQL Servers](#postgre_sql_servers)|
+|Network|[Public IP Address](#public_ip_addresses)|
+|Compute|[Snapshots](#Snapshots)|
+|Database|[SQL Servers](#SQL_Servers)|
+|Database|[SQL Databases](#SQL_databases)|
+|Storage|[Storage Account](#storage_accounts)|
+|Network|[Virtual Network](#virtual_networks)|
+|Compute|[VM ScaleSets](#vm_scale_sets)|
     
-
 ---
 ## SETTING
 You should insert information about account in SpaceONE's **Service Account** initially.
@@ -50,10 +55,10 @@ You should insert information about account in SpaceONE's **Service Account** in
 ## Authentication Overview
 Registered service account on SpaceONE must have certain permissions to collect cloud service data 
 Please, set authentication privilege for followings:
- 
+
 
 #### [Virtual Machines](https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/list)
-        
+      
 - Azure VM (Instance)
 
     - Scope
@@ -164,13 +169,4 @@ Please, set authentication privilege for followings:
         - https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list
     - Permissions
         - Microsoft.Storage/storageAccounts/read
-	
-
-
-            
-
-            
-
-
-
 
