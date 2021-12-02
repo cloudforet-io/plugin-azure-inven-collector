@@ -25,7 +25,9 @@ class VmScaleSetManager(AzureManager):
                     - 'zones' : 'list'
                     - 'subscription_info' :  'dict'
             Response:
-                CloudServiceResponse (dict) : dictionary of azure vm scale set data resource information
+                CloudServiceResponse (list) : dictionary of azure vm scale set data resource information
+                ErrorResourceResponse (list) : list of error resource information
+
         """
         _LOGGER.debug("** VmScaleSet START **")
         start_time = time.time()
@@ -33,125 +35,139 @@ class VmScaleSetManager(AzureManager):
         subscription_info = params['subscription_info']
 
         vm_scale_set_conn: VmScaleSetConnector = self.locator.get_connector(self.connector_name, **params)
-        vm_scale_sets = []
-        for vm_scale_set in vm_scale_set_conn.list_vm_scale_sets():
-            vm_scale_set_dict = self.convert_nested_dictionary(self, vm_scale_set)
+        vm_scale_set_responses = []
+        error_responses = []
 
-            # update vm_scale_set_dict
-            vm_scale_set_dict.update({
-                'resource_group': self.get_resource_group_from_id(vm_scale_set_dict['id']),  # parse resource_group from ID
-                'subscription_id': subscription_info['subscription_id'],
-                'subscription_name': subscription_info['subscription_name'],
-            })
+        vm_scale_sets = vm_scale_set_conn.list_vm_scale_sets()
 
-            if vm_scale_set_dict.get('proximity_placement_group'):  # if it has a key -> get value -> check if it isn't None / if no 'Key' ->  return None
+        for vm_scale_set in vm_scale_sets:
+            vm_scale_set_id = ''
+
+            try:
+                vm_scale_set_dict = self.convert_nested_dictionary(self, vm_scale_set)
+                vm_scale_set_id = vm_scale_set_dict['id']
+
+                # update vm_scale_set_dict
                 vm_scale_set_dict.update({
-                    'proximity_placement_group_display':  self.get_proximity_placement_group_name(vm_scale_set_dict['proximity_placement_group']['id'])
+                    'resource_group': self.get_resource_group_from_id(vm_scale_set_id),  # parse resource_group from ID
+                    'subscription_id': subscription_info['subscription_id'],
+                    'subscription_name': subscription_info['subscription_name'],
                 })
 
-            # Get Instance termination notification display
-            if vm_scale_set_dict.get('virtual_machine_profile') is not None:
-                if vm_scale_set_dict['virtual_machine_profile'].get('scheduled_events_profile'):
-                    if vm_scale_set.virtual_machine_profile.scheduled_events_profile.terminate_notification_profile.enable:
-                        terminate_notification_display = 'On'
-                    else:
-                        terminate_notification_display = 'Off'
+                if vm_scale_set_dict.get('proximity_placement_group'):  # if it has a key -> get value -> check if it isn't None / if no 'Key' ->  return None
                     vm_scale_set_dict.update({
-                        'terminate_notification_display': terminate_notification_display
+                        'proximity_placement_group_display':  self.get_proximity_placement_group_name(vm_scale_set_dict['proximity_placement_group']['id'])
                     })
 
-                # Convert disks' sku-dict to string display
-                if vm_scale_set_dict['virtual_machine_profile'].get('storage_profile') is not None:
-                    if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('image_reference'):
-                        image_reference_dict = vm_scale_set_dict['virtual_machine_profile']['storage_profile']['image_reference']
-                        image_reference_str = \
-                            str(image_reference_dict['publisher']) + " / " + str(image_reference_dict['offer']) + " / " + str(image_reference_dict['sku']) + " / " + str(image_reference_dict['version'])
-                        vm_scale_set_dict['virtual_machine_profile']['storage_profile'].update({
-                            'image_reference_display': image_reference_str
+                # Get Instance termination notification display
+                if vm_scale_set_dict.get('virtual_machine_profile') is not None:
+                    if vm_scale_set_dict['virtual_machine_profile'].get('scheduled_events_profile') is not None:
+                        if vm_scale_set.virtual_machine_profile['scheduled_events_profile']['terminate_notification_profile']['enable']:
+                            terminate_notification_display = 'On'
+                        else:
+                            terminate_notification_display = 'Off'
+
+                        vm_scale_set_dict.update({
+                            'terminate_notification_display': terminate_notification_display
                         })
 
-                    # switch storage_account_type to storage_account_type for user-friendly words.
-                    # (ex.Premium LRS -> Premium SSD, Standard HDD..)
-                    if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('data_disks'):
-                        for data_disk in vm_scale_set_dict['virtual_machine_profile']['storage_profile']['data_disks']:
-                            data_disk['managed_disk'].update({
-                                'storage_type': self.get_disk_storage_type(data_disk['managed_disk']['storage_account_type'])
+                    # Convert disks' sku-dict to string display
+                    if vm_scale_set_dict['virtual_machine_profile'].get('storage_profile') is not None:
+                        if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('image_reference'):
+                            image_reference_dict = vm_scale_set_dict['virtual_machine_profile']['storage_profile']['image_reference']
+                            image_reference_str = \
+                                str(image_reference_dict['publisher']) + " / " + str(image_reference_dict['offer']) + " / " + str(image_reference_dict['sku']) + " / " + str(image_reference_dict['version'])
+                            vm_scale_set_dict['virtual_machine_profile']['storage_profile'].update({
+                                'image_reference_display': image_reference_str
                             })
-                # Get VM Profile's operating_system type (Linux or Windows)
-                if vm_scale_set_dict['virtual_machine_profile'].get('os_profile') is not None:
-                    vm_scale_set_dict['virtual_machine_profile']['os_profile'].update({
-                        'operating_system': self.get_operating_system(vm_scale_set_dict['virtual_machine_profile']['os_profile'])
+
+                        # switch storage_account_type to storage_account_type for user-friendly words.
+                        # (ex.Premium LRS -> Premium SSD, Standard HDD..)
+                        if vm_scale_set_dict['virtual_machine_profile']['storage_profile'].get('data_disks'):
+                            for data_disk in vm_scale_set_dict['virtual_machine_profile']['storage_profile']['data_disks']:
+                                data_disk['managed_disk'].update({
+                                    'storage_type': self.get_disk_storage_type(data_disk['managed_disk']['storage_account_type'])
+                                })
+                    # Get VM Profile's operating_system type (Linux or Windows)
+                    if vm_scale_set_dict['virtual_machine_profile'].get('os_profile') is not None:
+                        vm_scale_set_dict['virtual_machine_profile']['os_profile'].update({
+                            'operating_system': self.get_operating_system(vm_scale_set_dict['virtual_machine_profile']['os_profile'])
+                        })
+
+                    # Get VM Profile's primary Vnet\
+                    if vm_scale_set_dict['virtual_machine_profile'].get('network_profile') is not None:
+                        vmss_vm_network_profile_dict = vm_scale_set_dict['virtual_machine_profile']['network_profile']
+                        vmss_vm_network_profile_dict.update({
+                            'primary_vnet': self.get_primary_vnet(vmss_vm_network_profile_dict['network_interface_configurations'])
+                        })
+
+                # Add vm instances list attached to VMSS
+                vm_instances_list = list()
+                instance_count = 0
+                resource_group = vm_scale_set_dict['resource_group']
+                name = vm_scale_set_dict['name']
+
+                for vm_instance in vm_scale_set_conn.list_vm_scale_set_vms(resource_group, name):
+                    instance_count += 1
+                    vm_scale_set_dict.update({
+                        'instance_count': instance_count
                     })
 
-                # Get VM Profile's primary Vnet\
-                if vm_scale_set_dict['virtual_machine_profile'].get('network_profile') is not None:
-                    vmss_vm_network_profile_dict = vm_scale_set_dict['virtual_machine_profile']['network_profile']
-                    vmss_vm_network_profile_dict.update({
-                        'primary_vnet': self.get_primary_vnet(vmss_vm_network_profile_dict['network_interface_configurations'])
+                    vm_instance_dict = self.get_vm_instance_dict(self, vm_instance, vm_scale_set_conn,  resource_group, name)
+                    vm_instances_list.append(vm_instance_dict)
+
+                vm_scale_set_dict['vm_instances'] = vm_instances_list
+
+                # Get auto scale settings by resource group and vm id
+                vm_scale_set_dict.update({
+                    'autoscale_settings': self.list_auto_scale_settings_obj(self, vm_scale_set_conn, resource_group, vm_scale_set_id)
+                })
+
+                # Set virtual_machine_scale_set_power_state information
+                if vm_scale_set_dict.get('autoscale_settings') is not None:
+                    vm_scale_set_dict.update({
+                        'virtual_machine_scale_set_power_state': self.list_virtual_machine_scale_set_power_state(self, vm_scale_set_dict['autoscale_settings']),
                     })
 
-            # Add vm instances list attached to VMSS
-            vm_instances_list = list()
-            instance_count = 0
-            for vm_instance in vm_scale_set_conn.list_vm_scale_set_vms(vm_scale_set_dict['resource_group'],
-                                                                       vm_scale_set_dict['name']):
-                instance_count += 1
-                vm_scale_set_dict.update({
-                    'instance_count': instance_count
+                # update auto_scale_settings to autoscale_setting_resource_collection
+                auto_scale_setting_resource_col_dict = dict()
+                auto_scale_setting_resource_col_dict.update({
+                    'value': self.list_auto_scale_settings(self, vm_scale_set_conn, resource_group, vm_scale_set_id)
                 })
 
-                vm_instance_dict = self.get_vm_instance_dict(self, vm_instance, vm_scale_set_conn, vm_scale_set_dict['resource_group'],  vm_scale_set_dict['name'])
-                vm_instances_list.append(vm_instance_dict)
-
-            vm_scale_set_dict['vm_instances'] = vm_instances_list
-
-            # Get auto scale settings by resource group and vm id
-            vm_scale_set_dict.update({
-                'autoscale_settings': self.list_auto_scale_settings_obj(self, vm_scale_set_conn, vm_scale_set_dict['resource_group'],vm_scale_set_dict['id'])
-            })
-
-            # Set virtual_machine_scale_set_power_state information
-            if vm_scale_set_dict.get('autoscale_settings') is not None:
                 vm_scale_set_dict.update({
-                    'virtual_machine_scale_set_power_state': self.list_virtual_machine_scale_set_power_state(self, vm_scale_set_dict['autoscale_settings']),
+                    'autoscale_setting_resource_collection': auto_scale_setting_resource_col_dict
                 })
 
-            # update auto_scale_settings to autoscale_setting_resource_collection
-            auto_scale_setting_resource_col_dict = dict()
-            auto_scale_setting_resource_col_dict.update({
-                'value': self.list_auto_scale_settings(self, vm_scale_set_conn,
-                                                                    vm_scale_set_dict['resource_group'],
-                                                                    vm_scale_set_dict['id'])
-            })
+                # switch tags form
+                tags = vm_scale_set_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
+                vm_scale_set_dict.update({
+                    'tags': _tags
+                })
 
-            vm_scale_set_dict.update({
-                'autoscale_setting_resource_collection': auto_scale_setting_resource_col_dict
-            })
+                _LOGGER.debug(f'[VM_SCALE_SET_INFO] {vm_scale_set_dict}')
 
-            # switch tags form
-            tags = vm_scale_set_dict.get('tags', {})
-            _tags = self.convert_tag_format(tags)
-            vm_scale_set_dict.update({
-                'tags': _tags
-            })
+                vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
+                vm_scale_set_resource = VmScaleSetResource({
+                    'data': vm_scale_set_data,
+                    'region_code': vm_scale_set_data.location,
+                    'reference': ReferenceModel(vm_scale_set_data.reference()),
+                    'tags': _tags,
+                    'name' : vm_scale_set_data.name
+                })
 
-            _LOGGER.debug(f'[VM_SCALE_SET_INFO] {vm_scale_set_dict}')
+                # Must set_region_code method for region collection
+                self.set_region_code(vm_scale_set_data['location'])
+                vm_scale_set_responses.append(VmScaleSetResponse({'resource': vm_scale_set_resource}))
 
-            vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
-            vm_scale_set_resource = VmScaleSetResource({
-                'data': vm_scale_set_data,
-                'region_code': vm_scale_set_data.location,
-                'reference': ReferenceModel(vm_scale_set_data.reference()),
-                'tags': _tags,
-                'name' : vm_scale_set_data.name
-            })
-            
-            # Must set_region_code method for region collection
-            self.set_region_code(vm_scale_set_data['location'])
-            vm_scale_sets.append(VmScaleSetResponse({'resource': vm_scale_set_resource}))
+            except Exception as e:
+                _LOGGER.error(f'[list_instances] {vm_scale_set_id} {e}', exc_info=True)
+                error_resource_response = self.generate_resource_error_response(e, 'Compute', 'VMScaleSet', vm_scale_set_id)
+                error_responses.append(error_resource_response)
 
         _LOGGER.debug(f'** VmScaleSet Finished {time.time() - start_time} Seconds **')
-        return vm_scale_sets
+        return vm_scale_set_responses, error_responses
 
     @staticmethod
     def get_proximity_placement_group_name(placement_group_id):

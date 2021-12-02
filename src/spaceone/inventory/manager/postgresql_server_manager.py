@@ -7,7 +7,6 @@ from spaceone.inventory.model.postgresqlserver.cloud_service_type import CLOUD_S
 from spaceone.inventory.model.postgresqlserver.data import *
 from spaceone.inventory.error.custom import *
 import time
-import ipaddress
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -28,7 +27,9 @@ class PostgreSQLServerManager(AzureManager):
                         - 'zones' : 'list'
                         - 'subscription_info' :  'dict'
                 Response:
-                    CloudServiceResponse (dict) : dictionary of azure cosmosdb data resource information
+                    CloudServiceResponse (list) : dictionary of azure cosmosdb data resource information
+                    ErrorResourceResponse (list) : list of error resource information
+
 
                 """
         _LOGGER.debug(f'** Postgre SQL Servers START **')
@@ -37,47 +38,54 @@ class PostgreSQLServerManager(AzureManager):
 
         subscription_info = params['subscription_info']
         postgre_sql_conn: PostgreSQLServerConnector = self.locator.get_connector(self.connector_name, **params)
-        postgre_sql_servers = []
-        postgre_sql_servers_list = postgre_sql_conn.list_servers()
+        postgre_sql_server_responses = []
+        error_responses = []
+        postgre_sql_servers = postgre_sql_conn.list_servers()
 
-        for postgre_sql_server in postgre_sql_servers_list:
-            postgre_sql_server_dict = self.convert_nested_dictionary(self, postgre_sql_server)
+        for postgre_sql_server in postgre_sql_servers:
+            postgre_sql_server_id = ''
 
-            # update application_gateway_dict
-            postgre_sql_server_dict.update({
-                'resource_group': self.get_resource_group_from_id(postgre_sql_server_dict['id']),
-                # parse resource_group from ID
-                'subscription_id': subscription_info['subscription_id'],
-                'subscription_name': subscription_info['subscription_name'],
-            })
+            try:
+                postgre_sql_server_dict = self.convert_nested_dictionary(self, postgre_sql_server)
+                postgre_sql_server_id = postgre_sql_server_dict['id']
 
-            if postgre_sql_server_dict.get('name') is not None:
-                resource_group = postgre_sql_server_dict['resource_group']
-                server_name = postgre_sql_server_dict['name']
+                # update application_gateway_dict
                 postgre_sql_server_dict.update({
-                    'firewall_rules': self.list_firewall_rules_by_server(self, postgre_sql_conn, resource_group, server_name),
-                    'virtual_network_rules': self.list_virtual_network_rules_by_server(self, postgre_sql_conn, resource_group, server_name),
-                    'replicas': self.list_replicas_by_server(self, postgre_sql_conn, resource_group, server_name),
-                    'server_administrators': self.list_server_administrators(self, postgre_sql_conn, resource_group, server_name)
+                    'resource_group': self.get_resource_group_from_id(postgre_sql_server_id),
+                    'subscription_id': subscription_info['subscription_id'],
+                    'subscription_name': subscription_info['subscription_name'],
                 })
 
-            print(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_dict}')
-            _LOGGER.debug(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_dict}')
-            postgre_sql_server_data = Server(postgre_sql_server_dict, strict=False)
-            postgre_sql_server_resource = SqlServerResource({
-                'data': postgre_sql_server_data,
-                'region_code': postgre_sql_server_data.location,
-                'reference': ReferenceModel(postgre_sql_server_data.reference()),
-                'name': postgre_sql_server_data.name
-            })
+                if postgre_sql_server_dict.get('name') is not None:
+                    resource_group = postgre_sql_server_dict['resource_group']
+                    server_name = postgre_sql_server_dict['name']
+                    postgre_sql_server_dict.update({
+                        'firewall_rules': self.list_firewall_rules_by_server(self, postgre_sql_conn, resource_group, server_name),
+                        'virtual_network_rules': self.list_virtual_network_rules_by_server(self, postgre_sql_conn, resource_group, server_name),
+                        'replicas': self.list_replicas_by_server(self, postgre_sql_conn, resource_group, server_name),
+                        'server_administrators': self.list_server_administrators(self, postgre_sql_conn, resource_group, server_name)
+                    })
 
-            # Must set_region_code method for region collection
-            self.set_region_code(postgre_sql_server_data['location'])
-            postgre_sql_servers.append(SqlServerResponse({'resource': postgre_sql_server_resource}))
+                _LOGGER.debug(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_dict}')
+                postgre_sql_server_data = Server(postgre_sql_server_dict, strict=False)
+                postgre_sql_server_resource = SqlServerResource({
+                    'data': postgre_sql_server_data,
+                    'region_code': postgre_sql_server_data.location,
+                    'reference': ReferenceModel(postgre_sql_server_data.reference()),
+                    'name': postgre_sql_server_data.name
+                })
 
-        _LOGGER.debug(f'** PostgreSQL Finished {time.time() - start_time} Seconds **')
+                # Must set_region_code method for region collection
+                self.set_region_code(postgre_sql_server_data['location'])
+                postgre_sql_server_responses.append(SqlServerResponse({'resource': postgre_sql_server_resource}))
 
-        return postgre_sql_servers
+            except Exception as e:
+                _LOGGER.error(f'[list_instances] {postgre_sql_server_id} {e}', exc_info=True)
+                error_resource_response = self.generate_resource_error_response(e, 'Database', 'PostgreSQLServer', postgre_sql_server_id)
+                error_responses.append(error_resource_response)
+
+        _LOGGER.debug(f'** PostgreSQLServer Finished {time.time() - start_time} Seconds **')
+        return postgre_sql_server_responses, error_responses
 
     @staticmethod
     def get_sql_resources(self, cosmos_db_conn, account_name, resource_group):

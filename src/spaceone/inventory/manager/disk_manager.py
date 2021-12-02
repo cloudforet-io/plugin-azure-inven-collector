@@ -1,5 +1,6 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
+from spaceone.inventory.libs.schema.resource import ErrorResourceResponse
 from spaceone.inventory.model.disk import *
 from spaceone.inventory.model.disk.cloud_service import *
 from spaceone.inventory.connector.disk import DiskConnector
@@ -8,6 +9,7 @@ from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
 from datetime import datetime
 import time
 import logging
+import json
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,75 +29,92 @@ class DiskManager(AzureManager):
                     - 'zones' : 'list'
                     - 'subscription_info' :  'dict'
             Response:
-                CloudServiceResponse (dict) : dictionary of azure disk data resource information
+                CloudServiceResponse (list) : dictionary of azure disk data resource information
+                ErrorResourceResponse (list) : list of error resource information
+
         """
         _LOGGER.debug(f'** Disk START **')
         start_time = time.time()
         subscription_info = params['subscription_info']
+
         disk_conn: DiskConnector = self.locator.get_connector(self.connector_name, **params)
-        disks = []
-        for disk in disk_conn.list_disks():
-            disk_dict = self.convert_nested_dictionary(self, disk)
+        disk_responses = []
+        error_responses = []
 
-            # update sku_dict
-            # switch DiskStorageAccountType to disk_sku_name for user-friendly words.
-            # (ex.Premium SSD, Standard HDD..)
-            if disk_dict.get('sku') is not None:
-                sku_dict = disk_dict['sku']
-                sku_dict.update({
-                    'name': self.get_disk_sku_name(sku_dict['name'])
-                })
+        disks = disk_conn.list_disks()
+        for disk in disks:
+            disk_id = ''
+
+            try:
+                disk_dict = self.convert_nested_dictionary(self, disk)
+                disk_id = disk_dict['id']
+
+                # Switch DiskStorageAccountType to disk_sku_name for user-friendly words. (ex.Premium SSD, Standard HDD..)
+                if disk_dict.get('sku') is not None:
+                    sku_dict = disk_dict['sku']
+                    sku_dict.update({
+                        'name': self.get_disk_sku_name(sku_dict['name'])
+                    })
+                    disk_dict.update({
+                        'sku': sku_dict
+                    })
+
+                # update disk_data dict
                 disk_dict.update({
-                    'sku': sku_dict
+                    'resource_group': self.get_resource_group_from_id(disk_dict['id']),  # parse resource_group from ID
+                    'subscription_id': subscription_info['subscription_id'],
+                    'subscription_name': subscription_info['subscription_name'],
+                    'size': disk_dict['disk_size_bytes'],
+                    'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
+                                                          disk_dict['disk_m_bps_read_write']),
                 })
 
-            # update disk_data dict
-            disk_dict.update({
-                'resource_group': self.get_resource_group_from_id(disk_dict['id']),  # parse resource_group from ID
-                'subscription_id': subscription_info['subscription_id'],
-                'subscription_name': subscription_info['subscription_name'],
-                'size': disk_dict['disk_size_bytes'],
-                'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
-                                                      disk_dict['disk_m_bps_read_write']),
-            })
+                # Update Network access policy to user-friendly words
+                if disk_dict.get('network_access_policy') is not None:
+                    disk_dict.update({
+                        'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
+                    })
 
-            # Update Network access policy to user-friendly words
-            if disk_dict.get('network_access_policy') is not None:
+                # get attached vm's name
+                if disk_dict.get('managed_by') is not None:
+                    managed_by = disk_dict['managed_by']
+                    disk_dict.update({
+                        'managed_by': self.get_attached_vm_name_from_managed_by(managed_by)
+                    })
+
+                # switch tags form
+                tags = disk_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
                 disk_dict.update({
-                    'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
+                    'tags': _tags
                 })
 
-            # get attached vm's name
-            if disk_dict.get('managed_by') is not None:
-                managed_by = disk_dict['managed_by']
-                disk_dict.update({
-                    'managed_by': self.get_attached_vm_name_from_managed_by(managed_by)
+                disk_data = Disk(disk_dict, strict=False)
+
+                disk_resource = DiskResource({
+                    'data': disk_data,
+                    'region_code': disk_data.location,
+                    'reference': ReferenceModel(disk_data.reference()),
+                    'tags':  _tags,
+                    'name': disk_data.name,
+                    'account': disk_data.subscription_id,
+                    'type': disk_data.sku.name,
+                    'size': disk_data.size,
+                    'launched_at': disk_data.time_created
                 })
 
-            # switch tags form
-            tags = disk_dict.get('tags', {})
-            _tags = self.convert_tag_format(tags)
-            disk_dict.update({
-                'tags': _tags
-            })
+                # Must set_region_code method for region collection
+                self.set_region_code(disk_data['location'])
 
-            disk_data = Disk(disk_dict, strict=False)
+                disk_responses.append(DiskResponse({'resource': disk_resource}))
+                _LOGGER.debug(f'** Disk Finished {time.time() - start_time} Seconds **')
 
-            disk_resource = DiskResource({
-                'data': disk_data,
-                'region_code': disk_data.location,
-                'reference': ReferenceModel(disk_data.reference()),
-                'tags':  _tags,
-                'name': disk_data.name
-            })
+            except Exception as e:
+                _LOGGER.error(f'[list_instances] {disk_id} {e}', exc_info=True)
+                error_resource_response = self.generate_resource_error_response(e, resource_id=disk_id, cloud_service_group='Compute', cloud_service_type='Disk')
+                error_responses.append(error_resource_response)
 
-            # Must set_region_code method for region collection
-            self.set_region_code(disk_data['location'])
-
-            disks.append(DiskResponse({'resource': disk_resource}))
-
-        _LOGGER.debug(f'** Disk Finished {time.time() - start_time} Seconds **')
-        return disks
+        return disk_responses, error_responses
 
     @staticmethod
     def get_attached_vm_name_from_managed_by(managed_by):
@@ -116,6 +135,7 @@ class DiskManager(AzureManager):
 
     @staticmethod
     def get_network_access_policy(network_access_policy):
+        network_access_policy_display = ''
         if network_access_policy == 'AllowAll':
             network_access_policy_display = 'Public endpoint (all network)'
         elif network_access_policy == 'AllowPrivate':

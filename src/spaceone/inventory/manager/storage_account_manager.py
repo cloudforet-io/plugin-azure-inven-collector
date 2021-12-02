@@ -26,62 +26,74 @@ class StorageAccountManager(AzureManager):
                     - 'zones' : 'list'
                     - 'subscription_info' :  'dict'
             Response:
-                CloudServiceResponse (dict) : dictionary of azure storage account data resource information
+                CloudServiceResponse (list) : dictionary of azure storage account data resource information
+                ErrorResourceResponse (list) : list of error resource information
+
         """
         _LOGGER.debug("** Storage Account START **")
         start_time = time.time()
 
         subscription_info = params['subscription_info']
         storage_account_conn: StorageAccountConnector = self.locator.get_connector(self.connector_name, **params)
-        storage_accounts = []
-        storage_account_list = storage_account_conn.list_storage_accounts()
+        storage_account_responses = []
+        error_responses = []
 
-        for storage_account in storage_account_list:
-            storage_account_dict = self.convert_nested_dictionary(self, storage_account)
+        storage_accounts = storage_account_conn.list_storage_accounts()
 
-            if storage_account_dict.get('network_rule_set') is not None:
+        for storage_account in storage_accounts:
+            storage_account_id = ''
+
+            try:
+                storage_account_dict = self.convert_nested_dictionary(self, storage_account)
+                storage_account_id = storage_account_dict['id']
+                resource_group = self.get_resource_group_from_id(storage_account_id)
+
+                if storage_account_dict.get('network_rule_set') is not None:
+                    storage_account_dict.update({
+                        'network_rule_set': self.get_network_rule_set(self, storage_account_dict['network_rule_set'])
+                    })
+
+                if storage_account_dict.get('name') is not None:
+                    storage_account_dict.update({
+                        'container_item': self.list_containers(self, storage_account_conn, resource_group, storage_account_dict['name'])
+                    })
+
+                if storage_account_dict.get('routing_preference') is not None:
+                    storage_account_dict.update({
+                        'routing_preference_display': 'Internet routing'
+                    })
+                else:
+                    storage_account_dict.update({
+                        'routing_preference_display': 'Microsoft network routing'
+                    })
+
                 storage_account_dict.update({
-                    'network_rule_set': self.get_network_rule_set(self, storage_account_dict['network_rule_set'])
-                })
-            resource_group = self.get_resource_group_from_id(storage_account_dict['id'])
-
-            if storage_account_dict.get('name') is not None:
-                storage_account_dict.update({
-                    'container_item': self.list_containers(self, storage_account_conn, resource_group, storage_account_dict['name'])
+                    'resource_group': resource_group,
+                    'subscription_id': subscription_info['subscription_id'],
+                    'subscription_name': subscription_info['subscription_name'],
                 })
 
-            if storage_account_dict.get('routing_preference') is not None:
-                storage_account_dict.update({
-                    'routing_preference_display': 'Internet routing'
+                _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_dict}')
+
+                storage_account_data = StorageAccount(storage_account_dict, strict=False)
+                storage_account_resource = StorageAccountResource({
+                    'data': storage_account_data,
+                    'region_code': storage_account_data.location,
+                    'reference': ReferenceModel(storage_account_data.reference()),
+                    'name': storage_account_data.name
                 })
-            else:
-                storage_account_dict.update({
-                    'routing_preference_display': 'Microsoft network routing'
-                })
 
-            storage_account_dict.update({
-                'resource_group': self.get_resource_group_from_id(storage_account_dict['id']),
-                # parse resource_group from ID
-                'subscription_id': subscription_info['subscription_id'],
-                'subscription_name': subscription_info['subscription_name'],
-            })
+                # Must set_region_code method for region collection
+                self.set_region_code(storage_account_data['location'])
+                storage_account_responses.append(StorageAccountResponse({'resource': storage_account_resource}))
 
-            _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_dict}')
-
-            storage_account_data = StorageAccount(storage_account_dict, strict=False)
-            storage_account_resource = StorageAccountResource({
-                'data': storage_account_data,
-                'region_code': storage_account_data.location,
-                'reference': ReferenceModel(storage_account_data.reference()),
-                'name': storage_account_data.name
-            })
-
-            # Must set_region_code method for region collection
-            self.set_region_code(storage_account_data['location'])
-            storage_accounts.append(StorageAccountResponse({'resource': storage_account_resource}))
+            except Exception as e:
+                _LOGGER.error(f'[list_instances] {storage_account_id} {e}', exc_info=True)
+                error_resource_response = self.generate_resource_error_response(e, 'Storage', 'StorageAccount', storage_account_id)
+                error_responses.append(error_resource_response)
 
         _LOGGER.debug(f'** Storage Account Finished {time.time() - start_time} Seconds **')
-        return storage_accounts
+        return storage_account_responses, error_responses
 
     @staticmethod
     def get_public_ip_address(self, application_gateway_conn, resource_group_name, pip_name):
@@ -176,7 +188,6 @@ class StorageAccountManager(AzureManager):
 
         return network_rule_dict
     
-
     @staticmethod
     def list_containers(self, storage_conn, rg_name, account_name):
         blob_list = []
