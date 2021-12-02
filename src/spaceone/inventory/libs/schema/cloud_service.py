@@ -33,6 +33,7 @@ class CloudServiceResource(Model):
 
 
 class CloudServiceResponse(BaseResponse):
+    state = StringType(default='SUCCESS')
     match_rules = DictType(ListType(StringType), default={
         '1': ['reference.resource_id', 'provider', 'cloud_service_type', 'cloud_service_group']
     })
