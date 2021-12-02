@@ -15,7 +15,7 @@ class LoadBalancerManager(AzureManager):
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        """
+        """"
             Args:
                 params (dict):
                     - 'options' : 'dict'
@@ -25,169 +25,163 @@ class LoadBalancerManager(AzureManager):
                     - 'zones' : 'list'
                     - 'subscription_info' :  'dict'
             Response:
-                CloudServiceResponse (dict) : dictionary of azure load balancer data resource information
+                CloudServiceResponse (list) : dictionary of azure load balancer data resource information
+                ErrorResourceResponse (list) : list of error resource information
+
         """
         _LOGGER.debug(f'** LoadBalancer START **')
         start_time = time.time()
-        """
-        Args:
-            params:
-                - options
-                - schema
-                - secret_data
-                - filter
-                - zones
-                - subscription_info
-        Response:
-            CloudServiceResponse
-        """
+
         subscription_info = params['subscription_info']
-
         load_balancer_conn: LoadBalancerConnector = self.locator.get_connector(self.connector_name, **params)
-        load_balancers = []
-        for load_balancer in load_balancer_conn.list_load_balancers():
-            load_balancer_dict = self.convert_nested_dictionary(self, load_balancer)
-            # update load_balancer_dict
-            load_balancer_dict.update({
-                'resource_group': self.get_resource_group_from_id(load_balancer_dict['id']),
-                # parse resource_group from ID
-                'subscription_id': subscription_info['subscription_id'],
-                'subscription_name': subscription_info['subscription_name'],
-            })
+        load_balancer_responses = []
+        error_responses = []
+        load_balancers = load_balancer_conn.list_load_balancers()
 
-            # Get Network Interfaces attached in this load balancer
-            load_balancer_dict.update({
-                'network_interfaces': self.get_network_interfaces(self, load_balancer_conn,
-                                                                  load_balancer_dict['resource_group'],
-                                                                  load_balancer_dict['name'])
-            })
+        for load_balancer in load_balancers:
+            load_balancer_id = ''
 
-            # Get Frontend IP Configurations information
-            if load_balancer_dict.get('frontend_ip_configurations') is not None:
-                private_ip_address_list = list()
-                used_by_list = list()
-                for fic in load_balancer_dict['frontend_ip_configurations']:
-                    if fic.get(
-                            'subnet'):  # If the 'public' type, Skip this part because there isn't subnet information for them.
-                        fic['subnet']['address_prefix'] = self.get_frontend_address_prefix(self, load_balancer_conn,
-                                                                                           fic['subnet'])
-                        fic['subnet']['name'] = self.get_frontend_ip_subnet_name(fic['subnet']['id'])
+            try:
+                load_balancer_dict = self.convert_nested_dictionary(self, load_balancer)
+                load_balancer_id = load_balancer_dict['id']
 
-                    # Get used inbound NAT rules
-                    if fic.get('inbound_nat_rules') is not None:
+                load_balancer_dict.update({
+                    'resource_group': self.get_resource_group_from_id(load_balancer_id),
+                    'subscription_id': subscription_info['subscription_id'],
+                    'subscription_name': subscription_info['subscription_name'],
+                })
+
+                # Get Network Interfaces attached in this load balancer
+                load_balancer_dict.update({
+                    'network_interfaces': self.get_network_interfaces(self, load_balancer_conn, load_balancer_dict['resource_group'],
+                                                                      load_balancer_dict['name'])
+                })
+
+                # Get Frontend IP Configurations information
+                if load_balancer_dict.get('frontend_ip_configurations') is not None:
+                    private_ip_address_list = list()
+                    used_by_list = list()
+
+                    for fic in load_balancer_dict['frontend_ip_configurations']:
+                        if fic.get('subnet'):  # If the 'public' type, Skip this part because there isn't subnet information for them.
+                            fic['subnet']['address_prefix'] = self.get_frontend_address_prefix(self, load_balancer_conn, fic['subnet'])
+                            fic['subnet']['name'] = self.get_frontend_ip_subnet_name(fic['subnet']['id'])
+
+                        # Get used inbound NAT rules
+                        if fic.get('inbound_nat_rules') is not None:
+                            load_balancer_dict.update({
+                                'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(
+                                    used_by_list, fic['inbound_nat_rules'])
+                            })
+
+                        # Get used load balancing NAT rules
+                        if fic.get('load_balancing_rules') is not None:
+                            load_balancer_dict.update({
+                                'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(
+                                    used_by_list, fic['load_balancing_rules']),
+                            })
+
+                        # Get all of private ip addresses
+                        private_ip_address_list.append(fic['private_ip_address'])
+
                         load_balancer_dict.update({
-                            'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(
-                                used_by_list, fic['inbound_nat_rules'])
+                            'private_ip_address_display': private_ip_address_list
                         })
 
-                    # Get used load balancing NAT rules
-                    if fic.get('load_balancing_rules') is not None:
-                        load_balancer_dict.update({
-                            'frontend_ip_configurations_used_by_display': self.get_frontend_ip_configurations_used_by_display(
-                                used_by_list, fic['load_balancing_rules']),
-                        })
-
-                    # Get all of private ip addresses
-                    private_ip_address_list.append(fic['private_ip_address'])
-
+                # Since Azure python sdk returns only one backend pool, delete the backend pool list first, and then use the new API connection
+                if load_balancer_dict.get('backend_address_pools') is not None:
+                    load_balancer_dict['backend_address_pools'].clear()
                     load_balancer_dict.update({
-                        'private_ip_address_display': private_ip_address_list
+                        'backend_address_pools': self.list_load_balancer_backend_address_pools(self, load_balancer_conn,
+                                                                                               load_balancer_dict['resource_group'],
+                                                                                               load_balancer_dict['name'])
+                    })
+                    # get backend address pool's count
+                    load_balancer_dict.update({
+                        'backend_address_pools_count_display': self.get_backend_address_pools_count(self,
+                                                                                                    load_balancer_dict['backend_address_pools'])
                     })
 
-            # Since Azure python sdk returns only one backend pool, delete the backend pool list first, and then use the new API connection
-            if load_balancer_dict.get('backend_address_pools') is not None:
-                load_balancer_dict['backend_address_pools'].clear()
-                load_balancer_dict.update({
-                    'backend_address_pools': self.list_load_balancer_backend_address_pools(self, load_balancer_conn,
-                                                                                           load_balancer_dict[
-                                                                                               'resource_group'],
-                                                                                           load_balancer_dict['name'],
-                                                                                           load_balancer_dict[
-                                                                                               'network_interfaces'])
-                })
-                # get backend address pool's count
-                load_balancer_dict.update({
-                    'backend_address_pools_count_display': self.get_backend_address_pools_count(self,
-                                                                                                load_balancer_dict[
-                                                                                                    'backend_address_pools'])
-                })
+                # Get load balancing Rules for display
+                if load_balancer_dict.get('load_balancing_rules') is not None:
+                    load_balancer_dict.update({
+                        'load_balancing_rules_display': self.get_load_balancing_rules_display(self, load_balancer_dict[
+                            'load_balancing_rules']),
+                    })
 
-            # Get load balancing Rules for display
-            if load_balancer_dict.get('load_balancing_rules') is not None:
-                load_balancer_dict.update({
-                    'load_balancing_rules_display': self.get_load_balancing_rules_display(self, load_balancer_dict[
-                        'load_balancing_rules']),
-                })
+                    for lbr in load_balancer_dict['load_balancing_rules']:
+                        if lbr.get('backend_address_pool') is not None:
+                            lbr.update({
+                                'backend_address_pool_display': self.get_backend_address_pool_name(
+                                    lbr['backend_address_pool']),
+                            })
 
-                for lbr in load_balancer_dict['load_balancing_rules']:
-                    if lbr.get('backend_address_pool') is not None:
-                        lbr.update({
-                            'backend_address_pool_display': self.get_backend_address_pool_name(
-                                lbr['backend_address_pool']),
-                        })
+                        if lbr.get('load_distribution') is not None:
+                            lbr.update({
+                                'load_distribution_display': self.get_load_distribution_display(lbr['load_distribution'])
+                            })
 
-                    if lbr.get('load_distribution') is not None:
-                        lbr.update({
-                            'load_distribution_display': self.get_load_distribution_display(lbr['load_distribution'])
-                        })
+                        if lbr.get('frontend_ip_configuration') is not None:
+                            lbr.update({
+                                'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(
+                                    lbr['frontend_ip_configuration'])
+                            })
 
-                    if lbr.get('frontend_ip_configuration') is not None:
-                        lbr.update({
+                # Get Inbound NAT Rules for display
+                if load_balancer_dict.get('inbound_nat_rules') is not None:
+                    load_balancer_dict.update({
+                        'inbound_nat_rules_display': self.get_nat_rules_display(self,
+                                                                                load_balancer_dict['inbound_nat_rules'])
+                    })
+                    for inr in load_balancer_dict['inbound_nat_rules']:
+                        inr.update({
                             'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(
-                                lbr['frontend_ip_configuration'])
+                                inr['frontend_ip_configuration']),
+                            'port_mapping_display': self.get_port_mapping_display(inr['frontend_port'], inr['backend_port']),
+                            'target_virtual_machine': self.get_matched_vm_info(self, inr['backend_ip_configuration']['id'],
+                                                                               load_balancer_dict['network_interfaces'])
                         })
 
-            # Get Inbound NAT Rules for display
-            if load_balancer_dict.get('inbound_nat_rules') is not None:
-                load_balancer_dict.update({
-                    'inbound_nat_rules_display': self.get_nat_rules_display(self,
-                                                                            load_balancer_dict['inbound_nat_rules'])
-                })
-                for inr in load_balancer_dict['inbound_nat_rules']:
-                    inr.update({
-                        'frontend_ip_configuration_display': self.get_frontend_ip_configuration_display(
-                            inr['frontend_ip_configuration']),
-                        'port_mapping_display': self.get_port_mapping_display(inr['frontend_port'],
-                                                                              inr['backend_port']),
-                        'target_virtual_machine': self.get_matched_vm_info(self, inr['backend_ip_configuration']['id'],
-                                                                           load_balancer_dict['network_interfaces'])
+                # Get Health Probes for display
+                if load_balancer_dict.get('probes') is not None:
+                    load_balancer_dict.update({
+                        'probes_display': self.get_probe_display_list(self, load_balancer_dict['probes'])
                     })
 
-            # Get Health Probes for display
-            if load_balancer_dict.get('probes') is not None:
+                # switch tags form
+                tags = load_balancer_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
                 load_balancer_dict.update({
-                    'probes_display': self.get_probe_display_list(self, load_balancer_dict['probes'])
+                    'tags': _tags
                 })
 
-            # switch tags form
-            tags = load_balancer_dict.get('tags', {})
-            _tags = self.convert_tag_format(tags)
-            load_balancer_dict.update({
-                'tags': _tags
-            })
+                _LOGGER.debug(f'[LOAD BALANCER INFO] {load_balancer_dict}')
 
-            _LOGGER.debug(f'[LOAD BALANCER INFO] {load_balancer_dict}')
+                load_balancer_data = LoadBalancer(load_balancer_dict, strict=False)
+                load_balancer_resource = LoadBalancerResource({
+                    'data': load_balancer_data,
+                    'region_code': load_balancer_data.location,
+                    'reference': ReferenceModel(load_balancer_data.reference()),
+                    'tags': _tags,
+                    'name': load_balancer_data.name
+                })
 
-            load_balancer_data = LoadBalancer(load_balancer_dict, strict=False)
-            load_balancer_resource = LoadBalancerResource({
-                'data': load_balancer_data,
-                'region_code': load_balancer_data.location,
-                'reference': ReferenceModel(load_balancer_data.reference()),
-                'tags': _tags,
-                'name': load_balancer_data.name
-            })
+                # Must set_region_code method for region collection
+                self.set_region_code(load_balancer_data['location'])
+                load_balancer_responses.append(LoadBalancerResponse({'resource': load_balancer_resource}))
 
-            # Must set_region_code method for region collection
-            self.set_region_code(load_balancer_data['location'])
-            load_balancers.append(LoadBalancerResponse({'resource': load_balancer_resource}))
+            except Exception as e:
+                _LOGGER.error(f'[list_instances] {load_balancer_id} {e}', exc_info=True)
+                error_resource_response = self.generate_resource_error_response(e, 'Network', 'LoadBalancer', load_balancer_id)
+                error_responses.append(error_resource_response)
 
         _LOGGER.debug(f'** LoadBalancer Finished {time.time() - start_time} Seconds **')
-        return load_balancers
+        return load_balancer_responses, error_responses
 
     @staticmethod
     def get_network_interfaces(self, load_balancer_conn, rg_name, lb_name):
         network_interface_object_list = list(load_balancer_conn.list_load_balancer_network_interfaces(rg_name, lb_name))
-        network_interface_list = []  # list for return values
+        network_interface_list = []
 
         # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
@@ -196,7 +190,8 @@ class LoadBalancerManager(AzureManager):
             nic_rg_name = network_interface_dict.get('id', '').split('/')[4]
 
             if network_interface_dict.get('ip_configurations') is not None:
-                # Loop for getting LB's name, VMs name attached to Backend Pool
+
+                # Get LB's name, VMs name attached to Backend Pool
                 for ip_configuration in network_interface_dict['ip_configurations']:
                     if ip_configuration.get('load_balancer_backend_address_pools') is not None:
                         for ic in ip_configuration['load_balancer_backend_address_pools']:
@@ -225,23 +220,14 @@ class LoadBalancerManager(AzureManager):
     @staticmethod
     def get_ip_configurations_list(self, load_balancer_conn, rg_name, network_interface_name):
         ip_configuration_list = []
-        ip_configurations_object_list = []
         if network_interface_name:
-            try:
-                ip_configurations_object = load_balancer_conn.list_network_interface_ip_configurations(rg_name, network_interface_name)
-                ip_configurations_object_list = list(ip_configurations_object)
+            ip_configurations_object = load_balancer_conn.list_network_interface_ip_configurations(rg_name, network_interface_name)
+            ip_configurations_object_list = list(ip_configurations_object)
 
-            except Exception as e:
-                _LOGGER.error(f'[ERROR: List load balancer Network IP configurations list]: {e}')
-
-            try:
+            if ip_configurations_object_list:
                 for ip_configuration_object in ip_configurations_object_list:
-                    type_obj = type(ip_configuration_object)
                     ip_object_dict = self.convert_nested_dictionary(self, ip_configuration_object)
                     ip_configuration_list.append(ip_object_dict)
-
-            except Exception as e:
-                _LOGGER.error(f'[ERROR: list IP configuration object]: {e}')
 
         return ip_configuration_list
 
@@ -254,6 +240,7 @@ class LoadBalancerManager(AzureManager):
 
     @staticmethod
     def get_frontend_address_prefix(self, conn, subnet):
+
         # Parse Vnet, LB name from subnet id
         subnet_id = subnet['id']
         resource_group_name = subnet_id.split('/')[4]
@@ -278,26 +265,15 @@ class LoadBalancerManager(AzureManager):
         return used_by_list
 
     @staticmethod
-    def list_load_balancer_backend_address_pools(self, conn, rg_name, lb_name, network_interfaces_list):
+    def list_load_balancer_backend_address_pools(self, conn, rg_name, lb_name):
         backend_pools_list = list()  # return result list
 
         backend_pools_object = conn.list_load_balancer_backend_address_pools(rg_name, lb_name)
-        backend_pools_object_list = list(
-            backend_pools_object)  # Since return type is ItemPagedClass, change to the list before convert dictionary
+        backend_pools_object_list = list(backend_pools_object)  # Since return type is ItemPagedClass, change to the list before convert dictionary
 
         # Loop for converting backend pools objects to dictionary
         for bp in backend_pools_object_list:
             backend_pool_dict = self.convert_nested_dictionary(self, bp)
-
-            # Loop for getting vm's id and name linked to this backend address pool
-            '''
-            for bic in backend_pool_dict['backend_ip_configurations']:
-                vm_id = self.get_matched_vm_info(self, bic['id'], network_interfaces_list)
-
-            backend_pool_dict.update({
-                'vm_ids': vm_id
-            })
-            '''
             backend_pools_list.append(backend_pool_dict)
 
         return backend_pools_list

@@ -14,8 +14,4 @@ class DiskConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_disks(self):
-        try:
-            return self.compute_client.disks.list()
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='Disk'))
-
+        return self.compute_client.disks.list()

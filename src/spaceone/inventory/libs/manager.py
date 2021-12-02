@@ -1,6 +1,8 @@
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.libs.schema.region import RegionResource, RegionResponse
+from spaceone.inventory.libs.schema.resource import RegionResourceResponse
+from spaceone.inventory.libs.schema.resource import ErrorResourceResponse
 from spaceone.inventory.error.custom import *
 from collections.abc import Iterable
 import json
@@ -10,80 +12,80 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 REGION_INFO = {
-    'eastus': {'name': 'US East (Virginia)', 'tags': {'latitude': '37.3719', 'longitude': '-79.8164'}},
-    'eastus2': {'name': 'US East 2 (Virginia)', 'tags': {'latitude': '36.6681', 'longitude': '-78.3889'}},
-    'westus': {'name': 'US West (California)', 'tags': {'latitude': '37.783', 'longitude': '-122.417'}},
-    'westus2': {'name': 'US West 2 (Washington)', 'tags': {'latitude': '47.233', 'longitude': '-119.852'}},
-    'centralus': {'name': 'US Central (Iowa)', 'tags': {'latitude': '41.5908', 'longitude': '-93.6208'}},
+    'eastus': {'name': 'US East (Virginia)', 'tags': {'latitude': '37.3719', 'longitude': '-79.8164', 'continent': 'north_america'}},
+    'eastus2': {'name': 'US East 2 (Virginia)', 'tags': {'latitude': '36.6681', 'longitude': '-78.3889', 'continent': 'north_america'}},
+    'westus': {'name': 'US West (California)', 'tags': {'latitude': '37.783', 'longitude': '-122.417', 'continent': 'north_america'}},
+    'westus2': {'name': 'US West 2 (Washington)', 'tags': {'latitude': '47.233', 'longitude': '-119.852', 'continent': 'north_america'}},
+    'centralus': {'name': 'US Central (Iowa)', 'tags': {'latitude': '41.5908', 'longitude': '-93.6208', 'continent': 'north_america'}},
     'southcentralus': {'name': 'US South Central (Texas)',
-                       'tags': {'latitude': '29.4167', 'longitude': '-98.5'}},
+                       'tags': {'latitude': '29.4167', 'longitude': '-98.5', 'continent': 'north_america'}},
     'northcentralus': {'name': 'US North Central (Illinois)',
-                       'tags': {'latitude': '41.8819', 'longitude': '-87.6278'}},
+                       'tags': {'latitude': '41.8819', 'longitude': '-87.6278', 'continent': 'north_america'}},
     'westcentralus': {'name': 'US West Central (Wyoming)',
-                      'tags': {'latitude': '40.890', 'longitude': '-110.234'}},
+                      'tags': {'latitude': '40.890', 'longitude': '-110.234', 'continent': 'north_america'}},
     'canadacentral': {'name': 'Canada Central (Toronto)',
-                      'tags': {'latitude': '43.653', 'longitude': '-79.383'}},
+                      'tags': {'latitude': '43.653', 'longitude': '-79.383', 'continent': 'north_america'}},
     'canadaeast': {'name': 'Canada East (Quebec)',
-                   'tags': {'latitude': '46.817', 'longitude': '-71.217'}},
+                   'tags': {'latitude': '46.817', 'longitude': '-71.217', 'continent': 'north_america'}},
     'southafricanorth': {'name': 'South Africa North (Johannesburg)',
-                         'tags': {'latitude': '-25.731340', 'longitude': '28.218370'}},
+                         'tags': {'latitude': '-25.731340', 'longitude': '28.218370', 'continent': 'africa'}},
     'southafricawest': {'name': 'South Africa West (Cape Town)',
-                        'tags': {'latitude': '-34.075691', 'longitude': '18.843266'}},
+                        'tags': {'latitude': '-34.075691', 'longitude': '18.843266', 'continent': 'africa'}},
     'eastasia': {'name': 'Asia Pacific East (Hong Kong)',
-                 'tags': {'latitude': '22.267', 'longitude': '114.188'}},
+                 'tags': {'latitude': '22.267', 'longitude': '114.188', 'continent': 'asia_pacific'}},
     'centralindia': {'name': 'Asia Pacific Central India (Pune)',
-                     'tags': {'latitude': '18.5822', 'longitude': '73.9197'}},
+                     'tags': {'latitude': '18.5822', 'longitude': '73.9197', 'continent': 'asia_pacific'}},
     'southindia': {'name': 'Asia Pacific South India (Chennai)',
-                   'tags': {'latitude': '12.9822', 'longitude': '80.1636'}},
+                   'tags': {'latitude': '12.9822', 'longitude': '80.1636', 'continent': 'asia_pacific'}},
     'westindia': {'name': 'Asia Pacific West India (Mumbai)',
-                  'tags': {'latitude': '19.088', 'longitude': '72.868'}},
+                  'tags': {'latitude': '19.088', 'longitude': '72.868', 'continent': 'asia_pacific'}},
     'southeastasia': {'name': 'Asia Pacific South East (Singapore)',
-                      'tags': {'latitude': '1.283', 'longitude': '103.833'}},
+                      'tags': {'latitude': '1.283', 'longitude': '103.833', 'continent': 'asia_pacific'}},
     'japaneast': {'name': 'Asia Pacific Japan East (Tokyo, Saitama)',
-                  'tags': {'latitude': '35.68', 'longitude': '139.77'}},
+                  'tags': {'latitude': '35.68', 'longitude': '139.77', 'continent': 'asia_pacific'}},
     'japanwest': {'name': 'Asia Pacific Japan West (Osaka)',
-                  'tags': {'latitude': '34.6939', 'longitude': '135.5022'}},
+                  'tags': {'latitude': '34.6939', 'longitude': '135.5022', 'continent': 'asia_pacific'}},
     'koreacentral': {'name': 'Asia Pacific Korea Central (Seoul)',
-                     'tags': {'latitude': '37.5665', 'longitude': '126.9780'}},
+                     'tags': {'latitude': '37.5665', 'longitude': '126.9780', 'continent': 'asia_pacific'}},
     'koreasouth': {'name': 'Asia Pacific Korea South (Busan)',
-                   'tags': {'latitude': '35.1796', 'longitude': '129.0756'}},
+                   'tags': {'latitude': '35.1796', 'longitude': '129.0756', 'continent': 'asia_pacific'}},
     'australiaeast': {'name': 'Asia Pacific Australia East (New South Wales)',
-                      'tags': {'latitude': '-33.86', 'longitude': '151.2094'}},
+                      'tags': {'latitude': '-33.86', 'longitude': '151.2094', 'continent': 'asia_pacific'}},
     'australiacentral': {'name': 'Asia Pacific Australia Central (Canberra)',
-                         'tags': {'latitude': '-35.3075', 'longitude': '149.1244'}},
+                         'tags': {'latitude': '-35.3075', 'longitude': '149.1244', 'continent': 'asia_pacific'}},
     'australiacentral2': {'name': 'Asia Pacific Australia Central 2 (Canberra)',
-                          'tags': {'latitude': '-35.3075', 'longitude': '149.1244'}},
+                          'tags': {'latitude': '-35.3075', 'longitude': '149.1244', 'continent': 'asia_pacific'}},
     'australiasoutheast': {'name': 'Asia Pacific Australia South East (Victoria)',
-                           'tags': {'latitude': '-37.8136', 'longitude': '144.9631'}},
-    'northeurope': {'name': 'North Europe (Ireland)', 'tags': {'latitude': '53.3478', 'longitude': '-6.2597'}},
+                           'tags': {'latitude': '-37.8136', 'longitude': '144.9631', 'continent': 'asia_pacific'}},
+    'northeurope': {'name': 'North Europe (Ireland)', 'tags': {'latitude': '53.3478', 'longitude': '-6.2597', 'continent': 'europe'}},
     'norwayeast': {'name': 'North Europe (Norway East)',
-                   'tags': {'latitude': '59.913868', 'longitude': '10.752245'}},
+                   'tags': {'latitude': '59.913868', 'longitude': '10.752245', 'continent': 'europe'}},
     'norwaywest': {'name': 'North Europe (Norway West)',
-                   'tags': {'latitude': '58.969975', 'longitude': '5.733107'}},
+                   'tags': {'latitude': '58.969975', 'longitude': '5.733107', 'continent': 'europe'}},
     'germanywestcentral': {'name': 'Europe Germany West Central (Frankfurt)',
-                           'tags': {'latitude': '50.110924', 'longitude': '8.682127'}},
+                           'tags': {'latitude': '50.110924', 'longitude': '8.682127', 'continent': 'europe'}},
     'germanynorth': {'name': 'Europe Germany North (Berlin)',
-                     'tags': {'latitude': '53.073635', 'longitude': '8.806422'}},
+                     'tags': {'latitude': '53.073635', 'longitude': '8.806422', 'continent': 'europe'}},
     'switzerlandnorth': {'name': 'Europe Switzerland North (Zurich)',
-                         'tags': {'latitude': '47.451542', 'longitude': '8.564572'}},
+                         'tags': {'latitude': '47.451542', 'longitude': '8.564572', 'continent': 'europe'}},
     'switzerlandwest': {'name': 'Europe Switzerland West (Geneva)',
-                        'tags': {'latitude': '46.204391', 'longitude': '6.143158'}},
+                        'tags': {'latitude': '46.204391', 'longitude': '6.143158', 'continent': 'europe'}},
+    'swedencentral': {'name': 'Sweden Central', 'tags': {'latitude': '60.67488', 'longitude': '17.14127', 'continent': 'europe'}},
     'francecentral': {'name': 'Europe France Central (Paris)',
-                      'tags': {'latitude': '46.3772', 'longitude': '2.3730'}},
+                      'tags': {'latitude': '46.3772', 'longitude': '2.3730', 'continent': 'europe'}},
     'francesouth': {'name': 'Europe France South (Marseille)',
-                    'tags': {'latitude': '43.8345', 'longitude': '2.1972'}},
-    'westeurope': {'name': 'West Europe (Netherlands)', 'tags': {'latitude': '52.3667', 'longitude': '4.9'}},
-    'uksouth': {'name': 'UK South (London)', 'tags': {'latitude': '50.941', 'longitude': '-0.799'}},
-    'ukwest': {'name': 'UK West (Cardiff)', 'tags': {'latitude': '53.427', 'longitude': '-3.084'}},
+                    'tags': {'latitude': '43.8345', 'longitude': '2.1972', 'continent': 'europe'}},
+    'westeurope': {'name': 'West Europe (Netherlands)', 'tags': {'latitude': '52.3667', 'longitude': '4.9', 'continent': 'europe'}},
+    'uksouth': {'name': 'UK South (London)', 'tags': {'latitude': '50.941', 'longitude': '-0.799', 'continent': 'europe'}},
+    'ukwest': {'name': 'UK West (Cardiff)', 'tags': {'latitude': '53.427', 'longitude': '-3.084', 'continent': 'europe'}},
     'uaenorth': {'name': 'Middle East UAE North (Dubai)',
-                 'tags': {'latitude': '25.266666', 'longitude': '55.316666'}},
+                 'tags': {'latitude': '25.266666', 'longitude': '55.316666', 'continent': 'middle_east'}},
     'uaecentral': {'name': 'Middle East UAE Central (Abu Dhabi)',
-                   'tags': {'latitude': '24.466667', 'longitude': '54.366669'}},
+                   'tags': {'latitude': '24.466667', 'longitude': '54.366669', 'continent': 'middle_east'}},
     'brazilsouth': {'name': 'South America Brazil South (Sao Paulo State)',
-                    'tags': {'latitude': '-23.55', 'longitude': '-46.633'}},
+                    'tags': {'latitude': '-23.55', 'longitude': '-46.633', 'continent': 'south_america'}},
     'brazilsoutheast': {'name': 'South America Brazil South East (Rio)',
-                        'tags': {'latitude': '-22.90278', 'longitude': '-43.2075'}},
-    'swedencentral': {'name': 'Sweden Central', 'tags': {'latitude': '60.67488', 'longitude': '17.14127'}}
+                        'tags': {'latitude': '-22.90278', 'longitude': '-43.2075', 'continent': 'south_america'}}
 }
 
 
@@ -107,19 +109,46 @@ class AzureManager(BaseManager):
         raise NotImplemented
 
     def collect_resources(self, params) -> list:
-        resources = []
+        total_resources = []
 
-        resources.extend(self.collect_cloud_service_type())
-        resources.extend(self.collect_cloud_service(params))
-        resources.extend(self.collect_region())
+        try:
+            total_resources.extend(self.collect_cloud_service_type())
+            resources, error_resources = self.collect_cloud_service(params)
 
-        return resources
+            total_resources.extend(resources)
+            total_resources.extend(error_resources)
+
+            regions = self.collect_region()
+            total_resources.extend(regions)
+
+        except Exception as e:
+            error_resource_response = self.generate_error_response(e, self.cloud_service_types[0].resource.group, self.cloud_service_types[0].resource.name)
+            total_resources.append(error_resource_response)
+            _LOGGER.error(f'[collect] {e}', exc_info=True)
+
+        return total_resources
 
     def collect_region(self):
         results = []
-        for region_code in self.collected_region_codes:
-            if region := self.match_region_info(region_code):
-                results.append(RegionResponse({'resource': region}))
+        try:
+            for region_code in self.collected_region_codes:
+                if region := self.match_region_info(region_code):
+                    results.append(RegionResourceResponse({'resource': region}))
+
+        except Exception as e:
+            _LOGGER.error(f'[collect] {e}', exc_info=True)
+
+            if type(e) is dict:
+                error_resource_response = ErrorResourceResponse({
+                    'message': json.dumps(e),
+                    'resource': {'resource_type': 'inventory.Region'}
+                })
+            else:
+                error_resource_response = ErrorResourceResponse({
+                    'message': str(e),
+                    'resource': {'resource_type': 'inventory.Region'}
+                })
+            results.append(error_resource_response)
 
         return results
 
@@ -186,8 +215,31 @@ class AzureManager(BaseManager):
 
     @staticmethod
     def get_resource_group_from_id(dict_id):
-        try:
-            resource_group = dict_id.split('/')[4]
-            return resource_group
-        except IndexError:
-            raise ERROR_PARSE_ID_FROM_RESOURCE_GROUP()
+        resource_group = dict_id.split('/')[4]
+        return resource_group
+
+    @staticmethod
+    def generate_error_response(e, cloud_service_group, cloud_service_type):
+        if type(e) is dict:
+            error_resource_response = ErrorResourceResponse({'message': json.dumps(e),
+                                                             'resource': {'cloud_service_group': cloud_service_group,
+                                                                          'cloud_service_type': cloud_service_type}})
+        else:
+            error_resource_response = ErrorResourceResponse({'message': str(e),
+                                                             'resource': {'cloud_service_group': cloud_service_group,
+                                                                          'cloud_service_type': cloud_service_type}})
+        return error_resource_response
+
+    @staticmethod
+    def generate_resource_error_response(e, cloud_service_group, cloud_service_type, resource_id):
+        if type(e) is dict:
+            error_resource_response = ErrorResourceResponse({'message': json.dumps(e),
+                                                             'resource': {'cloud_service_group': cloud_service_group,
+                                                                          'cloud_service_type': cloud_service_type,
+                                                                          'resource_id': resource_id}})
+        else:
+            error_resource_response = ErrorResourceResponse({'message': str(e),
+                                                             'resource': {'cloud_service_group': cloud_service_group,
+                                                                          'cloud_service_type': cloud_service_type,
+                                                                          'resource_id': resource_id}})
+        return error_resource_response

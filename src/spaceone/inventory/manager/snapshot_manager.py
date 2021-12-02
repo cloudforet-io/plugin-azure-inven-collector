@@ -27,7 +27,9 @@ class SnapshotManager(AzureManager):
                     - 'zones' : 'list'
                     - 'subscription_info' :  'dict'
             Response:
-                CloudServiceResponse (dict) : dictionary of azure snapshot data resource information
+                CloudServiceResponse (list) : dictionary of azure snapshot data resource information
+                ErrorResourceResponse (list) : list of error resource information
+
         """
         _LOGGER.debug("** Snapshot START **")
         start_time = time.time()
@@ -35,86 +37,97 @@ class SnapshotManager(AzureManager):
         subscription_info = params['subscription_info']
 
         snapshot_conn: SnapshotConnector = self.locator.get_connector(self.connector_name, **params)
-        snapshots = []
-        for snapshot in snapshot_conn.list_snapshots():
-            snapshot_dict = self.convert_nested_dictionary(self, snapshot)
+        snapshot_responses = []
+        error_responses = []
 
-            # update sku_dict
-            # switch SnapshotStorageAccountType to snapshot_sku_name for user-friendly words.
-            # (ex.Premium_LRS -> Premium SSD, Standard HDD..)
-            sku_dict = snapshot_dict.get('sku', {})
-            sku_dict.update({
-                'name': self.get_disk_sku_name(sku_dict.get('name', ''))
-            })
+        snapshots = snapshot_conn.list_snapshots()
 
-            # update encryption_dict type to user-friendly words
-            # (ex.EncryptionAtRestWithPlatformKey -> Platform-managed key...)
-            if snapshot_dict.get('encryption', {}).get('type') is not None:
-                type = snapshot_dict['encryption']['type']
-                encryption_type = ''
-                if type == 'EncryptionAtRestWithPlatformKey':
-                    encryption_type = 'Platform-managed key'
-                elif type == 'EncryptionAtRestWithPlatformAndCustomerKeys':
-                    encryption_type = 'Platform and customer managed key'
-                elif type == 'EncryptionAtRestWithCustomerKey':
-                    encryption_type = 'Customer-managed key'
+        for snapshot in snapshots:
+            snapshot_id = ''
+            try:
+                snapshot_dict = self.convert_nested_dictionary(self, snapshot)
+                snapshot_id = snapshot_dict['id']
 
-                snapshot_dict['encryption'].update({
-                    'type_display': encryption_type
+                # update sku_dict
+                # switch SnapshotStorageAccountType to snapshot_sku_name for user-friendly words.
+                # (ex.Premium_LRS -> Premium SSD, Standard HDD..)
+                sku_dict = snapshot_dict.get('sku', {})
+                sku_dict.update({
+                    'name': self.get_disk_sku_name(sku_dict.get('name', ''))
                 })
 
-            # update snapshot_dict
-            snapshot_dict.update({
-                'resource_group': self.get_resource_group_from_id(snapshot_dict['id']),  # parse resource_group from ID
-                'subscription_id': subscription_info['subscription_id'],
-                'subscription_name': subscription_info['subscription_name'],
-                'size': snapshot_dict['disk_size_bytes'],
-                'sku': sku_dict,
-                'incremental_display': self.get_incremental_display(snapshot_dict['incremental'])
-            })
+                # update encryption_dict type to user-friendly words
+                # (ex.EncryptionAtRestWithPlatformKey -> Platform-managed key...)
+                if snapshot_dict.get('encryption', {}).get('type') is not None:
+                    type = snapshot_dict['encryption']['type']
+                    encryption_type = ''
+                    if type == 'EncryptionAtRestWithPlatformKey':
+                        encryption_type = 'Platform-managed key'
+                    elif type == 'EncryptionAtRestWithPlatformAndCustomerKeys':
+                        encryption_type = 'Platform and customer managed key'
+                    elif type == 'EncryptionAtRestWithCustomerKey':
+                        encryption_type = 'Customer-managed key'
 
-            if snapshot_dict.get('network_access_policy') is not None:
+                    snapshot_dict['encryption'].update({
+                        'type_display': encryption_type
+                    })
+
+                # update snapshot_dict
                 snapshot_dict.update({
-                    'network_access_policy_display': self.get_network_access_policy(snapshot_dict['network_access_policy'])
+                    'resource_group': self.get_resource_group_from_id(snapshot_id),  # parse resource_group from ID
+                    'subscription_id': subscription_info['subscription_id'],
+                    'subscription_name': subscription_info['subscription_name'],
+                    'size': snapshot_dict['disk_size_bytes'],
+                    'sku': sku_dict,
+                    'incremental_display': self.get_incremental_display(snapshot_dict['incremental'])
                 })
-            
-            # get attached vm's name
-            if snapshot_dict.get('managed_by') is not None:
+
+                if snapshot_dict.get('network_access_policy') is not None:
+                    snapshot_dict.update({
+                        'network_access_policy_display': self.get_network_access_policy(snapshot_dict['network_access_policy'])
+                    })
+
+                # get attached vm's name
+                if snapshot_dict.get('managed_by') is not None:
+                    snapshot_dict.update({
+                        'managed_by': self.get_attached_vm_name_from_managed_by(snapshot_dict['managed_by'])
+                    })
+
+                # get source_disk_name from source_resource_id
+                if snapshot_dict.get('creation_data') is not None:
+                    source_resource_id = snapshot_dict['creation_data'].get('source_resource_id', '')
+                    snapshot_dict.update({
+                        'source_disk_name': self.get_source_disk_name(source_resource_id)
+                    })
+
+                # switch tags form
+                tags = snapshot_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
                 snapshot_dict.update({
-                    'managed_by': self.get_attached_vm_name_from_managed_by(snapshot_dict['managed_by'])
+                    'tags': _tags
                 })
 
-            # get source_disk_name from source_resource_id
-            if snapshot_dict.get('creation_data') is not None:
-                source_resource_id = snapshot_dict['creation_data'].get('source_resource_id', '')
-                snapshot_dict.update({
-                    'source_disk_name': self.get_source_disk_name(source_resource_id)
+                snapshot_data = Snapshot(snapshot_dict, strict=False)
+                snapshot_resource = SnapshotResource({
+                    'data': snapshot_data,
+                    'region_code': snapshot_data.location,
+                    'reference': ReferenceModel(snapshot_data.reference()),
+                    'tags': _tags,
+                    'name': snapshot_data.name
                 })
 
-            # switch tags form
-            tags = snapshot_dict.get('tags', {})
-            _tags = self.convert_tag_format(tags)
-            snapshot_dict.update({
-                'tags': _tags
-            })
+                # Must set_region_code method for region collection
+                self.set_region_code(snapshot_data['location'])
+                snapshot_responses.append(SnapshotResponse({'resource': snapshot_resource}))
+                _LOGGER.debug(f'[SNAPSHOT INFO] {snapshot_dict}')
 
-            snapshot_data = Snapshot(snapshot_dict, strict=False)
-            snapshot_resource = SnapshotResource({
-                'data': snapshot_data,
-                'region_code': snapshot_data.location,
-                'reference': ReferenceModel(snapshot_data.reference()),
-                'tags': _tags,
-                'name': snapshot_data.name
-            })
-
-            _LOGGER.debug(f'[SNAPSHOT DICT]{snapshot_dict}')
-
-            # Must set_region_code method for region collection
-            self.set_region_code(snapshot_data['location'])
-            snapshots.append(SnapshotResponse({'resource': snapshot_resource}))
+            except Exception as e:
+                _LOGGER.error(f'[list_instances] {snapshot_id} {e}', exc_info=True)
+                error_resource_response = self.generate_resource_error_response(e, 'Compute', 'Snapshot', snapshot_id)
+                error_responses.append(error_resource_response)
 
         _LOGGER.debug(f'** Snapshot Finished {time.time() - start_time} Seconds **')
-        return snapshots
+        return snapshot_responses, error_responses
 
     @staticmethod
     def get_attached_vm_name_from_managed_by(managed_by):

@@ -15,8 +15,5 @@ class PublicIPAddressConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_all_public_ip_addresses(self):
-        try:
-            return self.network_client.public_ip_addresses.list_all()
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='Public IP Address'))
+        return self.network_client.public_ip_addresses.list_all()
 

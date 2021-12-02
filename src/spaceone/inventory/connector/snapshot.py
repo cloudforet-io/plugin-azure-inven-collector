@@ -14,7 +14,4 @@ class SnapshotConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_snapshots(self):
-        try:
-            return self.compute_client.snapshots.list()
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='Public IP Address'))
+        return self.compute_client.snapshots.list()

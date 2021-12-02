@@ -14,14 +14,8 @@ class StorageAccountConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_storage_accounts(self):
-        try:
-            return self.storage_client.storage_accounts.list()
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='Storage Accounts'))
+        return self.storage_client.storage_accounts.list()
 
     def list_blobs(self, rg_name, account_name):
-        try:
-            return self.storage_client.blob_containers.list(resource_group_name=rg_name, account_name=account_name)
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='Storage Accounts Blobs'))
+        return self.storage_client.blob_containers.list(resource_group_name=rg_name, account_name=account_name)
 
