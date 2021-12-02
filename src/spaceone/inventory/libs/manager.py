@@ -70,7 +70,7 @@ REGION_INFO = {
                          'tags': {'latitude': '47.451542', 'longitude': '8.564572', 'continent': 'europe'}},
     'switzerlandwest': {'name': 'Europe Switzerland West (Geneva)',
                         'tags': {'latitude': '46.204391', 'longitude': '6.143158', 'continent': 'europe'}},
-    'swedencentral': {'name': 'Sweden Central', 'tags': {'latitude': '60.67488', 'longitude': '17.14127'}},
+    'swedencentral': {'name': 'Sweden Central', 'tags': {'latitude': '60.67488', 'longitude': '17.14127', 'continent': 'europe'}},
     'francecentral': {'name': 'Europe France Central (Paris)',
                       'tags': {'latitude': '46.3772', 'longitude': '2.3730', 'continent': 'europe'}},
     'francesouth': {'name': 'Europe France South (Marseille)',
@@ -86,10 +86,6 @@ REGION_INFO = {
                     'tags': {'latitude': '-23.55', 'longitude': '-46.633', 'continent': 'south_america'}},
     'brazilsoutheast': {'name': 'South America Brazil South East (Rio)',
                         'tags': {'latitude': '-22.90278', 'longitude': '-43.2075', 'continent': 'south_america'}}
-}
-
-CLOUD_SERVICE_INFO = {
-    'NetworkSecurityGroup': {'cloud_service_type': '', 'cloud_service_group': ''},
 }
 
 
