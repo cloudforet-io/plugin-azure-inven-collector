@@ -17,23 +17,10 @@ class NATGatewayConnector(AzureConnector):
         return self.network_client.nat_gateways.list_all()
 
     def get_public_ip_addresses(self, resource_group_name, public_ip_address_name):
-        try:
-            return self.network_client.public_ip_addresses.get(resource_group_name, public_ip_address_name)
-        except Exception as e:
-            _LOGGER.error(f'[ERROR: Azure NAT Gateway Connector Get Public IP Addresses]: {e}')
+        return self.network_client.public_ip_addresses.get(resource_group_name, public_ip_address_name)
 
     def get_public_ip_prefixes(self, resource_group_name, public_ip_prefixes_name):
-        try:
-            obj = self.network_client.public_ip_prefixes.get(resource_group_name, public_ip_prefixes_name)
-            return obj
-
-        except Exception as e:
-            _LOGGER.error(f'[ERROR: Azure NAT Gateway Connector Get Public IP Prefixes]: {e}')
+        return self.network_client.public_ip_prefixes.get(resource_group_name, public_ip_prefixes_name)
 
     def get_subnet(self, resource_group_name, subnet_name, vnet_name):
-        try:
-            obj = self.network_client.subnets.get(resource_group_name=resource_group_name, virtual_network_name=vnet_name, subnet_name=subnet_name)
-            return obj
-
-        except Exception as e:
-            _LOGGER.error(f'[ERROR: Azure NAT Gateway Connector Get Subnet]: {e}')
+        return self.network_client.subnets.get(resource_group_name=resource_group_name, virtual_network_name=vnet_name, subnet_name=subnet_name)

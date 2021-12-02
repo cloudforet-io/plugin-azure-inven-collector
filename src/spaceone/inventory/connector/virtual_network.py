@@ -14,13 +14,7 @@ class VirtualNetworkConnector(AzureConnector):
         self.set_connect(kwargs.get('secret_data'))
 
     def list_all_virtual_networks(self):
-        try:
-            return self.network_client.virtual_networks.list_all()
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='Virtual Networks'))
+        return self.network_client.virtual_networks.list_all()
 
     def list_all_firewalls(self, resource_group_name):
-        try:
-            return self.network_client.azure_firewalls.list(resource_group_name)
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR_GET_ADDITIONAL_RESOURCE_INFO(field='Virtual Networks Firewalls'))
+        return self.network_client.azure_firewalls.list(resource_group_name)
