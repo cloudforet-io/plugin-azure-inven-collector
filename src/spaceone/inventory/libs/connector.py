@@ -1,4 +1,5 @@
 import os
+import logging
 
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.compute import ComputeManagementClient
@@ -15,6 +16,7 @@ from azure.mgmt.rdbms.postgresql import PostgreSQLManagementClient
 from spaceone.core.connector import BaseConnector
 
 DEFAULT_SCHEMA = 'azure_client_secret'
+_LOGGER = logging.getLogger(__name__)
 
 
 class AzureConnector(BaseConnector):

@@ -70,7 +70,7 @@ class CollectorService(BaseService):
 
     @transaction
     @check_required(['options', 'secret_data', 'filter'])
-    def list_resources(self, params):
+    def collect(self, params):
         """
         Args:
             params:
@@ -97,13 +97,9 @@ class CollectorService(BaseService):
                 _manager = self.locator.get_manager(execute_manager)
                 future_executors.append(executor.submit(_manager.collect_resources, params))
 
-            try:
-                for future in concurrent.futures.as_completed(future_executors):
-                    for result in future.result():
-                        yield result.to_primitive()
-
-            except Exception as e:
-                _LOGGER.error(f'failed to result {e}')
+            for future in concurrent.futures.as_completed(future_executors):
+                for result in future.result():
+                    yield result
 
         '''
         for manager in self.execute_managers:

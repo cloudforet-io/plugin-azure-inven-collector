@@ -170,3 +170,13 @@ Please, set authentication privilege for followings:
     - Permissions
         - Microsoft.Storage/storageAccounts/read
 
+
+#### [MySQL Servers]()
+- MySQL Servers
+    - Scope 
+        - https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list
+    - Permissions
+        - Microsoft.Storage/storageAccounts/read
+    
+    - SpaceONE Inventory Collector only supports ``Single Servers`` type. 
+
