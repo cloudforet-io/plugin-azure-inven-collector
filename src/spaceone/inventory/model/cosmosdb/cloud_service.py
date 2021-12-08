@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
@@ -106,15 +106,19 @@ cosmos_db_meta = CloudServiceMeta.set_layouts(
      cosmos_db_virtual_network, cosmos_db_private_endpoint, cosmos_db_cors, cosmos_db_database, cosmos_db_tags])
 
 
-class ComputeResource(CloudServiceResource):
-    cloud_service_group = StringType(default='CosmosDBResourceProvider')
+class DatabaseResource(CloudServiceResource):
+    cloud_service_group = StringType(default='Database')
 
 
-class CosmosDBResource(ComputeResource):
+class CosmosDBResource(DatabaseResource):
     cloud_service_type = StringType(default='AzureCosmosDB')
     data = ModelType(DatabaseAccountGetResults)
     _metadata = ModelType(CloudServiceMeta, default=cosmos_db_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class CosmosDBResponse(CloudServiceResponse):

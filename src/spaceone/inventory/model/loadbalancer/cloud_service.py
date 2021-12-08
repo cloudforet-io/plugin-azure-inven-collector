@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.model.loadbalancer.data import LoadBalancer
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
@@ -15,12 +15,12 @@ LOAD_BALANCER
 # Resource Group, Location, Subscription, Subscription ID, SKU, Backend pool, Health probe,
 # Load balancing rule, NAT Rules, Public IP Addresses, Load Balancing Type
 load_balancer_info_meta = ItemDynamicLayout.set_fields('LoadBalancers', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Location', 'data.location'),
-    TextDyField.data_source('Subscription', 'data.subscription_id'),
-    TextDyField.data_source('SKU', 'data.sku.name'),
+    TextDyField.data_source('Subscription', 'account'),
+    TextDyField.data_source('SKU', 'type'),
     TextDyField.data_source('Backend pools', 'data.backend_address_pools_count_display'),
     ListDyField.data_source('Health Probe', 'data.probes_display', options={
         'delimiter': '<br>'
@@ -160,6 +160,10 @@ class LoadBalancerResource(NetworkResource):
     data = ModelType(LoadBalancer)
     _metadata = ModelType(CloudServiceMeta, default=load_balancer_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class LoadBalancerResponse(CloudServiceResponse):

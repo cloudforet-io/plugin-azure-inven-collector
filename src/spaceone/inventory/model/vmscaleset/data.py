@@ -446,7 +446,7 @@ class VirtualMachineScaleSetVMProfile(Model):  # belongs to VmScaleSet
     scheduled_events_profile = ModelType(ScheduledEventsProfile, serialize_when_none=False)
     security_profile = ModelType(SecurityProfile, serialize_when_none=False)
     storage_profile = ModelType(VirtualMachineScaleSetStorageProfile, serialize_when_none=False)
-    terminate_notification_display = StringType(default='Off', serialize_when_none=False)
+    terminate_notification_display = StringType(serialize_when_none=False)
 
 
 #  vm instances class
@@ -665,6 +665,7 @@ class VirtualMachineScaleSet(Model):
     unique_id = StringType(serialize_when_none=False)
     upgrade_policy = ModelType(UpgradePolicy, serialize_when_none=False)
     virtual_machine_profile = ModelType(VirtualMachineScaleSetVMProfile, serialize_when_none=False)
+    terminate_notification_display = StringType(serialize_when_none=False)
     virtual_machine_scale_set_power_state = ListType(ModelType(VirtualMachineScaleSetPowerState))
     zone_balance = BooleanType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)

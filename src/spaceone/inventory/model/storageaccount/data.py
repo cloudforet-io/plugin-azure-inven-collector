@@ -288,7 +288,6 @@ class StorageAccount(Model):
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
-
     def reference(self):
         return {
             "resource_id": self.id,

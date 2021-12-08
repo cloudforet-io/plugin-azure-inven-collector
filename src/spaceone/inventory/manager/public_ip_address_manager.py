@@ -69,11 +69,14 @@ class PublicIPAddressManager(AzureManager):
                     'data': public_ip_address_data,
                     'region_code': public_ip_address_data.location,
                     'reference': ReferenceModel(public_ip_address_data.reference()),
-                    'name': public_ip_address_data.name
+                    'name': public_ip_address_data.name,
+                    'account': public_ip_address_data.subscription_id,
+                    'instance_type': public_ip_address_data.sku.name
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(public_ip_address_data['location'])
+                _LOGGER.debug(f'[PUBLIC IP ADDRESS INFO] {public_ip_address_resource.to_primitive()}')
                 public_ip_address_responses.append(PublicIPAddressResponse({'resource': public_ip_address_resource}))
 
             except Exception as e:

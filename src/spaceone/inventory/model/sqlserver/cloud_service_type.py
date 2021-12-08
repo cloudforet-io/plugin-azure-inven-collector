@@ -6,7 +6,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 cst_sql_server = CloudServiceTypeResource()
 cst_sql_server.name = 'SQLServer'
-cst_sql_server.group = 'SQL'
+cst_sql_server.group = 'Database'
 cst_sql_server.service_code = 'Microsoft.Sql/servers'
 cst_sql_server.labels = ['Database']
 cst_sql_server.is_primary = True
@@ -17,7 +17,7 @@ cst_sql_server.tags = {
 
 cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Name', 'name'),
         EnumDyField.data_source('Status', 'data.state', default_state={
             'safe': ['Ready'],
             'warning': ['Disabled']
@@ -30,7 +30,7 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource ID', 'data.id', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+        TextDyField.data_source('Subscription ID', 'account', options={
             'is_optional': True
         }),
         TextDyField.data_source('Server Admin', 'data.administrator_login', options={
@@ -195,8 +195,8 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
 
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),

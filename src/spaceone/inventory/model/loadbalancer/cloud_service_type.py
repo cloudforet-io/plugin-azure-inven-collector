@@ -24,7 +24,7 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource ID', 'data.id', options={
             'is_optional': True
         }),
-        TextDyField.data_source('SKU', 'data.sku.name', options={
+        TextDyField.data_source('SKU', 'instance_type', options={
             'is_optional': True
         }),
         ListDyField.data_source('Health Probe', 'data.probes_display', options={
@@ -148,12 +148,12 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Load Balancer Type', key='data.sku.name', data_type='string'),
+        SearchField.set(name='Load Balancer Type', key='instance_type', data_type='string'),
 
 
     ]

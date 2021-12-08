@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, DateTimeType, FloatType
 
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
@@ -12,13 +12,13 @@ PUBLIC_IP_ADDRESS
 '''
 # TAB - Default
 public_ip_address_meta = ItemDynamicLayout.set_fields('Public IP Address', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
-    TextDyField.data_source('SKU', 'data.sku.name'),
+    TextDyField.data_source('Subscription ID', 'account'),
+    TextDyField.data_source('SKU', 'instance_type'),
     TextDyField.data_source('Tier', 'data.sku.tier'),
     TextDyField.data_source('IP Address', 'data.ip_address'),
     TextDyField.data_source('DNS Name', 'data.dns_settings.fqdn'),
@@ -52,15 +52,19 @@ virtual_network_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields
 public_addresses_meta = CloudServiceMeta.set_layouts([public_ip_address_meta, public_ip_address_configuration])
 
 
-class ComputeResource(CloudServiceResource):
+class NetworkResource(CloudServiceResource):
     cloud_service_group = StringType(default='Network')
 
 
-class PublicIPAddressResource(ComputeResource):
+class PublicIPAddressResource(NetworkResource):
     cloud_service_type = StringType(default='PublicIPAddress')
     data = ModelType(PublicIPAddress)
     _metadata = ModelType(CloudServiceMeta, default=public_addresses_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class PublicIPAddressResponse(CloudServiceResponse):

@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.model.vmscaleset.data import VirtualMachineScaleSet
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
@@ -14,22 +14,22 @@ VM_SCALE_SET
 # instance termination notification(Configuration Tab), over provisioning, proximity placement group, Termination Notification
 #        application health monitoring(Health and repair Tab), Upgrade Policy(Upgrade Policy Tab),
 vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSets', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Subscription ID', 'account'),
     TextDyField.data_source('Instances', 'data.instance_count'),
     TextDyField.data_source('Operating System', 'data.virtual_machine_profile.os_profile.operating_system'),
-    TextDyField.data_source('Size', 'data.sku.name'),
+    TextDyField.data_source('Size', 'instance_type'),
     TextDyField.data_source('Virtual network/subnet', 'data.virtual_machine_profile.network_profile.primary_vnet'),
     TextDyField.data_source('Host group', 'data.host_group.id'),
     TextDyField.data_source('Ephemeral OS Disk',
                             'data.virtual_machine_profile.storage_profile.os_disk.diff_disk_settings.option.local'),
     TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy'),
     TextDyField.data_source('Azure Spot Max Price', 'data.virtual_machine_profile.billing_profile.max_price'),
-    TextDyField.data_source('Termination Notification', 'data.virtual_machine_profile.terminate_notification_display'),
+    TextDyField.data_source('Termination Notification', 'data.terminate_notification_display'),
     TextDyField.data_source('OverProvisioning', 'data.overprovision'),
     TextDyField.data_source('Proximity Placement Group', 'data.proximity_placement_group_display'),
     TextDyField.data_source('Automatic Repairs', 'data.automatic_repairs_policy.enabled'),
@@ -177,6 +177,10 @@ class VmScaleSetResource(ComputeResource):
     data = ModelType(VirtualMachineScaleSet)
     _metadata = ModelType(CloudServiceMeta, default=vm_scale_set_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class VmScaleSetResponse(CloudServiceResponse):

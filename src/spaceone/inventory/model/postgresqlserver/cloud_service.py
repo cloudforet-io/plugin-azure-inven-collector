@@ -1,7 +1,7 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.model.postgresqlserver.data import Server
-from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, EnumDyField, \
     ListDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
@@ -13,7 +13,7 @@ POSTGRESQL SERVERS
 
 # TAB - Default
 postgresql_servers_info_meta = ItemDynamicLayout.set_fields('PostgreSQL Servers', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Resource ID', 'data.id'),
     EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
@@ -22,7 +22,7 @@ postgresql_servers_info_meta = ItemDynamicLayout.set_fields('PostgreSQL Servers'
     }),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Subscription ID', 'account'),
     TextDyField.data_source('Server Name', 'data.fully_qualified_domain_name'),
     TextDyField.data_source('Admin Username', 'data.administrator_login'),
     TextDyField.data_source('PostgreSQL Version', 'data.version'),
@@ -114,7 +114,7 @@ postgresql_servers_meta = CloudServiceMeta.set_layouts(
 
 
 class DatabaseResource(CloudServiceResource):
-    cloud_service_group = StringType(default='PostgreSQL')
+    cloud_service_group = StringType(default='Database')
 
 
 class SqlServerResource(DatabaseResource):
@@ -122,6 +122,10 @@ class SqlServerResource(DatabaseResource):
     data = ModelType(Server)
     _metadata = ModelType(CloudServiceMeta, default=postgresql_servers_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class SqlServerResponse(CloudServiceResponse):

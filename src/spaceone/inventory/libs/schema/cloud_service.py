@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ListType, StringType, PolyModelType, DictType, ModelType
+from schematics.types import ListType, StringType, PolyModelType, DictType, ModelType, IntType, DateTimeType, FloatType
 from .base import BaseMetaData, BaseResponse, MetaDataView, MetaDataViewSubData, ReferenceModel
 
 
@@ -24,7 +24,11 @@ class CloudServiceResource(Model):
     provider = StringType(default="azure")
     cloud_service_type = StringType()
     cloud_service_group = StringType()
-    name = StringType()
+    name = StringType(default='')
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    account = StringType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
     tags = ListType(ModelType(Tags), serialize_when_none=False)
     data = PolyModelType(Model, default=lambda: {})
     reference = ModelType(ReferenceModel)
