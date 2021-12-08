@@ -87,12 +87,15 @@ class CosmosDBManager(AzureManager):
                         'sql_databases': self.get_sql_resources(self, cosmos_db_conn, cosmos_db_account_dict['name'], cosmos_db_account_dict['resource_group'])
                     })
 
+                _LOGGER.debug(f'[COSMOS DB INFO]{cosmos_db_account_dict}')
                 cosmos_db_account_data = DatabaseAccountGetResults(cosmos_db_account_dict, strict=False)
                 cosmos_db_resource = CosmosDBResource({
                     'data': cosmos_db_account_data,
                     'region_code': cosmos_db_account_data.location,
                     'reference': ReferenceModel(cosmos_db_account_data.reference()),
-                    'name': cosmos_db_account_data.name
+                    'name': cosmos_db_account_data.name,
+                    'account': cosmos_db_account_data.subscription_id,
+                    'instance_type': cosmos_db_account_data.database_account_offer_type
                 })
 
                 # Must set_region_code method for region collection

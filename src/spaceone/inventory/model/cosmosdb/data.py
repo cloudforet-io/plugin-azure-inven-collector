@@ -185,7 +185,10 @@ class DatabaseAccountGetResults(Model):  # Main Class
     write_locations = ListType(ModelType(Location), serialize_when_none=False)
     system_data = ModelType(SystemData, serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
-    type = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    account = StringType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
     def reference(self):
         return {

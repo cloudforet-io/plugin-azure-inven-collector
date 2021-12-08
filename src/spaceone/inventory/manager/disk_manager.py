@@ -98,14 +98,15 @@ class DiskManager(AzureManager):
                     'tags':  _tags,
                     'name': disk_data.name,
                     'account': disk_data.subscription_id,
-                    'type': disk_data.sku.name,
-                    'size': disk_data.size,
+                    'instance_type': disk_data.sku.name,
+                    'instance_size': float(disk_data.disk_size_gb),
                     'launched_at': disk_data.time_created
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(disk_data['location'])
 
+                _LOGGER.debug(f'[DISK INFO: {disk_resource.to_primitive()}]')
                 disk_responses.append(DiskResponse({'resource': disk_resource}))
                 _LOGGER.debug(f'** Disk Finished {time.time() - start_time} Seconds **')
 

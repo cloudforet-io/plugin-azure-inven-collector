@@ -6,7 +6,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 cst_postgre_sql_server = CloudServiceTypeResource()
 cst_postgre_sql_server.name = 'PostgreSQLServer'
-cst_postgre_sql_server.group = 'PostgreSQL'
+cst_postgre_sql_server.group = 'Database'
 cst_postgre_sql_server.service_code = 'Microsoft.DBforPostgreSQL/servers'
 cst_postgre_sql_server.labels = ['Database']
 cst_postgre_sql_server.is_primary = False
@@ -17,8 +17,8 @@ cst_postgre_sql_server.tags = {
 
 cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Type', 'data.type'),
+        TextDyField.data_source('Name', 'name'),
+        TextDyField.data_source('Type', 'instance_type'),
         EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
             'safe': ['Ready'],
             'warning': ['Disabled', 'Dropping', 'Inaccessible']
@@ -32,7 +32,7 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Subscription', 'data.subscription_name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+        TextDyField.data_source('Subscription ID', 'account', options={
             'is_optional': True
         }),
 
@@ -49,7 +49,7 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('PostgreSQL Version', 'data.version', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Performance Configuration Tier', 'data.sku.tier', options={
+        TextDyField.data_source('Performance Configuration Tier', 'instance_type', options={
             'is_optional': True
         }),
         TextDyField.data_source('Performance Configuration Name', 'data.sku.name', options={
@@ -116,6 +116,9 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Compute Generation', 'data.sku.name', options={
             'is_optional': True
         }),
+        TextDyField.data_source('Compute Tier', 'instance_type', options={
+            'is_optional': True
+        }),
         TextDyField.data_source('vCore', 'data.sku.capacity', options={
             'is_optional': True
         }),
@@ -127,8 +130,8 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
 
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),

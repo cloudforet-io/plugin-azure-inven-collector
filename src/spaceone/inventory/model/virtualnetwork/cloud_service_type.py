@@ -17,7 +17,7 @@ cst_virtual_network.tags = {
 
 cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
@@ -26,7 +26,7 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource ID', 'data.id', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+        TextDyField.data_source('Subscription ID', 'account', options={
             'is_optional': True
         }),
         ListDyField.data_source('DNS servers', 'data.dhcp_options.dns_servers', options={
@@ -111,8 +111,8 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),

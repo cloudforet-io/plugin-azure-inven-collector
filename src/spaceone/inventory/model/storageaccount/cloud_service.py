@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
@@ -12,19 +12,19 @@ STORAGE_ACCOUNT
 '''
 # TAB - Default
 storage_account_info_meta = ItemDynamicLayout.set_fields('Storage Account', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Subscription ID', 'account'),
     TextDyField.data_source('State of Primary', 'data.status_of_primary'),
-    TextDyField.data_source('Performance Tier', 'data.sku.tier'),
+    TextDyField.data_source('Performance Tier', 'instance_type'),
     TextDyField.data_source('Access Tier', 'data.access_tier'),
     TextDyField.data_source('Replication', 'data.sku.name'),
     TextDyField.data_source('Account Kind', 'data.kind'),
     TextDyField.data_source('Provisioning State', 'data.provisioning_state'),
-    DateTimeDyField.data_source('Created', 'data.creation_time')
+    DateTimeDyField.data_source('Created', 'launched_at')
 ])
 
 # TAB - Networking
@@ -90,15 +90,19 @@ storage_account_meta = CloudServiceMeta.set_layouts(
     [storage_account_info_meta, storage_group_networking, storage_account_primary_endpoints, storage_account_containers, storage_account_encryption, storage_account_geo_replication, network_security_group_tags])
 
 
-class ComputeResource(CloudServiceResource):
+class StorageResource(CloudServiceResource):
     cloud_service_group = StringType(default='Storage')
 
 
-class StorageAccountResource(ComputeResource):
+class StorageAccountResource(StorageResource):
     cloud_service_type = StringType(default='StorageAccount')
     data = ModelType(StorageAccount)
     _metadata = ModelType(CloudServiceMeta, default=storage_account_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class StorageAccountResponse(CloudServiceResponse):

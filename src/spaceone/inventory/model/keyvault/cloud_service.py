@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
@@ -12,14 +12,14 @@ KEY_VAULT
 '''
 # TAB - Default
 key_vault_info_meta = ItemDynamicLayout.set_fields('Key Vault', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Subscription ID', 'account'),
     TextDyField.data_source('Vault URI', 'data.properties.vault_uri'),
-    TextDyField.data_source('Sku (Pricing Tier)', 'data.properties.sku.name'),
+    TextDyField.data_source('Sku (Pricing Tier)', 'instance_type'),
     TextDyField.data_source('Directory ID', 'data.properties.tenant_id'),
     # TextDyField.data_source('Directory Name', 'data.'),
     TextDyField.data_source('Soft-delete', 'data.properties.enable_soft_delete'),
@@ -29,7 +29,7 @@ key_vault_info_meta = ItemDynamicLayout.set_fields('Key Vault', fields=[
 # TAB - Keys
 key_vault_keys = SimpleTableDynamicLayout.set_fields('Keys', 'data.keys', fields=[
     TextDyField.data_source('Name', 'name'),
-    TextDyField.data_source('Type', 'type'),
+    TextDyField.data_source('Type', 'instance_type'),
     TextDyField.data_source('Location', 'location'),
     TextDyField.data_source('Status', 'attributes.enabled'),
     DateTimeDyField.data_source('Expiration Date', 'attributes.expires'),
@@ -88,15 +88,16 @@ key_vault_meta = CloudServiceMeta.set_layouts(
     [key_vault_info_meta, key_vault_keys, key_vault_secrets, key_vault_certificates, key_vault_access_policies, key_vault_networking, key_vault_tags])
 
 
-class ComputeResource(CloudServiceResource):
+class KeyVaultResource(CloudServiceResource):
     cloud_service_group = StringType(default='KeyVault')
-
-
-class KeyVaultResource(ComputeResource):
     cloud_service_type = StringType(default='KeyVault')
     data = ModelType(KeyVault)
     _metadata = ModelType(CloudServiceMeta, default=key_vault_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class KeyVaultResponse(CloudServiceResponse):

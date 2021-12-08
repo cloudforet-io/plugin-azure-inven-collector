@@ -174,7 +174,9 @@ class ApplicationGatewayManager(AzureManager):
                     'data': application_gateway_data,
                     'region_code': application_gateway_data.location,
                     'reference': ReferenceModel(application_gateway_data.reference()),
-                    'name': application_gateway_data.name
+                    'name': application_gateway_data.name,
+                    'instance_type': application_gateway_data.sku.name,
+                    'account': application_gateway_data.subscription_id
                 })
 
                 # Must set_region_code method for region collection

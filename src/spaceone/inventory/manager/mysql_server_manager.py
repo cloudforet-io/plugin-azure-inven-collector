@@ -71,18 +71,19 @@ class MySQLServerManager(AzureManager):
                         'storage_gb': self.get_storage_gb(mysql_server_dict['storage_profile'].get('storage_mb', ''))
                     })
 
-                _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_dict}')
-
                 mysql_server_data = MySQLServer(mysql_server_dict, strict=False)
                 mysql_server_resource = MySQLServerResource({
                     'data': mysql_server_data,
                     'region_code': mysql_server_data.location,
                     'reference': ReferenceModel(mysql_server_data.reference()),
-                    'name': mysql_server_data.name
+                    'name': mysql_server_data.name,
+                    'account': mysql_server_data.subscription_id,
+                    'instance_type': mysql_server_data.sku.tier
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(mysql_server_data['location'])
+                _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_resource.to_primitive()}')
                 mysql_server_responses.append(MySQLServerResponse({'resource': mysql_server_resource}))
 
             except Exception as e:

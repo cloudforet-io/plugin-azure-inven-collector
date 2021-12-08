@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.model.sqldatabase.data import Database
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
@@ -15,7 +15,7 @@ SQL DATABASES
 # Resource Group, Location, Subscription, Subscription ID, SKU, Backend pool, Health probe,
 # Load balancing rule, NAT Rules, Public IP Addresses, Load Balancing Type
 sql_databases_info_meta = ItemDynamicLayout.set_fields('SQL Databases', fields=[
-    TextDyField.data_source('Database Name', 'data.name'),
+    TextDyField.data_source('Database Name', 'name'),
     EnumDyField.data_source('Status', 'data.status', default_state={
         'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring',
                  'Resuming', 'Scaling', 'Standby'],
@@ -27,13 +27,13 @@ sql_databases_info_meta = ItemDynamicLayout.set_fields('SQL Databases', fields=[
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Subscription ID', 'account'),
     TextDyField.data_source('Server Name', 'data.server_name'),
     TextDyField.data_source('Elastic Pool', 'data.elastic_pool_id'),
     TextDyField.data_source('Pricing Tier', 'data.pricing_tier_display'),
     DateTimeDyField.data_source('Earliest Restore Point', 'data.earliest_restore_date'),
     TextDyField.data_source('Collation', 'data.collation'),
-    DateTimeDyField.data_source('Creation Date', 'data.creation_date'),
+    DateTimeDyField.data_source('Creation Date', 'launched_at'),
     TextDyField.data_source('Server Admin Login', 'data.administrator_login'),
 
 ])
@@ -45,7 +45,7 @@ sql_databases_configure = ItemDynamicLayout.set_fields('Configure', fields=[
     TextDyField.data_source('Compute Hardware', 'data.sku.family'),
     TextDyField.data_source('Licence Type', 'data.license_type'),
     TextDyField.data_source('vCores', 'data.current_sku.capacity'),
-    TextDyField.data_source('Data max size', 'data.max_size_gb'),
+    TextDyField.data_source('Data max size', 'instance_size'),
     TextDyField.data_source('Zone Redundant', 'data.zone_redundant'),
     ListDyField.data_source('Sync Groups', 'data.sync_group_display'),
     ListDyField.data_source('Sync Agents', 'data.sync_agent_display'),
@@ -73,13 +73,18 @@ sql_databases_meta = CloudServiceMeta.set_layouts(
 
 
 class DatabaseResource(CloudServiceResource):
-    cloud_service_group = StringType(default='SQL')
+    cloud_service_group = StringType(default='Database')
 
 
 class SqlDatabaseResource(DatabaseResource):
     cloud_service_type = StringType(default='SQLDatabase')
     data = ModelType(Database)
     _metadata = ModelType(CloudServiceMeta, default=sql_databases_meta, serialized_name='metadata')
+    name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class SqlDatabaseResponse(CloudServiceResponse):

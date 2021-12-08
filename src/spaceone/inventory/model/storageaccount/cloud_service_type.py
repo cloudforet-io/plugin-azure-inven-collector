@@ -17,17 +17,17 @@ cst_storage_account.tags = {
 
 cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Type', 'data.type'),
         TextDyField.data_source('Kind', 'data.type'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+        TextDyField.data_source('Subscription ID', 'account'),
         TextDyField.data_source('Subscription Name', 'data.subscription_name'),
         TextDyField.data_source('State of Primary', 'data.status_of_primary', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Performance Tier', 'data.sku.tier', options={
+        TextDyField.data_source('Performance Tier', 'instance_type', options={
             'is_optional': True
         }),
         TextDyField.data_source('Access Tier', 'data.access_tier', options={
@@ -111,9 +111,9 @@ cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
         SearchField.set(name='Name', key='data.type', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string')
