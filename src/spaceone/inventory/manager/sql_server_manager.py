@@ -9,6 +9,7 @@ from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.sqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.sqldatabase.cloud_service_type import CLOUD_SERVICE_TYPES_SQL_DB
 from datetime import datetime
+from spaceone.core.utils import *
 import time
 import copy
 import logging
@@ -33,7 +34,9 @@ class SqlServerManager(AzureManager):
                    - 'zones' : 'list'
                    - 'subscription_info' :  'dict'
            Response:
-               CloudServiceResponse (dict) : dictionary of azure sql servers data resource information
+               CloudServiceResponse (list) : dictionary of azure sql servers data resource information
+               ErrorResourceResponse (list) : list of error resource information
+
         """
         _LOGGER.debug(f'** Sql Servers START **')
         start_time = time.time()
@@ -42,105 +45,114 @@ class SqlServerManager(AzureManager):
 
         sql_servers_conn: SqlConnector = self.locator.get_connector(self.sql_connector_name, **params)
         sql_servers_monitor_conn: MonitorConnector = self.locator.get_connector(self.monitor_connector_name, **params)
-        sql_servers = []
-        sql_databases = []
-        for sql_server in sql_servers_conn.list_servers():
-            sql_server_dict = self.convert_nested_dictionary(self, sql_server)
 
-            # update sql_servers_data dict
-            sql_server_dict.update({
-                'resource_group': self.get_resource_group_from_id(sql_server_dict['id']),
-                # parse resource_group from ID
-                'subscription_id': subscription_info['subscription_id'],
-                'subscription_name': subscription_info['subscription_name'],
-            })
+        sql_server_responses = []
+        error_responses = []
 
-            # Get Server Auditing Settings, Failover groups. azure ad administrators
-            server_auditing_settings_dict = self.get_server_auditing_settings(self, sql_servers_conn,
-                                                                              sql_server_dict['resource_group'],
-                                                                              sql_server_dict['name'])
-            failover_group_list = self.list_failover_groups(self, sql_servers_conn, sql_server_dict['resource_group'],
-                                                            sql_server_dict['name'])
-            transparent_data_encryption_dict = self.list_encryption_protectors(self, sql_servers_conn, sql_server_dict['resource_group'], sql_server_dict['name'])
-            azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn,
-                                                                    sql_server_dict['resource_group'],
-                                                                    sql_server_dict['name'])
-            server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn,
-                                                                            sql_server_dict['resource_group'],
-                                                                            sql_server_dict['name'])
-            databases_list = self.list_databases(self, sql_servers_conn=sql_servers_conn,
-                                                 sql_monitor_conn=sql_servers_monitor_conn,
-                                                 rg_name=sql_server_dict['resource_group'],
-                                                 server_name=sql_server_dict['name'], server_admin_name=sql_server_dict.get('administrator_login'))
-            elastic_pools_list = self.list_elastic_pools(self, sql_servers_conn, sql_server_dict['resource_group'],
-                                                         sql_server_dict['name'])
-            deleted_databases_list = self.list_deleted_databases(self, sql_servers_conn,
-                                                                 sql_server_dict['resource_group'],
-                                                                 sql_server_dict['name'])
-            virtual_network_rules_list = self.list_virtual_network_rules(self, sql_servers_conn,
-                                                                         sql_server_dict['resource_group'],
-                                                                         sql_server_dict['name'])
-            firewall_rules_list = self.list_firewall_rules(self, sql_servers_conn, sql_server_dict['resource_group'],
-                                                           sql_server_dict['name'])
+        sql_servers = sql_servers_conn.list_servers()
 
-            sql_server_dict.update({
-                'azure_ad_administrators': azure_ad_admin_list,
-                'server_auditing_settings': server_auditing_settings_dict,
-                'failover_groups': failover_group_list,
-                'server_automatic_tuning': server_automatic_tuning_dict,
-                'databases': databases_list,
-                'elastic_pools': elastic_pools_list,
-                'deleted_databases': deleted_databases_list,
-                'virtual_network_rules': virtual_network_rules_list,
-                'firewall_rules': firewall_rules_list,
-                'encryption_protectors': transparent_data_encryption_dict
-            })
+        for sql_server in sql_servers:
+            sql_server_id = ''
 
-            if sql_server_dict.get('azure_ad_administrators') is not None:
+            try:
+                sql_server_dict = self.convert_nested_dictionary(self, sql_server)
+                sql_server_id = sql_server_dict['id']
+
+                # update sql_servers_data dict
                 sql_server_dict.update({
-                    'azure_ad_admin_name': self.get_azure_ad_admin_name(sql_server_dict['azure_ad_administrators'])
+                    'resource_group': self.get_resource_group_from_id(sql_server_id),
+                    'subscription_id': subscription_info['subscription_id'],
+                    'subscription_name': subscription_info['subscription_name'],
                 })
 
-            if sql_server_dict.get('private_endpoint_connections') is not None:
+                resource_group = sql_server_dict['resource_group']
+                name = sql_server_dict['name']
+
+                # Get Server Auditing Settings, Failover groups. azure ad administrators
+                server_auditing_settings_dict = self.get_server_auditing_settings(self, sql_servers_conn, resource_group, name)
+                failover_group_list = self.list_failover_groups(self, sql_servers_conn, resource_group, name)
+                transparent_data_encryption_dict = self.list_encryption_protectors(self, sql_servers_conn, resource_group, name)
+                azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn, resource_group, name)
+                server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn, resource_group, name)
+                databases_list = self.list_databases(self, sql_servers_conn=sql_servers_conn,
+                                                     sql_monitor_conn=sql_servers_monitor_conn,
+                                                     rg_name=resource_group, server_name=name,
+                                                     server_admin_name=sql_server_dict.get('administrator_login'))
+                elastic_pools_list = self.list_elastic_pools(self, sql_servers_conn, resource_group, name)
+                deleted_databases_list = self.list_deleted_databases(self, sql_servers_conn, resource_group, name)
+                virtual_network_rules_list = self.list_virtual_network_rules(self, sql_servers_conn, resource_group, name)
+                firewall_rules_list = self.list_firewall_rules(self, sql_servers_conn, resource_group, name)
+
                 sql_server_dict.update({
-                    'private_endpoint_connections': self.get_private_endpoint_connections(self, sql_server_dict[
-                        'private_endpoint_connections'])
+                    'azure_ad_administrators': azure_ad_admin_list,
+                    'server_auditing_settings': server_auditing_settings_dict,
+                    'failover_groups': failover_group_list,
+                    'server_automatic_tuning': server_automatic_tuning_dict,
+                    'databases': databases_list,
+                    'elastic_pools': elastic_pools_list,
+                    'deleted_databases': deleted_databases_list,
+                    'virtual_network_rules': virtual_network_rules_list,
+                    'firewall_rules': firewall_rules_list,
+                    'encryption_protectors': transparent_data_encryption_dict
                 })
 
-            # switch tags form
-            tags = sql_server_dict.get('tags', {})
-            _tags = self.convert_tag_format(tags)
-            sql_server_dict.update({
-                'tags': _tags
-            })
+                if sql_server_dict.get('azure_ad_administrators') is not None:
+                    sql_server_dict.update({
+                        'azure_ad_admin_name': self.get_azure_ad_admin_name(sql_server_dict['azure_ad_administrators'])
+                    })
 
-            sql_servers_data = SqlServer(sql_server_dict, strict=False)
-            sql_servers_resource = SqlServerResource({
-                'data': sql_servers_data,
-                'region_code': sql_servers_data.location,
-                'reference': ReferenceModel(sql_servers_data.reference()),
-                'tags': _tags,
-                'name': sql_servers_data.name
-            })
-            sql_servers.append(SqlServerResponse({'resource': sql_servers_resource}))
+                if sql_server_dict.get('private_endpoint_connections') is not None:
+                    sql_server_dict.update({
+                        'private_endpoint_connections': self.get_private_endpoint_connections(self, sql_server_dict[
+                            'private_endpoint_connections'])
+                    })
 
-            for sql_database in sql_server_dict.get('databases', []):
-                sql_database_data = Database(sql_database, strict=False)
-                sql_databases_resource = SqlDatabaseResource({
-                    'data': sql_database_data,
-                    'region_code': sql_database_data.location,
-                    'reference': ReferenceModel(sql_database_data.reference()),
+                # switch tags form
+                tags = sql_server_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
+                sql_server_dict.update({
+                    'tags': _tags
+                })
+
+                sql_server_data = SqlServer(sql_server_dict, strict=False)
+                sql_servers_resource = SqlServerResource({
+                    'data': sql_server_data,
+                    'region_code': sql_server_data.location,
+                    'reference': ReferenceModel(sql_server_data.reference()),
                     'tags': _tags,
-                    'name': sql_database_data.name
+                    'name': sql_server_data.name,
+                    'account': sql_server_data.subscription_id
                 })
-                sql_servers.append(SqlDatabaseResponse({'resource': sql_databases_resource}))
+                sql_server_responses.append(SqlServerResponse({'resource': sql_servers_resource}))
+                _LOGGER.debug(f'[SQL SERVER INFO] {sql_servers_resource.to_primitive()}')
 
-            # Must set_region_code method for region collection
-            self.set_region_code(sql_servers_data['location'])
+                for sql_database in sql_server_dict.get('databases', []):
+                    sql_database_data = Database(sql_database, strict=False)
+                    sql_databases_resource = SqlDatabaseResource({
+                        'data': sql_database_data,
+                        'region_code': sql_database_data.location,
+                        'reference': ReferenceModel(sql_database_data.reference()),
+                        'tags': _tags,
+                        'name': sql_database_data.name,
+                        'account': sql_database_data.subscription_id,
+                        'instance_type': sql_database_data.sku.tier,
+                        'instance_size': float(sql_database_data.max_size_gb),
+                        'launched_at': datetime_to_iso8601(sql_database_data.creation_date)
+                    })
+                    _LOGGER.debug(f'[SQL DATABASE INFO] {sql_databases_resource.to_primitive()}')
+                    sql_server_responses.append(SqlDatabaseResponse({'resource': sql_databases_resource}))
+
+                # Must set_region_code method for region collection
+                self.set_region_code(sql_server_data['location'])
+
+            except Exception as e:
+                _LOGGER.error(f'[list_instances] {sql_server_id} {e}', exc_info=True)
+                error_resource_response = self.generate_resource_error_response(e, 'Database', 'SqlServer', sql_server_id)
+                error_responses.append(error_resource_response)
 
         _LOGGER.debug(f'** Sql Servers Finished {time.time() - start_time} Seconds **')
 
-        return sql_servers
+        return sql_server_responses, error_responses
 
     @staticmethod
     def list_databases(self, sql_servers_conn, sql_monitor_conn, rg_name, server_name, server_admin_name):
@@ -206,8 +218,7 @@ class SqlServerManager(AzureManager):
 
             # Get Database Replication Type
             database_dict.update({
-                'replication_link': self.list_replication_link(self, sql_servers_conn, rg_name, server_name,
-                                                               database_dict['name'])
+                'replication_link': self.list_replication_link(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
             })
 
             # Get azure_ad_admin name

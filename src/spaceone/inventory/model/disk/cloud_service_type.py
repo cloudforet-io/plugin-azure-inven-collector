@@ -18,7 +18,7 @@ cst_disk.tags = {
 
 cst_disk._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Storage Account Type', 'data.sku.name'),
         SizeField.data_source('Size', 'data.size'),
         EnumDyField.data_source('Disk State', 'data.disk_state', default_state={

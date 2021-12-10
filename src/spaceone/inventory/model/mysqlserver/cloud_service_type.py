@@ -5,8 +5,8 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 
 cst_mysql_server = CloudServiceTypeResource()
-cst_mysql_server.name = 'Server'
-cst_mysql_server.group = 'MySQL'
+cst_mysql_server.name = 'MySQLServer'
+cst_mysql_server.group = 'Database'
 cst_mysql_server.service_code = 'Microsoft.DBforMySQL/servers'
 cst_mysql_server.labels = ['MySQLServer']
 cst_mysql_server.is_major = False
@@ -17,8 +17,8 @@ cst_mysql_server.tags = {
 
 cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Type', 'data.type'),
+        TextDyField.data_source('Name', 'name'),
+        TextDyField.data_source('Type', 'instance_type'),
         EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
             'safe': ['Ready'],
             'warning': ['Dropping'],
@@ -27,13 +27,13 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+        TextDyField.data_source('Subscription ID', 'account'),
 
         # is_optional fields - MySQL
-        TextDyField.data_source('Name', 'data.name', options={
+        TextDyField.data_source('Name', 'name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Type', 'data.type', options={
+        TextDyField.data_source('Type', 'instance_type', options={
             'is_optional': True
         }),
         TextDyField.data_source('Resource Group', 'data.resource_group', options={
@@ -45,7 +45,7 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Subscription', 'data.subscription_name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+        TextDyField.data_source('Subscription ID', 'account', options={
             'is_optional': True
         }),
         TextDyField.data_source('Server Admin Login Name', 'data.administrator_login', options={
@@ -54,7 +54,7 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('MySQL Version', 'data.version', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Performance Configuration (Tier)', 'data.sku.tier', options={
+        TextDyField.data_source('Performance Configuration (Tier)', 'instance_type', options={
             'is_optional': True
         }),
         TextDyField.data_source('Performance Configuration (Name)', 'data.sku.name', options={
@@ -81,7 +81,7 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Minimum TLS Version', 'data.minimal_tls_version', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Tier', 'data.sku.tier', options={
+        TextDyField.data_source('Tier', 'instance_type', options={
             'is_optional': True
         }),
         TextDyField.data_source('Compute Generation', 'data.sku.family', options={
@@ -99,9 +99,9 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Type', key='data.type', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Type', key='instance_type', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string')

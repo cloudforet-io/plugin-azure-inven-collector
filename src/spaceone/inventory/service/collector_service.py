@@ -4,39 +4,15 @@ import concurrent.futures
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.manager.subscription_manager import SubscriptionManager
 from spaceone.core.service import *
-
+from spaceone.inventory.conf.cloud_service_conf import *
 
 _LOGGER = logging.getLogger(__name__)
-MAX_WORKER = 20
-SUPPORTED_FEATURES = ['garbage_collection']
-SUPPORTED_RESOURCE_TYPE = ['inventory.CloudService', 'inventory.CloudServiceType', 'inventory.Region']
-SUPPORTED_SCHEDULES = ['hours']
-FILTER_FORMAT = []
 
 
 @authentication_handler
 class CollectorService(BaseService):
     def __init__(self, metadata):
         super().__init__(metadata)
-
-        self.execute_managers = [
-            # set MS Azure cloud service manager
-            'DiskManager',
-            'SnapshotManager',
-            'VmScaleSetManager',
-            'LoadBalancerManager',
-            'SqlServerManager',
-            'VirtualNetworkManager',
-            'ApplicationGatewayManager',
-            'PublicIPAddressManager',
-            'NetworkSecurityGroupManager',
-            'NATGatewayManager',
-            'StorageAccountManager',
-            'KeyVaultManager',
-            'MySQLServerManager',
-            'CosmosDBManager',
-            'PostgreSQLServerManager'
-        ]
 
     @check_required(['options'])
     def init(self, params):
@@ -59,7 +35,6 @@ class CollectorService(BaseService):
                 - options
                 - secret_data
         """
-        _LOGGER.debug(f'[PARAMS in COLLECTOR SERVICE] {params}')
         options = params['options']
         secret_data = params.get('secret_data', {})
         if secret_data != {}:
@@ -70,7 +45,7 @@ class CollectorService(BaseService):
 
     @transaction
     @check_required(['options', 'secret_data', 'filter'])
-    def list_resources(self, params):
+    def collect(self, params):
         """
         Args:
             params:
@@ -87,23 +62,20 @@ class CollectorService(BaseService):
         })
 
         _LOGGER.debug("[ EXECUTOR START: Azure Cloud Service ]")
+        target_execute_managers = self._get_target_execute_manger(params.get('options', {}))
 
         # Thread per cloud services
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
             future_executors = []
 
-            for execute_manager in self.execute_managers:
+            for execute_manager in target_execute_managers:
                 _LOGGER.info(f'@@@ {execute_manager} @@@')
                 _manager = self.locator.get_manager(execute_manager)
                 future_executors.append(executor.submit(_manager.collect_resources, params))
 
-            try:
-                for future in concurrent.futures.as_completed(future_executors):
-                    for result in future.result():
-                        yield result.to_primitive()
-
-            except Exception as e:
-                _LOGGER.error(f'failed to result {e}')
+            for future in concurrent.futures.as_completed(future_executors):
+                for result in future.result():
+                    yield result
 
         '''
         for manager in self.execute_managers:
@@ -118,3 +90,15 @@ class CollectorService(BaseService):
     def get_subscription_info(self, params):
         subscription_manager: SubscriptionManager = self.locator.get_manager('SubscriptionManager')
         return subscription_manager.get_subscription_info(params)
+
+    def _match_execute_manager(self, cloud_service_groups):
+        return [CLOUD_SERVICE_GROUP_MAP[_cloud_service_group] for _cloud_service_group in cloud_service_groups
+                if _cloud_service_group in CLOUD_SERVICE_GROUP_MAP]
+
+    def _get_target_execute_manger(self, options):
+        if 'cloud_service_types' in options:
+            execute_managers = self._match_execute_manager(options['cloud_service_types'])
+        else:
+            execute_managers = list(CLOUD_SERVICE_GROUP_MAP.values())
+
+        return execute_managers

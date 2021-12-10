@@ -17,17 +17,17 @@ cst_snapshot.tags = {
 
 cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Source disk', 'data.source_disk_name'),
         TextDyField.data_source('Snapshot type', 'data.incremental_display'),
         SizeField.data_source('Source disk size', 'data.disk_size_bytes'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        DateTimeDyField.data_source('Time created', 'data.time_created'),
+        DateTimeDyField.data_source('Time created', 'launched_at'),
 
         # is_optional fields - Default
-        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
+        TextDyField.data_source('Subscription ID', 'account', options={
             'is_optional': True
         }),
         TextDyField.data_source('Encryption Type', 'data.encryption.type_display', options={
@@ -39,19 +39,19 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Storage Account Type', key='data.sku.name', data_type='string'),
+        SearchField.set(name='Storage Account Type', key='instance_type', data_type='string'),
         SearchField.set(name='Snapshot Type', key='data.incremental_display', data_type='string'),
         SearchField.set(name='Disk Size (Bytes)', key='data.disk_size_bytes', data_type='integer'),
-        SearchField.set(name='Disk Size (GB)', key='data.disk_size_gb', data_type='integer'),
+        SearchField.set(name='Disk Size (GB)', key='instance_size', data_type='float'),
         SearchField.set(name='Encryption', key='data.encryption.type_display', data_type='string'),
         SearchField.set(name='Network Access Policy', key='data.network_access_policy', data_type='string'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
-        SearchField.set(name='Creation Time', key='data.time_created', data_type='datetime')
+        SearchField.set(name='Creation Time', key='launched_at', data_type='datetime')
     ]
 
 )

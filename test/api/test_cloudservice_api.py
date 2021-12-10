@@ -33,12 +33,11 @@ class TestCollector(TestCase):
 
     def test_collect(self):
 
-        print(self.inventory)
+        # options = {'cloud_service_types': ['Disk', 'LoadBalancer', 'PublicIPAddress']}
         options = {}
         filter = {}
         resource_stream = self.inventory.Collector.collect({'options': options, 'secret_data': self.azure_credentials,
                                                             'filter': filter})
-        # print(resource_stream)
 
         for res in resource_stream:
             print_json(res)

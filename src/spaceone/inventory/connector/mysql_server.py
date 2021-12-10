@@ -15,22 +15,10 @@ class MySQLServerConnector(AzureConnector):
         self.set_connect(secret_data)
 
     def list_servers(self):
-        try:
-            return self.mysql_client.servers.list()
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='MySQL Servers'))
+        return self.mysql_client.servers.list()
 
     def list_firewall_rules_by_server(self, resource_group_name, server_name):
-        try:
-            return self.mysql_client.firewall_rules.list_by_server(resource_group_name=resource_group_name, server_name=server_name)
-        except ConnectionError:
-            _LOGGER.error(ERROR_CONNECTOR(field='MySQL Servers Firewall Rules'))
+        return self.mysql_client.firewall_rules.list_by_server(resource_group_name=resource_group_name, server_name=server_name)
 
     def list_server_parameters(self, resource_group_name, server_name):
-        try:
-            return self.mysql_client.server_parameters._list_update_configurations_initial(resource_group_name=resource_group_name, server_name=server_name, value=[])
-        except ConnectionError:
-            raise ERROR_CONNECTOR_GET_ADDITIONAL_RESOURCE_INFO(field='MySQL Servers Firewall')
-
-
-
+        return self.mysql_client.server_parameters._list_update_configurations_initial(resource_group_name=resource_group_name, server_name=server_name, value=[])

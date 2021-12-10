@@ -17,7 +17,7 @@ cst_application_gateway.tags = {
 
 cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Public IP Address', 'data.public_ip_address.ip_address'),
         TextDyField.data_source('Private IP Address', 'data.private_ip_address'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -138,7 +138,7 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
         SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
@@ -146,7 +146,6 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Public IP Address', key='data.public_ip_address.ip_address', data_type='string'),
         SearchField.set(name='Private IP Address', key='data.private_ip_address', data_type='string')
     ]
-
 )
 
 

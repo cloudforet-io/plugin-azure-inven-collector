@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
@@ -11,9 +11,9 @@ MYSQL SERVERS
 
 # TAB - Default
 mysql_servers_info_meta = ItemDynamicLayout.set_fields('MySQL Server', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Server Name', 'data.fully_qualified_domain_name'),
-    TextDyField.data_source('Type', 'data.type'),
+    TextDyField.data_source('Type', 'instance_type'),
     EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
         'safe': ['Ready'],
         'warning': ['Dropping'],
@@ -22,7 +22,7 @@ mysql_servers_info_meta = ItemDynamicLayout.set_fields('MySQL Server', fields=[
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Subscription ID', 'account'),
     TextDyField.data_source('Server Admin Login Name', 'data.administrator_login'),
     TextDyField.data_source('MySQL Version', 'data.version'),
     TextDyField.data_source('Performance Configuration (Tier)', 'data.sku.tier'),
@@ -80,15 +80,19 @@ mysql_servers_meta = CloudServiceMeta.set_layouts(
     [mysql_servers_info_meta, mysql_servers_connection_security, mysql_servers_parameters, mysql_servers_pricing_tiers, mysql_servers_tags])
 
 
-class ComputeResource(CloudServiceResource):
-    cloud_service_group = StringType(default='MySQL')
+class DatabaseResource(CloudServiceResource):
+    cloud_service_group = StringType(default='Database')
 
 
-class MySQLServerResource(ComputeResource):
-    cloud_service_type = StringType(default='Server')
+class MySQLServerResource(DatabaseResource):
+    cloud_service_type = StringType(default='MySQLServer')
     data = ModelType(MySQLServer)
     _metadata = ModelType(CloudServiceMeta, default=mysql_servers_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class MySQLServerResponse(CloudServiceResponse):
