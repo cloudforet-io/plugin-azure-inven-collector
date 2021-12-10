@@ -188,6 +188,8 @@ Please, set authentication privilege for followings:
 If cloud_service_types is added to the list elements in options, only the specified cloud service type is collected.
 By default, if cloud_service_types is not specified in options, all services are collected.
 
+The cloud_service_types items that can be specified are as follows.
+
 <pre>
 <code>
 {
