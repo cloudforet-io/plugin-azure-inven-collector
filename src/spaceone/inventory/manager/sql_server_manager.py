@@ -9,6 +9,7 @@ from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.sqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.sqldatabase.cloud_service_type import CLOUD_SERVICE_TYPES_SQL_DB
 from datetime import datetime
+from spaceone.core.utils import *
 import time
 import copy
 import logging
@@ -136,7 +137,7 @@ class SqlServerManager(AzureManager):
                         'account': sql_database_data.subscription_id,
                         'instance_type': sql_database_data.sku.tier,
                         'instance_size': float(sql_database_data.max_size_gb),
-                        'launched_at': sql_database_data.creation_date
+                        'launched_at': datetime_to_iso8601(sql_database_data.creation_date)
                     })
                     _LOGGER.debug(f'[SQL DATABASE INFO] {sql_databases_resource.to_primitive()}')
                     sql_server_responses.append(SqlDatabaseResponse({'resource': sql_databases_resource}))

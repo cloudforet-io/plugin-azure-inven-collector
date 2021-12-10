@@ -6,6 +6,7 @@ from spaceone.inventory.model.disk.cloud_service import *
 from spaceone.inventory.connector.disk import DiskConnector
 from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.core.utils import *
 from datetime import datetime
 import time
 import logging
@@ -100,7 +101,7 @@ class DiskManager(AzureManager):
                     'account': disk_data.subscription_id,
                     'instance_type': disk_data.sku.name,
                     'instance_size': float(disk_data.disk_size_gb),
-                    'launched_at': disk_data.time_created
+                    'launched_at': datetime_to_iso8601(disk_data.time_created)
                 })
 
                 # Must set_region_code method for region collection
