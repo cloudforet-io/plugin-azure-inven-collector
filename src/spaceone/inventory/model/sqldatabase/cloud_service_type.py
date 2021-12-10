@@ -17,7 +17,7 @@ cst_sql_database.tags = {
 
 cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Database Name', 'data.name'),
+        TextDyField.data_source('Database Name', 'name'),
         EnumDyField.data_source('Status', 'data.status', default_state={
             'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring',
                      'Resuming', 'Scaling', 'Standby'],
@@ -31,7 +31,7 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Server', 'data.server_name'),
         TextDyField.data_source('Pricing Tier', 'data.pricing_tier_display'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+        TextDyField.data_source('Subscription ID', 'account'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
 
         # is_optional fields - Default
@@ -50,7 +50,7 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Collation', 'data.collation', options={
             'is_optional': True
         }),
-        DateTimeDyField.data_source('Creation Date', 'data.creation_date', options={
+        DateTimeDyField.data_source('Creation Date', 'launched_at', options={
             'is_optional': True
         }),
         TextDyField.data_source('Server Admin Login', 'data.administrator_login', options={
@@ -73,7 +73,7 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('vCores', 'data.current_sku.capacity', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Data max size', 'data.max_size_gb', options={
+        TextDyField.data_source('Data max size', 'instance_size', options={
             'is_optional': True
         }),
         TextDyField.data_source('Zone Redundant', 'data.zone_redundant', options={
@@ -103,11 +103,11 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='Database ID', key='data.database_id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Tier', key='data.sku.tier', data_type='string'),
+        SearchField.set(name='Tier', key='instance_type', data_type='string'),
         SearchField.set(name='Server Name', key='data.managed_by', data_type='string')
 
     ]

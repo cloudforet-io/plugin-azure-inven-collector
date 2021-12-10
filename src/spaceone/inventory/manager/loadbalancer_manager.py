@@ -155,19 +155,20 @@ class LoadBalancerManager(AzureManager):
                     'tags': _tags
                 })
 
-                _LOGGER.debug(f'[LOAD BALANCER INFO] {load_balancer_dict}')
-
                 load_balancer_data = LoadBalancer(load_balancer_dict, strict=False)
                 load_balancer_resource = LoadBalancerResource({
                     'data': load_balancer_data,
                     'region_code': load_balancer_data.location,
                     'reference': ReferenceModel(load_balancer_data.reference()),
                     'tags': _tags,
-                    'name': load_balancer_data.name
+                    'name': load_balancer_data.name,
+                    'instance_type': load_balancer_data.sku.name,
+                    'account': load_balancer_data.subscription_id
                 })
-
                 # Must set_region_code method for region collection
                 self.set_region_code(load_balancer_data['location'])
+
+                _LOGGER.debug(f'[LOAD BALANCER INFO] {load_balancer_resource.to_primitive()}')
                 load_balancer_responses.append(LoadBalancerResponse({'resource': load_balancer_resource}))
 
             except Exception as e:

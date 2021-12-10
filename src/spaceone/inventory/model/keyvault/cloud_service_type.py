@@ -17,13 +17,13 @@ cst_key_vault.tags = {
 
 cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
-        TextDyField.data_source('Type', 'data.type'),
+        TextDyField.data_source('Name', 'name'),
+        TextDyField.data_source('Type', 'instance_type'),
         TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+        TextDyField.data_source('Subscription ID', 'account'),
 
         # is_optional fields - Public IP Addresses
         TextDyField.data_source('Name', 'data.public_ip_addresses.name', options={
@@ -93,9 +93,9 @@ cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Type', key='data.type', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Type', key='instance_type', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string')

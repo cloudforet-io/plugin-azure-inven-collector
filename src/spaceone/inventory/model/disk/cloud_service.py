@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.model.disk.data import Disk
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField, SizeField
@@ -10,9 +10,9 @@ DISK
 '''
 # TAB - Default
 disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
-    TextDyField.data_source('Name', 'data.name'),
-    TextDyField.data_source('Storage Account Type', 'data.sku.name'),
-    SizeField.data_source('Size', 'data.size'),
+    TextDyField.data_source('Name', 'name'),
+    TextDyField.data_source('Storage Account Type', 'instance_type'),
+    SizeField.data_source('Size', 'instance_size'),
     EnumDyField.data_source('Disk State', 'data.disk_state', default_state={
         'safe': ['ActiveSAS', 'ActiveUpload', 'Attached', 'Reserved'],
         'warning':['ReadyToUpload'],
@@ -29,7 +29,7 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
     TextDyField.data_source('Subscription Name', 'data.subscription_name'),
     TextDyField.data_source('Encryption Type', 'data.encryption.type'),
     TextDyField.data_source('Networking', 'data.network_access_policy_display'),
-    DateTimeDyField.data_source('Created Time', 'data.time_created'),
+    DateTimeDyField.data_source('Created Time', 'launched_at'),
     TextDyField.data_source('Max Shares', 'data.max_shares')
 
 ])
@@ -52,6 +52,10 @@ class DiskResource(ComputeResource):
     data = ModelType(Disk)
     _metadata = ModelType(CloudServiceMeta, default=disk_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class DiskResponse(CloudServiceResponse):

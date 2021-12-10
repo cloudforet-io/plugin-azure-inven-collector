@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, DateTimeType, FloatType
 
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
@@ -12,12 +12,12 @@ VIRTUAL_NETWORK
 '''
 # TAB - Default
 virtual_network_info_meta = ItemDynamicLayout.set_fields('Virtual Network', fields=[
-    TextDyField.data_source('Name', 'data.name'),
+    TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Location', 'data.location'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
-    TextDyField.data_source('Subscription ID', 'data.subscription_id'),
+    TextDyField.data_source('Subscription ID', 'account'),
     ListDyField.data_source('DNS servers', 'data.dhcp_options.dns_servers'),
     EnumDyField.data_source('DDoS Protection Standard', 'data.enable_ddos_protection', default_state={
         'safe': ['True'],
@@ -105,15 +105,19 @@ virtual_network_meta = CloudServiceMeta.set_layouts(
      virtual_network_subnets, virtual_network_firewall, virtual_network_peerings, virtual_network_service_endpoints, virtual_network_private_endpoints, virtual_network_tags])
 
 
-class ComputeResource(CloudServiceResource):
+class NetworkResource(CloudServiceResource):
     cloud_service_group = StringType(default='Network')
 
 
-class VirtualNetworkResource(ComputeResource):
+class VirtualNetworkResource(NetworkResource):
     cloud_service_type = StringType(default='VirtualNetwork')
     data = ModelType(VirtualNetwork)
     _metadata = ModelType(CloudServiceMeta, default=virtual_network_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class VirtualNetworkResponse(CloudServiceResponse):

@@ -73,18 +73,20 @@ class StorageAccountManager(AzureManager):
                     'subscription_name': subscription_info['subscription_name'],
                 })
 
-                _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_dict}')
-
                 storage_account_data = StorageAccount(storage_account_dict, strict=False)
                 storage_account_resource = StorageAccountResource({
                     'data': storage_account_data,
                     'region_code': storage_account_data.location,
                     'reference': ReferenceModel(storage_account_data.reference()),
-                    'name': storage_account_data.name
+                    'name': storage_account_data.name,
+                    'account': storage_account_data.subscription_id,
+                    'instance_type': storage_account_data.sku.tier,
+                    'launched_at': storage_account_data.creation_time
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(storage_account_data['location'])
+                _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_resource.to_primitive()}')
                 storage_account_responses.append(StorageAccountResponse({'resource': storage_account_resource}))
 
             except Exception as e:

@@ -17,7 +17,7 @@ cst_vm_scale_set.tags = {
 
 cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
+        TextDyField.data_source('Name', 'name'),
         # TextDyField.data_source('Status', 'data.'), (x)
         TextDyField.data_source('Instances', 'data.instance_count'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -67,8 +67,8 @@ cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
+        SearchField.set(name='Name', key='name', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),

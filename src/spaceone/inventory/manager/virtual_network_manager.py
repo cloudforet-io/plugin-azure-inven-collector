@@ -61,10 +61,10 @@ class VirtualNetworkManager(AzureManager):
                     resource_group = vnet_dict['resource_group']
 
                     # Change attached network interfaces objects to id
-                    self.change_subnet_object_to_ids_list()
+                    self.change_subnet_object_to_ids_list(subnets)
 
                     vnet_dict.update({
-                        'subnets': self.update_subnet_info(self, subnets, vnet_conn, resource_group),
+                        'subnets': self.update_subnet_info(self, subnets),
                         'service_endpoints': self.get_service_endpoints(self, subnets),
                         'private_endpoints': self.get_private_endpoints(self, subnets),
                         'azure_firewall': self.get_azure_firewall(self, vnet_conn, subnets, resource_group),
@@ -88,18 +88,19 @@ class VirtualNetworkManager(AzureManager):
                             ip = IPNetwork(address_space)
                             # vnet_dict['address_space']['address_count'] = ip.size
                 '''
-                _LOGGER.debug(f'[VNET INFO] {vnet_dict}')
 
                 vnet_data = VirtualNetwork(vnet_dict, strict=False)
                 vnet_resource = VirtualNetworkResource({
                     'data': vnet_data,
                     'region_code': vnet_data.location,
                     'reference': ReferenceModel(vnet_data.reference()),
-                    'name': vnet_data.name
+                    'name': vnet_data.name,
+                    'account': vnet_data.subscription_id
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(vnet_data['location'])
+                _LOGGER.debug(f'[VNET INFO] {vnet_resource.to_primitive()}')
                 virtual_network_responses.append(VirtualNetworkResponse({'resource': vnet_resource}))
 
             except Exception as e:
@@ -126,7 +127,7 @@ class VirtualNetworkManager(AzureManager):
         return subnet_id_list
 
     @staticmethod
-    def update_subnet_info(self, subnet_list, vnet_conn, resource_group_name):
+    def update_subnet_info(self, subnet_list):
         '''
         : subnets_dict = {
             ip_configurations= [
@@ -153,7 +154,6 @@ class VirtualNetworkManager(AzureManager):
                 }
             }
                 ...
-
         '''
 
         for subnet in subnet_list:

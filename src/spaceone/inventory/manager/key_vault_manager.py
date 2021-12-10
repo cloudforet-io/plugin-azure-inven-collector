@@ -80,18 +80,19 @@ class KeyVaultManager(AzureManager):
                         'enable_purge_protection_str': 'Disabled' if key_vault_dict['properties']['enable_purge_protection'] is False else 'Enabled'
                     })
 
-                _LOGGER.debug(f'[KEY VAULT INFO] {key_vault_dict}')
-
                 key_vault_data = KeyVault(key_vault_dict, strict=False)
                 key_vault_resource = KeyVaultResource({
                     'data': key_vault_data,
                     'region_code': key_vault_data.location,
                     'reference': ReferenceModel(key_vault_data.reference()),
-                    'name': key_vault_data.name
+                    'name': key_vault_data.name,
+                    'instance_type': key_vault_data.properties.sku.name,
+                    'account': key_vault_data.subscription_id
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(key_vault_data['location'])
+                _LOGGER.debug(f'[KEY VAULT INFO]{key_vault_resource.to_primitive()}')
                 key_vault_responses.append(KeyVaultResponse({'resource': key_vault_resource}))
 
             except Exception as e:

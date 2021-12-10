@@ -53,7 +53,7 @@ class PostgreSQLServerManager(AzureManager):
                 postgre_sql_server_dict.update({
                     'resource_group': self.get_resource_group_from_id(postgre_sql_server_id),
                     'subscription_id': subscription_info['subscription_id'],
-                    'subscription_name': subscription_info['subscription_name'],
+                    'subscription_name': subscription_info['subscription_name']
                 })
 
                 if postgre_sql_server_dict.get('name') is not None:
@@ -66,17 +66,20 @@ class PostgreSQLServerManager(AzureManager):
                         'server_administrators': self.list_server_administrators(self, postgre_sql_conn, resource_group, server_name)
                     })
 
-                _LOGGER.debug(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_dict}')
                 postgre_sql_server_data = Server(postgre_sql_server_dict, strict=False)
                 postgre_sql_server_resource = SqlServerResource({
                     'data': postgre_sql_server_data,
                     'region_code': postgre_sql_server_data.location,
                     'reference': ReferenceModel(postgre_sql_server_data.reference()),
-                    'name': postgre_sql_server_data.name
+                    'name': postgre_sql_server_data.name,
+                    'account': postgre_sql_server_data.subscription_id,
+                    'instance_type': postgre_sql_server_data.sku.tier,
+                    'instance_size': float(postgre_sql_server_data.storage_profile.storage_mb)
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(postgre_sql_server_data['location'])
+                _LOGGER.debug(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_resource.to_primitive()}')
                 postgre_sql_server_responses.append(SqlServerResponse({'resource': postgre_sql_server_resource}))
 
             except Exception as e:
@@ -89,17 +92,15 @@ class PostgreSQLServerManager(AzureManager):
 
     @staticmethod
     def get_sql_resources(self, cosmos_db_conn, account_name, resource_group):
-        try:
-            sql_resources = []
-            sql_resources_obj = cosmos_db_conn.list_sql_resources(account_name=account_name, resource_group_name=resource_group)
+        sql_resources = []
+        sql_resources_obj = cosmos_db_conn.list_sql_resources(account_name=account_name, resource_group_name=resource_group)
 
-            for sql in sql_resources_obj:
-                sql_dict = self.convert_nested_dictionary(self, sql)
-                sql_resources.append(sql_dict)
-            return sql_resources
+        for sql in sql_resources_obj:
+            sql_dict = self.convert_nested_dictionary(self, sql)
+            sql_resources.append(sql_dict)
+        return sql_resources
 
-        except ConnectionError as e:
-            _LOGGER.error(ERROR_CONNECTOR(Connector='Cosmos DB'))
+
 
     @staticmethod
     def list_firewall_rules_by_server(self, postgresql_conn, resource_group, name):
@@ -168,9 +169,7 @@ class PostgreSQLServerManager(AzureManager):
 
     @staticmethod
     def get_replica_master_server_name(master_server_id):
-        try:
-            master_server_name = master_server_id.split('/')[8]
-            return master_server_name
-        except Exception as e:
-            _LOGGER.error(f'[ERROR: Azure PostgreSQL Server Manager Get Master Server Name]: {e}')
+        master_server_name = master_server_id.split('/')[8]
+        return master_server_name
+
 

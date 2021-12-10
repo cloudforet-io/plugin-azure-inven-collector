@@ -85,7 +85,7 @@ class Snapshot(Model):
     network_access_policy_display = StringType(serialize_when_none=False)
     os_type = StringType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
-    time_created = DateTimeType()
+    time_created = DateTimeType(serialize_when_none=False)
     unique_id = StringType()
     size = IntType()
     sku = ModelType(Sku)

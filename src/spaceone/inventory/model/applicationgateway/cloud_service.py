@@ -1,4 +1,4 @@
-from schematics.types import ModelType, StringType, PolyModelType
+from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
@@ -12,7 +12,7 @@ APPLICATION_GATEWAY
 '''
 # TAB - Default
 application_gateway_info_meta = ItemDynamicLayout.set_fields('Application Gateway', fields=[
-    TextDyField.data_source('Name', 'data.name', options={
+    TextDyField.data_source('Name', 'name', options={
         'is_optional': True
     }),
     TextDyField.data_source('Resource ID', 'data.id'),
@@ -162,15 +162,19 @@ application_gateway_meta = CloudServiceMeta.set_layouts(
      application_gateway_rewrites, application_gateway_health_probes])
 
 
-class ComputeResource(CloudServiceResource):
+class NetworkResource(CloudServiceResource):
     cloud_service_group = StringType(default='Network')
 
 
-class ApplicationGatewayResource(ComputeResource):
+class ApplicationGatewayResource(NetworkResource):
     cloud_service_type = StringType(default='ApplicationGateway')
     data = ModelType(ApplicationGateway)
     _metadata = ModelType(CloudServiceMeta, default=application_gateway_meta, serialized_name='metadata')
     name = StringType()
+    account = StringType()
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class ApplicationGatewayResponse(CloudServiceResponse):

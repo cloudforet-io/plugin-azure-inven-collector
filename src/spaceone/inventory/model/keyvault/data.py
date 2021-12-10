@@ -178,6 +178,8 @@ class KeyVault(Model):  # Main class
     certificates = ListType(ModelType(CertificateItem), serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    account = StringType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
     def reference(self):
         return {

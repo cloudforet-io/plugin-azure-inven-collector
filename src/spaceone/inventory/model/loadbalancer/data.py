@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, FloatType, DateTimeType
 
 
 class Tags(Model):

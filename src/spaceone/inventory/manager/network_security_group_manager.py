@@ -75,7 +75,8 @@ class NetworkSecurityGroupManager(AzureManager):
                     'inbound_security_rules': inbound_rules,
                     'outbound_security_rules': outbound_rules
                 })
-
+                #  TODO : update network interface name
+                '''
                 # get network interfaces
                 if network_security_group_dict.get('network_interfaces') is not None:
                     new_network_interfaces_list, virtual_machines_display_str = self.get_network_interfaces(self, network_security_group_conn, network_security_group_dict['network_interfaces'])
@@ -83,7 +84,7 @@ class NetworkSecurityGroupManager(AzureManager):
                     network_security_group_dict.update({
                         'virtual_machines_display': virtual_machines_display_str
                     })
-
+                '''
                 # Change Subnet models to ID
                 if network_security_group_dict.get('network_interfaces') is not None:
                     self.replace_subnet_model_to_id(network_security_group_dict['network_interfaces'])
@@ -109,18 +110,18 @@ class NetworkSecurityGroupManager(AzureManager):
                     'subscription_name': subscription_info['subscription_name'],
                 })
 
-                _LOGGER.debug(f'[NETWORK SECURITY GROUP INFO] {network_security_group_dict}')
-
                 network_security_group_data = NetworkSecurityGroup(network_security_group_dict, strict=False)
                 network_security_group_resource = NetworkSecurityGroupResource({
                     'data': network_security_group_data,
                     'region_code': network_security_group_data.location,
                     'reference': ReferenceModel(network_security_group_data.reference()),
-                    'name': network_security_group_data.name
+                    'name': network_security_group_data.name,
+                    'account': network_security_group_data.subscription_id
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(network_security_group_data['location'])
+                _LOGGER.debug(f'[NETWORK SECURITY GROUP INFO] {network_security_group_resource.to_primitive()}')
                 network_security_group_responses.append(NetworkSecurityGroupResponse({'resource': network_security_group_resource}))
 
             except Exception as e:
@@ -166,7 +167,7 @@ class NetworkSecurityGroupManager(AzureManager):
 
         for network_interface in network_interfaces_list:
             resource_group = network_interface['id'].split('/')[4]
-            network_interface_name = network_interface['id'].split('/')[8]
+            network_interface_name = network_interface['id'].split('/')[8] # TODO : network interface name diverse
             network_interface_obj = network_security_group_conn.get_network_interfaces(network_interface_name, resource_group)
             network_interface_dict = self.convert_nested_dictionary(self, network_interface_obj)
 

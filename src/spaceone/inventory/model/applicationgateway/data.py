@@ -978,7 +978,10 @@ class ApplicationGateway(Model):  # Main Class
     virtual_network = StringType(serialize_when_none=False)
     subnet = StringType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
-    type = StringType(serialize_when_none=False)
+    instance_type = StringType(serialize_when_none=False)
+    instance_size = FloatType(serialize_when_none=False)
+    account = StringType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
     def reference(self):

@@ -113,13 +113,16 @@ class SnapshotManager(AzureManager):
                     'region_code': snapshot_data.location,
                     'reference': ReferenceModel(snapshot_data.reference()),
                     'tags': _tags,
-                    'name': snapshot_data.name
+                    'name': snapshot_data.name,
+                    'instance_size': float(snapshot_data.disk_size_gb),
+                    'instance_type': snapshot_data.sku.name,
+                    'launched_at': snapshot_data.time_created
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(snapshot_data['location'])
+                _LOGGER.debug(f'[SNAPSHOT INFO] {snapshot_resource.to_primitive()}')
                 snapshot_responses.append(SnapshotResponse({'resource': snapshot_resource}))
-                _LOGGER.debug(f'[SNAPSHOT INFO] {snapshot_dict}')
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {snapshot_id} {e}', exc_info=True)

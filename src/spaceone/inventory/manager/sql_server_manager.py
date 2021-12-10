@@ -113,15 +113,17 @@ class SqlServerManager(AzureManager):
                     'tags': _tags
                 })
 
-                sql_servers_data = SqlServer(sql_server_dict, strict=False)
+                sql_server_data = SqlServer(sql_server_dict, strict=False)
                 sql_servers_resource = SqlServerResource({
-                    'data': sql_servers_data,
-                    'region_code': sql_servers_data.location,
-                    'reference': ReferenceModel(sql_servers_data.reference()),
+                    'data': sql_server_data,
+                    'region_code': sql_server_data.location,
+                    'reference': ReferenceModel(sql_server_data.reference()),
                     'tags': _tags,
-                    'name': sql_servers_data.name
+                    'name': sql_server_data.name,
+                    'account': sql_server_data.subscription_id
                 })
                 sql_server_responses.append(SqlServerResponse({'resource': sql_servers_resource}))
+                _LOGGER.debug(f'[SQL SERVER INFO] {sql_servers_resource.to_primitive()}')
 
                 for sql_database in sql_server_dict.get('databases', []):
                     sql_database_data = Database(sql_database, strict=False)
@@ -130,12 +132,17 @@ class SqlServerManager(AzureManager):
                         'region_code': sql_database_data.location,
                         'reference': ReferenceModel(sql_database_data.reference()),
                         'tags': _tags,
-                        'name': sql_database_data.name
+                        'name': sql_database_data.name,
+                        'account': sql_database_data.subscription_id,
+                        'instance_type': sql_database_data.sku.tier,
+                        'instance_size': float(sql_database_data.max_size_gb),
+                        'launched_at': sql_database_data.creation_date
                     })
+                    _LOGGER.debug(f'[SQL DATABASE INFO] {sql_databases_resource.to_primitive()}')
                     sql_server_responses.append(SqlDatabaseResponse({'resource': sql_databases_resource}))
 
                 # Must set_region_code method for region collection
-                self.set_region_code(sql_servers_data['location'])
+                self.set_region_code(sql_server_data['location'])
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {sql_server_id} {e}', exc_info=True)

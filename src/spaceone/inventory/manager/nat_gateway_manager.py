@@ -96,18 +96,19 @@ class NATGatewayManager(AzureManager):
                         'subnets': self.get_subnets(self, nat_gateway_conn, nat_gateway_dict['subnets'])
                     })
 
-                _LOGGER.debug(f'[NAT GATEWAYS INFO] {nat_gateway_dict}')
-
                 nat_gateway_data = NatGateway(nat_gateway_dict, strict=False)
                 nat_gateway_resource = NatGatewayResource({
                     'data': nat_gateway_data,
                     'region_code': nat_gateway_data.location,
                     'reference': ReferenceModel(nat_gateway_data.reference()),
-                    'name': nat_gateway_data.name
+                    'name': nat_gateway_data.name,
+                    'account': nat_gateway_data.subscription_id,
+                    'instance_type': nat_gateway_data.sku.name
                 })
 
                 # Must set_region_code method for region collection
                 self.set_region_code(nat_gateway_data['location'])
+                _LOGGER.debug(f'[NAT GATEWAYS INFO] {nat_gateway_resource.to_primitive()}')
                 nat_gateway_responses.append(NatGatewayResponse({'resource': nat_gateway_resource}))
 
             except Exception as e:
