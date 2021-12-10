@@ -6,6 +6,7 @@ from spaceone.inventory.connector.snapshot import SnapshotConnector
 from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.snapshot.cloud_service_type import CLOUD_SERVICE_TYPES
 from datetime import datetime
+from spaceone.core.utils import *
 import time
 import logging
 
@@ -116,7 +117,7 @@ class SnapshotManager(AzureManager):
                     'name': snapshot_data.name,
                     'instance_size': float(snapshot_data.disk_size_gb),
                     'instance_type': snapshot_data.sku.name,
-                    'launched_at': snapshot_data.time_created
+                    'launched_at': datetime_to_iso8601(snapshot_data.time_created)
                 })
 
                 # Must set_region_code method for region collection
