@@ -2,6 +2,7 @@ from schematics import Model
 from schematics.types import ListType, StringType, PolyModelType, DictType, ModelType
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import BaseLayoutField
 from spaceone.inventory.libs.schema.metadata.dynamic_search import BaseDynamicSearch
+from spaceone.inventory.libs.schema.metadata.dynamic_widget import BaseDynamicWidget
 
 
 class MetaDataViewSubData(Model):
@@ -16,6 +17,7 @@ class MetaDataView(Model):
     table = PolyModelType(MetaDataViewTable, serialize_when_none=False)
     sub_data = PolyModelType(MetaDataViewSubData, serialize_when_none=False)
     search = ListType(PolyModelType(BaseDynamicSearch), serialize_when_none=False)
+    widget = ListType(PolyModelType(BaseDynamicWidget), serialize_when_none=False)
 
 
 class BaseMetaData(Model):
