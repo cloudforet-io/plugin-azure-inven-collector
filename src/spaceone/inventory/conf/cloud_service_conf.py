@@ -11,6 +11,7 @@ CLOUD_SERVICE_GROUP_MAP = {
     'KeyVault': 'KeyVaultManager',
     'LoadBalancer': 'LoadBalancerManager',
     'MySQLServer': 'MySQLServerManager',
+    'SQLServer': 'SqlServerManager',
     'NATGateway': 'NATGatewayManager',
     'NetworkSecurityGroup': 'NetworkSecurityGroupManager',
     'PostgreSQLServer': 'PostgreSQLServerManager',
