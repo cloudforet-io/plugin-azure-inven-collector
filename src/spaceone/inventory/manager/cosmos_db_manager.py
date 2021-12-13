@@ -6,6 +6,7 @@ from spaceone.inventory.model.cosmosdb.cloud_service import *
 from spaceone.inventory.model.cosmosdb.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.cosmosdb.data import *
 from spaceone.inventory.error.custom import *
+from spaceone.core.utils import *
 import time
 import ipaddress
 import logging
@@ -95,7 +96,8 @@ class CosmosDBManager(AzureManager):
                     'reference': ReferenceModel(cosmos_db_account_data.reference()),
                     'name': cosmos_db_account_data.name,
                     'account': cosmos_db_account_data.subscription_id,
-                    'instance_type': cosmos_db_account_data.database_account_offer_type
+                    'instance_type': cosmos_db_account_data.database_account_offer_type,
+                    'launched_at': datetime_to_iso8601(cosmos_db_account_data.system_data.created_at)
                 })
 
                 # Must set_region_code method for region collection
