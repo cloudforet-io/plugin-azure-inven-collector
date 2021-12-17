@@ -9,7 +9,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
-> Latest stable version : 1.2.12
+> Latest stable version : 1.2.13
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -56,6 +56,40 @@ You should insert information about account in SpaceONE's **Service Account** in
 Registered service account on SpaceONE must have certain permissions to collect cloud service data 
 Please, set authentication privilege for followings:
 
+### Additional custom roles for SpaceONE collector
+Several cloud services require several additional privileges for collecting. <br>
+Please create custom roles in Azure portal, and assign roles to SpaceONE collector apps before collect resources.
+For information on creating custom roles in Azure, see the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
+
+#### KeyVaults
+For collecting Azure ```KeyVaults``` resources, you need to assign a Key Vault access policy to SpaceONE collector App in Azure portal.
+For information on assigning access policy, see [Microsoft key vault access policy document](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).
+
+#### CosmosDB
+For collecting key lists in ```CosmosDB``` azure resources, you need to assign an access policy to SpaceONE collector App in Azure portal.
+For information on creating custom roles in Azure, see the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
+
+```
+{
+    "properties": {
+        "roleName": "YOUR_ROLE_NAME_FOR_LIST_KEYS_IN_COSMOSDB",
+        "description": "",
+        "assignableScopes": [
+            "/subscriptions/YOUR_SUBSCRIPTION_ID"
+        ],
+        "permissions": [
+            {
+                "actions": [
+                    "Microsoft.DocumentDB/databaseAccounts/listKeys/action"
+                ],
+                "notActions": [],
+                "dataActions": [],
+                "notDataActions": []
+            }
+        ]
+    }
+}
+```
 
 #### [Virtual Machines](https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/list)
       
