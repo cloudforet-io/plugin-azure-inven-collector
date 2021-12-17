@@ -1,0 +1,15 @@
+---
+cloud_service_group: Compute
+cloud_service_type: Disk
+name: Disk Total Count per Resource Group
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: resource_group
+            key: data.resource_group
+        fields:
+          - name: value
+            operator: count
+options:
+  chart_type: DONUT
