@@ -10,7 +10,7 @@ cst_key_vault.group = 'KeyVault'
 cst_key_vault.service_code = 'Microsoft.KeyVault/vaults'
 cst_key_vault.labels = ['KeyVault']
 cst_key_vault.is_major = False
-cst_key_vault.is_primary = False
+cst_key_vault.is_primary = True
 cst_key_vault.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-key-vault.svg',
 }
