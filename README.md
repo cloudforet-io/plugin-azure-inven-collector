@@ -199,6 +199,7 @@ The cloud_service_types items that can be specified are as follows.
         'Disk',
         'KeyVault',
         'LoadBalancer',
+        'SQLServer',
         'MySQLServer',
         'NATGateway',
         'NetworkSecurityGroup,
@@ -233,4 +234,39 @@ Update plugin through spacectl command with the created yaml file.
 <pre><code>
 > spacectl exec update_plugin inventory.Collector -f update_collector.yaml
 </code></pre>
+
+## Release Note
+
+### Ver 1.2.13
+* [Add feature to specify the Cloud Service Type and collect it.](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/162)
+* [Add fields to cloud services model(account, instance_type, instance_size, launched_at)](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/159) 
+* [Add ErrorResources to collect error messages as resources](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/157)
+
+### Ver 1.2.12
+* [Add ```PostgreSQL``` Servers cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/154)
+
+### Ver 1.2.10
+* [Add CosmosDB Syntax bug](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/152/commits)
+* [Add ```CosmosDB cloud``` service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/commit/c50693a222555611cb1fb27b2ce222543e1cf174)
+* [Update CI workflow](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/142)
+
+### Ver 1.2.8
+* [Add ```MySQL Servers``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/136)
+
+
+### Ver 1.2.7
+* [Add ```Key Vaults``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/123)
+
+### Ver 1.2.6
+* Add ```Storage Accounts``` cloud service
+
+### Ver 1.2.5
+* Add ```NAT Gateways``` cloud service
+
+### Ver 1.2.4
+* Add ```Network Security Groups``` cloud service
+
+### Ver 1.2.3
+* Add ```Virtual Networks```, ```Application Gateways```, ```Public IP Address``` cloud service
+
 

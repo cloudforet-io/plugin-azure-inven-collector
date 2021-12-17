@@ -167,8 +167,6 @@ class ApplicationGatewayManager(AzureManager):
 
                             self.update_backend_pool_dict(application_gateway_dict['backend_address_pools'], backend_address_pool_id, rule_name_list)
 
-                _LOGGER.debug(f'[APPLICATION GATEWAYS INFO] {application_gateway_dict}')
-
                 application_gateway_data = ApplicationGateway(application_gateway_dict, strict=False)
                 application_gateway_resource = ApplicationGatewayResource({
                     'data': application_gateway_data,
@@ -178,6 +176,7 @@ class ApplicationGatewayManager(AzureManager):
                     'instance_type': application_gateway_data.sku.name,
                     'account': application_gateway_data.subscription_id
                 })
+                _LOGGER.debug(f'[APPLICATION GATEWAYS INFO] {application_gateway_resource.to_primitive()}')
 
                 # Must set_region_code method for region collection
                 self.set_region_code(application_gateway_data['location'])
