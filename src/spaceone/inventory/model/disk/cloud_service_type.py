@@ -1,8 +1,22 @@
+import os
+from spaceone.inventory.libs.utils import *
+from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, ChartWidget
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, DateTimeDyField, ListDyField, \
     EnumDyField, SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
+current_dir = os.path.abspath(os.path.dirname(__file__))
+
+"""
+DISK
+"""
+disk_total_size_conf = os.path.join(current_dir, 'widget/disk_total_size.yaml')
+disk_total_size_per_location_conf = os.path.join(current_dir, 'widget/disk_total_size_per_location.yaml')
+disk_total_size_per_subscription_conf = os.path.join(current_dir, 'widget/disk_total_size_per_subscription.yaml')
+disk_count_per_resource_group_conf = os.path.join(current_dir, 'widget/disk_count_per_resource_group.yaml')
+disk_total_size_per_status_conf = os.path.join(current_dir, 'widget/disk_total_size_per_status.yaml')
+disk_total_size_per_type_conf = os.path.join(current_dir, 'widget/disk_total_size_per_type.yaml')
 
 cst_disk = CloudServiceTypeResource()
 cst_disk.name = 'Disk'
@@ -67,8 +81,15 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='OS Type', key='data.os_type', data_type='string'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
         SearchField.set(name='Creation Time', key='data.time_created', data_type='datetime'),
+    ],
+    widget=[
+        CardWidget.set(**get_data_from_yaml(disk_total_size_conf)),
+        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(disk_count_per_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_status_conf)),
+        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_type_conf)),
     ]
-
 )
 
 

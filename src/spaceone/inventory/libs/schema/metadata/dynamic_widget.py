@@ -137,7 +137,7 @@ class BaseDynamicWidget(Model):
         query['aggregate'] = query_aggrs
 
         # Query : filter
-        filter = [{'key': 'provider', 'value': 'aws', 'operator': 'eq'},
+        filter = [{'key': 'provider', 'value': 'azure', 'operator': 'eq'},
                   {'key': 'cloud_service_group', 'value': cloud_service_group, 'operator': 'eq'},
                   {'key': 'cloud_service_type', 'value': cloud_service_type, 'operator': 'eq'}]
 

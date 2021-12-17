@@ -1,7 +1,12 @@
+import os
+from spaceone.inventory.libs.utils import *
+from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, ChartWidget
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, DateTimeDyField, ListDyField, \
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+
+current_dir = os.path.abspath(os.path.dirname(__file__))
 
 
 cst_key_vault = CloudServiceTypeResource()
@@ -10,7 +15,7 @@ cst_key_vault.group = 'KeyVault'
 cst_key_vault.service_code = 'Microsoft.KeyVault/vaults'
 cst_key_vault.labels = ['KeyVault']
 cst_key_vault.is_major = False
-cst_key_vault.is_primary = False
+cst_key_vault.is_primary = True
 cst_key_vault.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-key-vault.svg',
 }

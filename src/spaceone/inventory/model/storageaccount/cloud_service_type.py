@@ -1,7 +1,12 @@
+import os
+from spaceone.inventory.libs.utils import *
+from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, ChartWidget
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, DateTimeDyField, ListDyField, \
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+
+current_dir = os.path.abspath(os.path.dirname(__file__))
 
 
 cst_storage_account = CloudServiceTypeResource()
@@ -10,7 +15,7 @@ cst_storage_account.group = 'Storage'
 cst_storage_account.service_code = 'Microsoft.Storage/storageAccounts'
 cst_storage_account.labels = ['Storage']
 cst_storage_account.is_major = False
-cst_storage_account.is_primary = False
+cst_storage_account.is_primary = True
 cst_storage_account.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-service-accounts.svg',
 }

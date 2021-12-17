@@ -1,0 +1,16 @@
+---
+cloud_service_group: Compute
+cloud_service_type: Disk
+name: Disk Total Size per Location
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: location
+            key: region_code
+        fields:
+          - name: size
+            key: instance_size
+            operator: sum
+options:
+  chart_type: COLUMN

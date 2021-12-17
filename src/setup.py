@@ -41,5 +41,8 @@ setup(
         'azure-mgmt-resource==15.0.0',
         'azure-mgmt-compute==18.0.0'
     ],
+    package_data={
+        'spaceone': ['inventory/model/*/widget/*.yaml']
+    },
     zip_safe=False,
 )
