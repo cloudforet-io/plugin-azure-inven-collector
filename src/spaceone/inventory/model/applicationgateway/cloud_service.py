@@ -135,7 +135,6 @@ application_gateway_rules = SimpleTableDynamicLayout.set_fields('Rules', 'data.r
 # TAB - Rewrites
 application_gateway_rewrites = SimpleTableDynamicLayout.set_fields('Rewrites', 'data.rewrite_rule_sets', fields=[
     TextDyField.data_source('Rewrite Sets', 'name'),
-    TextDyField.data_source('Type', 'rule_type'),
     TextDyField.data_source('Rules Applied', 'rules_applied'),
     ListDyField.data_source('Rewrite Rule Configuration', 'rewrite_rules_display')
 ])
