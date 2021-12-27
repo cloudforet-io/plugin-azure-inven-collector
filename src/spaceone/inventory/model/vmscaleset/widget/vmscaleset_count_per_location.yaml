@@ -1,0 +1,16 @@
+---
+cloud_service_group: Compute
+cloud_service_type: VmScaleSet
+name: Virtual Machine Scale Set Total Count per Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: region_code
+            key: region_code
+        fields:
+          - name: value
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN

@@ -8,6 +8,9 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+cosmosdb_count_per_subscription_conf = os.path.join(current_dir, 'widget/cosmosdb_count_per_subscription.yaml')
+cosmosdb_count_per_location_conf = os.path.join(current_dir, 'widget/cosmosdb_count_per_location.yaml')
+cosmosdb_database_count_per_subscription_conf = os.path.join(current_dir, 'widget/cosmosdb_database_count_per_subscription.yaml')
 
 cst_cosmos_db = CloudServiceTypeResource()
 cst_cosmos_db.name = 'AzureCosmosDB'
@@ -122,6 +125,11 @@ cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string')
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(cosmosdb_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(cosmosdb_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(cosmosdb_database_count_per_subscription_conf))
     ]
 
 )

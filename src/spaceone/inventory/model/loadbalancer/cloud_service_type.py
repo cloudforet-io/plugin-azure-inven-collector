@@ -7,7 +7,9 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
-
+loadbalancer_backendpool_vm_count_per_location_conf = os.path.join(current_dir, 'widget/loadbalancer_backendpool_vm_count_per_location.yaml')
+loadbalancer_count_per_location_conf = os.path.join(current_dir, 'widget/loadbalancer_count_per_location.yaml')
+loadbalancer_count_per_subscription_conf = os.path.join(current_dir, 'widget/loadbalancer_count_per_subscription.yaml')
 
 cst_load_balancer = CloudServiceTypeResource()
 cst_load_balancer.name = 'LoadBalancer'
@@ -160,10 +162,13 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
         SearchField.set(name='Load Balancer Type', key='instance_type', data_type='string'),
-
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(loadbalancer_backendpool_vm_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(loadbalancer_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(loadbalancer_count_per_subscription_conf))
 
     ]
-
 )
 
 

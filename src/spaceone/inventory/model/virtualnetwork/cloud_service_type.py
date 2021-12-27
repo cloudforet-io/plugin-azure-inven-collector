@@ -8,6 +8,11 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+virtualnetwork_count_per_location_conf = os.path.join(current_dir, 'widget/virtualnetwork_count_per_location.yaml')
+virtualnetwork_count_per_subscription_conf = os.path.join(current_dir, 'widget/virtualnetwork_count_per_subscription.yaml')
+virtualnetwork_subnet_count_per_location_conf = os.path.join(current_dir, 'widget/virtualnetwork_subnet_count_per_location.yaml')
+virtualnetwork_subnet_count_per_subscription_conf = os.path.join(current_dir, 'widget/virtualnetwork_subnet_count_per_subscription.yaml')
+
 
 cst_virtual_network = CloudServiceTypeResource()
 cst_virtual_network.name = 'VirtualNetwork'
@@ -112,7 +117,6 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Private Endpoint Subnet', 'data.private_endpoints.subnet', options={
             'is_optional': True
         })
-
     ],
     search=[
         SearchField.set(name='ID', key='data.id', data_type='string'),
@@ -121,8 +125,13 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(virtualnetwork_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtualnetwork_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtualnetwork_subnet_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtualnetwork_subnet_count_per_location_conf))
     ]
-
 )
 
 

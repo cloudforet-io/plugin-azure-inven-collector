@@ -1,0 +1,11 @@
+---
+cloud_service_group: Compute
+cloud_service_type: Snapshot
+name: Snapshot Total Size
+query:
+  aggregate:
+    - group:
+        fields:
+          - name: size
+            key: data.disk_size_gb
+            operator: sum
