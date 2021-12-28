@@ -8,7 +8,6 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-
 cst_sql_database = CloudServiceTypeResource()
 cst_sql_database.name = 'SQLDatabase'
 cst_sql_database.group = 'SQL'
@@ -114,7 +113,6 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Location', key='data.location', data_type='string'),
         SearchField.set(name='Tier', key='instance_type', data_type='string'),
         SearchField.set(name='Server Name', key='data.managed_by', data_type='string')
-
     ]
 
 )

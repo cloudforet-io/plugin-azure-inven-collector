@@ -1,0 +1,15 @@
+---
+cloud_service_group: Compute
+cloud_service_type: VmScaleSet
+name: VMScaleSet Total Count per Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: subscription
+            key: account
+        fields:
+          - name: value
+            operator: count
+options:
+  chart_type: DONUT

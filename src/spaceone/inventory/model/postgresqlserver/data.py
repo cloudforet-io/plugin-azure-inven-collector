@@ -320,7 +320,6 @@ class EncryptionProtector(Model):
     type = StringType(serialize_when_none=False)
 
 
-
 class RestorableDroppedDatabase(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()

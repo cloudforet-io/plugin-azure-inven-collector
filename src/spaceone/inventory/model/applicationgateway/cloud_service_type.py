@@ -8,6 +8,8 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+ag_count_per_subscription_conf = os.path.join(current_dir, 'widget/application_gateway_count_per_subscription.yaml')
+ag_count_per_location_conf = os.path.join(current_dir, 'widget/application_gateway_count_per_location.yaml')
 
 cst_application_gateway = CloudServiceTypeResource()
 cst_application_gateway.name = 'ApplicationGateway'
@@ -150,6 +152,10 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Location', key='data.location', data_type='string'),
         SearchField.set(name='Public IP Address', key='data.public_ip_address.ip_address', data_type='string'),
         SearchField.set(name='Private IP Address', key='data.private_ip_address', data_type='string')
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(ag_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(ag_count_per_location_conf))
     ]
 )
 

@@ -8,6 +8,8 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+storage_account_count_per_location_conf = os.path.join(current_dir, 'widget/storage_account_count_per_location.yaml')
+storage_account_count_per_subscription_conf = os.path.join(current_dir, 'widget/storage_account_count_per_subscription.yaml')
 
 cst_storage_account = CloudServiceTypeResource()
 cst_storage_account.name = 'StorageAccount'
@@ -122,6 +124,10 @@ cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string')
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(storage_account_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_account_count_per_subscription_conf))
     ]
 )
 

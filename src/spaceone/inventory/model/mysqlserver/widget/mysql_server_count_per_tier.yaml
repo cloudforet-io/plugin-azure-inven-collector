@@ -1,0 +1,16 @@
+---
+cloud_service_group: Database
+cloud_service_type: MySQLServer
+name: MySQLServer Total Count per Tier
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: tier
+            key: data.sku.tier
+        fields:
+          - name: count
+            key: data.sku.tier
+            operator: count
+options:
+  chart_type: DONUT

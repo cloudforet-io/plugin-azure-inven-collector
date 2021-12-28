@@ -176,6 +176,7 @@ class KeyVault(Model):  # Main class
     keys = ListType(ModelType(KeyItem), serialize_when_none=False)
     secrets = ListType(ModelType(SecretItem), serialize_when_none=False)
     certificates = ListType(ModelType(CertificateItem), serialize_when_none=False)
+    key_count = IntType(serialize_when_none=False)
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     account = StringType(serialize_when_none=False)

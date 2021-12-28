@@ -1,0 +1,16 @@
+---
+cloud_service_group: Network
+cloud_service_type: VirtualNetwork
+name: VirtualNetwork Total Count per Location
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: region_code
+            key: region_code
+        fields:
+          - name: location
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN
