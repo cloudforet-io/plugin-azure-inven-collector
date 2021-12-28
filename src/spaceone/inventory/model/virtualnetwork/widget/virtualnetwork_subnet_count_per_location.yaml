@@ -8,10 +8,10 @@ query:
        path: data.subnets
    - group:
        keys:
-       - name: location
+       - name: name
          key: region_code
        fields:
-        - name: region_code
+        - name: value
           key: region_code
           operator: count
 options:

@@ -6,10 +6,10 @@ query:
   aggregate:
     - group:
         keys:
-          - name: region_code
+          - name: name
             key: region_code
         fields:
-          - name: location
+          - name: value
             key: region_code
             operator: count
 options:

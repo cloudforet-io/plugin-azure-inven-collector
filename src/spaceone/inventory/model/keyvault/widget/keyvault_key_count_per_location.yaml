@@ -8,7 +8,7 @@ query:
         path: data.keys
     - group:
         keys:
-          - name: location
+          - name: name
             key: data.keys.location
         fields:
           - name: value
