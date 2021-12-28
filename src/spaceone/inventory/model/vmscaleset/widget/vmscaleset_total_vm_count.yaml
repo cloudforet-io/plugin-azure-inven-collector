@@ -5,9 +5,7 @@ name: VmScaleSet Total Count per Subscription
 query:
   aggregate:
    - group:
-       fields: data.instance_count
-        - name: value
-          key: account
-          operator: sum
-options:
-  chart_type: COLUMN
+       fields:
+         - name: value
+           key: data.instance_count
+           operator: sum
