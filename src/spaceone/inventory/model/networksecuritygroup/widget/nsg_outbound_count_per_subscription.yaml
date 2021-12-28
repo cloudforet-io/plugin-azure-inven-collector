@@ -8,7 +8,7 @@ query:
         path: data.outbound_security_rules
     - group:
         keys:
-          - name: account
+          - name: name
             key: account
         fields:
           - name: value

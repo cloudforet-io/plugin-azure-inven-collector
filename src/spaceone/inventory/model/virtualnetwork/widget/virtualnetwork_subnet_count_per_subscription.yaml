@@ -8,10 +8,10 @@ query:
        path: data.subnets
    - group:
        keys:
-       - name: subscription
+       - name: name
          key: account
        fields:
-        - name: account
+        - name: value
           key: account
           operator: count
 options:

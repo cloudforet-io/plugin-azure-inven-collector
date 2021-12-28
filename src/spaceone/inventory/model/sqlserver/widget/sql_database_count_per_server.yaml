@@ -8,10 +8,10 @@ query:
         path: data.databases
     - group:
         keys:
-          - name: server_name
+          - name: name
             key: data.databases.server_name
         fields:
-          - name: count
+          - name: value
             key: data.databases.server_name
             operator: count
 options:
