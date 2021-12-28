@@ -8,6 +8,10 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+postgresql_count_per_location_conf = os.path.join(current_dir, 'widget/postgresql_count_per_location.yaml')
+postgresql_count_per_subscription_conf = os.path.join(current_dir, 'widget/postgresql_count_per_subscription.yaml')
+postgresql_count_per_tier_conf = os.path.join(current_dir, 'widget/postgresql_count_per_tier.yaml')
+
 
 cst_postgre_sql_server = CloudServiceTypeResource()
 cst_postgre_sql_server.name = 'PostgreSQLServer'
@@ -141,9 +145,12 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
         SearchField.set(name='Public Network Access', key='data.public_network_access', data_type='string'),
-
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(postgresql_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(postgresql_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(postgresql_count_per_tier_conf))
     ]
-
 )
 
 CLOUD_SERVICE_TYPES = [

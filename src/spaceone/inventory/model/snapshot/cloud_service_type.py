@@ -8,6 +8,11 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+snapshot_count_per_location_conf = os.path.join(current_dir, 'widget/snapshot_count_per_location.yaml')
+snapshot_count_per_resource_group_conf = os.path.join(current_dir, 'widget/snapshot_count_per_resource_group.yaml')
+snapshot_count_per_subscription_conf = os.path.join(current_dir, 'widget/snapshot_count_per_subscription.yaml')
+snapshot_total_size_conf = os.path.join(current_dir, 'widget/snapshot_total_size.yaml')
+
 
 cst_snapshot = CloudServiceTypeResource()
 cst_snapshot.name = 'Snapshot'
@@ -57,8 +62,13 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Network Access Policy', key='data.network_access_policy', data_type='string'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
         SearchField.set(name='Creation Time', key='launched_at', data_type='datetime')
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(snapshot_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(snapshot_count_per_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(snapshot_count_per_subscription_conf)),
+        CardWidget.set(**get_data_from_yaml(snapshot_total_size_conf))
     ]
-
 )
 
 

@@ -62,10 +62,13 @@ class KeyVaultManager(AzureManager):
                     vault_name = key_vault_dict['name']
                     vault_uri = key_vault_dict['properties']['vault_uri']
 
+                    keys = self.list_keys(self, key_vault_conn, resource_group_name, vault_name)
+                    secrets = self.list_secrets(self, key_vault_conn, subscription_id, vault_uri)
+                    certificates = self.list_certificates(self, key_vault_conn, subscription_id, vault_uri)
                     key_vault_dict.update({
-                        'keys': self.list_keys(self, key_vault_conn, resource_group_name, vault_name),
-                        'secrets': self.list_secrets(self, key_vault_conn, subscription_id, vault_uri),
-                        'certificates': self.list_certificates(self, key_vault_conn, subscription_id, vault_uri)
+                        'keys': keys,
+                        'secrets': secrets,
+                        'certificates': certificates
                     })
 
                 # Get name of private connection from ID

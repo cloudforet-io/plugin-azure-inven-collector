@@ -1,13 +1,11 @@
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.libs.schema.resource import ErrorResourceResponse
-from pprint import pprint
 from spaceone.inventory.connector.application_gateway import ApplicationGatewayConnector
 from spaceone.inventory.model.applicationgateway.cloud_service import *
 from spaceone.inventory.model.applicationgateway.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.applicationgateway.data import *
 import time
-import ipaddress
 import logging
 
 _LOGGER = logging.getLogger(__name__)

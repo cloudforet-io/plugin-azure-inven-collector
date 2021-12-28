@@ -1,0 +1,18 @@
+---
+cloud_service_group: Database
+cloud_service_type: SQLServer
+name: SQLServer Failover Count per location
+query:
+  aggregate:
+    - unwind:
+        path: data.failover_groups
+    - group:
+        keys:
+          - name: location
+            key: data.failover_groups.location
+        fields:
+          - name: failover_count
+            key: data.failover_groups.location
+            operator: count
+options:
+  chart_type: COLUMN

@@ -8,6 +8,15 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+sql_database_count_per_location_conf = os.path.join(current_dir, 'widget/sql_database_count_per_location.yaml')
+sql_database_count_per_server_conf = os.path.join(current_dir, 'widget/sql_database_count_per_server.yaml')
+sql_database_count_per_subscription_conf = os.path.join(current_dir, 'widget/sql_database_count_per_subscription.yaml')
+sql_database_count_per_tier_conf = os.path.join(current_dir, 'widget/sql_database_count_per_tier.yaml')
+sql_server_count_per_location_conf = os.path.join(current_dir, 'widget/sql_server_count_per_location.yaml')
+sql_server_count_per_subscription_conf = os.path.join(current_dir, 'widget/sql_server_count_per_subscription.yaml')
+sql_server_failover_count_per_location_conf = os.path.join(current_dir, 'widget/sql_server_failover_count_per_location.yaml')
+sql_server_failover_count_per_server_conf = os.path.join(current_dir, 'widget/sql_server_failover_count_per_server.yaml')
+
 
 cst_sql_server = CloudServiceTypeResource()
 cst_sql_server.name = 'SQLServer'
@@ -206,9 +215,18 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
         SearchField.set(name='Public Network Access', key='data.public_network_access', data_type='string'),
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(sql_server_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_server_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_server_failover_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_server_failover_count_per_server_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_server_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_tier_conf)),
 
     ]
-
 )
 
 CLOUD_SERVICE_TYPES = [

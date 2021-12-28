@@ -1,0 +1,16 @@
+---
+cloud_service_group: Database
+cloud_service_type: AzureCosmosDB
+name: AzureCosmosDB Total Count per Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: account
+            key: account
+        fields:
+          - name: value
+            key: account
+            operator: count
+options:
+  chart_type: DONUT

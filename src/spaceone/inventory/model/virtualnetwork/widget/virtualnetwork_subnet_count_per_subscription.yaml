@@ -1,0 +1,18 @@
+---
+cloud_service_group: Network
+cloud_service_type: VirtualNetwork
+name: Subnet Count per Subscription
+query:
+  aggregate:
+   - unwind:
+       path: data.subnets
+   - group:
+       keys:
+       - name: subscription
+         key: account
+       fields:
+        - name: account
+          key: account
+          operator: count
+options:
+  chart_type: DONUT

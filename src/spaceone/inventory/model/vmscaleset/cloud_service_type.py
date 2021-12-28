@@ -8,6 +8,9 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+vmscaleset_count_per_location_conf = os.path.join(current_dir, 'widget/vmscaleset_count_per_location.yaml')
+vmscaleset_count_per_subscription_conf = os.path.join(current_dir, 'widget/vmscaleset_count_per_subscription.yaml')
+vmscaleset_total_vm_count_conf = os.path.join(current_dir, 'widget/vmscaleset_total_vm_count.yaml')
 
 cst_vm_scale_set = CloudServiceTypeResource()
 cst_vm_scale_set.name = 'VmScaleSet'
@@ -77,6 +80,11 @@ cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
         SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
         SearchField.set(name='Location', key='data.location', data_type='string'),
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(vmscaleset_count_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(vmscaleset_count_per_subscription_conf)),
+        CardWidget.set(**get_data_from_yaml(vmscaleset_total_vm_count_conf))
     ]
 
 )
