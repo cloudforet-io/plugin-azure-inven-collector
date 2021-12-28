@@ -8,10 +8,10 @@ query:
        path: data.network_interfaces
    - group:
        keys:
-       - name: location
+       - name: name
          key: data.network_interfaces.location
        fields:
-        - name: count
+        - name: value
           key: data.network_interfaces.location
           operator: count
 options:

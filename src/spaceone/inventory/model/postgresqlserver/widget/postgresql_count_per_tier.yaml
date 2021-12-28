@@ -6,7 +6,7 @@ query:
   aggregate:
     - group:
         keys:
-          - name: state
+          - name: name
             key: data.user_visible_state
         fields:
           - name: value

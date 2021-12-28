@@ -6,10 +6,10 @@ query:
   aggregate:
     - group:
         keys:
-          - name: tier
+          - name: name
             key: data.sku.tier
         fields:
-          - name: count
+          - name: value
             key: data.sku.tier
             operator: count
 options:
