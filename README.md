@@ -52,6 +52,15 @@ You should insert information about account in SpaceONE's **Service Account** in
 	* `Client ID`
 ---
 
+## Azure Service Endpoint (in use)
+
+ There is an endpoints used to collect Azure resources information.
+
+<pre>
+https://management.azure.com
+</pre>
+
+
 ## Authentication Overview
 Registered service account on SpaceONE must have certain permissions to collect cloud service data 
 Please, set authentication privilege for followings:
