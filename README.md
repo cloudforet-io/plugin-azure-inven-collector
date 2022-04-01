@@ -1,4 +1,4 @@
-<h1 align="center">Microsoft AZure Cloud Service Collector</h1>  
+<h1 align="center">Microsoft Azure Cloud Service Collector</h1>  
 
 <br/>  
 <div align="center" style="display:flex;">  
