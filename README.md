@@ -1,6 +1,14 @@
-# plugin-azure-cloud-services
+<h1 align="center">Microsoft Zure Cloud Service Collector</h1>  
 
-![Microsoft Azure Cloud Services](https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg)
+<br/>  
+<div align="center" style="display:flex;">  
+  <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
+  <p> 
+    <br>
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.2.14-blue.svg?cacheSeconds=2592000"  />    
+    <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
+  </p> 
+</div>  
 **Plugin to collect Microsoft Azure Cloud Services**
 
 
@@ -60,6 +68,32 @@ You should insert information about account in SpaceONE's **Service Account** in
 https://management.azure.com
 </pre>
 
+---
+
+### Service list
+
+The following is a list of services being collected and service code information.
+
+|No.|Service name|Service Code|
+|---|------|---|
+|1|Virtual Disk|Microsoft.Compute/disks|
+|2|Storage Account|Microsoft.Storage/storageAccounts|
+|3|Snapshot|Microsoft.Compute/snapshots|
+|4|VM ScaleSet|Microsoft.Compute/virtualMachineScaleSets|
+|5|Azure Costmos DB|Microsoft.DocumentDB/databaseAccounts|
+|6|MySQL Server|Microsoft.DBforMySQL/servers|
+|7|PostgreSQL Server|Microsoft.DBforPostgreSQL/servers|
+|8|SQL Database|Microsoft.Sql/servers/databases|
+|9|SQL Server|Microsoft.Sql/servers|
+|10|Virtual Network|Microsoft.Network/virtualNetworks|
+|11|Load Balancer|Microsoft.Network/loadBalancers|
+|12|Application Gateway|Microsoft.Network/applicationGateways|
+|13|NAT Gateway|Microsoft.Network/natGateways|
+|14|Network Security Group|Microsoft.Network/networkSecurityGroups|
+|15|Public IP Address|Microsoft.Network/publicIPAddresses|
+|16|Azure Key Vault|Microsoft.KeyVault/vaults|
+
+---
 
 ## Authentication Overview
 Registered service account on SpaceONE must have certain permissions to collect cloud service data 
