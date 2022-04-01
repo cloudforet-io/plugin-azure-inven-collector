@@ -1,4 +1,4 @@
-<h1 align="center">Microsoft Zure Cloud Service Collector</h1>  
+<h1 align="center">Microsoft AZure Cloud Service Collector</h1>  
 
 <br/>  
 <div align="center" style="display:flex;">  
@@ -70,7 +70,7 @@ https://management.azure.com
 
 ---
 
-### Service list
+## Service list
 
 The following is a list of services being collected and service code information.
 
