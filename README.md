@@ -8,8 +8,9 @@
     <img alt="Version"  src="https://img.shields.io/badge/version-1.2.14-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
-</div>  
-**Plugin to collect Microsoft Azure Cloud Services**
+</div> 
+
+#### Plugin to collect Microsoft Azure Cloud Services
 
 
 > SpaceONE's [plugin-azure-cloud-services](https://github.com/spaceone-dev/plugin-azure-cloud-services) is a convenient tool to 
