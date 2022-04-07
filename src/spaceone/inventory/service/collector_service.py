@@ -91,10 +91,6 @@ class CollectorService(BaseService):
         subscription_manager: SubscriptionManager = self.locator.get_manager('SubscriptionManager')
         return subscription_manager.get_subscription_info(params)
 
-    def _match_execute_manager(self, cloud_service_groups):
-        return [CLOUD_SERVICE_GROUP_MAP[_cloud_service_group] for _cloud_service_group in cloud_service_groups
-                if _cloud_service_group in CLOUD_SERVICE_GROUP_MAP]
-
     def _get_target_execute_manger(self, options):
         if 'cloud_service_types' in options:
             execute_managers = self._match_execute_manager(options['cloud_service_types'])
@@ -102,3 +98,8 @@ class CollectorService(BaseService):
             execute_managers = list(CLOUD_SERVICE_GROUP_MAP.values())
 
         return execute_managers
+
+    @staticmethod
+    def _match_execute_manager(cloud_service_groups):
+        return [CLOUD_SERVICE_GROUP_MAP[_cloud_service_group] for _cloud_service_group in cloud_service_groups
+                if _cloud_service_group in CLOUD_SERVICE_GROUP_MAP]
