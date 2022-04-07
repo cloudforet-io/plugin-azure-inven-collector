@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.2.14-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.2.15-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
-> Latest stable version : 1.2.14
+> Latest stable version : 1.2.15
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -743,9 +743,34 @@ Update plugin through spacectl command with the created yaml file.
 > spacectl exec update_plugin inventory.Collector -f update_collector.yaml
 </code></pre>
 
+### Service Code Mapper : Convert service code in Cloud Service Type what you want.
+
+If `service_code_mappers` is added in options, You can replace the service code specified in the cloud service type.
+The service code set by default can be checked in the Service List item of this document.
+
+The `service_code_mappers` items that can be specified are as follows.
+
+<pre>
+<code>
+{
+    "service_code_mappers": {
+        "Microsoft.Compute/disks": "Azure Virtual Disk",
+        "Microsoft.Storage/storageAccounts": "Azure Storage Account",
+    }
+}
+</code>
+</pre>
+
+---
+
 ## Release Note
+
+### Ver 1.2.15
+* [Add feature to convert service_code to what you want using options](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/186)
+
 ### Ver 1.2.14
 * [Add feature for Usage Overview of cloud services](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/174)
+
 ### Ver 1.2.13
 * [Add feature to specify the Cloud Service Type and collect it.](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/162)
 * [Add fields to cloud services model(account, instance_type, instance_size, launched_at)](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/159) 
