@@ -101,8 +101,16 @@ class AzureManager(BaseManager):
         connector: AzureConnector = self.locator.get_connector('AzureConnector', secret_data=secret_data)
         connector.verify()
 
-    def collect_cloud_service_type(self):
+    def collect_cloud_service_type(self, params):
+        options = params.get('options', {})
+
         for cloud_service_type in self.cloud_service_types:
+            if 'service_code_mappers' in options:
+                svc_code_maps = options['service_code_mappers']
+                if getattr(cloud_service_type.resource, 'service_code') and \
+                        cloud_service_type.resource.service_code in svc_code_maps:
+                    cloud_service_type.resource.service_code = svc_code_maps[cloud_service_type.resource.service_code]
+
             yield cloud_service_type
 
     def collect_cloud_service(self, params) -> list:
@@ -112,7 +120,7 @@ class AzureManager(BaseManager):
         total_resources = []
 
         try:
-            total_resources.extend(self.collect_cloud_service_type())
+            total_resources.extend(self.collect_cloud_service_type(params))
             resources, error_resources = self.collect_cloud_service(params)
 
             total_resources.extend(resources)
