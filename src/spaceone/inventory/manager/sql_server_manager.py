@@ -124,7 +124,7 @@ class SqlServerManager(AzureManager):
                     'account': sql_server_data.subscription_id
                 })
                 sql_server_responses.append(SqlServerResponse({'resource': sql_servers_resource}))
-                _LOGGER.debug(f'[SQL SERVER INFO] {sql_servers_resource.to_primitive()}')
+                # _LOGGER.debug(f'[SQL SERVER INFO] {sql_servers_resource.to_primitive()}')
 
                 for sql_database in sql_server_dict.get('databases', []):
                     sql_database_data = Database(sql_database, strict=False)
@@ -161,36 +161,37 @@ class SqlServerManager(AzureManager):
 
         for database in databases:
             database_dict = self.convert_nested_dictionary(self, database)
-            if database_dict.get('sku') is not None:
+            if database_dict.get('sku'):
                 if database_dict.get('name') != 'master':  # No pricing tier for system database
                     database_dict.update({
                         'pricing_tier_display': self.get_pricing_tier_display(database_dict['sku']),
                         'service_tier_display': database_dict['sku'].get('tier')
                     })
 
-            if database_dict.get('id') is not None:  # Get Subscription ID
+            if db_id := database_dict.get('id'):
                 database_dict.update({
-                    'server_name': database_dict['id'].split('/')[8],
-                    'subscription_id': database_dict['id'].split('/')[2],
-                    'resource_group': database_dict['id'].split('/')[4]
+                    'server_name': db_id.split('/')[8],
+                    'subscription_id': db_id.split('/')[2],
+                    'resource_group': db_id.split('/')[4]
                 })
 
-            if database_dict.get('kind') is not None:  # Get Compute Tier
+            if compute_tier := database_dict.get('kind'):
                 database_dict.update({
-                    'compute_tier': self.get_db_compute_tier(database_dict['kind'])
+                    'compute_tier': self.get_db_compute_tier(compute_tier)
                 })
 
-            if database_dict.get('max_size_bytes') is not None:
+            if database_dict.get('max_size_bytes'):
                 database_dict.update({
                     'max_size_gb': database_dict['max_size_bytes'] / 1073741824
                 })
 
             # Get Sync Groups by databases
             database_dict.update({
-                'sync_group': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name, database_dict['name']),
+                'sync_group': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name,
+                                                               database_dict['name']),
             })
 
-            if database_dict['sync_group'] is not None:
+            if database_dict['sync_group']:
                 database_dict.update({
                     'sync_group_display': self.get_sync_group_display(self, database_dict['sync_group'])
                 })
@@ -200,8 +201,8 @@ class SqlServerManager(AzureManager):
                 'sync_agent': self.get_sync_agent_by_servers(self, sql_servers_conn, rg_name, server_name)
             })
 
-            if database_dict['sync_agent'] is not None:
-                 database_dict.update({
+            if database_dict['sync_agent']:
+                database_dict.update({
                     'sync_agent_display': self.get_sync_agent_display(self, database_dict['sync_agent'])
                 })
             '''
@@ -331,7 +332,8 @@ class SqlServerManager(AzureManager):
     @staticmethod
     def list_encryption_protectors(self, sql_servers_conn, rg_name, server_name):
         encryption_protectors_list = list()
-        encryption_protectors_obj = sql_servers_conn.list_encryption_protectors(resource_group=rg_name, server_name=server_name)
+        encryption_protectors_obj = sql_servers_conn.list_encryption_protectors(resource_group=rg_name,
+                                                                                server_name=server_name)
 
         for encryption_protector in encryption_protectors_obj:
             encryption_protectors_dict = self.convert_nested_dictionary(self, encryption_protector)
@@ -341,15 +343,15 @@ class SqlServerManager(AzureManager):
 
     @staticmethod
     def get_per_db_settings(per_database_settings_dict):
-        per_db_settings = str(per_database_settings_dict['min_capacity']) + " - " + str(
-            per_database_settings_dict['max_capacity']) + "vCores"
+        per_db_settings = f"{str(per_database_settings_dict['min_capacity'])} - " \
+                          f"{str(per_database_settings_dict['max_capacity'])} vCores"
         return per_db_settings
 
     @staticmethod
     def get_pricing_tier_display(sku_dict):
         if sku_dict.get('capacity') is not None:
-            pricing_tier = str(sku_dict['tier']) + " : " + str(sku_dict['family']) + " , " + str(
-                sku_dict['capacity']) + " vCores"
+            pricing_tier = f'{str(sku_dict["tier"])} : {str(sku_dict["family"])} , {str(sku_dict["capacity"])} vCores'
+
         return pricing_tier
 
     @staticmethod
@@ -453,10 +455,10 @@ class SqlServerManager(AzureManager):
 
     @staticmethod
     def get_db_compute_tier(kind):
-        if kind.find('serverless') < 0:
-            compute_tier = 'Provisioned'
-        else:
+        if 'serverless' in kind:
             compute_tier = 'Serverless'
+        else:
+            compute_tier = 'Provisioned'
 
         return compute_tier
 
@@ -474,8 +476,7 @@ class SqlServerManager(AzureManager):
     def get_sync_group_display(self, sync_group_list):
         sync_group_display_list = list()
         for sync_group in sync_group_list:
-            sync_display = sync_group['name'] + " / " + sync_group['conflict_resolution_policy'] + " / " + sync_group[
-                'sync_state']
+            sync_display = f"{sync_group['name']} / {sync_group['conflict_resolution_policy']} / {sync_group['sync_state']}"
             sync_group_display_list.append(sync_display)
 
         return sync_group_display_list
@@ -495,7 +496,7 @@ class SqlServerManager(AzureManager):
     def get_sync_agent_display(self, sync_agent_list):
         sync_agent_display_list = list()
         for sync_agent in sync_agent_list:
-            sync_display = sync_agent['name'] + " / " + sync_agent['state']
+            sync_display = f"{sync_agent['name']} / {sync_agent['state']}"
             sync_agent_display_list.append(sync_display)
 
         return sync_agent_display_list
