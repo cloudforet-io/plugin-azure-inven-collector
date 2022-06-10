@@ -56,7 +56,7 @@ class CollectorService(BaseService):
         """
 
         start_time = time.time()
-
+        secret_data = params.get('secret_data', {})
         params.update({
             'subscription_info': self.get_subscription_info(params)
         })

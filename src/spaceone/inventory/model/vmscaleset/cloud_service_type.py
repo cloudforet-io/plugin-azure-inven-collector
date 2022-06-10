@@ -25,18 +25,19 @@ cst_vm_scale_set.tags = {
 
 cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
-        # TextDyField.data_source('Status', 'data.'), (x)
-        TextDyField.data_source('Instances', 'data.instance_count'),
+        TextDyField.data_source('Instance Count', 'data.instance_count'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Default', 'data.virtual_machine_scale_set_power_state.profiles.capacity.default'),
         TextDyField.data_source('Max', 'data.virtual_machine_scale_set_power_state.profiles.capacity.maximum'),
         TextDyField.data_source('Min', 'data.virtual_machine_scale_set_power_state.profiles.capacity.minimum'),
         TextDyField.data_source('Azure Spot Eviction Policy', 'data.virtual_machine_profile.eviction_policy'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
 
         # is_optional fields
+        TextDyField.data_source('Subscription ID', 'account', options={
+            'is_optional': True
+        }),
         TextDyField.data_source('Virtual network/subnet', 'data.virtual_machine_profile.network_profile.primary_vnet', options={
             'is_optional': True
         }),
@@ -69,17 +70,26 @@ cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Upgrade Policy', 'data.upgrade_policy.mode', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Fault Domains', 'data.platform_fault_domain_count', options={
+        TextDyField.data_source('Fault Domains (count)', 'data.platform_fault_domain_count', options={
             'is_optional': True
         })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Default', key='data.virtual_machine_scale_set_power_state.profiles.capacity.default'),
+        SearchField.set(name='Max', key='data.virtual_machine_scale_set_power_state.profiles.capacity.maximum'),
+        SearchField.set(name='Min', key='data.virtual_machine_scale_set_power_state.profiles.capacity.minimum'),
+        SearchField.set(name='Azure Spot Eviction Policy', key='data.virtual_machine_profile.eviction_policy'),
+        SearchField.set(name='Azure Spot Max Price', key='data.virtual_machine_profile.billing_profile.max_price'),
+        SearchField.set(name='Termination Notification', key='data.virtual_machine_profile.terminate_notification_display'),
+        SearchField.set(name='OverProvisioning', key='data.overprovision', data_type='boolean'),
+        SearchField.set(name='Proximity Placement Group', key='data.proximity_placement_group_display'),
+        SearchField.set(name='Automatic Repairs', key='data.automatic_repairs_policy.enabled', data_type='boolean'),
+        SearchField.set(name='Upgrade Policy', key='data.upgrade_policy.mode'),
+        SearchField.set(name='Fault Domains (count)', key='data.platform_fault_domain_count', data_type='integer'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(vmscaleset_count_per_location_conf)),

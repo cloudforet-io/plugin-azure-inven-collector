@@ -32,7 +32,6 @@ cst_disk.tags = {
 
 cst_disk._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Storage Account Type', 'data.sku.name'),
         SizeField.data_source('Size', 'data.size'),
         EnumDyField.data_source('Disk State', 'data.disk_state', default_state={
@@ -43,7 +42,7 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Owner', 'data.managed_by'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
 
         # is_optional - Default
         TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
@@ -62,12 +61,8 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Max Shares', 'data.max_shares', options={
             'is_optional': True
         })
-
-
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='data.name', data_type='string'),
         SearchField.set(name='Tier', key='data.tier', data_type='string'),
         SearchField.set(name='Subscription ID', key='data.subscription_id', data_type='string'),
         SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),

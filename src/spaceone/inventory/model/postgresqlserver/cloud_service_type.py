@@ -26,7 +26,6 @@ cst_postgre_sql_server.tags = {
 
 cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Type', 'instance_type'),
         EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
             'safe': ['Ready'],
@@ -38,15 +37,10 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Location', 'data.location', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subscription', 'data.subscription_name', options={
+        TextDyField.data_source('Subscription Name', 'data.subscription_name', options={
             'is_optional': True
         }),
         TextDyField.data_source('Subscription ID', 'account', options={
-            'is_optional': True
-        }),
-
-        # is_optional fields - Default
-        TextDyField.data_source('Resource ID', 'data.id', options={
             'is_optional': True
         }),
         TextDyField.data_source('Server Name', 'data.fully_qualified_domain_name', options={
@@ -90,7 +84,7 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         }),
 
         # VNet Rules
-        TextDyField.data_source('Rule Name', 'data.virtual_network_rules.name', options={
+        TextDyField.data_source('Virtual Network Rule Name', 'data.virtual_network_rules.name', options={
             'is_optional': True
         }),
         TextDyField.data_source('Virtual Network', 'data.virtual_network_rules.virtual_network_name_display', options={
@@ -104,10 +98,10 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Replicas Name', 'data.replicas.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Location', 'data.replicas.location', options={
+        TextDyField.data_source('Replicas Location', 'data.replicas.location', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Master Server Name', 'data.replicas.master_server_name', options={
+        TextDyField.data_source('Replicas Master Server Name', 'data.replicas.master_server_name', options={
             'is_optional': True
         }),
         TextDyField.data_source('Active Directory Name', 'data.server_administrators.name', options={
@@ -135,16 +129,24 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
             'is_optional': True
         })
     ],
-
-
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Public Network Access', key='data.public_network_access', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Server Name', key='data.fully_qualified_domain_name'),
+        SearchField.set(name='Admin Username', key='data.administrator_login'),
+        SearchField.set(name='PostgreSQL Version', key='data.version'),
+        SearchField.set(name='Performance Configuration Tier', key='instance_type'),
+        SearchField.set(name='Performance Configuration Name', key='data.sku.name'),
+        SearchField.set(name='Performance Configuration Capacity', key='data.sku.capacity', data_type='integer'),
+        SearchField.set(name='SSL Enforce Status', key='data.ssl_enforcement'),
+        SearchField.set(name='SSL Enforcement', key='data.ssl_enforcement'),
+        SearchField.set(name='Public Network Access', key='data.public_network_access'),
+        SearchField.set(name='TLS Setting', key='data.minimal_tls_version'),
+        SearchField.set(name='Firewall Rule Name', key='data.firewall_rules.name'),
+        SearchField.set(name='Firewall Rule Start IP', key='data.firewall_rules.start_ip_address'),
+        SearchField.set(name='Firewall Rule End IP', key='data.firewall_rules.end_ip_address'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(postgresql_count_per_location_conf)),

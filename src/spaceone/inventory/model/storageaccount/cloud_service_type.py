@@ -24,9 +24,7 @@ cst_storage_account.tags = {
 
 cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Type', 'data.type'),
-        TextDyField.data_source('Kind', 'data.type'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'account'),
@@ -43,7 +41,7 @@ cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Replication', 'data.sku.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Account Kind', 'data.kind', options={
+        TextDyField.data_source('Kind of Account', 'data.kind', options={
             'is_optional': True
         }),
         TextDyField.data_source('Provisioning State', 'data.provisioning_state', options={
@@ -117,13 +115,39 @@ cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
         })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Name', key='data.type', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string')
+        SearchField.set(name='Type', key='data.type'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='State of Primary', key='data.status_of_primary'),
+        SearchField.set(name='Performance Tier', key='instance_type'),
+        SearchField.set(name='Access Tier', key='data.access_tier'),
+        SearchField.set(name='Replication', key='data.sku.name'),
+        SearchField.set(name='Kind of Account', key='data.kind'),
+        SearchField.set(name='Provisioning State', key='data.provisioning_state'),
+        SearchField.set(name='Is Public', key='data.allow_blob_public_access', data_type='boolean'),
+        SearchField.set(name='Virtual Network', key='data.network_acls.virtual_networks'),
+        SearchField.set(name='Firewall Address Range', key='data.network_acls.firewall_address_range'),
+        SearchField.set(name='Resource Instances', key='data.network_acls.resource_access_rules_display'),
+        SearchField.set(name='Exceptions', key='data.network_acls.bypass'),
+        SearchField.set(name='Routing Preference', key='data.routing_preference_display'),
+        SearchField.set(name='Publish Microsoft Endpoints', key='data.routing_preference.publish_microsoft_endpoints'),
+        SearchField.set(name='Publish Internet Endpoints', key='data.routing_preference.publish_internet_endpoints'),
+        SearchField.set(name='Blob', key='data.primary_endpoints.blob'),
+        SearchField.set(name='Queue', key='data.primary_endpoints.queue'),
+        SearchField.set(name='Table', key='data.primary_endpoints.table'),
+        SearchField.set(name='File', key='data.primary_endpoints.file'),
+        SearchField.set(name='Web', key='data.primary_endpoints.web'),
+        SearchField.set(name='DFS', key='data.primary_endpoints.dfs'),
+        SearchField.set(name='Microsoft Endpoints', key='data.routing_preference.publish_microsoft_endpoints'),
+        SearchField.set(name='Internet Endpoints', key='data.routing_preference.publish_internet_endpoints'),
+        SearchField.set(name='Container Name', key='data.container_item.name'),
+        SearchField.set(name='Container Last Modified', key='data.container_item.last_modified_time', data_type='datetime'),
+        SearchField.set(name='Container Public Access Level', key='data.container_item.public_access'),
+        SearchField.set(name='Container Lease State', key='data.container_item.lease_state'),
+        SearchField.set(name='Primary Location', key='data.primary_location'),
+        SearchField.set(name='Secondary Location', key='data.secondary_location'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(storage_account_count_per_location_conf)),

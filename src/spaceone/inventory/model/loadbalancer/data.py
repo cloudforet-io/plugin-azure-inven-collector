@@ -777,7 +777,6 @@ class LoadBalancerSku(Model):
 class LoadBalancer(Model):
     name = StringType()
     id = StringType()
-    type = StringType()
     subscription_id = StringType()
     subscription_name = StringType()
     resource_group = StringType()

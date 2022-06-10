@@ -27,7 +27,6 @@ cst_snapshot.tags = {
 
 cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Source disk', 'data.source_disk_name'),
         TextDyField.data_source('Snapshot type', 'data.incremental_display'),
         SizeField.data_source('Source disk size', 'data.disk_size_bytes'),
@@ -48,19 +47,17 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
         })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Storage Account Type', key='instance_type', data_type='string'),
-        SearchField.set(name='Snapshot Type', key='data.incremental_display', data_type='string'),
-        SearchField.set(name='Disk Size (Bytes)', key='data.disk_size_bytes', data_type='integer'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Storage Account Type', key='instance_type'),
+        SearchField.set(name='Snapshot Type', key='data.incremental_display'),
+        SearchField.set(name='Disk Size (Bytes)', key='data.disk_size_bytes'),
         SearchField.set(name='Disk Size (GB)', key='instance_size', data_type='float'),
-        SearchField.set(name='Encryption', key='data.encryption.type_display', data_type='string'),
-        SearchField.set(name='Network Access Policy', key='data.network_access_policy', data_type='string'),
-        SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
+        SearchField.set(name='Encryption', key='data.encryption.type_display'),
+        SearchField.set(name='Network Access Policy', key='data.network_access_policy'),
+        SearchField.set(name='Provisioning State', key='data.provisioning_state'),
         SearchField.set(name='Creation Time', key='launched_at', data_type='datetime')
     ],
     widget=[

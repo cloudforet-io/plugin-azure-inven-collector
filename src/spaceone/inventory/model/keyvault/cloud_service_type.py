@@ -24,22 +24,20 @@ cst_key_vault.tags = {
 
 cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Type', 'instance_type'),
-        TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
         TextDyField.data_source('Subscription ID', 'account'),
 
         # is_optional fields - Public IP Addresses
-        TextDyField.data_source('Name', 'data.public_ip_addresses.name', options={
+        TextDyField.data_source('Public IP Address', 'data.public_ip_addresses.name', options={
             'is_optional': True
         }),
         TextDyField.data_source('Vault URI', 'data.properties.vault_uri', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Sku (Pricing Tier)', 'data.sku.name', options={
+        TextDyField.data_source('SKU (Pricing Tier)', 'data.sku.name', options={
             'is_optional': True
         }),
         TextDyField.data_source('Directory ID', 'data.properties.tenant_id', options={
@@ -51,7 +49,6 @@ cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Purge Protection', 'data.properties.enable_purge_protection', options={
             'is_optional': True
         }),
-
         TextDyField.data_source('Key Name', 'data.keys.name', options={
             'is_optional': True
         }),
@@ -73,7 +70,6 @@ cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Key URI', 'data.keys.key_uri', options={
             'is_optional': True
         }),
-
         TextDyField.data_source('Enable for Azure VM Deployment', 'data.properties.enabled_for_deployment', options={
             'is_optional': True
         }),
@@ -87,25 +83,53 @@ cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
             'is_optional': True
         }),
 
-        TextDyField.data_source('Connection Name', 'data.properties.private_endpoint_connections.name', options={
+        TextDyField.data_source('Private Connection Name', 'data.properties.private_endpoint_connections.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Connection State', 'data.properties.private_endpoint_connections.private_link_service_connection_state.status', options={
+        TextDyField.data_source('Private Connection State', 'data.properties.private_endpoint_connections.private_link_service_connection_state.status', options={
             'is_optional': True
         }),
-
-        TextDyField.data_source('Private Endpoint', 'data.properties.private_endpoint_connections.private_endpoint.id', options={
+        TextDyField.data_source('Private Endpoint ID', 'data.properties.private_endpoint_connections.private_endpoint.id', options={
             'is_optional': True
         }),
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Type', key='instance_type', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string')
+        SearchField.set(name='Type', key='instance_type'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Public IP Address', key='data.public_ip_addresses.name'),
+        SearchField.set(name='Vault URI', key='data.properties.vault_uri'),
+        SearchField.set(name='SKU (Pricing Tier)', key='data.sku.name'),
+        SearchField.set(name='Directory ID', key='data.properties.tenant_id'),
+        SearchField.set(name='Soft-delete', key='data.properties.enable_soft_delete'),
+        SearchField.set(name='Purge Protection', key='data.properties.enable_purge_protection'),
+        SearchField.set(name='Key Name', key='data.keys.name'),
+        SearchField.set(name='Key Type', key='data.keys.type'),
+        SearchField.set(name='Key Location', key='data.keys.location'),
+        SearchField.set(name='Key Status', key='data.keys.attributes.enabled'),
+        SearchField.set(name='Key Expiration Date', key='data.keys.attributes.expires'),
+        SearchField.set(name='Key Creation Date', key='data.keys.attributes.created'),
+        SearchField.set(name='Key URI', key='data.keys.key_uri'),
+        SearchField.set(name='Enable for Azure VM Deployment',
+                        key='data.properties.enabled_for_deployment',
+                        data_type='boolean'),
+        SearchField.set(name='Enable for Disk Encryption',
+                        key='data.properties.enabled_for_disk_encryption',
+                        data_type='boolean'),
+        SearchField.set(name='Enable for Template Deployment',
+                        key='data.properties.enabled_for_template_deployment',
+                        data_type='boolean'),
+        SearchField.set(name='Enable RBAC Authorization',
+                        key='data.properties.enable_rbac_authorization',
+                        data_type='boolean'),
+        SearchField.set(name='Private Endpoint Connection Name',
+                        key='data.properties.private_endpoint_connections.name'),
+        SearchField.set(name='Private Endpoint Connection State',
+                        key='data.properties.private_endpoint_connections.private_link_service_connection_state.status'),
+        SearchField.set(name='Private Endpoint ID',
+                        key='data.properties.private_endpoint_connections.private_endpoint.id'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(key_vault_count_per_location_conf)),
