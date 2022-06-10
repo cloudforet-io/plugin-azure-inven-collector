@@ -24,12 +24,10 @@ cst_load_balancer.tags = {
 
 cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
-        # is_optional fields- Default
-        TextDyField.data_source('Resource ID', 'data.id', options={
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
+        TextDyField.data_source('Subscription ID', 'data.subscription_id', options={
             'is_optional': True
         }),
         TextDyField.data_source('SKU', 'instance_type', options={
@@ -38,7 +36,6 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
         ListDyField.data_source('Health Probe', 'data.probes_display', options={
             'delimiter': '<br>',
             'is_optional': True
-
         }),
         ListDyField.data_source('Load Balancing Rule', 'data.load_balancing_rules_display', options={
             'delimiter': '<br>',
@@ -90,34 +87,34 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
             'is_optional': True
         }),
         # is_optional fields - Load Balancing Rules
-        TextDyField.data_source('Load Balancing Rule Name', 'data.load_balancing_rules.name', options={
+        TextDyField.data_source('LB Rule Name', 'data.load_balancing_rules.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule Frontend IP Address', 'data.load_balancing_rules.frontend_ip_configuration_display', options={
+        TextDyField.data_source('LB Rule Frontend IP Address', 'data.load_balancing_rules.frontend_ip_configuration_display', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule Protocol', 'data.load_balancing_rules.protocol', options={
+        TextDyField.data_source('LB Rule Protocol', 'data.load_balancing_rules.protocol', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule Frontend Port', 'data.load_balancing_rules.frontend_port', options={
+        TextDyField.data_source('LB Rule Frontend Port', 'data.load_balancing_rules.frontend_port', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule Backend Port', 'data.load_balancing_rules.backend_port', options={
+        TextDyField.data_source('LB Rule Backend Port', 'data.load_balancing_rules.backend_port', options={
             'is_optional': True
         }),
-        ListDyField.data_source('Load Balancing Rule Backend Pool', 'data.load_balancing_rules.backend_address_pool_display', options={
+        ListDyField.data_source('LB Rule Backend Pool', 'data.load_balancing_rules.backend_address_pool_display', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule Session Persistence', 'data.load_balancing_rules.load_distribution_display', options={
+        TextDyField.data_source('LB Rule Session Persistence', 'data.load_balancing_rules.load_distribution_display', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule Idle Timeout (minutes)', 'data.load_balancing_rules.idle_timeout_in_minutes', options={
+        TextDyField.data_source('LB Rule Idle Timeout (minutes)', 'data.load_balancing_rules.idle_timeout_in_minutes', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule Floating IP', 'data.load_balancing_rules.enable_floating_ip', options={
+        TextDyField.data_source('LB Rule Floating IP', 'data.load_balancing_rules.enable_floating_ip', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Load Balancing Rule TCP Reset', 'data.load_balancing_rules.enable_tcp_reset', options={
+        TextDyField.data_source('LB Rule TCP Reset', 'data.load_balancing_rules.enable_tcp_reset', options={
             'is_optional': True
         }),
         # is_optional fields - Inbound NAT Rules
@@ -151,23 +148,54 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Inbound NAT Rule Target Port', 'data.inbound_nat_rules.backend_port', options={
             'is_optional': True
         })
-
-
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Load Balancer Type', key='instance_type', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Load Balancer Type', key='instance_type'),
+        SearchField.set(name='SKU', key='instance_type'),
+        SearchField.set(name='Health Probe', key='data.probes_display'),
+        SearchField.set(name='Load Balancing Rule', key='data.load_balancing_rules_display'),
+        SearchField.set(name='NAT Rules', key='data.inbound_nat_rules_display'),
+        SearchField.set(name='Private IP Address', key='data.private_ip_address_display'),
+        SearchField.set(name='Frontend Name', key='data.frontend_ip_configurations.name'),
+        SearchField.set(name='Frontend IP Address', key='data.frontend_ip_configurations.private_ip_address'),
+        SearchField.set(name='Frontend IP Version', key='data.frontend_ip_configurations.private_ip_address_version'),
+        SearchField.set(name='Frontend IP Used By', key='data.frontend_ip_configurations_used_by_display'),
+        SearchField.set(name='Backend Pool Name', key='data.backend_address_pools.name'),
+        SearchField.set(name='Backend Pool ID', key='data.backend_address_pools.id'),
+        SearchField.set(name='Health Probe Name', key='data.probes.name'),
+        SearchField.set(name='Health Probes Protocol', key='data.probes.protocol'),
+        SearchField.set(name='Health Probes Port', key='data.probes.port', data_type='integer'),
+        SearchField.set(name='Health Probes Interval', key='data.probes.interval_in_seconds', data_type='integer'),
+        SearchField.set(name='Health Probes Unhealthy Threshold', key='data.probes.number_of_probes'),
+        SearchField.set(name='LB Rule Name', key='data.load_balancing_rules.name'),
+        SearchField.set(name='LB Rule Frontend IP Address', key='data.load_balancing_rules.frontend_ip_configuration_display'),
+        SearchField.set(name='LB Rule Protocol', key='data.load_balancing_rules.protocol'),
+        SearchField.set(name='LB Rule Frontend Port', key='data.load_balancing_rules.frontend_port', data_type='integer'),
+        SearchField.set(name='LB Rule Backend Port', key='data.load_balancing_rules.backend_port', data_type='integer'),
+        SearchField.set(name='LB Rule Backend Pool', key='data.load_balancing_rules.backend_address_pool_display'),
+        SearchField.set(name='LB Rule Session Persistence', key='data.load_balancing_rules.load_distribution_display'),
+        SearchField.set(name='LB Rule Idle Timeout (minutes)', key='data.load_balancing_rules.idle_timeout_in_minutes', data_type='integer'),
+        SearchField.set(name='LB Rule Floating IP', key='data.load_balancing_rules.enable_floating_ip'),
+        SearchField.set(name='LB Rule TCP Reset', key='data.load_balancing_rules.enable_tcp_reset'),
+        SearchField.set(name='Inbound NAT Rules Name', key='data.inbound_nat_rules.name'),
+        SearchField.set(name='Inbound NAT Rule Protocol', key='data.inbound_nat_rules.protocol'),
+        SearchField.set(name='Inbound NAT Rule Idle timeout (minutes)', key='data.inbound_nat_rules.idle_timeout_in_minutes', data_type='integer'),
+        SearchField.set(name='Inbound NAT Rule TCP Reset', key='data.load_balancing_rules.enable_tcp_reset'),
+        SearchField.set(name='Inbound NAT Rule Port', key='data.inbound_nat_rules.frontend_port', data_type='integer'),
+        SearchField.set(name='Inbound NAT Rule Target Virtual Machine', key='data.inbound_nat_rules.target_virtual_machine'),
+        SearchField.set(name='Inbound NAT Rule Network IP Configuration', key='data.inbound_nat_rules.frontend_ip_configuration_display'),
+        SearchField.set(name='Inbound NAT Rule Port mapping', key='data.inbound_nat_rules.port_mapping_display'),
+        SearchField.set(name='Inbound NAT Rule Floating IP', key='data.inbound_nat_rules.enable_floating_ip'),
+        SearchField.set(name='Inbound NAT Rule Target Port', key='data.inbound_nat_rules.backend_port', data_type='integer'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(loadbalancer_backendpool_vm_count_per_location_conf)),
         ChartWidget.set(**get_data_from_yaml(loadbalancer_count_per_location_conf)),
         ChartWidget.set(**get_data_from_yaml(loadbalancer_count_per_subscription_conf))
-
     ]
 )
 

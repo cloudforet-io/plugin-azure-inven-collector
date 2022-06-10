@@ -24,40 +24,32 @@ cst_nat_gateway.tags = {
 
 cst_nat_gateway._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
-        TextDyField.data_source('Resource ID', 'data.id'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
         TextDyField.data_source('Subscription ID', 'account'),
-        TextDyField.data_source('Subnets', 'data.subnets_count'),
-        TextDyField.data_source('Public IP Addresses', 'data.public_ip_prefixes_count'),
-        TextDyField.data_source('Public IP Prefixes', 'data.public_ip_prefixes_count'),
-
+        TextDyField.data_source('Subnets (count)', 'data.subnets_count'),
+        TextDyField.data_source('Public IP Addresses (count)', 'data.public_ip_prefixes_count'),
+        TextDyField.data_source('Public IP Prefixes (count)', 'data.public_ip_prefixes_count'),
         # is_optional fields - Public IP Addresses
-        TextDyField.data_source('Name', 'data.public_ip_addresses.name', options={
+        TextDyField.data_source('Public IP Name', 'data.public_ip_addresses.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('IP Address', 'data.public_ip_addresses.ip_address', options={
+        TextDyField.data_source('Public IP Address', 'data.public_ip_addresses.ip_address', options={
             'is_optional': True
         }),
-        TextDyField.data_source('DNS Name', 'data.public_ip_addresses.dns_settings.domain_name_label', options={
+        TextDyField.data_source('Public DNS Name', 'data.public_ip_addresses.dns_settings.domain_name_label', options={
             'is_optional': True
         }),
-
         # is_optional fields - Public IP Prefixes
-        TextDyField.data_source('Name', 'data.public_ip_prefixes.name', options={
+        TextDyField.data_source('Public IP Prefix Name', 'data.public_ip_prefixes.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('IP Prefix', 'data.public_ip_prefixes.ip_prefix', options={
+        TextDyField.data_source('Public IP Prefix', 'data.public_ip_prefixes.ip_prefix', options={
             'is_optional': True
         }),
-
         # is_optional fields - Subnets
         TextDyField.data_source('Subnet Name', 'data.subnets.name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Subnet Address ', 'data.subnets.address_prefix', options={
             'is_optional': True
         }),
         TextDyField.data_source('Subnet Addresses', 'data.subnets.address_prefixes', options={
@@ -68,12 +60,18 @@ cst_nat_gateway._metadata = CloudServiceTypeMeta.set_meta(
         })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string')
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Public IP Name', key='data.public_ip_addresses.name'),
+        SearchField.set(name='Public IP Address', key='data.public_ip_addresses.ip_address'),
+        SearchField.set(name='Public DNS Name', key='data.public_ip_addresses.dns_settings.domain_name_label'),
+        SearchField.set(name='Public IP Prefix Name', key='data.public_ip_prefixes.name'),
+        SearchField.set(name='Public IP Prefix', key='data.public_ip_prefixes.ip_prefix'),
+        SearchField.set(name='Subnet Name', key='data.subnets.name'),
+        SearchField.set(name='Subnet Addresses', key='data.subnets.address_prefixes'),
+        SearchField.set(name='Virtual Network', key='data.subnets.virtual_network')
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(nat_gateway_count_per_location_conf)),

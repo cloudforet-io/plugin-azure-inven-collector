@@ -26,7 +26,6 @@ cst_mysql_server.tags = {
 
 cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Type', 'instance_type'),
         EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
             'safe': ['Ready'],
@@ -35,28 +34,8 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         }),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
         TextDyField.data_source('Subscription ID', 'account'),
-
-        # is_optional fields - MySQL
-        TextDyField.data_source('Name', 'name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Type', 'instance_type', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Resource Group', 'data.resource_group', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Location', 'data.location', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Subscription', 'data.subscription_name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Subscription ID', 'account', options={
-            'is_optional': True
-        }),
         TextDyField.data_source('Server Admin Login Name', 'data.administrator_login', options={
             'is_optional': True
         }),
@@ -75,10 +54,10 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Firewall Rule Name', 'data.firewall_rules.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Start IP', 'data.firewall_rules.start_ip_address', options={
+        TextDyField.data_source('Firewall Rule Start IP', 'data.firewall_rules.start_ip_address', options={
             'is_optional': True
         }),
-        TextDyField.data_source('End IP', 'data.firewall_rules.end_ip_address', options={
+        TextDyField.data_source('Firewall Rule End IP', 'data.firewall_rules.end_ip_address', options={
             'is_optional': True
         }),
         TextDyField.data_source('Allow Access To Azure Services', 'data.allow_azure_services_access', options={
@@ -88,9 +67,6 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
             'is_optional': True
         }),
         TextDyField.data_source('Minimum TLS Version', 'data.minimal_tls_version', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Tier', 'instance_type', options={
             'is_optional': True
         }),
         TextDyField.data_source('Compute Generation', 'data.sku.family', options={
@@ -107,13 +83,26 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Type', key='instance_type', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string')
+        SearchField.set(name='Type', key='instance_type'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Server Admin Login Name', key='data.administrator_login'),
+        SearchField.set(name='MySQL Version', key='data.version'),
+        SearchField.set(name='Performance Configuration (Tier)', key='instance_type'),
+        SearchField.set(name='Performance Configuration (Name)', key='data.sku.name'),
+        SearchField.set(name='SSL Enforce Status', key='data.ssl_enforcement'),
+        SearchField.set(name='Firewall Rule Name', key='data.firewall_rules.name'),
+        SearchField.set(name='Firewall Rule Start IP', key='data.firewall_rules.start_ip_address'),
+        SearchField.set(name='Firewall Rule End IP', key='data.firewall_rules.end_ip_address'),
+        SearchField.set(name='Allow Access To Azure Services', key='data.allow_azure_services_access'),
+        SearchField.set(name='Enforce SSL Connection', key='data.ssl_enforcement'),
+        SearchField.set(name='Minimum TLS Version', key='data.minimal_tls_version'),
+        SearchField.set(name='Compute Generation', key='data.sku.family'),
+        SearchField.set(name='vCore', key='data.sku.capacity', data_type='integer'),
+        SearchField.set(name='Storage', key='data.storage_profile.storage_gb', data_type='integer'),
+        SearchField.set(name='Backup Retention Period', key='data.storage_profile.backup_retention_days'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(mysql_server_count_per_location_conf)),

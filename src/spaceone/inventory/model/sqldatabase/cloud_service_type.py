@@ -21,7 +21,6 @@ cst_sql_database.tags = {
 
 cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Database Name', 'name'),
         EnumDyField.data_source('Status', 'data.status', default_state={
             'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring',
                      'Resuming', 'Scaling', 'Standby'],
@@ -39,12 +38,6 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
 
         # is_optional fields - Default
-        TextDyField.data_source('Resource ID', 'data.id', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Server Name', 'data.server_name', options={
-            'is_optional': True
-        }),
         TextDyField.data_source('Elastic Pool', 'data.elastic_pool_id', options={
             'is_optional': True
         }),
@@ -103,16 +96,35 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Log Analytics Workspace', 'data.diagnostic_settings_resource.workspace_id', options={
             'is_optional': True
         })
-
     ],
     search=[
-        SearchField.set(name='Database ID', key='data.database_id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Tier', key='instance_type', data_type='string'),
-        SearchField.set(name='Server Name', key='data.managed_by', data_type='string')
+        SearchField.set(name='Database ID', key='data.database_id'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Tier', key='instance_type'),
+        SearchField.set(name='Server Name', key='data.managed_by'),
+        SearchField.set(name='Status', key='data.status'),
+        SearchField.set(name='Replication Partner Server', key='data.replication_link.partner_server'),
+        SearchField.set(name='Pricing Tier', key='data.pricing_tier_display'),
+        SearchField.set(name='Elastic Pool', key='data.elastic_pool_id'),
+        SearchField.set(name='Earliest Restore Point', key='data.earliest_restore_date'),
+        SearchField.set(name='Collation', key='data.collation'),
+        SearchField.set(name='Server Admin Login', key='data.administrator_login'),
+        SearchField.set(name='Service Tier', key='data.service_tier_display'),
+        SearchField.set(name='Compute Tier', key='data.compute_tier'),
+        SearchField.set(name='Compute Hardware', key='data.sku.family'),
+        SearchField.set(name='Licence Type', key='data.license_type'),
+        SearchField.set(name='vCores', key='data.current_sku.capacity', data_type='integer'),
+        SearchField.set(name='Data max size', key='instance_size', data_type='integer'),
+        SearchField.set(name='Zone Redundant', key='data.zone_redundant'),
+        SearchField.set(name='Sync Groups', key='data.sync_group_display'),
+        SearchField.set(name='Sync Agents', key='data.sync_agent_display'),
+        SearchField.set(name='Diagnostic Setting Name', key='data.diagnostic_settings_resource.name'),
+        SearchField.set(name='Diagnostic Setting Storage Account', key='data.diagnostic_settings_resource.storage_account_id'),
+        SearchField.set(name='Event Hub', key='data.diagnostic_settings_resource.event_hub_name'),
+        SearchField.set(name='Log Analytics Workspace', key='data.diagnostic_settings_resource.workspace_id'),
+        SearchField.set(name='Creation Date', key='launched_at', data_type='datetime'),
     ]
 
 )

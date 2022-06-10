@@ -25,7 +25,6 @@ cst_cosmos_db.tags = {
 
 cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
@@ -33,9 +32,6 @@ cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Subscription ID', 'data.subscription_id'),
 
         # is_optional field
-        TextDyField.data_source('Name ', 'data.name', options={
-            'is_optional': True
-        }),
         TextDyField.data_source('Backup Policy', 'data.backup_policy.type', options={
             'is_optional': True
         }),
@@ -45,7 +41,7 @@ cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
         ListDyField.data_source('Write Locations', 'data.write_locations.location_name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('URI', 'data.document_endpoint', options={
+        TextDyField.data_source('Document Endpoint', 'data.document_endpoint', options={
             'is_optional': True
         }),
         TextDyField.data_source('Capacity Mode', 'data.capability_display', options={
@@ -99,32 +95,55 @@ cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
             'is_optional': True
         }),
         # is_optional - cors
-        TextDyField.data_source('Connection Name', 'data.cors.name', options={
+        TextDyField.data_source('Private Endpoint Connection Name', 'data.cors.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Connection State', 'data.cors.private_link_service_connection_state.status', options={
+        TextDyField.data_source('Private Endpoint State', 'data.cors.private_link_service_connection_state.status', options={
             'is_optional': True
         }),
         TextDyField.data_source('Private Endpoint', 'data.cors.private_endpoint.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Description', 'data.cors.private_link_service_connection_state.description', options={
+        TextDyField.data_source('COR Private Link Description', 'data.cors.private_link_service_connection_state.description', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Database', 'name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Database ID', 'id', options={
-            'is_optional': True
-        })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string')
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Backup Policy', key='data.backup_policy.type'),
+        SearchField.set(name='Read Locations', key='data.read_locations.location_name'),
+        SearchField.set(name='Write Locations', key='data.write_locations.location_name'),
+        SearchField.set(name='Document Endpoint', key='data.document_endpoint'),
+        SearchField.set(name='Capacity Mode', key='data.capability_display'),
+        SearchField.set(name='Enable Automatic Failover', key='data.enable_automatic_failover', data_type='boolean'),
+        SearchField.set(name='Enable Free Tier', key='data.enable_free_tier', data_type='boolean'),
+        SearchField.set(name='Enable Analytical Storage', key='data.enable_analytical_storage', data_type='boolean'),
+        SearchField.set(name='Backup Policy', key='data.backup_policy.type'),
+        SearchField.set(name='CORS', key='data.cors_display'),
+        SearchField.set(name='Default Consistency',
+                        key='data.consistency_policy.default_consistency_level'),
+        SearchField.set(name='Backup Interval (Minutes)',
+                        key='data.backup_policy.periodic_mode_properties.backup_interval_in_minutes',
+                        data_type='integer'),
+        SearchField.set(name='Backup Retention (Hours)',
+                        key='data.backup_policy.periodic_mode_properties.backup_retention_interval_in_hours'),
+        SearchField.set(name='Backup storage redundancy',
+                        key='data.backup_policy.periodic_mode_properties.additional_properties.backupStorageRedundancy'),
+        SearchField.set(name='Enable Public Network Access',
+                        key='data.public_network_access'),
+        SearchField.set(name='Virtual Networks',
+                        key='data.virtual_network_display'),
+        SearchField.set(name='Private Endpoint Connection Name',
+                        key='data.private_endpoint_connections.name'),
+        SearchField.set(name='Private Endpoint State',
+                        key='data.private_endpoint_connections.private_link_service_connection_state.status'),
+        SearchField.set(name='Private Endpoint Name',
+                        key='data.private_endpoint_connections.name'),
+        SearchField.set(name='Private Endpoint',
+                        key='data.private_endpoint_connections.name'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(cosmosdb_count_per_location_conf)),

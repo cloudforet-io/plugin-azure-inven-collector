@@ -31,19 +31,15 @@ cst_sql_server.tags = {
 
 cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         EnumDyField.data_source('Status', 'data.state', default_state={
             'safe': ['Ready'],
             'warning': ['Disabled']
         }),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
 
         # is_optional fields - Default
-        TextDyField.data_source('Resource ID', 'data.id', options={
-            'is_optional': True
-        }),
         TextDyField.data_source('Subscription ID', 'account', options={
             'is_optional': True
         }),
@@ -61,7 +57,7 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Failover Group ID', 'data.failover_groups.id', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Failover Group', 'data.failover_groups.name', options={
+        TextDyField.data_source('Failover Group Name', 'data.failover_groups.name', options={
             'is_optional': True
         }),
         TextDyField.data_source('Failover Groups Primary Server', 'data.failover_groups.primary_server', options={
@@ -131,7 +127,7 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         DateTimeDyField.data_source('Deleted Databases Creation Time (UTC)', 'data.deleted_databases.creation_date', options={
             'is_optional': True
         }),
-        TextDyField.data_source(' Deleted Databases Edition Time (UTC)', 'data.deleted_databases.edition', options={
+        TextDyField.data_source('Deleted Databases Edition Time (UTC)', 'data.deleted_databases.edition', options={
             'is_optional': True
         }),
 
@@ -190,7 +186,7 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Encryption Key Type', 'data.encryption_protectors.server_key_type', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Encryption Uri', 'data.encryption_protectors.uri', options={
+        TextDyField.data_source('Encryption URI', 'data.encryption_protectors.uri', options={
             'is_optional': True
         }),
 
@@ -205,16 +201,56 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
             'is_optional': True
         })
     ],
-
-
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Public Network Access', key='data.public_network_access', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Server Admin', key='data.administrator_login'),
+        SearchField.set(name='Active Directory Admin', key='data.azure_ad_admin_name'),
+        SearchField.set(name='Server Name', key='data.fully_qualified_domain_name'),
+        SearchField.set(name='Failover Group ID', key='data.failover_groups.id'),
+        SearchField.set(name='Failover Group Name', key='data.failover_groups.name'),
+        SearchField.set(name='Failover Groups Primary Server', key='data.failover_groups.primary_server'),
+        SearchField.set(name='Failover Groups Secondary Server', key='data.failover_groups.secondary_server'),
+        SearchField.set(name='Read/Write Failover Policy', key='data.failover_groups.failover_policy_display'),
+        SearchField.set(name='Grace Period (minutes)', key='data.failover_groups.grace_period_display', data_type='integer'),
+        SearchField.set(name='Backup Database', key='data.databases.name'),
+        SearchField.set(name='Backup Earliest PITR Restore Point (UTC)', key='data.databases.earliest_restore_date', data_type='datetime'),
+        SearchField.set(name='Backup Available LTR backups', key='data.databases.long_term_retention_backup_resource_id'),
+        SearchField.set(name='Active Directory Admin', key='data.azure_ad_admin_name'),
+        SearchField.set(name='Elastic Pool Name', key='data.elastic_pools.name'),
+        SearchField.set(name='Elastic Pool Resource Group', key='data.elastic_pools.resource_group_display'),
+        SearchField.set(name='Per DB Settings', key='data.elastic_pools.per_db_settings_display'),
+        SearchField.set(name='Pricing Tier', key='data.elastic_pools.pricing_tier_display'),
+        SearchField.set(name='# of DBs', key='data.elastic_pools.number_of_databases', data_type='integer'),
+        SearchField.set(name='Elastic Pool Unit', key='data.elastic_pools.unit_display'),
+        SearchField.set(name='Elastic Pool Server Name', key='data.elastic_pools.server_name_display'),
+        SearchField.set(name='Elastic Pool Resource Configuration', key='data.elastic_pools.pricing_tier_display'),
+        SearchField.set(name='Elastic Pool Maximum Storage Size', key='data.elastic_pools.max_size_gb'),
+        SearchField.set(name='Deleted Database', key='data.deleted_databases.database_name'),
+        SearchField.set(name='Deletion Time (UTC)', key='data.deleted_databases.deletion_date', data_type='datetime'),
+        SearchField.set(name='Deleted Databases Creation Time (UTC)', key='data.deleted_databases.creation_date', data_type='datetime'),
+        SearchField.set(name='Deleted Databases Edition Time (UTC)', key='data.deleted_databases.edition', data_type='datetime'),
+        SearchField.set(name='Audit Log Destination', key='data.server_auditing_settings.storage_endpoint'),
+        SearchField.set(name='Audit Storage Account ID', key='data.server_auditing_settings.storage_account_subscription_id'),
+        SearchField.set(name='Minimum TLS Version', key='data.minimal_tls_version'),
+        SearchField.set(name='Connection Policy', key='data.server_auditing_settings.name'),
+        SearchField.set(name='Allow Azure Services and Resources to Access this server', key='data.server_auditing_settings.is_azure_monitor_target_enabled'),
+        SearchField.set(name='Firewall Rule Name', key='data.firewall_rules.name'),
+        SearchField.set(name='Firewall Start IP', key='data.firewall_rules.start_ip_address'),
+        SearchField.set(name='Firewall End IP', key='data.firewall_rules.end_ip_address'),
+        SearchField.set(name='Private Endpoint Connection ID', key='data.private_endpoint_connections.connection_id'),
+        SearchField.set(name='Private Endpoint State', key='data.private_endpoint_connections.status'),
+        SearchField.set(name='Private Endpoint Name', key='data.private_endpoint_connections.private_endpoint_name'),
+        SearchField.set(name='Request / Response Message', key='data.private_endpoint_connections.description'),
+        SearchField.set(name='Transparent Data Encryption', key='data.encryption_protectors.kind'),
+        SearchField.set(name='Encryption Key', key='data.encryption_protectors.server_key_name'),
+        SearchField.set(name='Encryption Key Type', key='data.encryption_protectors.server_key_type'),
+        SearchField.set(name='Encryption URI', key='data.encryption_protectors.uri'),
+        SearchField.set(name='Tuning Type', key='data.server_automatic_tuning.options.tuning_type'),
+        SearchField.set(name='Tuning Desired State', key='data.server_automatic_tuning.options.desired_state'),
+        SearchField.set(name='Tuning Current State', key='data.server_automatic_tuning.options.actual_state'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(sql_server_count_per_subscription_conf)),

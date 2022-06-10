@@ -26,54 +26,53 @@ cst_network_security_group.tags = {
 
 cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'data.name'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'account'),
         TextDyField.data_source('Subscription Name', 'data.subscription_name'),
         TextDyField.data_source('Virtual Machines', 'data.virtual_machines_display'),
         # is_optional fields - Inbound Security Rules
-        TextDyField.data_source('Inbound Security Rule Priority', 'data.inbound_security_rules.priority', options={
+        TextDyField.data_source('Inbound Rule Priority', 'data.inbound_security_rules.priority', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Name', 'data.inbound_security_rules.name', options={
+        TextDyField.data_source('Inbound Rule Name', 'data.inbound_security_rules.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Port', 'data.inbound_security_rules.destination_port_range', options={
+        TextDyField.data_source('Inbound Rule Port', 'data.inbound_security_rules.destination_port_range', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Protocol', 'data.inbound_security_rules.protocol', options={
+        TextDyField.data_source('Inbound Rule Protocol', 'data.inbound_security_rules.protocol', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Source', 'data.inbound_security_rules.source_address_prefix', options={
+        TextDyField.data_source('Inbound Rule Source', 'data.inbound_security_rules.source_address_prefix', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Destination', 'data.inbound_security_rules.destination_address_prefix', options={
+        TextDyField.data_source('Inbound Rule Destination', 'data.inbound_security_rules.destination_address_prefix', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Inbound Security Rule Action', 'data.inbound_security_rules.access', options={
+        TextDyField.data_source('Inbound Rule Action', 'data.inbound_security_rules.access', options={
             'is_optional': True
         }),
         # is_optional fields - Outbound Security Rules
-        TextDyField.data_source('Priority', 'data.outbound_security_rules.priority', options={
+        TextDyField.data_source('Outbound Rule Priority', 'data.outbound_security_rules.priority', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Name', 'data.outbound_security_rules.name', options={
+        TextDyField.data_source('Outbound Rule Name', 'data.outbound_security_rules.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Port', 'data.outbound_security_rules.destination_port_range', options={
+        TextDyField.data_source('Outbound Rule Port', 'data.outbound_security_rules.destination_port_range', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Protocol', 'data.outbound_security_rules.protocol', options={
+        TextDyField.data_source('Outbound Rule Protocol', 'data.outbound_security_rules.protocol', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Source', 'data.outbound_security_rules.source_address_prefix', options={
+        TextDyField.data_source('Outbound Rule Source', 'data.outbound_security_rules.source_address_prefix', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Destination', 'data.outbound_security_rules.destination_address_prefix', options={
+        TextDyField.data_source('Outbound Rule Destination', 'data.outbound_security_rules.destination_address_prefix', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Action', 'data.outbound_security_rules.access', options={
+        TextDyField.data_source('Outbound Rule Action', 'data.outbound_security_rules.access', options={
             'is_optional': True
         }),
         # is_optional_field - Network Interfaces
@@ -98,13 +97,31 @@ cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
         })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
-        SearchField.set(name='Virtual Machines', key='data.virtual_machines_display', data_type='string')
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='Virtual Machines', key='data.virtual_machines_display'),
+        SearchField.set(name='Inbound Rule Priority', key='data.inbound_security_rules.priority', data_type='integer'),
+        SearchField.set(name='Inbound Rule Name', key='data.inbound_security_rules.name'),
+        SearchField.set(name='Inbound Rule Port', key='data.inbound_security_rules.destination_port_range'),
+        SearchField.set(name='Inbound Rule Protocol', key='data.inbound_security_rules.protocol'),
+        SearchField.set(name='Inbound Rule Source', key='data.inbound_security_rules.source_address_prefix'),
+        SearchField.set(name='Inbound Rule Destination', key='data.inbound_security_rules.destination_address_prefix'),
+        SearchField.set(name='Inbound Rule Action', key='data.inbound_security_rules.access'),
+        SearchField.set(name='Outbound Rule Priority', key='data.outbound_security_rules.priority', data_type='integer'),
+        SearchField.set(name='Outbound Rule Name', key='data.outbound_security_rules.name'),
+        SearchField.set(name='Outbound Rule Port', key='data.outbound_security_rules.destination_port_range'),
+        SearchField.set(name='Outbound Rule Protocol', key='data.outbound_security_rules.protocol'),
+        SearchField.set(name='Outbound Rule Source', key='data.outbound_security_rules.source_address_prefix'),
+        SearchField.set(name='Outbound Rule Destination', key='data.outbound_security_rules.destination_address_prefix'),
+        SearchField.set(name='Outbound Rule Action', key='data.outbound_security_rules.access'),
+        SearchField.set(name='Network Interface Name', key='data.network_interfaces.name'),
+        SearchField.set(name='Network Interface Public IP Address', key='data.network_interfaces.public_ip_address'),
+        SearchField.set(name='Network Interface Private IP Address', key='data.network_interfaces.private_ip_address'),
+        SearchField.set(name='Subnet Name', key='data.subnets.name'),
+        SearchField.set(name='Subnet Address Range', key='data.subnets.address_prefix'),
+        SearchField.set(name='Virtual Network', key='data.subnets.virtual_network'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(nsg_count_per_location_conf)),

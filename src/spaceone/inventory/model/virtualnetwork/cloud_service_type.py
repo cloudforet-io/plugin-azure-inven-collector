@@ -27,15 +27,11 @@ cst_virtual_network.tags = {
 
 cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Name', 'name'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
-        TextDyField.data_source('Subscription', 'data.subscription_name'),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
 
         # is_optional fields - Default
-        TextDyField.data_source('Resource ID', 'data.id', options={
-            'is_optional': True
-        }),
         TextDyField.data_source('Subscription ID', 'account', options={
             'is_optional': True
         }),
@@ -64,16 +60,13 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Subnet Name', 'data.subnets.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('IP Address Prefix', 'data.subnets.address_prefix', options={
+        ListDyField.data_source('Subnet IP Prefixes', 'data.subnets.address_prefixes', options={
             'is_optional': True
         }),
-        ListDyField.data_source('IP Address Prefixes', 'data.subnets.address_prefixes', options={
+        TextDyField.data_source('Subnet Delegated To', 'data.subnets.delegations.name', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Delegated To', 'data.subnets.delegations.name', options={
-            'is_optional': True
-        }),
-        TextDyField.data_source('Security Group', 'data.subnets.network_security_group.name', options={
+        TextDyField.data_source('Subnet Network Security Group', 'data.subnets.network_security_group.name', options={
             'is_optional': True
         }),
 
@@ -100,13 +93,13 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         }),
 
         # is optional fields - Service Endpoints
-        TextDyField.data_source('Service', 'data.service_endpoints.service', options={
+        TextDyField.data_source('Service Endpoint', 'data.service_endpoints.service', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Subnet', 'data.service_endpoints.subnet', options={
+        TextDyField.data_source('Service Endpoint Subnet', 'data.service_endpoints.subnet', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Locations', 'data.service_endpoints.locations', options={
+        TextDyField.data_source('Service Endpoint Locations', 'data.service_endpoints.locations', options={
             'is_optional': True
         }),
 
@@ -119,12 +112,20 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         })
     ],
     search=[
-        SearchField.set(name='ID', key='data.id', data_type='string'),
-        SearchField.set(name='Name', key='name', data_type='string'),
-        SearchField.set(name='Subscription ID', key='account', data_type='string'),
-        SearchField.set(name='Subscription Name', key='data.subscription_name', data_type='string'),
-        SearchField.set(name='Resource Group', key='data.resource_group', data_type='string'),
-        SearchField.set(name='Location', key='data.location', data_type='string'),
+        SearchField.set(name='Subscription ID', key='account'),
+        SearchField.set(name='Subscription Name', key='data.subscription_name'),
+        SearchField.set(name='Resource Group', key='data.resource_group'),
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='DNS servers', key='data.dhcp_options.dns_servers'),
+        SearchField.set(name='Resource GUID', key='data.resource_guid'),
+        SearchField.set(name='Address Space', key='data.address_space.address_prefixes'),
+        SearchField.set(name='Connected Device', key='data.connected_devices.device'),
+        SearchField.set(name='Connected Device Type', key='data.connected_devices.type'),
+        SearchField.set(name='Connected Subnet', key='data.connected_devices.name'),
+        SearchField.set(name='Subnet Name', key='data.subnets.name'),
+        SearchField.set(name='Subnet IP Prefixes', key='data.subnets.address_prefixes'),
+        SearchField.set(name='Subnet Delegated To', key='data.subnets.delegations.name'),
+        SearchField.set(name='Subnet Network Security Group', key='data.subnets.network_security_group.name'),
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(virtualnetwork_count_per_subscription_conf)),

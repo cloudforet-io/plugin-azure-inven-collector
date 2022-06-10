@@ -385,7 +385,6 @@ class Server(Model):
     id = StringType()
     identity = ModelType(ResourceIdentity, serialize_when_none=False)
     location = StringType()
-    type = StringType()
     subscription_id = StringType()
     subscription_name = StringType()
     resource_group = StringType()
