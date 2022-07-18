@@ -1,6 +1,7 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, UTCDateTimeType, \
+    FloatType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -133,20 +134,17 @@ class SqlDatabaseGetResults(Model):
     id = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    tags = ModelType(Tags)
+    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
-class DatabaseAccountGetResults(Model):  # Main Class
+class DatabaseAccountGetResults(AzureCloudService):  # Main Class
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     identity = ModelType(ManagedServiceIdentity, serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     kind = StringType(choices=('GlobalDocumentDB', 'MongoDB', 'Parse'), serialize_when_none=False)
     name = StringType(default='-', serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
     api_properties = ModelType(ApiProperties, serialize_when_none=False)
     backup_policy = ModelType(PeriodicModeBackupPolicy, serialize_when_none=False)
     capabilities = ListType(ModelType(Capability), serialize_when_none=False)
@@ -184,11 +182,10 @@ class DatabaseAccountGetResults(Model):  # Main Class
     sql_databases = ListType(ModelType(SqlDatabaseGetResults), serialize_when_none=False)
     write_locations = ListType(ModelType(Location), serialize_when_none=False)
     system_data = ModelType(SystemData, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
-    account = StringType(serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

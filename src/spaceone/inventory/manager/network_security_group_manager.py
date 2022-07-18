@@ -1,13 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.network_security_group import NetworkSecurityGroupConnector
 from spaceone.inventory.model.networksecuritygroup.cloud_service import *
 from spaceone.inventory.model.networksecuritygroup.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.networksecuritygroup.data import *
-import time
-import ipaddress
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -50,12 +48,10 @@ class NetworkSecurityGroupManager(AzureManager):
             try:
                 network_security_group_dict = self.convert_nested_dictionary(self, network_security_group)
                 network_security_group_id = network_security_group_dict['id']
+                inbound_rules = []
+                outbound_rules = []
 
                 if network_security_group_dict.get('security_rules') is not None:
-                    # update security rules
-                    inbound_rules = []
-                    outbound_rules = []
-
                     # update custom security rules
                     inbound, outbound = self.split_security_rules(network_security_group_dict, 'security_rules')
                     for ib in inbound:
@@ -108,6 +104,7 @@ class NetworkSecurityGroupManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(network_security_group_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': network_security_group_id}
                 })
 
                 network_security_group_data = NetworkSecurityGroup(network_security_group_dict, strict=False)
@@ -121,7 +118,7 @@ class NetworkSecurityGroupManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(network_security_group_data['location'])
-                _LOGGER.debug(f'[NETWORK SECURITY GROUP INFO] {network_security_group_resource.to_primitive()}')
+                # _LOGGER.debug(f'[NETWORK SECURITY GROUP INFO] {network_security_group_resource.to_primitive()}')
                 network_security_group_responses.append(NetworkSecurityGroupResponse({'resource': network_security_group_resource}))
 
             except Exception as e:

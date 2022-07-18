@@ -1,6 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType, DictType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, DictType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -61,8 +61,6 @@ class ServiceEndpointPolicyDefinition(Model):
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     service = StringType(serialize_when_none=False)
     service_resources = ListType(StringType)
-
-
 
 
 class UserAssignedIdentity(Model):
@@ -230,7 +228,8 @@ class SasPolicy(Model):
 
 
 class Sku(Model):
-    name = StringType(choices=('Premium_LRS', 'Premium_ZRS', 'Standard_GRS', 'Standard_GZRS', 'Standard_LRS' ,'Standard_RAGRS', 'Standard_RAGZRS', 'Standard_ZRS'), serialize_when_none=False)
+    name = StringType(choices=('Premium_LRS', 'Premium_ZRS', 'Standard_GRS', 'Standard_GZRS', 'Standard_LRS',
+                               'Standard_RAGRS', 'Standard_RAGZRS', 'Standard_ZRS'), serialize_when_none=False)
     tier = StringType(choices=('Premium', 'Standard'), serialize_when_none=False)
 
 
@@ -241,23 +240,21 @@ class ContainerItem(Model):
     lease_state = StringType(serialize_when_none=False)
 
 
-class StorageAccount(Model):
+class StorageAccount(AzureCloudService):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
     name = StringType(default='-', serialize_when_none=False)
     container_item = ListType(ModelType(ContainerItem), serialize_when_none=False)
     identity = ModelType(Identity, serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
     is_public = StringType(serialize_when_none=False)
     access_tier = StringType(choices=('Cool', 'Hot'), serialize_when_none=False)
     allow_blob_public_access = BooleanType(serialize_when_none=False)
     allow_cross_tenant_replication = BooleanType(serialize_when_none=False)
     allow_shared_key_access = BooleanType(serialize_when_none=False)
-    azure_files_identity_based_authentication = ModelType(AzureFilesIdentityBasedAuthentication, serialize_when_none=False)
+    azure_files_identity_based_authentication = ModelType(AzureFilesIdentityBasedAuthentication,
+                                                          serialize_when_none=False)
     blob_range_status = ModelType(BlobRestoreStatus, serialize_when_none=False)
     creation_time = DateTimeType(serialize_when_none=False)
     custom_domain = ModelType(CustomDomain, serialize_when_none=False)
@@ -268,7 +265,7 @@ class StorageAccount(Model):
     is_nfs_v3_enabled = BooleanType(serialize_when_none=False)
     key_creation_time = ModelType(KeyCreationTime, serialize_when_none=False)
     key_policy = ModelType(KeyPolicy, serialize_when_none=False)
-    large_file_shares_state = StringType(choices=('Enabled','Disabled'), serialize_when_none=False)
+    large_file_shares_state = StringType(choices=('Enabled', 'Disabled'), serialize_when_none=False)
     last_geo_failover_time = StringType(serialize_when_none=False)
     minimum_tls_version = StringType(choices=('TLS1_0', 'TLS1_1', 'TLS1_2'), serialize_when_none=False)
     network_rule_set = ModelType(NetworkRuleSet, serialize_when_none=False)

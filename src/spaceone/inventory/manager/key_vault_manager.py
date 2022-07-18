@@ -1,12 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.key_vault import KeyVaultConnector
 from spaceone.inventory.model.keyvault.cloud_service import *
 from spaceone.inventory.model.keyvault.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.keyvault.data import *
-from spaceone.inventory.error.custom import *
-import time
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,6 +51,7 @@ class KeyVaultManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(key_vault_id),  # parse resource_group from ID
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': key_vault_id}
                 })
 
                 resource_group_name = key_vault_dict.get('resource_group', '')

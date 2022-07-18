@@ -1,5 +1,7 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, TimedeltaType, \
+    FloatType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -80,7 +82,8 @@ class RecurrentSchedule(Model):
 
 
 class Recurrence(Model):
-    frequency = StringType(choices= ('Day', 'Hour', 'Minute', 'Month', 'None', 'Second', 'Week', 'Year'), serialize_when_none=False)
+    frequency = StringType(choices=('Day', 'Hour', 'Minute', 'Month', 'None', 'Second', 'Week', 'Year'),
+                           serialize_when_none=False)
     schedule = ModelType(RecurrentSchedule)
 
 
@@ -640,12 +643,9 @@ class VirtualMachineScaleSetPowerState(Model):
     tags = ModelType(Tags, serialize_when_none=False)
 
 
-class VirtualMachineScaleSet(Model):
+class VirtualMachineScaleSet(AzureCloudService):
     id = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
     autoscale_setting_resource_collection = ModelType(AutoscaleSettingResourceCollection, serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     identity = ModelType(VirtualMachineScaleSetIdentity, serialize_when_none=False)
     instance_count = IntType(serialize_when_none=False)
@@ -669,7 +669,6 @@ class VirtualMachineScaleSet(Model):
     virtual_machine_scale_set_power_state = ListType(ModelType(VirtualMachineScaleSetPowerState))
     zone_balance = BooleanType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
-    tags = ListType(ModelType(Tags), default=[], serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
     vm_instances = ListType(ModelType(VirtualMachineScaleSetVM), serialize_when_none=False)

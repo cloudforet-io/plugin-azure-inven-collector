@@ -1,6 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -164,22 +164,18 @@ class KeyItem(Model):
     tags = ModelType(Tags, serialize_when_none=False)
 
 
-class KeyVault(Model):  # Main class
+class KeyVault(AzureCloudService):  # Main class
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     properties = ModelType(VaultProperties, serialize_when_none=False)
     keys = ListType(ModelType(KeyItem), serialize_when_none=False)
     secrets = ListType(ModelType(SecretItem), serialize_when_none=False)
     certificates = ListType(ModelType(CertificateItem), serialize_when_none=False)
     key_count = IntType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
-    account = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)
 
     def reference(self):

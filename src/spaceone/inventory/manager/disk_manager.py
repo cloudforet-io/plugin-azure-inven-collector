@@ -1,16 +1,11 @@
-from spaceone.inventory.libs.manager import AzureManager
-from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.libs.schema.resource import ErrorResourceResponse
-from spaceone.inventory.model.disk import *
-from spaceone.inventory.model.disk.cloud_service import *
-from spaceone.inventory.connector.disk import DiskConnector
-from spaceone.inventory.connector.subscription import SubscriptionConnector
-from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.core.utils import *
-from datetime import datetime
 import time
 import logging
-import json
+from spaceone.core.utils import *
+from spaceone.inventory.libs.manager import AzureManager
+from spaceone.inventory.libs.schema.base import ReferenceModel
+from spaceone.inventory.model.disk.cloud_service import *
+from spaceone.inventory.connector.disk import DiskConnector
+from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -68,6 +63,7 @@ class DiskManager(AzureManager):
                     'size': disk_dict['disk_size_bytes'],
                     'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
                                                           disk_dict['disk_m_bps_read_write']),
+                    'azure_monitor': {'resource_id': disk_id}
                 })
 
                 # Update Network access policy to user-friendly words
@@ -106,8 +102,7 @@ class DiskManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(disk_data['location'])
-
-                _LOGGER.debug(f'[DISK INFO: {disk_resource.to_primitive()}]')
+                # _LOGGER.debug(f'[DISK INFO: {disk_resource.to_primitive()}]')
                 disk_responses.append(DiskResponse({'resource': disk_resource}))
                 _LOGGER.debug(f'** Disk Finished {time.time() - start_time} Seconds **')
 

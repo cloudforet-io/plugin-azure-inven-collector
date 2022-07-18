@@ -1,6 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -15,8 +15,6 @@ class SubResource(Model):
 '''
 START OF REF CLASSES
 '''
-
-
 class NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties(Model):
     fqdns = ListType(StringType, serialize_when_none=False)
     group_id = StringType(serialize_when_none=False)
@@ -58,8 +56,6 @@ class NetworkInterfaceIPConfigurationRef(Model):  # ip configuration in a networ
 '''
 END OF REF CLASSES
 '''
-
-
 class AddressSpace(Model):
     address_count = IntType(serialize_when_none=False, default=0)
     address_prefixes = ListType(StringType, default=['-'])
@@ -412,9 +408,6 @@ class NatGatewaySku(Model):
     name = StringType(choices=('Standard', None), serialize_when_none=False)
 
 
-
-
-
 class PrivateLinkServiceConnectionState(Model):
     actions_required = StringType(serialize_when_none=False)
     description = StringType(serialize_when_none=False)
@@ -554,7 +547,7 @@ class PublicIPAddress(Model):
     ip_tags = ListType(ModelType(IpTag), serialize_when_none=False)
     # linked_public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
     migration_phase = StringType(choices=('Abort', 'Commit', 'Committed', 'None', 'Prepare'), serialize_when_none=False)
-    nat_gateway = StringType(serialize_when_none=False) # Change to NAT id
+    nat_gateway = StringType(serialize_when_none=False)     # Change to NAT id
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     public_ip_address_version = StringType(choices=('IPv4', 'IPv6'), serialize_when_none=False)
     public_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
@@ -564,17 +557,6 @@ class PublicIPAddress(Model):
     tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
-
-
-class IPConfiguration(Model):
-    etag = StringType(serialize_when_none=False)
-    id = StringType(serialize_when_none=False)
-    name = StringType(serialize_when_none=False)
-    private_ip_address = StringType(serialize_when_none=False)
-    private_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
-    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
-    public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
-    subnet = StringType(serialize_when_none=False)
 
 
 class ApplicationSecurityGroup(Model):
@@ -616,12 +598,6 @@ class NetworkInterfaceDnsSettings(Model):
     internal_dns_name_label = StringType(serialize_when_none=False)
     internal_domain_name_suffix = StringType(serialize_when_none=False)
     internal_fqdn = StringType(serialize_when_none=False)
-
-
-class NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties(Model):
-    fqdns = ListType(StringType, serialize_when_none=False)
-    group_id = StringType(serialize_when_none=False)
-    required_member_name = StringType(serialize_when_none=False)
 
 
 class NetworkInterfaceIPConfiguration(Model):  # ip configuration in a network interface
@@ -897,13 +873,10 @@ class VirtualNetworkPeering(Model):
     type = StringType(serialize_when_none=False)
 
 
-class NatGateway(Model):  # Main class
+class NatGateway(AzureCloudService):  # Main class
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     idle_timeout_in_minutes = IntType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
@@ -915,9 +888,9 @@ class NatGateway(Model):  # Main class
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     subnets_count = IntType(default=0)
     sku = ModelType(NatGatewaySku, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

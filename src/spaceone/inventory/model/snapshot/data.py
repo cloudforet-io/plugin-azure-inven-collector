@@ -1,5 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, FloatType, DateTimeType, IntType, BooleanType
+from schematics.types import ModelType, ListType, StringType, DateTimeType, IntType, BooleanType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Sku(Model):
@@ -57,16 +58,10 @@ class ShareInfoElement(Model):
     vm_uri = StringType(serialize_when_none=False)
 
 
-class Tags(Model):
-    key = StringType()
-    value = StringType()
-
-
-class Snapshot(Model):
+class Snapshot(AzureCloudService):
     id = StringType()
     location = StringType()
     managed_by = StringType(serialize_when_none=False)
-    resource_group = StringType()
     name = StringType()
     creation_data = ModelType(CreationData)
     disk_access_id = StringType(serialize_when_none=False)
@@ -90,9 +85,6 @@ class Snapshot(Model):
     size = IntType()
     sku = ModelType(Sku)
     source_disk_name = StringType()
-    subscription_id = StringType()
-    subscription_name = StringType()
-    tags = ListType(ModelType(Tags), default=[])
     tier_display = StringType(default='')
     type = StringType(serialize_when_none=False)
 

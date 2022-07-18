@@ -1,12 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.libs.schema.resource import ErrorResourceResponse
 from spaceone.inventory.connector.application_gateway import ApplicationGatewayConnector
 from spaceone.inventory.model.applicationgateway.cloud_service import *
 from spaceone.inventory.model.applicationgateway.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.applicationgateway.data import *
-import time
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,6 +51,7 @@ class ApplicationGatewayManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(application_gateway_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': application_gateway_id}
                 })
 
                 if application_gateway_dict.get('frontend_ip_configurations') is not None:

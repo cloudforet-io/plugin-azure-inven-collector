@@ -1,5 +1,6 @@
 from schematics import Model
 from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, FloatType, DateTimeType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -324,7 +325,6 @@ class EncryptionProtector(Model):
     type = StringType(serialize_when_none=False)
 
 
-
 class RestorableDroppedDatabase(Model):
     name = StringType(serialize_when_none=False)
     id = StringType()
@@ -362,16 +362,13 @@ class FirewallRule(Model):
     type = StringType(serialize_when_none=False)
 
 
-class SqlServer(Model):
+class SqlServer(AzureCloudService):
     name = StringType()
     id = StringType()
     identity = ModelType(ResourceIdentity, serialize_when_none=False)
     kind = StringType(serialize_when_none=False)
     location = StringType()
     type = StringType()
-    subscription_id = StringType()
-    subscription_name = StringType()
-    resource_group = StringType()
     administrator_login = StringType(serialize_when_none=False)
     azure_ad_admin_name = StringType(default='Not configured')
     administrator_login_password = StringType(serialize_when_none=False)
@@ -392,7 +389,6 @@ class SqlServer(Model):
     deleted_databases = ListType(ModelType(RestorableDroppedDatabase), serialize_when_none=False)
     virtual_network_rules = ListType(ModelType(VirtualNetworkRule), serialize_when_none=False)
     firewall_rules = ListType(ModelType(FirewallRule), serialize_when_none=False)
-    tags = ListType(ModelType(Tags))
 
     def reference(self):
         return {

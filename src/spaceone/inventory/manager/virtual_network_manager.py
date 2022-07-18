@@ -1,12 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.virtual_network import VirtualNetworkConnector
 from spaceone.inventory.model.virtualnetwork.cloud_service import *
 from spaceone.inventory.model.virtualnetwork.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.virtualnetwork.data import *
-import time
-import ipaddress
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -54,6 +53,7 @@ class VirtualNetworkManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(virtual_network_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': virtual_network_id}
                 })
 
                 if vnet_dict.get('subnets') is not None:
@@ -100,7 +100,7 @@ class VirtualNetworkManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(vnet_data['location'])
-                _LOGGER.debug(f'[VNET INFO] {vnet_resource.to_primitive()}')
+                # _LOGGER.debug(f'[VNET INFO] {vnet_resource.to_primitive()}')
                 virtual_network_responses.append(VirtualNetworkResponse({'resource': vnet_resource}))
 
             except Exception as e:

@@ -1,14 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.model.snapshot.cloud_service import *
-from spaceone.inventory.model.disk.cloud_service import *
 from spaceone.inventory.connector.snapshot import SnapshotConnector
-from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.snapshot.cloud_service_type import CLOUD_SERVICE_TYPES
-from datetime import datetime
 from spaceone.core.utils import *
-import time
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -80,7 +77,8 @@ class SnapshotManager(AzureManager):
                     'subscription_name': subscription_info['subscription_name'],
                     'size': snapshot_dict['disk_size_bytes'],
                     'sku': sku_dict,
-                    'incremental_display': self.get_incremental_display(snapshot_dict['incremental'])
+                    'incremental_display': self.get_incremental_display(snapshot_dict['incremental']),
+                    'azure_monitor': {'resource_id': snapshot_id}
                 })
 
                 if snapshot_dict.get('network_access_policy') is not None:

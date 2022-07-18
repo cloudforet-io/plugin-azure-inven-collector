@@ -1,11 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.vmscaleset import VmScaleSetConnector
 from spaceone.inventory.model.vmscaleset.cloud_service import *
 from spaceone.inventory.model.vmscaleset.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.vmscaleset.data import *
-import time
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,6 +52,7 @@ class VmScaleSetManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(vm_scale_set_id),  # parse resource_group from ID
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': vm_scale_set_id}
                 })
 
                 if vm_scale_set_dict.get('proximity_placement_group'):  # if it has a key -> get value -> check if it isn't None / if no 'Key' ->  return None
@@ -97,9 +98,9 @@ class VmScaleSetManager(AzureManager):
                     # Get VM Profile's primary Vnet\
                     if vm_scale_set_dict['virtual_machine_profile'].get('network_profile') is not None:
                         vmss_vm_network_profile_dict = vm_scale_set_dict['virtual_machine_profile']['network_profile']
-                        vmss_vm_network_profile_dict.update({
-                            'primary_vnet': self.get_primary_vnet(vmss_vm_network_profile_dict['network_interface_configurations'])
-                        })
+
+                        if primary_vnet := self.get_primary_vnet(vmss_vm_network_profile_dict['network_interface_configurations']):
+                            vmss_vm_network_profile_dict.update({'primary_vnet': primary_vnet})
 
                 # Add vm instances list attached to VMSS
                 vm_instances_list = list()
@@ -202,6 +203,8 @@ class VmScaleSetManager(AzureManager):
 
     @staticmethod
     def get_primary_vnet(network_interface_configurations):
+        vnet_id = None
+
         # 1) Find Primary NIC
         for nic in network_interface_configurations:
             if nic['primary'] is True:
@@ -209,6 +212,7 @@ class VmScaleSetManager(AzureManager):
                 for ip_configuration in nic['ip_configurations']:
                     if ip_configuration['primary'] is True:
                         vnet_id = ip_configuration['subnet']['id'].split('/')[8]
+
         return vnet_id
 
     # Get instances of a virtual machine from a VM scale set
@@ -229,9 +233,8 @@ class VmScaleSetManager(AzureManager):
 
         # Get Primary Vnet display
         if getattr(vm_instance, 'network_profile_configuration') is not None:
-            vm_instance_dict.update({
-                'primary_vnet': self.get_primary_vnet(vm_instance_dict['network_profile_configuration']['network_interface_configurations'])
-            })
+            if primary_vnet := self.get_primary_vnet(vm_instance_dict['network_profile_configuration']['network_interface_configurations']):
+                vm_instance_dict.update({'primary_vnet': primary_vnet})
 
         return vm_instance_dict
 
@@ -240,13 +243,15 @@ class VmScaleSetManager(AzureManager):
     def get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, instance_id):
         vm_instance_status_profile = vm_instance_conn.get_vm_scale_set_instance_view(resource_group, vm_scale_set_name, instance_id)
         vm_instance_status_profile_dict = self.convert_nested_dictionary(self, vm_instance_status_profile)
+
         if vm_instance_status_profile.vm_agent is not None:
+            status_str = None
+
             for status in vm_instance_status_profile_dict.get('vm_agent').get('statuses'):
                 status_str = status['display_status']
 
-            vm_instance_status_profile_dict['vm_agent'].update({
-                    'display_status': status_str
-            })
+            if status_str:
+                vm_instance_status_profile_dict['vm_agent'].update({'display_status': status_str})
 
         return vm_instance_status_profile_dict
 
@@ -269,7 +274,8 @@ class VmScaleSetManager(AzureManager):
     @staticmethod
     def list_auto_scale_settings_obj(self, vm_scale_set_conn, resource_group_name, vm_scale_set_id):
         auto_scale_settings_obj_list = list()
-        auto_scale_settings_obj = vm_scale_set_conn.list_auto_scale_settings(resource_group=resource_group_name)  # List all of the Auto scaling Rules in this resource group
+        # all List of the Auto scaling Rules in this resource group
+        auto_scale_settings_obj = vm_scale_set_conn.list_auto_scale_settings(resource_group=resource_group_name)
 
         for auto_scale_setting in auto_scale_settings_obj:
             if auto_scale_setting.target_resource_uri.lower() == vm_scale_set_id.lower():
