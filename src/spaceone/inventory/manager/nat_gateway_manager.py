@@ -1,12 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.nat_gateway import NATGatewayConnector
 from spaceone.inventory.model.natgateway.cloud_service import *
 from spaceone.inventory.model.natgateway.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.natgateway.data import *
-import time
-import ipaddress
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -53,6 +52,7 @@ class NATGatewayManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(nat_gateway_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': nat_gateway_id}
                 })
 
                 if nat_gateway_dict.get('public_ip_addresses') is not None:

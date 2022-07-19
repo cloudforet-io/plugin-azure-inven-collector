@@ -1,10 +1,6 @@
 from schematics import Model
 from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, FloatType, DateTimeType
-
-
-class Tags(Model):
-    key = StringType()
-    value = StringType()
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class SyncGroupSchemaColumn(Model):
@@ -107,19 +103,17 @@ class Sku(Model):
     tier = StringType(serialize_when_none=False)
 
 
-class Database(Model):
+class Database(AzureCloudService):
     name = StringType(serialize_when_none=False)
     id = StringType()
     kind = StringType(serialize_when_none=False)
     location = StringType()
     managed_by = StringType(serialize_when_none=False)
     server_name = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
     administrator_login = StringType(default='-')
     auto_pause_delay = IntType(serialize_when_none=False)
     catalog_collation = StringType(choices=('DATABASE_DEFAULT', 'SQL_Latin1_General_CP1_CI_AS'),
-                                       serialize_when_none=False)
+                                   serialize_when_none=False)
     collation = StringType(serialize_when_none=False)
     create_mode = StringType(choices=(
             'Copy', 'Default', 'OnlineSecondary', 'PointInTimeRestore', 'Recovery', 'Restore', 'RestoreExternalBackup',
@@ -149,7 +143,7 @@ class Database(Model):
     restore_point_in_time = StringType(serialize_when_none=False)
     resumed_date = DateTimeType(serialize_when_none=False)
     sample_name = StringType(choices=('AdventureWorksLT', 'WideWorldImportersFull', 'WideWorldImportersStd'),
-                                 serialize_when_none=False)
+                             serialize_when_none=False)
     secondary_type = StringType(choices=('Geo', 'Named'), serialize_when_none=False)
     source_database_deletion_date = StringType(serialize_when_none=False)
     source_database_id = StringType(serialize_when_none=False)
@@ -170,9 +164,7 @@ class Database(Model):
     pricing_tier_display = StringType(default='-')
     service_tier_display = StringType(default='-')
     compute_tier = StringType(serialize_when_none=False)
-    tags = (ModelType(Tags))
     type = StringType(serialize_when_none=False)
-
 
     def reference(self):
         return {

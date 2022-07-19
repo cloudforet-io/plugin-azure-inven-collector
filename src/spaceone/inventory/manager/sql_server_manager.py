@@ -1,18 +1,15 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.model.sqlserver import *
 from spaceone.inventory.model.sqlserver.cloud_service import *
 from spaceone.inventory.model.sqldatabase.cloud_service import *
 from spaceone.inventory.connector.sql import SqlConnector
 from spaceone.inventory.connector.monitor import MonitorConnector
-from spaceone.inventory.connector.subscription import SubscriptionConnector
 from spaceone.inventory.model.sqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.sqldatabase.cloud_service_type import CLOUD_SERVICE_TYPES_SQL_DB
-from datetime import datetime
 from spaceone.core.utils import *
-import time
-import copy
-import logging
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -63,6 +60,7 @@ class SqlServerManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(sql_server_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': sql_server_id}
                 })
 
                 resource_group = sql_server_dict['resource_group']
@@ -172,7 +170,8 @@ class SqlServerManager(AzureManager):
                 database_dict.update({
                     'server_name': db_id.split('/')[8],
                     'subscription_id': db_id.split('/')[2],
-                    'resource_group': db_id.split('/')[4]
+                    'resource_group': db_id.split('/')[4],
+                    'azure_monitor': {'resource_id': db_id}
                 })
 
             if compute_tier := database_dict.get('kind'):
@@ -435,11 +434,11 @@ class SqlServerManager(AzureManager):
 
     @staticmethod
     def get_failover_secondary_server(partner_servers):
+        secondary_server = None
+
         for partner_server in partner_servers:
             if partner_server['replication_role'] == 'Secondary':
                 secondary_server = partner_server['id'].split('/')[8]
-            else:
-                secondary_server = None
 
         return secondary_server
 

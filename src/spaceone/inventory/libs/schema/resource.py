@@ -47,3 +47,20 @@ class ErrorResourceResponse(ResourceResponse):
     state = StringType(default='FAILURE')
     resource_type = StringType(default='inventory.ErrorResource')
     resource = ModelType(ErrorResource, default={})
+
+
+class AzureMonitorModel(Model):
+    resource_id = StringType()
+
+
+class AzureTags(Model):
+    key = StringType(serialize_when_none=False)
+    value = StringType(serialize_when_none=False)
+
+
+class AzureCloudService(Model):
+    resource_group = StringType(serialize_when_none=False)
+    subscription_id = StringType(serialize_when_none=False)
+    subscription_name = StringType(serialize_when_none=False)
+    tags = ListType(ModelType(AzureTags), default=[])
+    azure_monitor = ModelType(AzureMonitorModel, serialize_when_none=False)

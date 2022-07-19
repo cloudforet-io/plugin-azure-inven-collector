@@ -1,13 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.public_ip_address import PublicIPAddressConnector
 from spaceone.inventory.model.publicipaddress.cloud_service import *
 from spaceone.inventory.model.publicipaddress.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.publicipaddress.data import *
-import json
-import time
-import ipaddress
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -55,6 +53,7 @@ class PublicIPAddressManager(AzureManager):
                     # parse resource_group from ID
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': public_ip_address_id}
                 })
 
                 if public_ip_address_dict.get('ip_configuration') is not None:

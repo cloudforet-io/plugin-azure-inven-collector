@@ -1,6 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -55,11 +55,10 @@ class NetworkInterfaceIPConfigurationRef(Model):  # ip configuration in a networ
     subnet = StringType(default='', serialize_when_none=False)  # Change Subnet to id
     virtual_network_taps = ListType(ModelType(SubResource), serialize_when_none=False)
 
+
 '''
 END OF REF CLASSES
 '''
-
-
 class AddressSpace(Model):
     address_count = IntType(serialize_when_none=False, default=0)
     address_prefixes = ListType(StringType, default=['-'])
@@ -548,17 +547,6 @@ class PublicIPAddress(Model):
     zones = ListType(StringType, serialize_when_none=False)
 
 
-class IPConfiguration(Model):
-    etag = StringType(serialize_when_none=False)
-    id = StringType(serialize_when_none=False)
-    name = StringType(serialize_when_none=False)
-    private_ip_address = StringType(serialize_when_none=False)
-    private_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
-    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
-    public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
-    subnet = StringType(serialize_when_none=False)
-
-
 class ApplicationSecurityGroup(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -598,12 +586,6 @@ class NetworkInterfaceDnsSettings(Model):
     internal_dns_name_label = StringType(serialize_when_none=False)
     internal_domain_name_suffix = StringType(serialize_when_none=False)
     internal_fqdn = StringType(serialize_when_none=False)
-
-
-class NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties(Model):
-    fqdns = ListType(StringType, serialize_when_none=False)
-    group_id = StringType(serialize_when_none=False)
-    required_member_name = StringType(serialize_when_none=False)
 
 
 class NetworkInterfaceIPConfiguration(Model):  # ip configuration in a network interface
@@ -878,11 +860,8 @@ class VirtualNetworkPeering(Model):
     type = StringType(serialize_when_none=False)
 
 
-class VirtualNetwork(Model):  # Main Class
+class VirtualNetwork(AzureCloudService):  # Main Class
     id = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
     etag = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     name = StringType(default='-', serialize_when_none=False)

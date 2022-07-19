@@ -1,12 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.mysql_server import MySQLServerConnector
 from spaceone.inventory.model.mysqlserver.cloud_service import *
 from spaceone.inventory.model.mysqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.mysqlserver.data import *
-from spaceone.inventory.error.custom import *
-import time
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,6 +51,7 @@ class MySQLServerManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(mysql_server_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': mysql_server_id}
                 })
 
                 if mysql_server_dict.get('name') is not None:

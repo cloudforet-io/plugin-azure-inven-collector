@@ -1,6 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -205,7 +205,7 @@ class NetworkInterfaceIPConfiguration(Model):  # ip configuration in a network i
     virtual_network_taps = ListType(ModelType(SubResource), serialize_when_none=False)
 
 
-class NetworkSecurityGroup(Model):
+class NetworkSecurityGroupRef(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     location = ModelType(ExtendedLocation, serialize_when_none=False)
@@ -396,18 +396,6 @@ class FrontendIPConfiguration(Model):
     zones = ListType(StringType, serialize_when_none=False)
 
 
-class PrivateLinkServiceConnectionState(Model):
-    actions_required = StringType(serialize_when_none=False)
-    description = StringType(serialize_when_none=False)
-    status = StringType(serialize_when_none=False)
-
-
-class PrivateLinkServiceConnectionState(Model):
-    actions_required = StringType(serialize_when_none=False)
-    description = StringType(serialize_when_none=False)
-    status = StringType(serialize_when_none=False)
-
-
 class PrivateEndpointConnection(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType()
@@ -467,7 +455,7 @@ class NetworkInterface(Model):
     mac_address = StringType(serialize_when_none=False)
     migration_phase = StringType(choices=('Abort', 'Commit', 'Committed', 'None', 'Prepare'), serialize_when_none=False)
     nic_type = StringType(choices=('Elastic', 'Standard'), serialize_when_none=False)
-    network_security_group = ModelType(NetworkSecurityGroup, serialize_when_none=False)
+    network_security_group = ModelType(NetworkSecurityGroupRef, serialize_when_none=False)
     primary = BooleanType(serialize_when_none=False)
     private_endpoint = ModelType(PrivateEndpointRef, serialize_when_none=False)
     private_link_service = ModelType(PrivateLinkService, serialize_when_none=False)
@@ -753,7 +741,7 @@ class Subnet(Model):
     ip_configurations = ListType(ModelType(IPConfiguration), serialize_when_none=False)
     azure_firewall = ListType(ModelType(AzureFirewall), serialize_when_none=False)
     nat_gateway = ModelType(SubResource, serialize_when_none=False)
-    network_security_group = ModelType(NetworkSecurityGroup, serialize_when_none=False)
+    network_security_group = ModelType(NetworkSecurityGroupRef, serialize_when_none=False)
     private_endpoint_network_policies = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
     private_endpoints = ListType(ModelType(PrivateEndpoint), serialize_when_none=False)
     private_link_service_network_policies = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
@@ -767,14 +755,11 @@ class Subnet(Model):
     type = StringType(serialize_when_none=False)
 
 
-class NetworkSecurityGroup(Model):
+class NetworkSecurityGroup(AzureCloudService):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
     name = StringType(default='-', serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
     default_security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
     inbound_security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
     outbound_security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
@@ -785,8 +770,8 @@ class NetworkSecurityGroup(Model):
     security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     virtual_machines_display = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

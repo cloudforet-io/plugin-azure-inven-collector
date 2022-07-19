@@ -1,12 +1,12 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.storage_account import StorageAccountConnector
 from spaceone.inventory.model.storageaccount.cloud_service import *
 from spaceone.inventory.model.storageaccount.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.storageaccount.data import *
-import time
-import ipaddress
-import logging
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -71,6 +71,7 @@ class StorageAccountManager(AzureManager):
                     'resource_group': resource_group,
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': storage_account_id}
                 })
 
                 storage_account_data = StorageAccount(storage_account_dict, strict=False)
@@ -86,7 +87,7 @@ class StorageAccountManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(storage_account_data['location'])
-                _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_resource.to_primitive()}')
+                # _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_resource.to_primitive()}')
                 storage_account_responses.append(StorageAccountResponse({'resource': storage_account_resource}))
 
             except Exception as e:

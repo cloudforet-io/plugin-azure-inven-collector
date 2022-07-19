@@ -1,5 +1,6 @@
 from schematics import Model
 from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, FloatType, DateTimeType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -145,7 +146,6 @@ class SyncAgent(Model):
     expiry_time = StringType(serialize_when_none=False)
     is_up_to_date = BooleanType(serialize_when_none=False)
     last_alive_time = StringType(serialize_when_none=False)
-    name = StringType(serialize_when_none=False)
     state = StringType(choices=('NeverConnected', 'Offline', 'Online'), serialize_when_none=False)
     sync_database_id = StringType(serialize_when_none=False)
     version = StringType(serialize_when_none=False)
@@ -380,14 +380,11 @@ class ServerAdministratorResource(Model):
     type = StringType(serialize_when_none=False)
 
 
-class Server(Model):
+class Server(AzureCloudService):
     name = StringType()
     id = StringType()
     identity = ModelType(ResourceIdentity, serialize_when_none=False)
     location = StringType()
-    subscription_id = StringType()
-    subscription_name = StringType()
-    resource_group = StringType()
     administrator_login = StringType(serialize_when_none=False)
     byok_enforcement = StringType(serialize_when_none=False)
     earliest_restore_date = DateTimeType(serialize_when_none=False)
@@ -408,8 +405,8 @@ class Server(Model):
     version = StringType(serialize_when_none=False)
     virtual_network_rules = ListType(ModelType(VirtualNetworkRule), serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
-    tags = ModelType(Tags)
     type = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

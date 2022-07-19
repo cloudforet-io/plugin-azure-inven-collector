@@ -1,6 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -90,14 +90,11 @@ class PublicIPAddressSku(Model):
     tier = StringType(choices=('Global', 'Regional'), serialize_when_none=False)
 
 
-class PublicIPAddress(Model):  # Main Class
+class PublicIPAddress(AzureCloudService):  # Main Class
     etag = StringType(serialize_when_none=False)
     extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     ddos_settings = ModelType(DdosSettings, serialize_when_none=False)
     dns_settings = ModelType(PublicIPAddressDnsSettings, serialize_when_none=False)
@@ -115,8 +112,8 @@ class PublicIPAddress(Model):  # Main Class
     public_ip_prefix = ModelType(SubResource, serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     sku = ModelType(PublicIPAddressSku, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
     def reference(self):

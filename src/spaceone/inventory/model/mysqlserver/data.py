@@ -1,5 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, DateTimeType, BooleanType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, DateTimeType, BooleanType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -62,14 +63,11 @@ class FirewallRule(Model):
     type = StringType(serialize_when_none=False)
 
 
-class MySQLServer(Model):  # Main class
+class MySQLServer(AzureCloudService):  # Main class
     id = StringType()
     identity = ModelType(ResourceIdentity, serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
     administrator_login = StringType(serialize_when_none=False)
     byok_enforcement = StringType(serialize_when_none=False)
     earliest_restore_date = DateTimeType(serialize_when_none=False)
@@ -88,8 +86,8 @@ class MySQLServer(Model):  # Main class
     user_visible_state = StringType(choices=('Disabled', 'Dropping', 'Inaccessible', 'Ready'), serialize_when_none=False)
     version = StringType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

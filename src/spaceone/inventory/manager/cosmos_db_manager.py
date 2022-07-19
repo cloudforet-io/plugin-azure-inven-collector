@@ -1,15 +1,12 @@
+import time
+import logging
+from spaceone.core.utils import *
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.cosmos_db import CosmosDBConnector
 from spaceone.inventory.model.cosmosdb.cloud_service import *
 from spaceone.inventory.model.cosmosdb.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.cosmosdb.data import *
-from spaceone.inventory.error.custom import *
-from spaceone.core.utils import *
-import time
-import ipaddress
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -37,8 +34,6 @@ class CosmosDBManager(AzureManager):
         _LOGGER.debug(f'** CosmosDB START **')
 
         start_time = time.time()
-
-        secret_data = params['secret_data']
         subscription_info = params['subscription_info']
         cosmos_db_conn: CosmosDBConnector = self.locator.get_connector(self.connector_name, **params)
 
@@ -59,6 +54,7 @@ class CosmosDBManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(cosmos_db_account_dict['id']),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': cosmos_db_account_id}
                 })
 
                 if cosmos_db_account_dict.get('capabilities') is not None:

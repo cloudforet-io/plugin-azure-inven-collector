@@ -1,11 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.loadbalncer import LoadBalancerConnector
 from spaceone.inventory.model.loadbalancer.cloud_service import *
 from spaceone.inventory.model.loadbalancer.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.loadbalancer.data import *
-import time
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -49,11 +49,13 @@ class LoadBalancerManager(AzureManager):
                     'resource_group': self.get_resource_group_from_id(load_balancer_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': load_balancer_id}
                 })
 
                 # Get Network Interfaces attached in this load balancer
                 load_balancer_dict.update({
-                    'network_interfaces': self.get_network_interfaces(self, load_balancer_conn, load_balancer_dict['resource_group'],
+                    'network_interfaces': self.get_network_interfaces(self, load_balancer_conn,
+                                                                      load_balancer_dict['resource_group'],
                                                                       load_balancer_dict['name'])
                 })
 

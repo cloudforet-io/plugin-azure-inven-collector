@@ -1,6 +1,6 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, NumberType, DateTimeType, \
-    TimestampType, UTCDateTimeType, TimedeltaType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, FloatType
+from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Tags(Model):
@@ -29,14 +29,14 @@ class ApplicationGatewayAutoscaleConfiguration(Model):
 class ManagedServiceIdentity(Model):
     principal_id = StringType(serialize_when_none=False)
     tenant_id = StringType(serialize_when_none=False)
-    type = StringType(choices=('None', 'SystemAssigned', 'SystemAssigned, UserAssigned', 'UserAssigned'), serialize_when_none=False)
+    type = StringType(choices=('None', 'SystemAssigned', 'SystemAssigned, UserAssigned', 'UserAssigned'),
+                      serialize_when_none=False)
     user_assigned_identities = StringType(serialize_when_none=False)
 
 
 class ApplicationGatewayBackendAddress(Model):
     fqdn = StringType(serialize_when_none=False)
     ip_address = StringType(serialize_when_none=False)
-
 
 ###### Firewall Classes ######
 class AzureFirewallRCAction(Model):
@@ -360,28 +360,6 @@ class FlowLog(Model):
     type = StringType(serialize_when_none=False)
 
 
-class SecurityRule(Model):
-    etag = StringType(serialize_when_none=False)
-    id = StringType(serialize_when_none=False)
-    name = StringType(serialize_when_none=False)
-    access = StringType(choices=('Allow', 'Deny'), serialize_when_none=False)
-    description = StringType(serialize_when_none=False)
-    destination_address_prefix = StringType(serialize_when_none=False)
-    destination_address_prefixes = ListType(StringType, serialize_when_none=False)
-    destination_application_security_groups = ListType(ModelType(ApplicationSecurityGroup), serialize_when_none=False)
-    destination_port_range = StringType(serialize_when_none=False)
-    destination_port_ranges = ListType(StringType, serialize_when_none=False)
-    direction = StringType(choices=('Inbound', 'Outbound'), serialize_when_none=False)
-    priority = IntType(serialize_when_none=False)
-    protocol = StringType(choices=('*', 'Ah', 'Esp', 'Icmp', 'Tcp', 'Udp'), serialize_when_none=False)
-    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
-    source_address_prefix = StringType(serialize_when_none=False)
-    source_address_prefixes = ListType(StringType, serialize_when_none=False)
-    source_application_security_groups = ListType(ModelType(ApplicationSecurityGroup), serialize_when_none=False)
-    source_port_range = StringType(serialize_when_none=False)
-    source_port_ranges = ListType(StringType, serialize_when_none=False)
-
-
 class NetworkSecurityGroup(Model):
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
@@ -522,7 +500,7 @@ class Subnet(Model):
     name = StringType(serialize_when_none=False)
     address_prefix = StringType(serialize_when_none=False)
     address_prefixes = ListType(StringType, serialize_when_none=False)
-    application_gateway_ip_configurations = ListType(StringType, serialize_when_none=False) # Change to ip configurations id
+    application_gateway_ip_configurations = ListType(StringType, serialize_when_none=False)     # Change to ip configurations id
     delegations = ListType(ModelType(Delegation), serialize_when_none=False)
     ip_allocations = ListType(ModelType(SubResource), serialize_when_none=False)
     ip_configuration_profiles = ListType(ModelType(IPConfigurationProfile), serialize_when_none=False)
@@ -589,7 +567,8 @@ class NetworkInterfaceIPConfiguration(Model):  # ip configuration in a network i
     private_ip_address = StringType(serialize_when_none=False)
     private_ip_address_version = StringType(choices=('IPv4', 'IPv6'), serialize_when_none=False)
     private_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)
-    private_link_connection_properties = ModelType(NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties, serialize_when_none=False)
+    private_link_connection_properties = ModelType(NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties,
+                                                   serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
     subnet = ModelType(Subnet, serialize_when_none=False)
@@ -687,7 +666,6 @@ class ApplicationGatewayHttpListener(Model):
     host_names = ListType(StringType, serialize_when_none=False)
     protocol = StringType(choices=('Http', 'Https'), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
-    port = IntType(serialize_when_none=False)
     require_server_name_indication = BooleanType(serialize_when_none=False)
     ssl_certificate = ModelType(SubResource, serialize_when_none=False)
     ssl_profile = ModelType(SubResource, serialize_when_none=False)
@@ -825,7 +803,8 @@ class ApplicationGatewayRewriteRuleSet(Model):
 
 class ApplicationGatewaySku(Model):
     capacity = IntType(serialize_when_none=False)
-    name = StringType(choices=('Standard_Large', 'Standard_Medium', 'Standard_Small', 'Standard_v2', 'WAF_Large', 'WAF_Medium', 'WAF_v2'), serialize_when_none=False)
+    name = StringType(choices=('Standard_Large', 'Standard_Medium', 'Standard_Small', 'Standard_v2',
+                               'WAF_Large', 'WAF_Medium', 'WAF_v2'), serialize_when_none=False)
     tier = StringType(choices=('Standard', 'Standard_v2', 'WAF', 'WAF_v2'), serialize_when_none=False)
 
 
@@ -845,7 +824,8 @@ class ApplicationGatewaySslPolicy(Model):
     cipher_suites = ListType(StringType, serialize_when_none=False)
     disabled_ssl_protocols = ListType(StringType, serialize_when_none=False)
     min_protocol_version = StringType(choices=('TLSv1_0', 'TLSv1_1', 'TLSv1_2'), serialize_when_none=False)
-    policy_name = StringType(choices=('AppGwSslPolicy20150501', 'AppGwSslPolicy20170401', 'AppGwSslPolicy20170401S'), serialize_when_none=False)
+    policy_name = StringType(choices=('AppGwSslPolicy20150501', 'AppGwSslPolicy20170401', 'AppGwSslPolicy20170401S'),
+                             serialize_when_none=False)
     policy_type = StringType(choices=('Custom', 'Predefined'), serialize_when_none=False)
 
 
@@ -934,45 +914,52 @@ class ApplicationGatewayWebApplicationFirewallConfiguration(Model):
     rule_set_version = StringType(serialize_when_none=False)
 
 
-class ApplicationGateway(Model):  # Main Class
+class ApplicationGateway(AzureCloudService):  # Main Class
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
     identity = ModelType(ManagedServiceIdentity, serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     name = StringType(default='-', serialize_when_none=False)
-    authentication_certificates = ListType(ModelType(ApplicationGatewayAuthenticationCertificate), serialize_when_none=False)
+    authentication_certificates = ListType(ModelType(ApplicationGatewayAuthenticationCertificate),
+                                           serialize_when_none=False)
     autoscale_configuration = ModelType(ApplicationGatewayAutoscaleConfiguration, serialize_when_none=False)
     backend_address_pools = ListType(ModelType(ApplicationGatewayBackendAddressPool), serialize_when_none=False)
-    backend_http_settings_collection = ListType(ModelType(ApplicationGatewayBackendHttpSettings), serialize_when_none=False)
+    backend_http_settings_collection = ListType(ModelType(ApplicationGatewayBackendHttpSettings),
+                                                serialize_when_none=False)
     custom_error_configurations = ListType(ModelType(ApplicationGatewayCustomError), serialize_when_none=False)
     enable_fips = BooleanType(serialize_when_none=False)
     enable_http2 = BooleanType(serialize_when_none=False)
     firewall_policy = ModelType(SubResource, serialize_when_none=False)
     force_firewall_policy_association = BooleanType(serialize_when_none=False)
-    frontend_ip_configurations = ListType(ModelType(ApplicationGatewayFrontendIPConfiguration), serialize_when_none=False)
+    frontend_ip_configurations = ListType(ModelType(ApplicationGatewayFrontendIPConfiguration),
+                                          serialize_when_none=False)
     frontend_ports = ListType(ModelType(ApplicationGatewayFrontendPort), serialize_when_none=False)
     gateway_ip_configurations = ListType(ModelType(ApplicationGatewayIPConfiguration), serialize_when_none=False)
     http_listeners = ListType(ModelType(ApplicationGatewayHttpListener), serialize_when_none=False)
     operational_state = StringType(choices=('Running', 'Starting', 'Stopped', 'Stopping'), serialize_when_none=False)
-    private_endpoint_connections = ListType(ModelType(ApplicationGatewayPrivateEndpointConnection), serialize_when_none=False)
-    private_link_configurations = ListType(ModelType(ApplicationGatewayPrivateLinkConfiguration), serialize_when_none=False)
+    private_endpoint_connections = ListType(ModelType(ApplicationGatewayPrivateEndpointConnection),
+                                            serialize_when_none=False)
+    private_link_configurations = ListType(ModelType(ApplicationGatewayPrivateLinkConfiguration),
+                                           serialize_when_none=False)
     probes = ListType(ModelType(ApplicationGatewayProbe), serialize_when_none=False)
-    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
-    redirect_configurations = ListType(ModelType(ApplicationGatewayRedirectConfiguration), serialize_when_none=False)
-    request_routing_rules = ListType(ModelType(ApplicationGatewayRequestRoutingRule), serialize_when_none=False)
+    provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'),
+                                    serialize_when_none=False)
+    redirect_configurations = ListType(ModelType(ApplicationGatewayRedirectConfiguration),
+                                       serialize_when_none=False)
+    request_routing_rules = ListType(ModelType(ApplicationGatewayRequestRoutingRule),
+                                     serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     rewrite_rule_sets = ListType(ModelType(ApplicationGatewayRewriteRuleSet), serialize_when_none=False)
     sku = ModelType(ApplicationGatewaySku, serialize_when_none=False)
     ssl_certificates = ListType(ModelType(ApplicationGatewaySslCertificate), serialize_when_none=False)
     ssl_policy = ModelType(ApplicationGatewaySslPolicy, serialize_when_none=False)
     ssl_profiles = ListType(ModelType(ApplicationGatewaySslProfile), serialize_when_none=False)
-    trusted_client_certificates = ListType(ModelType(ApplicationGatewayTrustedClientCertificate), serialize_when_none=False)
+    trusted_client_certificates = ListType(ModelType(ApplicationGatewayTrustedClientCertificate),
+                                           serialize_when_none=False)
     trusted_root_certificates = ListType(ModelType(ApplicationGatewayTrustedRootCertificate), serialize_when_none=False)
     url_path_maps = ListType(ModelType(ApplicationGatewayUrlPathMap), serialize_when_none=False)
-    web_application_firewall_configuration = ModelType(ApplicationGatewayWebApplicationFirewallConfiguration, serialize_when_none=False)
-    resource_group = StringType(serialize_when_none=False)
-    subscription_id = StringType(serialize_when_none=False)
-    subscription_name = StringType(serialize_when_none=False)
+    web_application_firewall_configuration = ModelType(ApplicationGatewayWebApplicationFirewallConfiguration,
+                                                       serialize_when_none=False)
     private_ip_address = StringType(serialize_when_none=False)
     public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
     virtual_network = StringType(serialize_when_none=False)
@@ -980,7 +967,6 @@ class ApplicationGateway(Model):  # Main Class
     tags = ModelType(Tags, serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
-    account = StringType(serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 

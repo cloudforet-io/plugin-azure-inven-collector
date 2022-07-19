@@ -1,13 +1,11 @@
+import time
+import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from pprint import pprint
 from spaceone.inventory.connector.postgresql_server import PostgreSQLServerConnector
 from spaceone.inventory.model.postgresqlserver.cloud_service import *
 from spaceone.inventory.model.postgresqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.postgresqlserver.data import *
-from spaceone.inventory.error.custom import *
-import time
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -53,7 +51,8 @@ class PostgreSQLServerManager(AzureManager):
                 postgre_sql_server_dict.update({
                     'resource_group': self.get_resource_group_from_id(postgre_sql_server_id),
                     'subscription_id': subscription_info['subscription_id'],
-                    'subscription_name': subscription_info['subscription_name']
+                    'subscription_name': subscription_info['subscription_name'],
+                    'azure_monitor': {'resource_id': postgre_sql_server_id}
                 })
 
                 if postgre_sql_server_dict.get('name') is not None:
@@ -99,8 +98,6 @@ class PostgreSQLServerManager(AzureManager):
             sql_dict = self.convert_nested_dictionary(self, sql)
             sql_resources.append(sql_dict)
         return sql_resources
-
-
 
     @staticmethod
     def list_firewall_rules_by_server(self, postgresql_conn, resource_group, name):
