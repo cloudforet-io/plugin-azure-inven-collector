@@ -4,9 +4,9 @@ from spaceone.core.utils import *
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.cosmos_db import CosmosDBConnector
-from spaceone.inventory.model.cosmosdb.cloud_service import *
-from spaceone.inventory.model.cosmosdb.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.cosmosdb.data import *
+from spaceone.inventory.model.cosmos_db.cloud_service import *
+from spaceone.inventory.model.cosmos_db.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.cosmos_db.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -131,7 +131,6 @@ class CosmosDBManager(AzureManager):
 
             return virtual_network_rules_display
 
-
     @staticmethod
     def get_private_endpoint_name(private_endpoint):
         if private_endpoint.get('id') is not None:
@@ -158,7 +157,6 @@ class CosmosDBManager(AzureManager):
         keys_obj = cosmos_db_conn.list_keys(account_name=account_name, resource_group_name=resource_group)
         key_dict = self.convert_nested_dictionary(self, keys_obj)
         return key_dict
-
 
     @staticmethod
     def get_sql_resources(self, cosmos_db_conn, account_name, resource_group):

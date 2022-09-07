@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.model.snapshot.cloud_service import *
-from spaceone.inventory.connector.snapshot import SnapshotConnector
-from spaceone.inventory.model.snapshot.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.snapshots.cloud_service import *
+from spaceone.inventory.connector.snapshots import SnapshotsConnector
+from spaceone.inventory.model.snapshots.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.core.utils import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class SnapshotManager(AzureManager):
-    connector_name = 'SnapshotConnector'
+class SnapshotsManager(AzureManager):
+    connector_name = 'SnapshotsConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class SnapshotManager(AzureManager):
 
         subscription_info = params['subscription_info']
 
-        snapshot_conn: SnapshotConnector = self.locator.get_connector(self.connector_name, **params)
+        snapshot_conn: SnapshotsConnector = self.locator.get_connector(self.connector_name, **params)
         snapshot_responses = []
         error_responses = []
 

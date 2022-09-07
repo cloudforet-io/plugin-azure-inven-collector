@@ -12,12 +12,12 @@ ag_count_per_subscription_conf = os.path.join(current_dir, 'widget/application_g
 ag_count_per_location_conf = os.path.join(current_dir, 'widget/application_gateway_count_per_location.yaml')
 
 cst_application_gateway = CloudServiceTypeResource()
-cst_application_gateway.name = 'ApplicationGateway'
-cst_application_gateway.group = 'Network'
+cst_application_gateway.name = 'Instance'
+cst_application_gateway.group = 'ApplicationGateways'
 cst_application_gateway.service_code = 'Microsoft.Network/applicationGateways'
-cst_application_gateway.labels = ['Network']
-cst_application_gateway.is_major = False
-cst_application_gateway.is_primary = False
+cst_application_gateway.labels = ['Networking']
+cst_application_gateway.is_major = True
+cst_application_gateway.is_primary = True
 cst_application_gateway.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-application-gateways.svg',
 }

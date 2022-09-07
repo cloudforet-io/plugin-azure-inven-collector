@@ -2,11 +2,11 @@ import logging
 
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error.custom import *
-__all__ = ['PostgreSQLServerConnector']
+__all__ = ['PostgreSQLServersConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class PostgreSQLServerConnector(AzureConnector):
+class PostgreSQLServersConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

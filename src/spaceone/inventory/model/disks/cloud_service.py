@@ -1,6 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
-from spaceone.inventory.model.disk.data import Disk
+from spaceone.inventory.model.disks.data import Disk
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField, SizeField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout,ListDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
@@ -44,7 +44,7 @@ disk_meta = CloudServiceMeta.set_layouts([disk_info_meta, disk_info_tags])
 
 
 class ComputeResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Compute')
+    cloud_service_group = StringType(default='Disks')
 
 
 class DiskResource(ComputeResource):

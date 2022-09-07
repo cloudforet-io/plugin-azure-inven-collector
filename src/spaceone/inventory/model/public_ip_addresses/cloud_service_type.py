@@ -13,12 +13,12 @@ public_ip_address_count_per_subscription_conf = os.path.join(current_dir, 'widge
 
 
 cst_public_ip_address = CloudServiceTypeResource()
-cst_public_ip_address.name = 'PublicIPAddress'
-cst_public_ip_address.group = 'Network'
+cst_public_ip_address.name = 'IPAddress'
+cst_public_ip_address.group = 'PublicIPAddresses'
 cst_public_ip_address.service_code = 'Microsoft.Network/publicIPAddresses'
-cst_public_ip_address.labels = ['Network']
-cst_public_ip_address.is_major = False
-cst_public_ip_address.is_primary = False
+cst_public_ip_address.labels = ['Networking']
+cst_public_ip_address.is_major = True
+cst_public_ip_address.is_primary = True
 cst_public_ip_address.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-public-ip-address.svg',
 }

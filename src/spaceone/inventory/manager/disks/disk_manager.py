@@ -3,15 +3,15 @@ import logging
 from spaceone.core.utils import *
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.model.disk.cloud_service import *
-from spaceone.inventory.connector.disk import DiskConnector
-from spaceone.inventory.model.disk.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.disks.cloud_service import *
+from spaceone.inventory.connector.disks import DisksConnector
+from spaceone.inventory.model.disks.cloud_service_type import CLOUD_SERVICE_TYPES
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class DiskManager(AzureManager):
-    connector_name = 'DiskConnector'
+class DisksManager(AzureManager):
+    connector_name = 'DisksConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -33,7 +33,7 @@ class DiskManager(AzureManager):
         start_time = time.time()
         subscription_info = params['subscription_info']
 
-        disk_conn: DiskConnector = self.locator.get_connector(self.connector_name, **params)
+        disk_conn: DisksConnector = self.locator.get_connector(self.connector_name, **params)
         disk_responses = []
         error_responses = []
 

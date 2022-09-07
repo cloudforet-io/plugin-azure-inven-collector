@@ -3,11 +3,11 @@ import logging
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error import *
 from spaceone.inventory.error.custom import *
-__all__ = ['SnapshotConnector']
+__all__ = ['SnapshotsConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class SnapshotConnector(AzureConnector):
+class SnapshotsConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -12,11 +12,11 @@ storage_account_count_per_location_conf = os.path.join(current_dir, 'widget/stor
 storage_account_count_per_subscription_conf = os.path.join(current_dir, 'widget/storage_account_count_per_subscription.yaml')
 
 cst_storage_account = CloudServiceTypeResource()
-cst_storage_account.name = 'StorageAccount'
-cst_storage_account.group = 'Storage'
+cst_storage_account.name = 'Instance'
+cst_storage_account.group = 'StorageAccounts'
 cst_storage_account.service_code = 'Microsoft.Storage/storageAccounts'
 cst_storage_account.labels = ['Storage']
-cst_storage_account.is_major = False
+cst_storage_account.is_major = True
 cst_storage_account.is_primary = True
 cst_storage_account.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-service-accounts.svg',

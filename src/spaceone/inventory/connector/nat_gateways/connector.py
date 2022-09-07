@@ -3,11 +3,11 @@ import logging
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error import *
 
-__all__ = ['NATGatewayConnector']
+__all__ = ['NATGatewaysConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class NATGatewayConnector(AzureConnector):
+class NATGatewaysConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

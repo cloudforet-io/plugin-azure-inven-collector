@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.model.keyvault.data import KeyVault
+from spaceone.inventory.model.key_vaults.data import KeyVault
 
 '''
 KEY_VAULT
@@ -89,8 +89,8 @@ key_vault_meta = CloudServiceMeta.set_layouts(
 
 
 class KeyVaultResource(CloudServiceResource):
-    cloud_service_group = StringType(default='KeyVault')
-    cloud_service_type = StringType(default='KeyVault')
+    cloud_service_group = StringType(default='KeyVaults')
+    cloud_service_type = StringType(default='Security')
     data = ModelType(KeyVault)
     _metadata = ModelType(CloudServiceMeta, default=key_vault_meta, serialized_name='metadata')
     name = StringType()

@@ -1,16 +1,11 @@
 import unittest
-import time
 import os
-from datetime import datetime, timedelta
-from unittest.mock import patch
-from spaceone.core.unittest.result import print_data
 from spaceone.core.unittest.runner import RichTestRunner
 from spaceone.core import config
 from spaceone.core.transaction import Transaction
 from spaceone.core import utils
-from spaceone.inventory.error import *
 from spaceone.inventory.connector.disk import DiskConnector
-from spaceone.inventory.manager.disk_manager import DiskManager
+from spaceone.inventory.manager.disks.disk_manager import DiskManager
 
 
 class TestDiskManager(unittest.TestCase):

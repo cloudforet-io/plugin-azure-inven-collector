@@ -9,12 +9,12 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
 cst_sql_database = CloudServiceTypeResource()
-cst_sql_database.name = 'SQLDatabase'
-cst_sql_database.group = 'SQL'
+cst_sql_database.name = 'Database'
+cst_sql_database.group = 'SQLDatabases'
 cst_sql_database.service_code = 'Microsoft.Sql/servers/databases'
 cst_sql_database.labels = ['Database']
-cst_sql_database.is_major = False
-cst_sql_database.is_primary = False
+cst_sql_database.is_major = True
+cst_sql_database.is_primary = True
 cst_sql_database.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-databases.svg',
 }

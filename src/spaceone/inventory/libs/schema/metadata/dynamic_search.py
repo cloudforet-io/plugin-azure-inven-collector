@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import StringType
+from schematics.types import StringType, ListType, PolyModelType
 
 
 class BaseDynamicSearch(Model):
@@ -8,3 +8,7 @@ class BaseDynamicSearch(Model):
     data_type = StringType(choices=['string', 'integer', 'float', 'boolean', 'datetime'],
                            serialize_when_none=False)
 
+
+class BaseDynamicSearchItem(Model):
+    title = StringType(default="Properties")
+    items = ListType(PolyModelType(BaseDynamicSearch), serialize_when_none=False)

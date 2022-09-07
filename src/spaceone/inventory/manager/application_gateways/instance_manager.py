@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.application_gateway import ApplicationGatewayConnector
-from spaceone.inventory.model.applicationgateway.cloud_service import *
-from spaceone.inventory.model.applicationgateway.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.applicationgateway.data import *
+from spaceone.inventory.connector.application_gateways import ApplicationGatewaysConnector
+from spaceone.inventory.model.application_gateways.cloud_service import *
+from spaceone.inventory.model.application_gateways.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.application_gateways.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class ApplicationGatewayManager(AzureManager):
-    connector_name = 'ApplicationGatewayConnector'
+class ApplicationGatewaysManager(AzureManager):
+    connector_name = 'ApplicationGatewaysConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class ApplicationGatewayManager(AzureManager):
         start_time = time.time()
         subscription_info = params['subscription_info']
 
-        application_gateway_conn: ApplicationGatewayConnector = self.locator.get_connector(self.connector_name, **params)
+        application_gateway_conn: ApplicationGatewaysConnector = self.locator.get_connector(self.connector_name, **params)
         application_gateways_responses = []
         error_responses = []
 

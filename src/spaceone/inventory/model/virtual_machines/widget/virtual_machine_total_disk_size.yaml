@@ -1,0 +1,20 @@
+---
+cloud_service_group: EC2
+cloud_service_type: Instance
+name: Total Disk Size
+query:
+  aggregate:
+    - unwind:
+        path: data.disks
+    - group:
+        fields:
+          - name: value
+            key: data.disks.size
+            operator: sum
+options:
+  value_options:
+    key: value
+    type: size
+    options:
+      default: 0
+      source_unit: GB

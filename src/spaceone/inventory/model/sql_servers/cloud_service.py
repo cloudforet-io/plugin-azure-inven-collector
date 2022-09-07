@@ -1,6 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
-from spaceone.inventory.model.sqlserver.data import SqlServer
+from spaceone.inventory.model.sql_servers.data import SqlServer
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
@@ -237,11 +237,11 @@ sql_servers_meta = CloudServiceMeta.set_layouts(
 
 
 class DatabaseResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Database')
+    cloud_service_group = StringType(default='SQLServers')
 
 
 class SqlServerResource(DatabaseResource):
-    cloud_service_type = StringType(default='SQLServer')
+    cloud_service_type = StringType(default='Server')
     data = ModelType(SqlServer)
     _metadata = ModelType(CloudServiceMeta, default=sql_servers_meta, serialized_name='metadata')
     name = StringType()

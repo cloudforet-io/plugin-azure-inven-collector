@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.nat_gateway import NATGatewayConnector
-from spaceone.inventory.model.natgateway.cloud_service import *
-from spaceone.inventory.model.natgateway.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.natgateway.data import *
+from spaceone.inventory.connector.nat_gateways import NATGatewaysConnector
+from spaceone.inventory.model.nat_gateways.cloud_service import *
+from spaceone.inventory.model.nat_gateways.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.nat_gateways.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class NATGatewayManager(AzureManager):
-    connector_name = 'NATGatewayConnector'
+class NATGatewaysManager(AzureManager):
+    connector_name = 'NATGatewaysConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class NATGatewayManager(AzureManager):
 
         subscription_info = params['subscription_info']
 
-        nat_gateway_conn: NATGatewayConnector = self.locator.get_connector(self.connector_name, **params)
+        nat_gateway_conn: NATGatewaysConnector = self.locator.get_connector(self.connector_name, **params)
         nat_gateway_responses = []
         error_responses = []
 

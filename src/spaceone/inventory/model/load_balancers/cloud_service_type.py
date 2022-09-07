@@ -12,10 +12,10 @@ loadbalancer_count_per_location_conf = os.path.join(current_dir, 'widget/loadbal
 loadbalancer_count_per_subscription_conf = os.path.join(current_dir, 'widget/loadbalancer_count_per_subscription.yaml')
 
 cst_load_balancer = CloudServiceTypeResource()
-cst_load_balancer.name = 'LoadBalancer'
-cst_load_balancer.group = 'Network'
+cst_load_balancer.name = 'Instance'
+cst_load_balancer.group = 'LoadBalancers'
 cst_load_balancer.service_code = 'Microsoft.Network/loadBalancers'
-cst_load_balancer.labels = ['Network']
+cst_load_balancer.labels = ['Networking']
 cst_load_balancer.is_major = True
 cst_load_balancer.is_primary = True
 cst_load_balancer.tags = {

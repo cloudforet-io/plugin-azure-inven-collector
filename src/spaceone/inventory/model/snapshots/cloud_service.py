@@ -1,6 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
-from spaceone.inventory.model.snapshot.data import Snapshot
+from spaceone.inventory.model.snapshots.data import Snapshot
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField, SizeField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout
@@ -42,11 +42,11 @@ snapshot_meta = CloudServiceMeta.set_layouts([snapshot_info_meta, snapshot_info_
 
 
 class ComputeResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Compute')
+    cloud_service_group = StringType(default='Snapshots')
 
 
 class SnapshotResource(ComputeResource):
-    cloud_service_type = StringType(default='Snapshot')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(Snapshot)
     _metadata = ModelType(CloudServiceMeta, default=snapshot_meta, serialized_name='metadata')
     name = StringType()

@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.model.natgateway.data import NatGateway
+from spaceone.inventory.model.nat_gateways.data import NatGateway
 
 '''
 NAT GATEWAY
@@ -63,11 +63,11 @@ nat_gateway_meta = CloudServiceMeta.set_layouts(
 
 
 class NetworkResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Network')
+    cloud_service_group = StringType(default='NATGateways')
 
 
 class NatGatewayResource(NetworkResource):
-    cloud_service_type = StringType(default='NATGateway')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(NatGateway)
     _metadata = ModelType(CloudServiceMeta, default=nat_gateway_meta, serialized_name='metadata')
     name = StringType()

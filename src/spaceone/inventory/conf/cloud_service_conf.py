@@ -4,20 +4,23 @@ SUPPORTED_SCHEDULES = ['hours']
 SUPPORTED_RESOURCE_TYPE = ['inventory.CloudService', 'inventory.CloudServiceType', 'inventory.Region']
 FILTER_FORMAT = []
 
+#todo
+
 CLOUD_SERVICE_GROUP_MAP = {
-    'ApplicationGateway': 'ApplicationGatewayManager',
-    'AzureCosmosDB': 'CosmosDBManager',
-    'Disk': 'DiskManager',
-    'KeyVault': 'KeyVaultManager',
-    'LoadBalancer': 'LoadBalancerManager',
-    'MySQLServer': 'MySQLServerManager',
-    'SQLServer': 'SqlServerManager',
-    'NATGateway': 'NATGatewayManager',
-    'NetworkSecurityGroup': 'NetworkSecurityGroupManager',
-    'PostgreSQLServer': 'PostgreSQLServerManager',
-    'PublicIPAddress': 'PublicIPAddressManager',
-    'Snapshot': 'SnapshotManager',
-    'StorageAccount': 'StorageAccountManager',
-    'VirtualNetwork': 'VirtualNetworkManager',
-    'VMScaleSet': 'VmScaleSetManager'
+    'ApplicationGateways': 'ApplicationGatewaysManager',
+    'CosmosDB': 'CosmosDBManager',
+    'Disks': 'DisksManager',
+    'KeyVaults': 'KeyVaultsManager',
+    'LoadBalancers': 'LoadBalancersManager',
+    'MySQLServers': 'MySQLServersManager',
+    'SQLServers': 'SQLServersManager',
+    'NATGateways': 'NATGatewaysManager',
+    'NetworkSecurityGroups': 'NetworkSecurityGroupsManager',
+    'PostgreSQLServers': 'PostgreSQLServersManager',
+    'PublicIPAddresses': 'PublicIPAddressesManager',
+    'Snapshots': 'SnapshotsManager',
+    'StorageAccounts': 'StorageAccountsManager',
+    'VirtualNetworks': 'VirtualNetworksManager',
+    'VMScaleSets': 'VmScaleSetsManager',
+    'VirtualMachines': 'VirtualMachinesManager',
 }

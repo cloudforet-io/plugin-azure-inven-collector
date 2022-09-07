@@ -1,6 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
-from spaceone.inventory.model.loadbalancer.data import LoadBalancer
+from spaceone.inventory.model.load_balancers.data import LoadBalancer
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
@@ -152,11 +152,11 @@ load_balancer_meta = CloudServiceMeta.set_layouts(
 
 
 class NetworkResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Network')
+    cloud_service_group = StringType(default='LoadBalancers')
 
 
 class LoadBalancerResource(NetworkResource):
-    cloud_service_type = StringType(default='LoadBalancer')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(LoadBalancer)
     _metadata = ModelType(CloudServiceMeta, default=load_balancer_meta, serialized_name='metadata')
     name = StringType()

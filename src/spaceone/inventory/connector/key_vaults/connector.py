@@ -6,11 +6,11 @@ from azure.keyvault.secrets import SecretClient
 from azure.keyvault.certificates import CertificateClient
 from azure.identity import DefaultAzureCredential
 
-__all__ = ['KeyVaultConnector']
+__all__ = ['KeyVaultsConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class KeyVaultConnector(AzureConnector):
+class KeyVaultsConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -14,10 +14,10 @@ virtualnetwork_subnet_count_per_subscription_conf = os.path.join(current_dir, 'w
 
 
 cst_virtual_network = CloudServiceTypeResource()
-cst_virtual_network.name = 'VirtualNetwork'
-cst_virtual_network.group = 'Network'
+cst_virtual_network.name = 'Instance'
+cst_virtual_network.group = 'VirtualNetworks'
 cst_virtual_network.service_code = 'Microsoft.Network/virtualNetworks'
-cst_virtual_network.labels = ['Network']
+cst_virtual_network.labels = ['Networking']
 cst_virtual_network.is_major = True
 cst_virtual_network.is_primary = True
 cst_virtual_network.tags = {

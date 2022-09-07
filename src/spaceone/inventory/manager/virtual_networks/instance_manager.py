@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.virtual_network import VirtualNetworkConnector
-from spaceone.inventory.model.virtualnetwork.cloud_service import *
-from spaceone.inventory.model.virtualnetwork.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.virtualnetwork.data import *
+from spaceone.inventory.connector.virtual_networks import VirtualNetworksConnector
+from spaceone.inventory.model.virtual_networks.cloud_service import *
+from spaceone.inventory.model.virtual_networks.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.virtual_networks.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class VirtualNetworkManager(AzureManager):
-    connector_name = 'VirtualNetworkConnector'
+class VirtualNetworksManager(AzureManager):
+    connector_name = 'VirtualNetworksConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -35,7 +35,7 @@ class VirtualNetworkManager(AzureManager):
         secret_data = params['secret_data']
         subscription_info = params['subscription_info']
 
-        vnet_conn: VirtualNetworkConnector = self.locator.get_connector(self.connector_name, **params)
+        vnet_conn: VirtualNetworksConnector = self.locator.get_connector(self.connector_name, **params)
         virtual_network_responses = []
         error_responses = []
 

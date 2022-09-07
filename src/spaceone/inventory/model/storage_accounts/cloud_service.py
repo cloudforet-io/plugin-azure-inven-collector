@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.model.storageaccount.data import StorageAccount
+from spaceone.inventory.model.storage_accounts.data import StorageAccount
 
 '''
 STORAGE_ACCOUNT
@@ -91,11 +91,11 @@ storage_account_meta = CloudServiceMeta.set_layouts(
 
 
 class StorageResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Storage')
+    cloud_service_group = StringType(default='StorageAccounts')
 
 
 class StorageAccountResource(StorageResource):
-    cloud_service_type = StringType(default='StorageAccount')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(StorageAccount)
     _metadata = ModelType(CloudServiceMeta, default=storage_account_meta, serialized_name='metadata')
     name = StringType()

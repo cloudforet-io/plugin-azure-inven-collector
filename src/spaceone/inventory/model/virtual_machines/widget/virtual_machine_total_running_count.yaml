@@ -1,0 +1,17 @@
+---
+cloud_service_group: EC2
+cloud_service_type: Instance
+name: Total Running Count
+query:
+  aggregate:
+    - count:
+        name: value
+  filter:
+    - key: data.compute.instance_state
+      value: RUNNING
+      operator: eq
+options:
+  value_options:
+    key: value
+    options:
+      default: 0

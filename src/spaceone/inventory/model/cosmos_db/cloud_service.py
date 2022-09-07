@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.model.cosmosdb.data import DatabaseAccountGetResults
+from spaceone.inventory.model.cosmos_db.data import DatabaseAccountGetResults
 
 '''
 COSMOS DB
@@ -107,11 +107,11 @@ cosmos_db_meta = CloudServiceMeta.set_layouts(
 
 
 class DatabaseResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Database')
+    cloud_service_group = StringType(default='CosmosDB')
 
 
 class CosmosDBResource(DatabaseResource):
-    cloud_service_type = StringType(default='AzureCosmosDB')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(DatabaseAccountGetResults)
     _metadata = ModelType(CloudServiceMeta, default=cosmos_db_meta, serialized_name='metadata')
     name = StringType()

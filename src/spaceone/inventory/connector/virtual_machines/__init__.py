@@ -1,0 +1,1 @@
+from spaceone.inventory.connector.virtual_machines.connector import VirtualMachinesConnector

@@ -2,17 +2,17 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.storage_account import StorageAccountConnector
-from spaceone.inventory.model.storageaccount.cloud_service import *
-from spaceone.inventory.model.storageaccount.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.storageaccount.data import *
+from spaceone.inventory.connector.storage_accounts import StorageAccountsConnector
+from spaceone.inventory.model.storage_accounts.cloud_service import *
+from spaceone.inventory.model.storage_accounts.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.storage_accounts.data import *
 
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class StorageAccountManager(AzureManager):
-    connector_name = 'StorageAccountConnector'
+class StorageAccountsManager(AzureManager):
+    connector_name = 'StorageAccountsConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class StorageAccountManager(AzureManager):
         start_time = time.time()
 
         subscription_info = params['subscription_info']
-        storage_account_conn: StorageAccountConnector = self.locator.get_connector(self.connector_name, **params)
+        storage_account_conn: StorageAccountsConnector = self.locator.get_connector(self.connector_name, **params)
         storage_account_responses = []
         error_responses = []
 

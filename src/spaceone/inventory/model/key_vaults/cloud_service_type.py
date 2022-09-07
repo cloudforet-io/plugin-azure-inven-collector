@@ -12,11 +12,11 @@ key_vault_count_per_subscription_conf = os.path.join(current_dir, 'widget/keyvau
 key_vault_key_count_per_location_conf = os.path.join(current_dir, 'widget/keyvault_key_count_per_location.yaml')
 
 cst_key_vault = CloudServiceTypeResource()
-cst_key_vault.name = 'KeyVault'
-cst_key_vault.group = 'KeyVault'
+cst_key_vault.name = 'Instance'
+cst_key_vault.group = 'KeyVaults'
 cst_key_vault.service_code = 'Microsoft.KeyVault/vaults'
-cst_key_vault.labels = ['KeyVault']
-cst_key_vault.is_major = False
+cst_key_vault.labels = ['Security']
+cst_key_vault.is_major = True
 cst_key_vault.is_primary = True
 cst_key_vault.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-key-vault.svg',

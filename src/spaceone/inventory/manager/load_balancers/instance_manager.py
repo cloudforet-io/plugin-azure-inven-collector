@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.loadbalncer import LoadBalancerConnector
-from spaceone.inventory.model.loadbalancer.cloud_service import *
-from spaceone.inventory.model.loadbalancer.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.loadbalancer.data import *
+from spaceone.inventory.connector.load_balancers import LoadBalancersConnector
+from spaceone.inventory.model.load_balancers.cloud_service import *
+from spaceone.inventory.model.load_balancers.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.load_balancers.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class LoadBalancerManager(AzureManager):
-    connector_name = 'LoadBalancerConnector'
+class LoadBalancersManager(AzureManager):
+    connector_name = 'LoadBalancersConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -33,7 +33,7 @@ class LoadBalancerManager(AzureManager):
         start_time = time.time()
 
         subscription_info = params['subscription_info']
-        load_balancer_conn: LoadBalancerConnector = self.locator.get_connector(self.connector_name, **params)
+        load_balancer_conn: LoadBalancersConnector = self.locator.get_connector(self.connector_name, **params)
         load_balancer_responses = []
         error_responses = []
         load_balancers = load_balancer_conn.list_load_balancers()

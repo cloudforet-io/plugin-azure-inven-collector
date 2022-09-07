@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.model.networksecuritygroup.data import NetworkSecurityGroup
+from spaceone.inventory.model.network_security_groups.data import NetworkSecurityGroup
 
 '''
 NETWORK_SECURITY_GROUP
@@ -69,11 +69,11 @@ network_security_group_meta = CloudServiceMeta.set_layouts(
 
 
 class NetworkResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Network')
+    cloud_service_group = StringType(default='NetworkSecurityGroups')
 
 
 class NetworkSecurityGroupResource(NetworkResource):
-    cloud_service_type = StringType(default='NetworkSecurityGroup')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(NetworkSecurityGroup)
     _metadata = ModelType(CloudServiceMeta, default=network_security_group_meta, serialized_name='metadata')
     name = StringType()

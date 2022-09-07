@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.mysql_server import MySQLServerConnector
-from spaceone.inventory.model.mysqlserver.cloud_service import *
-from spaceone.inventory.model.mysqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.mysqlserver.data import *
+from spaceone.inventory.connector.mysql_servers import MySQLServersConnector
+from spaceone.inventory.model.mysql_servers.cloud_service import *
+from spaceone.inventory.model.mysql_servers.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.mysql_servers.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class MySQLServerManager(AzureManager):
-    connector_name = 'MySQLServerConnector'
+class MySQLServersManager(AzureManager):
+    connector_name = 'MySQLServersConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class MySQLServerManager(AzureManager):
 
         subscription_info = params['subscription_info']
 
-        mysql_servers_conn: MySQLServerConnector = self.locator.get_connector(self.connector_name, **params)
+        mysql_servers_conn: MySQLServersConnector = self.locator.get_connector(self.connector_name, **params)
         mysql_server_responses = []
         error_responses = []
 

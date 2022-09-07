@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.network_security_group import NetworkSecurityGroupConnector
-from spaceone.inventory.model.networksecuritygroup.cloud_service import *
-from spaceone.inventory.model.networksecuritygroup.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.networksecuritygroup.data import *
+from spaceone.inventory.connector.network_security_groups import NetworkSecurityGroupsConnector
+from spaceone.inventory.model.network_security_groups.cloud_service import *
+from spaceone.inventory.model.network_security_groups.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.network_security_groups.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class NetworkSecurityGroupManager(AzureManager):
-    connector_name = 'NetworkSecurityGroupConnector'
+class NetworkSecurityGroupsManager(AzureManager):
+    connector_name = 'NetworkSecurityGroupsConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -36,7 +36,7 @@ class NetworkSecurityGroupManager(AzureManager):
         subscription_info = params['subscription_info']
         # cloud_service_info = self.get_cloud
 
-        network_security_group_conn: NetworkSecurityGroupConnector = self.locator.get_connector(self.connector_name, **params)
+        network_security_group_conn: NetworkSecurityGroupsConnector = self.locator.get_connector(self.connector_name, **params)
 
         network_security_group_responses = []
         error_responses = []

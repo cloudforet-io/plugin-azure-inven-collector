@@ -4,11 +4,11 @@ from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error import *
 from spaceone.inventory.error.custom import *
 
-__all__ = ['PublicIPAddressConnector']
+__all__ = ['PublicIPAddressesConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class PublicIPAddressConnector(AzureConnector):
+class PublicIPAddressesConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

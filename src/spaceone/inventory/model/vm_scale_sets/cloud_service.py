@@ -1,6 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
-from spaceone.inventory.model.vmscaleset.data import VirtualMachineScaleSet
+from spaceone.inventory.model.vm_scale_sets.data import VirtualMachineScaleSet
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
     ListDyField, SizeField, StateItemDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
@@ -169,11 +169,11 @@ vm_scale_set_meta = CloudServiceMeta.set_layouts(
 
 
 class ComputeResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Compute')
+    cloud_service_group = StringType(default='VMScaleSets')
 
 
 class VmScaleSetResource(ComputeResource):
-    cloud_service_type = StringType(default='VmScaleSet')
+    cloud_service_type = StringType(default='ScaleSet')
     data = ModelType(VirtualMachineScaleSet)
     _metadata = ModelType(CloudServiceMeta, default=vm_scale_set_meta, serialized_name='metadata')
     name = StringType()

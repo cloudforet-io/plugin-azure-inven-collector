@@ -99,7 +99,8 @@ class AzureManager(BaseManager):
         """ Check collector's status.
         """
         connector: AzureConnector = self.locator.get_connector('AzureConnector', secret_data=secret_data)
-        connector.verify()
+        params = {'secret_data': secret_data}
+        connector.verify(**params)
 
     def collect_cloud_service_type(self, params):
         options = params.get('options', {})

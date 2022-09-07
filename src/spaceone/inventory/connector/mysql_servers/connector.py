@@ -3,11 +3,11 @@ import logging
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error.custom import *
 
-__all__ = ['MySQLServerConnector']
+__all__ = ['MySQLServersConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class MySQLServerConnector(AzureConnector):
+class MySQLServersConnector(AzureConnector):
 
     def __init__(self, secret_data=None, **kwargs):
         super().__init__(**kwargs)

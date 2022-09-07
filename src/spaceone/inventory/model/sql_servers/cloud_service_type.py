@@ -19,8 +19,8 @@ sql_server_failover_count_per_server_conf = os.path.join(current_dir, 'widget/sq
 
 
 cst_sql_server = CloudServiceTypeResource()
-cst_sql_server.name = 'SQLServer'
-cst_sql_server.group = 'Database'
+cst_sql_server.name = 'Server'
+cst_sql_server.group = 'SQLServers'
 cst_sql_server.service_code = 'Microsoft.Sql/servers'
 cst_sql_server.labels = ['Database']
 cst_sql_server.is_primary = True

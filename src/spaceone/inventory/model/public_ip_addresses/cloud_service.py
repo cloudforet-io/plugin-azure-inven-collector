@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.model.publicipaddress.data import PublicIPAddress
+from spaceone.inventory.model.public_ip_addresses.data import PublicIPAddress
 
 '''
 PUBLIC_IP_ADDRESS
@@ -53,11 +53,11 @@ public_addresses_meta = CloudServiceMeta.set_layouts([public_ip_address_meta, pu
 
 
 class NetworkResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Network')
+    cloud_service_group = StringType(default='PublicIPAddresses')
 
 
 class PublicIPAddressResource(NetworkResource):
-    cloud_service_type = StringType(default='PublicIPAddress')
+    cloud_service_type = StringType(default='IPAddress')
     data = ModelType(PublicIPAddress)
     _metadata = ModelType(CloudServiceMeta, default=public_addresses_meta, serialized_name='metadata')
     name = StringType()

@@ -14,12 +14,12 @@ postgresql_count_per_tier_conf = os.path.join(current_dir, 'widget/postgresql_co
 
 
 cst_postgre_sql_server = CloudServiceTypeResource()
-cst_postgre_sql_server.name = 'PostgreSQLServer'
-cst_postgre_sql_server.group = 'Database'
+cst_postgre_sql_server.name = 'Server'
+cst_postgre_sql_server.group = 'PostgreSQLServers'
 cst_postgre_sql_server.service_code = 'Microsoft.DBforPostgreSQL/servers'
 cst_postgre_sql_server.labels = ['Database']
-cst_postgre_sql_server.is_primary = False
-cst_postgre_sql_server.is_major = False
+cst_postgre_sql_server.is_primary = True
+cst_postgre_sql_server.is_major = True
 cst_postgre_sql_server.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-postgresql-server.svg',
 }

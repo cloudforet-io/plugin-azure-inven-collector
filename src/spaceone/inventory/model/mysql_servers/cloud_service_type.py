@@ -14,12 +14,12 @@ mysql_server_count_per_tier_conf = os.path.join(current_dir, 'widget/mysql_serve
 
 
 cst_mysql_server = CloudServiceTypeResource()
-cst_mysql_server.name = 'MySQLServer'
-cst_mysql_server.group = 'Database'
+cst_mysql_server.name = 'Server'
+cst_mysql_server.group = 'MySQLServers'
 cst_mysql_server.service_code = 'Microsoft.DBforMySQL/servers'
-cst_mysql_server.labels = ['MySQLServer']
-cst_mysql_server.is_major = False
-cst_mysql_server.is_primary = False
+cst_mysql_server.labels = ['Database']
+cst_mysql_server.is_major = True
+cst_mysql_server.is_primary = True
 cst_mysql_server.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-mysql-servers.svg',
 }

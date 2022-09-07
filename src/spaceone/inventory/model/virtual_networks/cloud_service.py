@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
-from spaceone.inventory.model.virtualnetwork.data import VirtualNetwork
+from spaceone.inventory.model.virtual_networks.data import VirtualNetwork
 
 '''
 VIRTUAL_NETWORK
@@ -106,11 +106,11 @@ virtual_network_meta = CloudServiceMeta.set_layouts(
 
 
 class NetworkResource(CloudServiceResource):
-    cloud_service_group = StringType(default='Network')
+    cloud_service_group = StringType(default='VirtualNetworks')
 
 
 class VirtualNetworkResource(NetworkResource):
-    cloud_service_type = StringType(default='VirtualNetwork')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(VirtualNetwork)
     _metadata = ModelType(CloudServiceMeta, default=virtual_network_meta, serialized_name='metadata')
     name = StringType()

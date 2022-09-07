@@ -2,11 +2,11 @@ import logging
 
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error.custom import *
-__all__ = ['ApplicationGatewayConnector']
+__all__ = ['ApplicationGatewaysConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class ApplicationGatewayConnector(AzureConnector):
+class ApplicationGatewaysConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

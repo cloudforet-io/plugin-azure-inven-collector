@@ -15,12 +15,12 @@ snapshot_total_size_conf = os.path.join(current_dir, 'widget/snapshot_total_size
 
 
 cst_snapshot = CloudServiceTypeResource()
-cst_snapshot.name = 'Snapshot'
-cst_snapshot.group = 'Compute'
+cst_snapshot.name = 'Instance'
+cst_snapshot.group = 'Snapshots'
 cst_snapshot.service_code = 'Microsoft.Compute/snapshots'
 cst_snapshot.labels = ['Compute', 'Storage']
-cst_snapshot.is_primary = False
-cst_snapshot.is_major = False
+cst_snapshot.is_primary = True
+cst_snapshot.is_major = True
 cst_snapshot.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk-snapshot.svg',
 }

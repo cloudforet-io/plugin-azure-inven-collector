@@ -3,11 +3,11 @@ import logging
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error import *
 
-__all__ = ['NetworkSecurityGroupConnector']
+__all__ = ['NetworkSecurityGroupsConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class NetworkSecurityGroupConnector(AzureConnector):
+class NetworkSecurityGroupsConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

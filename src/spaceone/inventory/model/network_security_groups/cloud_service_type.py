@@ -14,12 +14,12 @@ nsg_inbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_
 nsg_outbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_outbound_count_per_subscription.yaml')
 
 cst_network_security_group = CloudServiceTypeResource()
-cst_network_security_group.name = 'NetworkSecurityGroup'
-cst_network_security_group.group = 'Network'
+cst_network_security_group.name = 'Instance'
+cst_network_security_group.group = 'NetworkSecurityGroups'
 cst_network_security_group.service_code = 'Microsoft.Network/networkSecurityGroups'
-cst_network_security_group.labels = ['Network']
-cst_network_security_group.is_major = False
-cst_network_security_group.is_primary = False
+cst_network_security_group.labels = ['Networking']
+cst_network_security_group.is_major = True
+cst_network_security_group.is_primary = True
 cst_network_security_group.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-network-security-groups.svg',
 }

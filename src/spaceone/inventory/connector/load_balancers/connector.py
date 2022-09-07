@@ -2,11 +2,11 @@ import logging
 
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error.custom import *
-__all__ = ['LoadBalancerConnector']
+__all__ = ['LoadBalancersConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class LoadBalancerConnector(AzureConnector):
+class LoadBalancersConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

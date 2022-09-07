@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.public_ip_address import PublicIPAddressConnector
-from spaceone.inventory.model.publicipaddress.cloud_service import *
-from spaceone.inventory.model.publicipaddress.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.publicipaddress.data import *
+from spaceone.inventory.connector.public_ip_addresses import PublicIPAddressesConnector
+from spaceone.inventory.model.public_ip_addresses.cloud_service import *
+from spaceone.inventory.model.public_ip_addresses.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.public_ip_addresses.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class PublicIPAddressManager(AzureManager):
-    connector_name = 'PublicIPAddressConnector'
+class PublicIPAddressesManager(AzureManager):
+    connector_name = 'PublicIPAddressesConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class PublicIPAddressManager(AzureManager):
 
         subscription_info = params['subscription_info']
 
-        public_ip_address_conn: PublicIPAddressConnector = self.locator.get_connector(self.connector_name,**params)
+        public_ip_address_conn: PublicIPAddressesConnector = self.locator.get_connector(self.connector_name,**params)
         public_ip_address_responses = []
         error_responses = []
 

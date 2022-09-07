@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.vmscaleset import VmScaleSetConnector
-from spaceone.inventory.model.vmscaleset.cloud_service import *
-from spaceone.inventory.model.vmscaleset.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.vmscaleset.data import *
+from spaceone.inventory.connector.vm_scale_sets import VmScaleSetsConnector
+from spaceone.inventory.model.vm_scale_sets.cloud_service import *
+from spaceone.inventory.model.vm_scale_sets.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.vm_scale_sets.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class VmScaleSetManager(AzureManager):
-    connector_name = 'VmScaleSetConnector'
+class VmScaleSetsManager(AzureManager):
+    connector_name = 'VmScaleSetsConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class VmScaleSetManager(AzureManager):
 
         subscription_info = params['subscription_info']
 
-        vm_scale_set_conn: VmScaleSetConnector = self.locator.get_connector(self.connector_name, **params)
+        vm_scale_set_conn: VmScaleSetsConnector = self.locator.get_connector(self.connector_name, **params)
         vm_scale_set_responses = []
         error_responses = []
 

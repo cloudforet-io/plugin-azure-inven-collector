@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.postgresql_server import PostgreSQLServerConnector
-from spaceone.inventory.model.postgresqlserver.cloud_service import *
-from spaceone.inventory.model.postgresqlserver.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.postgresqlserver.data import *
+from spaceone.inventory.connector.postgresql_servers import PostgreSQLServersConnector
+from spaceone.inventory.model.postgresql_servers.cloud_service import *
+from spaceone.inventory.model.postgresql_servers.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.postgresql_servers.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class PostgreSQLServerManager(AzureManager):
-    connector_name = 'PostgreSQLServerConnector'
+class PostgreSQLServersManager(AzureManager):
+    connector_name = 'PostgreSQLServersConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):

@@ -12,12 +12,12 @@ nat_gateway_count_per_location_conf = os.path.join(current_dir, 'widget/nat_gate
 nat_gateway_count_per_subscription_conf = os.path.join(current_dir, 'widget/nat_gateway_count_per_subscription.yaml')
 
 cst_nat_gateway = CloudServiceTypeResource()
-cst_nat_gateway.name = 'NATGateway'
-cst_nat_gateway.group = 'Network'
+cst_nat_gateway.name = 'Instance'
+cst_nat_gateway.group = 'NATGateways'
 cst_nat_gateway.service_code = 'Microsoft.Network/natGateways'
-cst_nat_gateway.labels = ['Network']
-cst_nat_gateway.is_major = False
-cst_nat_gateway.is_primary = False
+cst_nat_gateway.labels = ['Networking']
+cst_nat_gateway.is_major = True
+cst_nat_gateway.is_primary = True
 cst_nat_gateway.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-nat.svg',
 }

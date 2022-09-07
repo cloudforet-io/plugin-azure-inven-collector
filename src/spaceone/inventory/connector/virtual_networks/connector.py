@@ -3,11 +3,11 @@ import logging
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error.custom import *
 
-__all__ = ['VirtualNetworkConnector']
+__all__ = ['VirtualNetworksConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class VirtualNetworkConnector(AzureConnector):
+class VirtualNetworksConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -2,16 +2,16 @@ import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
-from spaceone.inventory.connector.key_vault import KeyVaultConnector
-from spaceone.inventory.model.keyvault.cloud_service import *
-from spaceone.inventory.model.keyvault.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.keyvault.data import *
+from spaceone.inventory.connector.key_vaults import KeyVaultsConnector
+from spaceone.inventory.model.key_vaults.cloud_service import *
+from spaceone.inventory.model.key_vaults.cloud_service_type import CLOUD_SERVICE_TYPES
+from spaceone.inventory.model.key_vaults.data import *
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class KeyVaultManager(AzureManager):
-    connector_name = 'KeyVaultConnector'
+class KeyVaultsManager(AzureManager):
+    connector_name = 'KeyVaultsConnector'
     cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
@@ -34,7 +34,7 @@ class KeyVaultManager(AzureManager):
 
         subscription_info = params['subscription_info']
 
-        key_vault_conn: KeyVaultConnector = self.locator.get_connector(self.connector_name, **params)
+        key_vault_conn: KeyVaultsConnector = self.locator.get_connector(self.connector_name, **params)
         key_vault_responses = []
         error_responses = []
 
