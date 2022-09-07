@@ -2,11 +2,11 @@ import logging
 
 from spaceone.inventory.libs.connector import AzureConnector
 from spaceone.inventory.error.custom import *
-__all__ = ['SqlConnector']
+__all__ = ['SqlDatabasesConnector']
 _LOGGER = logging.getLogger(__name__)
 
 
-class SqlConnector(AzureConnector):
+class SqlDatabasesConnector(AzureConnector):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
