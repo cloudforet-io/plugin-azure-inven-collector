@@ -55,6 +55,7 @@ class CollectorService(BaseService):
                 - filter
         """
 
+        print(f"options {params.get('options')}")
         start_time = time.time()
         secret_data = params.get('secret_data', {})
         params.update({

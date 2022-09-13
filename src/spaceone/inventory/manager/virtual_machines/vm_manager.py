@@ -10,7 +10,7 @@ class VirtualMachineVmManager(BaseManager):
         self.params = params
         self.azure_vm_connector: VirtualMachinesConnector = azure_vm_connector
 
-    def get_vm_info(self, vm, disks, nics, resource_group, subscription, network_security_groups, vm_sizes, primary_ip):
+    def get_vm_info(self, vm, disks, nics, resource_group, subscription, network_security_groups, primary_ip, skus_dict):
         '''
         server_data = {
             "name": ""
@@ -75,10 +75,11 @@ class VirtualMachineVmManager(BaseManager):
 
         vm_dic = self.get_vm_dic(vm, nics)
         os_data = self.get_os_data(vm.storage_profile)
-        hardware_data = self.get_hardware_data(vm, vm_sizes)
+        # hardware_data = self.get_hardware_data(vm, vm_sizes)
         azure_data = self.get_azure_data(vm)
         compute_data = self.get_compute_data(vm, resource_group_name, network_security_groups, subscription)
         resource_group_data = self.get_resource_group_data(resource_group)
+        hardware_data = self.get_hardware_data(vm, skus_dict, compute_data)
 
         vm_dic.update({
             'data': {
@@ -125,7 +126,7 @@ class VirtualMachineVmManager(BaseManager):
             except Exception as e:
                 print(f'[ERROR: GET OS Data]: {e}')
 
-    def get_hardware_data(self, vm, vm_sizes):
+    def get_hardware_data_(self, vm, vm_sizes):
         """
         vm_sizes = [
             {
@@ -149,10 +150,46 @@ class VirtualMachineVmManager(BaseManager):
             'location': location,
             'list_sizes': list(self.azure_vm_connector.list_virtual_machine_sizes(location))
         })
+        print("=========")
+        import pprint
+        for result in new_vm_size['list_sizes']:
+            print(result)
+        print("=========")
 
         vm_sizes.append(new_vm_size)
         hardware_data = self.get_vm_hardware_info(new_vm_size.get('list_sizes'), size)
         return Hardware(hardware_data, strict=False)
+
+    @staticmethod
+    def get_hardware_data(vm, skus_dict, compute_data):
+        """
+        skus = [
+            {
+                'memory': '0.75',
+                'family': 'basicAFamily',
+                'name': 'Basic_A0',
+                'resource_type': 'virtualMachines',
+                'size': 'A0',
+                'tier': 'Basic',
+                'core': '1'},
+            },
+        ]
+        """
+        # caching location info by vm_sizes
+        location = vm.location
+        # size = vm.hardware_profile.vm_size
+        instance_type = compute_data.instance_type
+
+        hardware_data = Hardware(strict=False)
+        for sku in skus_dict[location]:
+            if sku['name'] == instance_type:
+                print(location)
+                print(f'hardware data {hardware_data}')
+                print(f'{sku["memory"]} {sku["core"]}')
+                hardware_data = Hardware(sku, strict=False)
+
+
+        return hardware_data
 
     def get_compute_data(self, vm, resource_group_name, network_security_groups, subscription_id):
         vm_info = self.azure_vm_connector.get_vm(resource_group_name, vm.name)

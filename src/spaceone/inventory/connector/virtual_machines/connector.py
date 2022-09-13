@@ -77,3 +77,6 @@ class VirtualMachinesConnector(AzureConnector):
 
     def list_virtual_machine_scale_sets_in_rg(self, resource_group_name):
         return self.compute_client.virtual_machine_scale_sets.list(resource_group_name)
+
+    def list_skus(self):
+        return self.compute_client.resource_skus.list()
