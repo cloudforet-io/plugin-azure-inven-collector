@@ -27,6 +27,7 @@ class VirtualMachinesConnector(AzureConnector):
     def get_vm(self, resource_group_name, vm_name):
         return self.compute_client.virtual_machines.get(resource_group_name, vm_name, expand='instanceView')
 
+    # todo : deprecated
     def list_virtual_machine_sizes(self, location):
         return self.compute_client.virtual_machine_sizes.list(location=location)
 

@@ -319,11 +319,11 @@ class EnumDyField(BaseDynamicField):
         _data_source.update({'options': _options_dic})
 
         if 'options' in kwargs:
+            print(f'enum options {kwargs.get("options")}')
             _data_source.update({'options': kwargs.get('options')})
 
         if 'reference' in kwargs:
             _data_source.update({'reference': kwargs.get('reference')})
-
         return cls(_data_source)
 
 
@@ -376,12 +376,14 @@ class AzureEnumField(BaseDynamicField):
         _enum_options = {'items': _options_item_dic}
 
         if 'options' in kwargs:
+            print(f'options {kwargs.get("options")}')
             _enum_options.update(kwargs.get('options'))
 
         if 'reference' in kwargs:
             _data_source.update({'reference': kwargs.get('reference')})
 
         _data_source.update({'options': EnumOptionDyField(_enum_options)})
+        print(_data_source)
         return cls(_data_source)
 
 

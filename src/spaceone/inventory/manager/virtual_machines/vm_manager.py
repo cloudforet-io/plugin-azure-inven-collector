@@ -73,7 +73,7 @@ class VirtualMachineVmManager(BaseManager):
 
         resource_group_name = resource_group.name
 
-        vm_dic = self.get_vm_dic(vm, nics)
+        vm_dict = self.get_vm_dict(vm, nics)
         os_data = self.get_os_data(vm.storage_profile)
         # hardware_data = self.get_hardware_data(vm, vm_sizes)
         azure_data = self.get_azure_data(vm)
@@ -81,7 +81,7 @@ class VirtualMachineVmManager(BaseManager):
         resource_group_data = self.get_resource_group_data(resource_group)
         hardware_data = self.get_hardware_data(vm, skus_dict, compute_data)
 
-        vm_dic.update({
+        vm_dict.update({
             'data': {
                 'os': os_data,
                 'hardware': hardware_data,
@@ -94,9 +94,9 @@ class VirtualMachineVmManager(BaseManager):
             }
         })
 
-        return vm_dic
+        return vm_dict
 
-    def get_vm_dic(self, vm, nic_vos):
+    def get_vm_dict(self, vm, nic_vos):
         vm_data = {
             'name': vm.name,
             'region_code': vm.location,
@@ -126,44 +126,10 @@ class VirtualMachineVmManager(BaseManager):
             except Exception as e:
                 print(f'[ERROR: GET OS Data]: {e}')
 
-    def get_hardware_data_(self, vm, vm_sizes):
-        """
-        vm_sizes = [
-            {
-                'location': 'koreacentral',
-                'list_sizes': []
-            },
-        ]
-        """
-        # caching location info by vm_sizes
-        location = vm.location
-        size = vm.hardware_profile.vm_size
-
-        if vm_sizes:
-            for vm_size in vm_sizes:
-                if vm_size.get('location') == location:
-                    hardware_data = self.get_vm_hardware_info(vm_size.get('list_sizes'), size)
-                    return Hardware(hardware_data, strict=False)
-
-        new_vm_size = {}
-        new_vm_size.update({
-            'location': location,
-            'list_sizes': list(self.azure_vm_connector.list_virtual_machine_sizes(location))
-        })
-        print("=========")
-        import pprint
-        for result in new_vm_size['list_sizes']:
-            print(result)
-        print("=========")
-
-        vm_sizes.append(new_vm_size)
-        hardware_data = self.get_vm_hardware_info(new_vm_size.get('list_sizes'), size)
-        return Hardware(hardware_data, strict=False)
-
     @staticmethod
     def get_hardware_data(vm, skus_dict, compute_data):
         """
-        skus = [
+        skus_dict = [
             {
                 'memory': '0.75',
                 'family': 'basicAFamily',
@@ -175,20 +141,14 @@ class VirtualMachineVmManager(BaseManager):
             },
         ]
         """
-        # caching location info by vm_sizes
+
         location = vm.location
-        # size = vm.hardware_profile.vm_size
         instance_type = compute_data.instance_type
 
         hardware_data = Hardware(strict=False)
         for sku in skus_dict[location]:
             if sku['name'] == instance_type:
-                print(location)
-                print(f'hardware data {hardware_data}')
-                print(f'{sku["memory"]} {sku["core"]}')
                 hardware_data = Hardware(sku, strict=False)
-
-
         return hardware_data
 
     def get_compute_data(self, vm, resource_group_name, network_security_groups, subscription_id):

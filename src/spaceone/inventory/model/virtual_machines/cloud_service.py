@@ -15,7 +15,7 @@ Virtual Machine
 virtual_machine = ItemDynamicLayout.set_fields('Virtual Machine', fields=[
     TextDyField.data_source('Resource ID', 'data.compute.instance_id'),
     TextDyField.data_source('VM ID', 'data.compute.tags.vm_id'),
-    AzureEnumField.data_source('VM State', 'data.compute.instance_state', default_state={
+    EnumDyField.data_source('VM State', 'data.compute.instance_state', default_state={
         'safe': ['RUNNING'],
         'warning': ['STARTING', 'DEALLOCATING', 'STOPPING', 'DEALLOCATING'],
         'disable': ['DEALLOCATED'],
@@ -23,19 +23,19 @@ virtual_machine = ItemDynamicLayout.set_fields('Virtual Machine', fields=[
     }),
     TextDyField.data_source('Instance Type', 'data.compute.instance_type'),
     TextDyField.data_source('Image', 'data.compute.image'),
-    AzureEnumField.data_source('Azure Priority', 'data.azure.priority', default_badge={
+    EnumDyField.data_source('Azure Priority', 'data.azure.priority', default_badge={
         'indigo.500': ['Regular'], 'coral.600': ['Low'], 'peacock.600': ['Spot']
     }),
     TextDyField.data_source('Region', 'region_code'),
     TextDyField.data_source('Availability Zone', 'data.compute.az'),
     TextDyField.data_source('Key Pair', 'data.compute.keypair'),
-    AzureEnumField.data_source('Ultra SSD Enabled', 'data.azure.ultra_ssd_enabled', default_badge={
+    EnumDyField.data_source('Ultra SSD Enabled', 'data.azure.ultra_ssd_enabled', default_badge={
         'indigo.500': ['true'], 'coral.600': ['false'],
     }),
-    AzureEnumField.data_source('Write Accelerator Enabled', 'data.azure.write_accelerator_enabled', default_badge={
+    EnumDyField.data_source('Write Accelerator Enabled', 'data.azure.write_accelerator_enabled', default_badge={
         'indigo.500': ['true'], 'coral.600': ['false']
     }),
-    AzureEnumField.data_source('Boot Diagnostics', 'data.azure.boot_diagnostics', default_badge={
+    EnumDyField.data_source('Boot Diagnostics', 'data.azure.boot_diagnostics', default_badge={
         'indigo.500': ['true'], 'coral.600': ['false']
     }),
     ListDyField.data_source('Public IP', 'nics', options={
@@ -107,29 +107,29 @@ nic = TableDynamicLayout.set_fields('NIC', root_path='data.nics', fields=[
     TextDyField.data_source('MAC Address', 'mac_address'),
     TextDyField.data_source('CIDR', 'cidr'),
     TextDyField.data_source('etag', 'tags.etag'),
-    AzureEnumField.data_source('Enable Accelerated Networking', 'tags.enable_accelerated_networking',
+    EnumDyField.data_source('Enable Accelerated Networking', 'tags.enable_accelerated_networking',
                             default_badge={
                                 'indigo.500': ['true'], 'coral.600': ['false']
                             }),
-    AzureEnumField.data_source('Enable IP Forwarding', 'tags.enable_ip_forwarding', default_badge={
+    EnumDyField.data_source('Enable IP Forwarding', 'tags.enable_ip_forwarding', default_badge={
         'indigo.500': ['true'], 'coral.600': ['false']
     }),
 ])
 
 # Tab - Security Group
 security_group = TableDynamicLayout.set_fields('Network Security Groups', root_path='data.security_group', fields=[
-    AzureEnumField.data_source('Direction', 'direction', default_badge={
+    EnumDyField.data_source('Direction', 'direction', default_badge={
         'indigo.500': ['inbound'],
         'coral.600': ['outbound']
     }),
     TextDyField.data_source('Name', 'security_group_name'),
-    AzureEnumField.data_source('Protocol', 'protocol', default_outline_badge=['ALL', 'TCP',
+    EnumDyField.data_source('Protocol', 'protocol', default_outline_badge=['ALL', 'TCP',
                                                                            'UDP',
                                                                            'ICMP']),
     TextDyField.data_source('Port Range', 'port'),
     TextDyField.data_source('Remote', 'remote'),
     TextDyField.data_source('Priority', 'priority'),
-    AzureEnumField.data_source('Action', 'action', default_badge={
+    EnumDyField.data_source('Action', 'action', default_badge={
         'indigo.500': ['allow'], 'coral.600': ['deny']
     }),
     TextDyField.data_source('Description', 'description'),
@@ -139,12 +139,12 @@ security_group = TableDynamicLayout.set_fields('Network Security Groups', root_p
 lb = TableDynamicLayout.set_fields('Load Balancer', root_path='data.load_balancer', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Endpoint', 'endpoint'),
-    AzureEnumField.data_source('Type', 'type', default_badge={
+    EnumDyField.data_source('Type', 'type', default_badge={
         'indigo.500': ['network'], 'coral.600': ['application']
     }),
     ListDyField.data_source('Protocol', 'protocol', options={'delimiter': '<br>'}),
     ListDyField.data_source('Port', 'port', options={'delimiter': '<br>'}),
-    AzureEnumField.data_source('Scheme', 'scheme', default_badge={
+    EnumDyField.data_source('Scheme', 'scheme', default_badge={
         'indigo.500': ['internet-facing'], 'coral.600': ['internal']
     }),
 ])

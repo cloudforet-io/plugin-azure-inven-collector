@@ -113,8 +113,8 @@ class SQLServersManager(AzureManager):
                     'tags': _tags
                 })
 
-                sql_server_data = SqlServer(sql_server_dict, strict=False)
-                sql_servers_resource = SqlServerResource({
+                sql_server_data = SQLServer(sql_server_dict, strict=False)
+                sql_servers_resource = SQLServerResource({
                     'data': sql_server_data,
                     'region_code': sql_server_data.location,
                     'reference': ReferenceModel(sql_server_data.reference()),
@@ -122,16 +122,16 @@ class SQLServersManager(AzureManager):
                     'name': sql_server_data.name,
                     'account': sql_server_data.subscription_id
                 })
-                sql_server_responses.append(SqlServerResponse({'resource': sql_servers_resource}))
-                # _LOGGER.debug(f'[SQL SERVER INFO] {sql_servers_resource.to_primitive()}')
+                sql_server_responses.append(SQLServerResponse({'resource': sql_servers_resource}))
+                _LOGGER.debug(f'[SQL SERVER INFO] {sql_servers_resource.to_primitive()}')
 
                 for sql_database in sql_server_dict.get('databases', []):
-                    sql_database_data = Database(sql_database, strict=False)
+                    sql_database_data = SQLDatabase(sql_database, strict=False)
                     sql_databases_resource = SqlDatabaseResource({
                         'data': sql_database_data,
                         'region_code': sql_database_data.location,
                         'reference': ReferenceModel(sql_database_data.reference()),
-                        'tags': _tags,
+                        # 'tags': _tags,
                         'name': sql_database_data.name,
                         'account': sql_database_data.subscription_id,
                         'instance_type': sql_database_data.sku.tier,
@@ -155,7 +155,7 @@ class SQLServersManager(AzureManager):
 
     @staticmethod
     def list_databases(self, sql_servers_conn, sql_monitor_conn, rg_name, server_name, server_admin_name):
-        databases_list = list()
+        databases_list = list() # todo : list() , []
         databases = sql_servers_conn.list_databases_by_server(resource_group=rg_name, server_name=server_name)
 
         for database in databases:
@@ -227,6 +227,12 @@ class SQLServersManager(AzureManager):
                 database_dict.update({
                     'administrator_login': server_admin_name
                 })
+            # switch tags form
+            tags = database_dict.get('tags', {})
+            _tags = self.convert_tag_format(tags)
+            database_dict.update({
+                'tags': _tags
+            })
 
             databases_list.append(database_dict)
 

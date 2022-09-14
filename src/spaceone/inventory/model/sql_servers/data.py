@@ -196,12 +196,14 @@ class ReplicationLink(Model):
     is_termination_allowed = BooleanType(serialize_when_none=False)
     partner_database = StringType(serialize_when_none=False)
     partner_location = StringType(serialize_when_none=False)
-    partner_role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
+    partner_role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'),
+                              serialize_when_none=False)
     partner_server = StringType(default='-')
     percent_complete = IntType(serialize_when_none=False)
     replication_mode = StringType(serialize_when_none=False)
     replication_state = StringType(choices=('CATCH_UP', 'PENDING', 'SEEDING', 'SUSPENDED'), serialize_when_none=False)
-    role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
+    role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'),
+                      serialize_when_none=False)
     start_time = DateTimeType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
@@ -278,7 +280,7 @@ class Database(Model):
     pricing_tier_display = StringType(default='-')
     service_tier_display = StringType(default='-')
     compute_tier = StringType(serialize_when_none=False)
-    tags = (ModelType(Tags))
+    tags = ListType(ModelType(Tags))
     type = StringType(serialize_when_none=False)
 
 
@@ -346,7 +348,8 @@ class VirtualNetworkRule(Model):
     subscription_id = StringType(serialize_when_none=False)
     resource_group = StringType(serialize_when_none=False)
     ignore_missing_vnet_service_endpoint = BooleanType(serialize_when_none=False)
-    state = StringType(choices=('Deleting', 'InProgress', 'Initializing', 'Ready', 'Unknown'), serialize_when_none=False)
+    state = StringType(choices=('Deleting', 'InProgress', 'Initializing', 'Ready', 'Unknown'),
+                       serialize_when_none=False)
     virtual_network_subnet_id = StringType(serialize_when_none=False)
     virtual_network_name_display = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
@@ -362,7 +365,7 @@ class FirewallRule(Model):
     type = StringType(serialize_when_none=False)
 
 
-class SqlServer(AzureCloudService):
+class SQLServer(AzureCloudService):
     name = StringType()
     id = StringType()
     identity = ModelType(ResourceIdentity, serialize_when_none=False)

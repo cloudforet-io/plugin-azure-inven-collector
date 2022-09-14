@@ -103,7 +103,7 @@ class Sku(Model):
     tier = StringType(serialize_when_none=False)
 
 
-class Database(AzureCloudService):
+class SQLDatabase(AzureCloudService):
     name = StringType(serialize_when_none=False)
     id = StringType()
     kind = StringType(serialize_when_none=False)

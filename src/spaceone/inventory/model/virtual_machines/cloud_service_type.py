@@ -33,13 +33,13 @@ cst_virtual_machine.tags = {
 
 cst_virtual_machine._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        AzureEnumField.data_source('Instance State', 'data.compute.instance_state', default_state={
+        EnumDyField.data_source('Instance State', 'data.compute.instance_state', default_state={
             'safe': ['RUNNING'],
             'warning': ['PENDING', 'REBOOTING', 'SHUTTING-DOWN', 'STOPPING', 'STARTING',
                         'PROVISIONING', 'STAGING', 'DEALLOCATING', 'REPAIRING'],
             'alert': ['STOPPED', 'DEALLOCATED', 'SUSPENDED'],
-            'disable': ['TERMINATED']
-        }, options={'is_optional': True}),
+            'disable': ['TERMINATED']}
+        ),
         TextDyField.data_source('Cloud Service ID', 'cloud_service_id', options={
             'is_optional': True
         }),

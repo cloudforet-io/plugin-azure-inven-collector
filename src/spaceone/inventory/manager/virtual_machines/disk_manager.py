@@ -33,6 +33,10 @@ class VirtualMachineDiskManager(BaseManager):
 
         os_disk = vm.storage_profile.os_disk
         volume_data = self.get_volume_data(os_disk, list_disks, index)
+        import pprint
+        print('=======')
+        pprint.pprint(f'volume_data {volume_data}')
+        print('=======')
         volume_data.update({
             'disk_type': 'os_disk'
         })
