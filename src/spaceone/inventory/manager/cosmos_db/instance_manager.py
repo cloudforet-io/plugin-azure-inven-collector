@@ -84,10 +84,18 @@ class CosmosDBManager(AzureManager):
                         'sql_databases': self.get_sql_resources(self, cosmos_db_conn, cosmos_db_account_dict['name'], cosmos_db_account_dict['resource_group'])
                     })
 
+                # switch tags form
+                tags = cosmos_db_account_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
+                cosmos_db_account_dict.update({
+                    'tags': _tags
+                })
+
                 _LOGGER.debug(f'[COSMOS DB INFO]{cosmos_db_account_dict}')
                 cosmos_db_account_data = DatabaseAccountGetResults(cosmos_db_account_dict, strict=False)
                 cosmos_db_resource = CosmosDBResource({
                     'data': cosmos_db_account_data,
+                    'tags': _tags,
                     'region_code': cosmos_db_account_data.location,
                     'reference': ReferenceModel(cosmos_db_account_data.reference()),
                     'name': cosmos_db_account_data.name,

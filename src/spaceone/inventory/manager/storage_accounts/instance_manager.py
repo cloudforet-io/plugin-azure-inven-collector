@@ -74,9 +74,17 @@ class StorageAccountsManager(AzureManager):
                     'azure_monitor': {'resource_id': storage_account_id}
                 })
 
+                # switch tags form
+                tags = storage_account_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
+                storage_account_dict.update({
+                    'tags': _tags
+                })
+
                 storage_account_data = StorageAccount(storage_account_dict, strict=False)
                 storage_account_resource = StorageAccountResource({
                     'data': storage_account_data,
+                    'tags': _tags,
                     'region_code': storage_account_data.location,
                     'reference': ReferenceModel(storage_account_data.reference()),
                     'name': storage_account_data.name,
