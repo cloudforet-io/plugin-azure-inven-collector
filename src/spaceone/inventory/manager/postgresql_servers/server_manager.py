@@ -47,11 +47,6 @@ class PostgreSQLServersManager(AzureManager):
                 postgre_sql_server_dict = self.convert_nested_dictionary(self, postgre_sql_server)
                 postgre_sql_server_id = postgre_sql_server_dict['id']
 
-                import pprint
-                print('-----------')
-                pprint.pprint(postgre_sql_server_dict)
-                print('-----------')
-
                 # update application_gateway_dict
                 postgre_sql_server_dict.update({
                     'resource_group': self.get_resource_group_from_id(postgre_sql_server_id),
