@@ -76,7 +76,7 @@ class DatabaseResource(CloudServiceResource):
     cloud_service_group = StringType(default='SQLDatabases')
 
 
-class SqlDatabaseResource(DatabaseResource):
+class SQLDatabaseResource(DatabaseResource):
     cloud_service_type = StringType(default='Database')
     data = ModelType(SQLDatabase)
     _metadata = ModelType(CloudServiceMeta, default=sql_databases_meta, serialized_name='metadata')
@@ -87,5 +87,5 @@ class SqlDatabaseResource(DatabaseResource):
     launched_at = DateTimeType(serialize_when_none=False)
 
 
-class SqlDatabaseResponse(CloudServiceResponse):
-    resource = PolyModelType(SqlDatabaseResource)
+class SQLDatabaseResponse(CloudServiceResponse):
+    resource = PolyModelType(SQLDatabaseResource)

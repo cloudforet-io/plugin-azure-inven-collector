@@ -3,7 +3,7 @@ from spaceone.inventory.manager.subscriptions.subscription_manager import Subscr
 from spaceone.inventory.manager.snapshots.instance_manager import SnapshotsManager
 from spaceone.inventory.manager.vm_scale_sets.scale_set_manager import VmScaleSetsManager
 from spaceone.inventory.manager.load_balancers.instance_manager import LoadBalancersManager
-# from spaceone.inventory.manager.sql_databases.database_manager import SQLDatabasesManager
+from spaceone.inventory.manager.sql_databases.database_manager import SQLDatabasesManager
 from spaceone.inventory.manager.sql_servers.server_manager import SQLServersManager
 from spaceone.inventory.manager.virtual_networks.instance_manager import VirtualNetworksManager
 from spaceone.inventory.manager.application_gateways.instance_manager import ApplicationGatewaysManager

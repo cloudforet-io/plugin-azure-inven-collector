@@ -130,6 +130,6 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
 )
 
 
-CLOUD_SERVICE_TYPES_SQL_DB = [
+CLOUD_SERVICE_TYPES = [
     CloudServiceTypeResponse({'resource': cst_sql_database}),
 ]

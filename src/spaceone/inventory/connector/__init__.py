@@ -16,3 +16,4 @@ from spaceone.inventory.connector.cosmos_db import CosmosDBConnector
 from spaceone.inventory.connector.postgresql_servers import PostgreSQLServersConnector
 from spaceone.inventory.connector.virtual_machines import VirtualMachinesConnector
 from spaceone.inventory.connector.sql_servers import SQLServersConnector
+from spaceone.inventory.connector.sql_databases import SQLDatabasesConnector

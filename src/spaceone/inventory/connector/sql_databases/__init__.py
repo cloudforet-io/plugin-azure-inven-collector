@@ -1,1 +1,1 @@
-
+from spaceone.inventory.connector.sql_databases.connector import SQLDatabasesConnector
