@@ -1,11 +1,6 @@
 from schematics import Model
 from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, FloatType, DateTimeType
-from spaceone.inventory.libs.schema.resource import AzureCloudService
-
-
-class Tags(Model):
-    key = StringType()
-    value = StringType()
+from spaceone.inventory.libs.schema.resource import AzureCloudService, AzureTags
 
 
 class ResourceIdentity(Model):
@@ -106,7 +101,7 @@ class FailoverGroup(Model):
     replication_state = StringType(serialize_when_none=False)
     failover_policy_display = StringType(serialize_when_none=False)
     grace_period_display = StringType(serialize_when_none=False)
-    tags = ListType(ModelType(Tags))
+    tags = ListType(ModelType(AzureTags))
     type = StringType(serialize_when_none=False)
 
 
@@ -273,7 +268,7 @@ class Database(Model):
     pricing_tier_display = StringType(default='-')
     service_tier_display = StringType(default='-')
     compute_tier = StringType(serialize_when_none=False)
-    tags = ListType(ModelType(Tags))
+    tags = ListType(ModelType(AzureTags))
     type = StringType(serialize_when_none=False)
 
 
@@ -303,7 +298,7 @@ class ElasticPool(Model):
     unit_display = StringType(serialize_when_none=False),
     server_name_display = StringType(serialize_when_none=False)
     resource_group_display = StringType(serialize_when_none=False)
-    tags = ModelType(Tags)
+    tags = ModelType(AzureTags)
     type = StringType(serialize_when_none=False)
 
 

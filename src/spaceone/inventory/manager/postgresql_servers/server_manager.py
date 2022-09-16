@@ -35,7 +35,7 @@ class PostgreSQLServersManager(AzureManager):
         start_time = time.time()
 
         subscription_info = params['subscription_info']
-        postgre_sql_conn: PostgreSQLServerConnector = self.locator.get_connector(self.connector_name, **params)
+        postgre_sql_conn: PostgreSQLServersConnector = self.locator.get_connector(self.connector_name, **params)
         postgre_sql_server_responses = []
         error_responses = []
         postgre_sql_servers = postgre_sql_conn.list_servers()
@@ -46,6 +46,11 @@ class PostgreSQLServersManager(AzureManager):
             try:
                 postgre_sql_server_dict = self.convert_nested_dictionary(self, postgre_sql_server)
                 postgre_sql_server_id = postgre_sql_server_dict['id']
+
+                import pprint
+                print('-----------')
+                pprint.pprint(postgre_sql_server_dict)
+                print('-----------')
 
                 # update application_gateway_dict
                 postgre_sql_server_dict.update({
@@ -65,11 +70,19 @@ class PostgreSQLServersManager(AzureManager):
                         'server_administrators': self.list_server_administrators(self, postgre_sql_conn, resource_group, server_name)
                     })
 
-                postgre_sql_server_data = Server(postgre_sql_server_dict, strict=False)
-                postgre_sql_server_resource = SqlServerResource({
+                # switch tags form
+                tags = postgre_sql_server_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
+                postgre_sql_server_dict.update({
+                    'tags': _tags
+                })
+
+                postgre_sql_server_data = PostgreSQLServer(postgre_sql_server_dict, strict=False)
+                postgre_sql_server_resource = PostgreSQLServerResource({
                     'data': postgre_sql_server_data,
                     'region_code': postgre_sql_server_data.location,
                     'reference': ReferenceModel(postgre_sql_server_data.reference()),
+                    'tags': _tags,
                     'name': postgre_sql_server_data.name,
                     'account': postgre_sql_server_data.subscription_id,
                     'instance_type': postgre_sql_server_data.sku.tier,
@@ -79,7 +92,7 @@ class PostgreSQLServersManager(AzureManager):
                 # Must set_region_code method for region collection
                 self.set_region_code(postgre_sql_server_data['location'])
                 _LOGGER.debug(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_resource.to_primitive()}')
-                postgre_sql_server_responses.append(SqlServerResponse({'resource': postgre_sql_server_resource}))
+                postgre_sql_server_responses.append(PostgreSQLServerResponse({'resource': postgre_sql_server_resource}))
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {postgre_sql_server_id} {e}', exc_info=True)
