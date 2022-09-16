@@ -3,11 +3,6 @@ from schematics.types import ModelType, ListType, StringType, IntType, BooleanTy
 from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
-class Tags(Model):
-    key = StringType(serialize_when_none=False)
-    value = StringType(serialize_when_none=False)
-
-
 class SubResource(Model):
     id = StringType()
 
@@ -282,7 +277,6 @@ class StorageAccount(AzureCloudService):
     status_of_secondary = StringType(choices=('available', 'unavailable'), serialize_when_none=False)
     supports_https_traffic_only = BooleanType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
     def reference(self):

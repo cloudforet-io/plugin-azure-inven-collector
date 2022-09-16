@@ -1,12 +1,7 @@
 from schematics import Model
 from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, TimedeltaType, \
     FloatType
-from spaceone.inventory.libs.schema.resource import AzureCloudService
-
-
-class Tags(Model):
-    key = StringType()
-    value = StringType()
+from spaceone.inventory.libs.schema.resource import AzureCloudService, AzureTags
 
 
 class AdditionalCapabilities(Model):  # belongs to VmScaleSet
@@ -116,7 +111,7 @@ class AutoscaleSettingResource(Model):  # belongs to VmScaleSet
     profiles = ListType(ModelType(AutoscaleProfile), serialize_when_none=False)
     profiles_display = ListType(StringType, serialize_when_none=False)
     target_resource_uri = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -484,7 +479,7 @@ class VirtualMachineExtension(Model):
     settings = ModelType(Settings, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     type_handler_version = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
 
 
 class KeyVaultSecretReference(Model):
@@ -624,7 +619,7 @@ class VirtualMachineScaleSetVM(Model):  # data model for actual instances
     vm_instance_status_profile = ModelType(VirtualMachineExtensionVMInstanceView, serialize_when_none=False)
     resources = ListType(ModelType(VirtualMachineExtension), serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
@@ -640,7 +635,7 @@ class VirtualMachineScaleSetPowerState(Model):
     name = StringType(serialize_when_none=False)
     notifications = ListType(ModelType(AutoscaleNotification), serialize_when_none=False)
     target_resource_uri = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
 
 
 class VirtualMachineScaleSet(AzureCloudService):

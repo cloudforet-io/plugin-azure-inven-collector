@@ -890,7 +890,6 @@ class NatGateway(AzureCloudService):  # Main class
     sku = ModelType(NatGatewaySku, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

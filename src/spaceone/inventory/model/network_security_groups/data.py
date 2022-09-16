@@ -771,7 +771,6 @@ class NetworkSecurityGroup(AzureCloudService):
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     virtual_machines_display = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

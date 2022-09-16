@@ -1,11 +1,6 @@
 from schematics import Model
 from schematics.types import ModelType, ListType, StringType, IntType, BooleanType
-from spaceone.inventory.libs.schema.resource import AzureCloudService
-
-
-class Tags(Model):
-    key = StringType(serialize_when_none=False)
-    value = StringType(serialize_when_none=False)
+from spaceone.inventory.libs.schema.resource import AzureCloudService, AzureTags
 
 
 class SubResource(Model):
@@ -35,7 +30,7 @@ class ApplicationSecurityGroupRef(Model):
     name = StringType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -59,6 +54,8 @@ class NetworkInterfaceIPConfigurationRef(Model):  # ip configuration in a networ
 '''
 END OF REF CLASSES
 '''
+
+
 class AddressSpace(Model):
     address_count = IntType(serialize_when_none=False, default=0)
     address_prefixes = ListType(StringType, default=['-'])
@@ -215,7 +212,7 @@ class NatGatewayRef(Model):
     resource_guid = StringType(serialize_when_none=False)
     subnets = ListType(ModelType(SubResource), serialize_when_none=False)
     sku = ModelType(NatGatewaySkuRef, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
@@ -246,7 +243,7 @@ class PublicIPAddressRef(Model):
     public_ip_prefix = ModelType(SubResource, serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     sku = ModelType(PublicIPAddressSkuRef, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
@@ -301,7 +298,7 @@ class FlowLog(Model):
     storage_id = StringType(serialize_when_none=False)
     target_resource_guid = StringType(serialize_when_none=False)
     target_resource_id = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -362,7 +359,7 @@ class ServiceEndpointPolicy(Model):
     service_endpoint_policy_definitions = ListType(ModelType(ServiceEndpointPolicyDefinition),
                                                    serialize_when_none=False)
     subnets = ListType(StringType, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -403,7 +400,7 @@ class RouteTable(Model):
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     routes = ListType(ModelType(Route), serialize_when_none=False)
     subnets = ListType(StringType, default=[], serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -423,7 +420,7 @@ class NatGateway(Model):
     resource_guid = StringType(serialize_when_none=False)
     subnets = ListType(ModelType(SubResource), serialize_when_none=False)
     sku = ModelType(NatGatewaySku, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
@@ -476,7 +473,7 @@ class PrivateEndpointRef(Model):
     private_link_service_connections = ListType(ModelType(PrivateLinkServiceConnection), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     subnet = StringType(serialize_when_none=False)  # Change to subnet ID
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -506,7 +503,7 @@ class PrivateLinkService(Model):
     private_endpoint_connections = ListType(ModelType(PrivateEndpointConnection), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     visibility = ModelType(Visibility, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -542,7 +539,7 @@ class PublicIPAddress(Model):
     public_ip_prefix = ModelType(SubResource, serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
     sku = ModelType(PublicIPAddressSku, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
@@ -554,7 +551,7 @@ class ApplicationSecurityGroup(Model):
     name = StringType(serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     resource_guid = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -625,7 +622,7 @@ class NetworkSecurityGroup(Model):
     resource_guid = StringType(serialize_when_none=False)
     security_rules = ListType(ModelType(SecurityRule), serialize_when_none=False)
     subnets = ListType(StringType, serialize_when_none=False)  # Change to Subnet IDs
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -652,7 +649,7 @@ class NetworkInterface(Model):
     resource_guid = StringType(serialize_when_none=False)
     tap_configurations = ListType(ModelType(NetworkInterfaceTapConfiguration), serialize_when_none=False)
     virtual_machine = ModelType(SubResource, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -670,7 +667,7 @@ class PrivateEndpoint(Model):
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     subnet = StringType(serialize_when_none=False)
     resource_group = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
 
@@ -793,7 +790,8 @@ class AzureFirewall(Model):
     location = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     subnet = StringType(serialize_when_none=False)
-    application_rule_collections = ListType(ModelType(AzureFirewallApplicationRuleCollection), serialize_when_none=False)
+    application_rule_collections = ListType(ModelType(AzureFirewallApplicationRuleCollection),
+                                            serialize_when_none=False)
     firewall_policy = ModelType(SubResource, serialize_when_none=False)
     hub_ip_addresses = ModelType(HubIPAddresses, serialize_when_none=False)
     ip_configurations = ListType(ModelType(AzureFirewallIPConfiguration), serialize_when_none=False)
@@ -805,7 +803,7 @@ class AzureFirewall(Model):
     sku = ModelType(AzureFirewallSku, serialize_when_none=False)
     threat_intel_mode = StringType(choices=('Alert', 'Deny', 'Off'), serialize_when_none=False)
     virtual_hub = ModelType(SubResource, serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
+    tags = ModelType(AzureTags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
@@ -881,7 +879,6 @@ class VirtualNetwork(AzureCloudService):  # Main Class
     subnets = ListType(ModelType(Subnet), serialize_when_none=False)
     virtual_network_peerings = ListType(ModelType(VirtualNetworkPeering), serialize_when_none=False)
     azure_firewall = ListType(ModelType(AzureFirewall), serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
     def reference(self):

@@ -185,7 +185,6 @@ class DatabaseAccountGetResults(AzureCloudService):  # Main Class
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

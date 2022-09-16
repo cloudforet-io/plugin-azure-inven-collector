@@ -964,7 +964,6 @@ class ApplicationGateway(AzureCloudService):  # Main Class
     public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
     virtual_network = StringType(serialize_when_none=False)
     subnet = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)

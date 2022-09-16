@@ -273,7 +273,7 @@ class Database(Model):
     pricing_tier_display = StringType(default='-')
     service_tier_display = StringType(default='-')
     compute_tier = StringType(serialize_when_none=False)
-    tags = (ModelType(Tags))
+    tags = ListType(ModelType(Tags))
     type = StringType(serialize_when_none=False)
 
 
@@ -380,7 +380,7 @@ class ServerAdministratorResource(Model):
     type = StringType(serialize_when_none=False)
 
 
-class Server(AzureCloudService):
+class PostgreSQLServer(AzureCloudService):  # Main Class
     name = StringType()
     id = StringType()
     identity = ModelType(ResourceIdentity, serialize_when_none=False)
@@ -406,7 +406,6 @@ class Server(AzureCloudService):
     virtual_network_rules = ListType(ModelType(VirtualNetworkRule), serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

@@ -113,7 +113,6 @@ class PublicIPAddress(AzureCloudService):  # Main Class
     resource_guid = StringType(serialize_when_none=False)
     sku = ModelType(PublicIPAddressSku, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
 
     def reference(self):

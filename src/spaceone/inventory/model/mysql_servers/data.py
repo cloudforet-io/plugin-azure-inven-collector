@@ -87,7 +87,6 @@ class MySQLServer(AzureCloudService):  # Main class
     version = StringType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
-    tags = ModelType(Tags, serialize_when_none=False)
 
     def reference(self):
         return {

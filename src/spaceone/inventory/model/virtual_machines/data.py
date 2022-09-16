@@ -164,9 +164,8 @@ class VNet(Model):
     cidr = StringType()
 
 
-class VirtualMachine(AzureCloudService):
+class VirtualMachine(AzureCloudService):  # Main Class
     os = ModelType(OS)
-    tags = ListType(ModelType(AzureTags))
     azure = ModelType(Azure)
     hardware = ModelType(Hardware)
     security_group = ListType(ModelType(SecurityGroup))
