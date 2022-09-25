@@ -142,7 +142,7 @@ class SyncGroup(Model):
 class SyncAgent(Model):
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    expiry_time = StringType(serialize_when_none=False)
+    expiry_time = DateTimeType(serialize_when_none=False)
     is_up_to_date = BooleanType(serialize_when_none=False)
     last_alive_time = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)

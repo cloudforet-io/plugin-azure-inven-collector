@@ -167,7 +167,6 @@ sql_servers_firewall_rules = TableDynamicLayout.set_fields('Firewall Rules', 'da
     TextDyField.data_source('End IP', 'end_ip_address')
 ])
 
-
 sql_servers_virtual_network_rules = TableDynamicLayout.set_fields('Virtual Network Rules', 'data.virtual_network_rules',
                                                                   fields=[
                                                                       TextDyField.data_source('Rule Name', 'name'),
@@ -206,7 +205,8 @@ sql_servers_private_endpoint_connections = TableDynamicLayout.set_fields('Privat
 ])
 
 # TAB - Transparent Data Encryption
-sql_servers_transparent_data_encryption = TableDynamicLayout.set_fields('Transparent Data Encryption', 'data.encryption_protectors', fields=[
+sql_servers_transparent_data_encryption = TableDynamicLayout.set_fields('Transparent Data Encryption',
+                                                                        'data.encryption_protectors', fields=[
     TextDyField.data_source('Transparent Data Encryption', 'kind'),
     TextDyField.data_source('Key', 'server_key_name'),
     TextDyField.data_source('Key Type', 'server_key_type'),
@@ -219,7 +219,7 @@ sql_servers_automatic_tuning_options = TableDynamicLayout.set_fields('Tuning Opt
         TextDyField.data_source('Tuning Type', 'tuning_type'),
         TextDyField.data_source('Desired State', 'desired_state'),
         TextDyField.data_source('Current State', 'actual_state'),
-    ])
+])
 
 
 # TAB - tags
@@ -228,6 +228,7 @@ sql_servers_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', field
     TextDyField.data_source('Value', 'value')
 ])
 
+# TAB - SQL Databases
 sql_servers_meta = CloudServiceMeta.set_layouts(
     [sql_servers_info_meta, sql_server_failover_group, sql_server_backups, sql_servers_active_directory_admin, sql_servers_databases_info,
      sql_servers_elastic_pools,
