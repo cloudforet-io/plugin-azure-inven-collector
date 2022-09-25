@@ -16,6 +16,7 @@ REGION_INFO = {
     'eastus2': {'name': 'US East 2 (Virginia)', 'tags': {'latitude': '36.6681', 'longitude': '-78.3889', 'continent': 'north_america'}},
     'westus': {'name': 'US West (California)', 'tags': {'latitude': '37.783', 'longitude': '-122.417', 'continent': 'north_america'}},
     'westus2': {'name': 'US West 2 (Washington)', 'tags': {'latitude': '47.233', 'longitude': '-119.852', 'continent': 'north_america'}},
+    'westus3': {'name': 'West US 3 (Phoenix)', 'tags': {'latitude': '33.448376', 'longitude': '-112.074036', 'continent': 'north_america'}},
     'centralus': {'name': 'US Central (Iowa)', 'tags': {'latitude': '41.5908', 'longitude': '-93.6208', 'continent': 'north_america'}},
     'southcentralus': {'name': 'US South Central (Texas)',
                        'tags': {'latitude': '29.4167', 'longitude': '-98.5', 'continent': 'north_america'}},
@@ -82,10 +83,12 @@ REGION_INFO = {
                  'tags': {'latitude': '25.266666', 'longitude': '55.316666', 'continent': 'middle_east'}},
     'uaecentral': {'name': 'Middle East UAE Central (Abu Dhabi)',
                    'tags': {'latitude': '24.466667', 'longitude': '54.366669', 'continent': 'middle_east'}},
+    'qatarcentral': {'name': 'Qatar Central(Doha)',
+                     'tags': {'latitude': '25.551462', 'longitude': '51.439327', 'continent': 'middle_east'}},
     'brazilsouth': {'name': 'South America Brazil South (Sao Paulo State)',
                     'tags': {'latitude': '-23.55', 'longitude': '-46.633', 'continent': 'south_america'}},
     'brazilsoutheast': {'name': 'South America Brazil South East (Rio)',
-                        'tags': {'latitude': '-22.90278', 'longitude': '-43.2075', 'continent': 'south_america'}}
+                        'tags': {'latitude': '-22.90278', 'longitude': '-43.2075', 'continent': 'south_america'}},
 }
 
 
