@@ -44,7 +44,7 @@ class PostgreSQLServersManager(AzureManager):
             postgre_sql_server_id = ''
 
             try:
-                postgre_sql_server_dict = self.convert_nested_dictionary(self, postgre_sql_server)
+                postgre_sql_server_dict = self.convert_nested_dictionary(postgre_sql_server)
                 postgre_sql_server_id = postgre_sql_server_dict['id']
 
                 # update application_gateway_dict
@@ -103,7 +103,7 @@ class PostgreSQLServersManager(AzureManager):
         sql_resources_obj = cosmos_db_conn.list_sql_resources(account_name=account_name, resource_group_name=resource_group)
 
         for sql in sql_resources_obj:
-            sql_dict = self.convert_nested_dictionary(self, sql)
+            sql_dict = self.convert_nested_dictionary(sql)
             sql_resources.append(sql_dict)
         return sql_resources
 
@@ -113,7 +113,7 @@ class PostgreSQLServersManager(AzureManager):
         firewall_rules_obj = postgresql_conn.list_firewall_rules_by_server(resource_group_name=resource_group, server_name=name)
 
         for firewall_rule in firewall_rules_obj:
-            firewall_rule_dict = self.convert_nested_dictionary(self, firewall_rule)
+            firewall_rule_dict = self.convert_nested_dictionary(firewall_rule)
             firewall_rules.append(firewall_rule_dict)
 
         return firewall_rules
@@ -124,7 +124,7 @@ class PostgreSQLServersManager(AzureManager):
         virtual_network_rules_obj = postgresql_conn.list_virtual_network_rules_by_server(resource_group_name=resource_group, server_name=name)
 
         for virtual_network in virtual_network_rules_obj:
-            virtual_network_dict = self.convert_nested_dictionary(self, virtual_network)
+            virtual_network_dict = self.convert_nested_dictionary(virtual_network)
             if virtual_network_dict.get('virtual_network_subnet_id') is not None:
                 virtual_network_dict.update({
                     'subnet_name': self.get_subnet_name(virtual_network_dict['virtual_network_subnet_id']),
@@ -153,7 +153,7 @@ class PostgreSQLServersManager(AzureManager):
         replicas_list = []
         replicas_obj = postgresql_conn.list_replicas_by_server(resource_group_name=resource_group, server_name=name)
         for replica in replicas_obj:
-            replica_dict = self.convert_nested_dictionary(self, replica)
+            replica_dict = self.convert_nested_dictionary(replica)
             if replica_dict.get('master_server_id') is not None:
                 replica_dict.update({
                     'master_server_name': self.get_replica_master_server_name(replica_dict['master_server_id'])
@@ -167,7 +167,7 @@ class PostgreSQLServersManager(AzureManager):
         server_administrators = []
         server_admin_obj = postgresql_conn.list_server_administrators(resource_group_name=resource_group, server_name=name)
         for server_admin in server_admin_obj:
-            server_admin_dict = self.convert_nested_dictionary(self, server_admin)
+            server_admin_dict = self.convert_nested_dictionary(server_admin)
             server_administrators.append(server_admin_dict)
 
         return server_administrators

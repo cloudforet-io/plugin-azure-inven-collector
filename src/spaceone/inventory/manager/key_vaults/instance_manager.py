@@ -44,7 +44,7 @@ class KeyVaultsManager(AzureManager):
             key_vault_id = ''
 
             try:
-                key_vault_dict = self.convert_nested_dictionary(self, key_vault)
+                key_vault_dict = self.convert_nested_dictionary(key_vault)
                 key_vault_id = key_vault_dict['id']
 
                 key_vault_dict.update({
@@ -113,7 +113,7 @@ class KeyVaultsManager(AzureManager):
 
         if keys_obj_list:
             for key in keys_obj_list:
-                key_dict = self.convert_nested_dictionary(self, key)
+                key_dict = self.convert_nested_dictionary(key)
                 keys.append(key_dict)
         return keys
 
@@ -126,7 +126,7 @@ class KeyVaultsManager(AzureManager):
 
         if secrets_obj_list:
             for secret in secrets_obj_list:
-                secret_dict = self.convert_nested_dictionary(self, secret)
+                secret_dict = self.convert_nested_dictionary(secret)
                 secrets.append(secret_dict)
         return secrets
 
@@ -139,7 +139,7 @@ class KeyVaultsManager(AzureManager):
 
         if certificate_obj_list:
             for certificate in certificate_obj_list:
-                secret_dict = self.convert_nested_dictionary(self, certificate)
+                secret_dict = self.convert_nested_dictionary(certificate)
                 certificates.append(secret_dict)
 
         return certificates

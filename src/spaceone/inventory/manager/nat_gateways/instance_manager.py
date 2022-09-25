@@ -44,7 +44,7 @@ class NATGatewaysManager(AzureManager):
             nat_gateway_id = ''
 
             try:
-                nat_gateway_dict = self.convert_nested_dictionary(self, nat_gateway)
+                nat_gateway_dict = self.convert_nested_dictionary(nat_gateway)
                 nat_gateway_id = nat_gateway_dict['id']
 
                 # update application_gateway_dict
@@ -133,7 +133,7 @@ class NATGatewaysManager(AzureManager):
         resource_group_name = pip_id.split('/')[4]
         pip_obj = nat_gateway_conn.get_public_ip_addresses(resource_group_name=resource_group_name, public_ip_address_name=pip_name)
 
-        pip_dict = self.convert_nested_dictionary(self, pip_obj)
+        pip_dict = self.convert_nested_dictionary(pip_obj)
         return pip_dict
 
     @staticmethod
@@ -142,7 +142,7 @@ class NATGatewaysManager(AzureManager):
         resource_group_name = pip_id.split('/')[4]
         pip_obj = nat_gateway_conn.get_public_ip_prefixes(resource_group_name=resource_group_name, public_ip_prefixes_name=pip_name)
 
-        pip_dict = self.convert_nested_dictionary(self, pip_obj)
+        pip_dict = self.convert_nested_dictionary(pip_obj)
         return pip_dict
 
     @staticmethod
@@ -155,7 +155,7 @@ class NATGatewaysManager(AzureManager):
             vnet_name = subnet['id'].split('/')[8]
 
             subnet_obj = nat_gateway_conn.get_subnet(resource_group_name=resource_group_name, subnet_name=subnet_name, vnet_name=vnet_name)
-            subnet_dict = self.convert_nested_dictionary(self, subnet_obj)
+            subnet_dict = self.convert_nested_dictionary(subnet_obj)
             subnet_dict.update({
                 'virtual_network': vnet_name
             })

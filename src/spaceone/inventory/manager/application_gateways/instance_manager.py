@@ -43,7 +43,7 @@ class ApplicationGatewaysManager(AzureManager):
             application_gateway_id = ''
 
             try:
-                application_gateway_dict = self.convert_nested_dictionary(self, application_gateway)
+                application_gateway_dict = self.convert_nested_dictionary(application_gateway)
                 application_gateway_id = application_gateway_dict['id']
 
                 # update application_gateway_dict
@@ -199,7 +199,7 @@ class ApplicationGatewaysManager(AzureManager):
     @staticmethod
     def get_public_ip_address(self, application_gateway_conn, resource_group_name, pip_name):
         public_ip_address_obj = application_gateway_conn.get_public_ip_addresses(resource_group_name, pip_name)
-        public_ip_address_dict = self.convert_nested_dictionary(self, public_ip_address_obj)
+        public_ip_address_dict = self.convert_nested_dictionary(public_ip_address_obj)
 
         _LOGGER.debug(f'[Public IP Address]{public_ip_address_dict}')
 

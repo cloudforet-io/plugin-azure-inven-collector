@@ -46,7 +46,7 @@ class NetworkSecurityGroupsManager(AzureManager):
             network_security_group_id = ''
 
             try:
-                network_security_group_dict = self.convert_nested_dictionary(self, network_security_group)
+                network_security_group_dict = self.convert_nested_dictionary(network_security_group)
                 network_security_group_id = network_security_group_dict['id']
                 inbound_rules = []
                 outbound_rules = []
@@ -174,7 +174,7 @@ class NetworkSecurityGroupsManager(AzureManager):
             resource_group = network_interface['id'].split('/')[4]
             network_interface_name = network_interface['id'].split('/')[8] # TODO : network interface name diverse
             network_interface_obj = network_security_group_conn.get_network_interfaces(network_interface_name, resource_group)
-            network_interface_dict = self.convert_nested_dictionary(self, network_interface_obj)
+            network_interface_dict = self.convert_nested_dictionary(network_interface_obj)
 
             if network_interface_dict['id'] == network_interface['id']:
                 # Get virtual machine display
@@ -217,7 +217,7 @@ class NetworkSecurityGroupsManager(AzureManager):
                 virtual_network_name = subnet['id'].split('/')[8]
 
                 subnet_obj = network_security_group_conn.get_subnet(resource_group_name, subnet_name, virtual_network_name)
-                subnet_dict = self.convert_nested_dictionary(self, subnet_obj)
+                subnet_dict = self.convert_nested_dictionary(subnet_obj)
                 subnets_full_list.append(subnet_dict)
 
             return subnets_full_list

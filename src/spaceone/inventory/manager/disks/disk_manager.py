@@ -42,7 +42,7 @@ class DisksManager(AzureManager):
             disk_id = ''
 
             try:
-                disk_dict = self.convert_nested_dictionary(self, disk)
+                disk_dict = self.convert_nested_dictionary(disk)
                 disk_id = disk_dict['id']
 
                 # Switch DiskStorageAccountType to disk_sku_name for user-friendly words. (ex.Premium SSD, Standard HDD..)

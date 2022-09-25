@@ -45,7 +45,7 @@ class VirtualNetworksManager(AzureManager):
             virtual_network_id = ''
 
             try:
-                vnet_dict = self.convert_nested_dictionary(self, virtual_network)
+                vnet_dict = self.convert_nested_dictionary(virtual_network)
                 virtual_network_id = vnet_dict['id']
 
                 # update vnet_dict
@@ -204,7 +204,7 @@ class VirtualNetworksManager(AzureManager):
                     if device['type'] == 'azureFirewalls':  # The subnet which has 'AzureFirewall' is typed as 'azureFirewalls'
                         firewall_obj = vnet_conn.list_all_firewalls(resource_group_name)  # List all firewalls in the resource group
                         for firewall in firewall_obj:
-                            firewall_dict = self.convert_nested_dictionary(self, firewall)
+                            firewall_dict = self.convert_nested_dictionary(firewall)
                             for ip_configuration in firewall_dict['ip_configurations']:
                                 if ip_configuration.get('subnet') is not None:
                                     if subnet['id'] in ip_configuration['subnet']['id']:  # If subnet id matches the firewall's subnet id

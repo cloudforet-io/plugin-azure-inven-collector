@@ -42,7 +42,7 @@ class LoadBalancersManager(AzureManager):
             load_balancer_id = ''
 
             try:
-                load_balancer_dict = self.convert_nested_dictionary(self, load_balancer)
+                load_balancer_dict = self.convert_nested_dictionary(load_balancer)
                 load_balancer_id = load_balancer_dict['id']
 
                 load_balancer_dict.update({
@@ -188,7 +188,7 @@ class LoadBalancersManager(AzureManager):
 
         # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
-            network_interface_dict = self.convert_nested_dictionary(self, nil)
+            network_interface_dict = self.convert_nested_dictionary(nil)
             _LOGGER.debug(f'[NETWORK_INTERFACE_DICT] {network_interface_dict}')
             nic_rg_name = network_interface_dict.get('id', '').split('/')[4]
 
@@ -229,7 +229,7 @@ class LoadBalancersManager(AzureManager):
 
             if ip_configurations_object_list:
                 for ip_configuration_object in ip_configurations_object_list:
-                    ip_object_dict = self.convert_nested_dictionary(self, ip_configuration_object)
+                    ip_object_dict = self.convert_nested_dictionary(ip_configuration_object)
                     ip_configuration_list.append(ip_object_dict)
 
         return ip_configuration_list
@@ -276,7 +276,7 @@ class LoadBalancersManager(AzureManager):
 
         # Loop for converting backend pools objects to dictionary
         for bp in backend_pools_object_list:
-            backend_pool_dict = self.convert_nested_dictionary(self, bp)
+            backend_pool_dict = self.convert_nested_dictionary(bp)
             backend_pools_list.append(backend_pool_dict)
 
         return backend_pools_list

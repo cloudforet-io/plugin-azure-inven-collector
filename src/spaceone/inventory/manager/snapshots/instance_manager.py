@@ -43,7 +43,7 @@ class SnapshotsManager(AzureManager):
         for snapshot in snapshots:
             snapshot_id = ''
             try:
-                snapshot_dict = self.convert_nested_dictionary(self, snapshot)
+                snapshot_dict = self.convert_nested_dictionary(snapshot)
                 snapshot_id = snapshot_dict['id']
 
                 # update sku_dict

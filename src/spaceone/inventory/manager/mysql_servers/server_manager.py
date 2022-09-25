@@ -44,7 +44,7 @@ class MySQLServersManager(AzureManager):
             mysql_server_id = ''
 
             try:
-                mysql_server_dict = self.convert_nested_dictionary(self, mysql_server)
+                mysql_server_dict = self.convert_nested_dictionary(mysql_server)
                 mysql_server_id = mysql_server_dict['id']
 
                 mysql_server_dict.update({
@@ -107,7 +107,7 @@ class MySQLServersManager(AzureManager):
         firewall_rules = []
         firewall_rules_obj = mysql_servers_conn.list_firewall_rules_by_server(resource_group_name=resource_group, server_name=server_name)
         for firewall_rule in firewall_rules_obj:
-            firewall_dict = self.convert_nested_dictionary(self, firewall_rule)
+            firewall_dict = self.convert_nested_dictionary(firewall_rule)
             firewall_rules.append(firewall_dict)
 
         return firewall_rules

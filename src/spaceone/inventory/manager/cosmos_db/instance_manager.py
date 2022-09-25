@@ -46,7 +46,7 @@ class CosmosDBManager(AzureManager):
             cosmos_db_account_id = ''
 
             try:
-                cosmos_db_account_dict = self.convert_nested_dictionary(self, cosmos_db_account)
+                cosmos_db_account_dict = self.convert_nested_dictionary(cosmos_db_account)
                 cosmos_db_account_id = cosmos_db_account_dict.get('id')
 
                 # update cosmosdb_dict
@@ -163,7 +163,7 @@ class CosmosDBManager(AzureManager):
     @staticmethod
     def get_keys(self, cosmos_db_conn, account_name, resource_group):
         keys_obj = cosmos_db_conn.list_keys(account_name=account_name, resource_group_name=resource_group)
-        key_dict = self.convert_nested_dictionary(self, keys_obj)
+        key_dict = self.convert_nested_dictionary(keys_obj)
         return key_dict
 
     @staticmethod
@@ -172,7 +172,7 @@ class CosmosDBManager(AzureManager):
         sql_resources_obj = cosmos_db_conn.list_sql_resources(account_name=account_name, resource_group_name=resource_group)
 
         for sql in sql_resources_obj:
-            sql_dict = self.convert_nested_dictionary(self, sql)
+            sql_dict = self.convert_nested_dictionary(sql)
             sql_resources.append(sql_dict)
         return sql_resources
 

@@ -44,7 +44,7 @@ class VmScaleSetsManager(AzureManager):
             vm_scale_set_id = ''
 
             try:
-                vm_scale_set_dict = self.convert_nested_dictionary(self, vm_scale_set)
+                vm_scale_set_dict = self.convert_nested_dictionary(vm_scale_set)
                 vm_scale_set_id = vm_scale_set_dict['id']
 
                 # update vm_scale_set_dict
@@ -218,7 +218,7 @@ class VmScaleSetsManager(AzureManager):
     # Get instances of a virtual machine from a VM scale set
     @staticmethod
     def get_vm_instance_dict(self, vm_instance, vm_instance_conn, resource_group, vm_scale_set_name):
-        vm_instance_dict = self.convert_nested_dictionary(self, vm_instance)
+        vm_instance_dict = self.convert_nested_dictionary(vm_instance)
 
         # Get instance view of a virtual machine from a VM scale set instance
         if vm_instance_dict.get('instance_id') is not None:
@@ -242,7 +242,7 @@ class VmScaleSetsManager(AzureManager):
     @staticmethod
     def get_vm_instance_view_dict(self, vm_instance_conn, resource_group, vm_scale_set_name, instance_id):
         vm_instance_status_profile = vm_instance_conn.get_vm_scale_set_instance_view(resource_group, vm_scale_set_name, instance_id)
-        vm_instance_status_profile_dict = self.convert_nested_dictionary(self, vm_instance_status_profile)
+        vm_instance_status_profile_dict = self.convert_nested_dictionary(vm_instance_status_profile)
 
         if vm_instance_status_profile.vm_agent is not None:
             status_str = None
@@ -262,7 +262,7 @@ class VmScaleSetsManager(AzureManager):
 
         ''''''
         for auto_scale_setting in auto_scale_settings_obj:
-            auto_scale_setting_dict = self.convert_nested_dictionary(self, auto_scale_setting)
+            auto_scale_setting_dict = self.convert_nested_dictionary(auto_scale_setting)
             auto_scale_setting_dict.update({
                  'profiles_display': self.get_autoscale_profiles_display(auto_scale_setting_dict['profiles'])
             })
@@ -295,7 +295,7 @@ class VmScaleSetsManager(AzureManager):
     def get_autoscale_rules(self, rules_dict):
         rule_list = list()
         for rule in rules_dict:
-            rule_dict = self.convert_nested_dictionary(self, rule)
+            rule_dict = self.convert_nested_dictionary(rule)
             rule_list.append(rule_dict)
         return rule_list
 
@@ -303,7 +303,7 @@ class VmScaleSetsManager(AzureManager):
     def get_autoscale_profiles_list(self, autoscale_setting):
         profiles_list = list()
         for profile in autoscale_setting.profiles:
-            profile_dict = self.convert_nested_dictionary(self, profile)
+            profile_dict = self.convert_nested_dictionary(profile)
             profiles_list.append(profile_dict)
 
         return profiles_list

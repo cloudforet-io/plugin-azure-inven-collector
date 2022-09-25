@@ -44,7 +44,7 @@ class PublicIPAddressesManager(AzureManager):
             public_ip_address_id = ''
 
             try:
-                public_ip_address_dict = self.convert_nested_dictionary(self, public_ip_address)
+                public_ip_address_dict = self.convert_nested_dictionary(public_ip_address)
                 public_ip_address_id = public_ip_address_dict['id']
 
                 # update application_gateway_dict

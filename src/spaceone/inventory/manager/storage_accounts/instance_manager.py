@@ -44,7 +44,7 @@ class StorageAccountsManager(AzureManager):
             storage_account_id = ''
 
             try:
-                storage_account_dict = self.convert_nested_dictionary(self, storage_account)
+                storage_account_dict = self.convert_nested_dictionary(storage_account)
                 storage_account_id = storage_account_dict['id']
                 resource_group = self.get_resource_group_from_id(storage_account_id)
 
@@ -204,7 +204,7 @@ class StorageAccountsManager(AzureManager):
         blob_list = []
         blob_obj = storage_conn.list_blobs(rg_name=rg_name, account_name=account_name)
         for blob in blob_obj:
-            blob_dict = self.convert_nested_dictionary(self, blob)
+            blob_dict = self.convert_nested_dictionary(blob)
             blob_list.append(blob_dict)
 
         return blob_list

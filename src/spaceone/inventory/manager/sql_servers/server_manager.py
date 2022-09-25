@@ -6,9 +6,9 @@ from spaceone.inventory.model.sql_databases.cloud_service import *
 from spaceone.inventory.connector.sql_servers import SQLServersConnector
 from spaceone.inventory.connector.monitor import MonitorConnector
 from spaceone.inventory.model.sql_servers.cloud_service_type import CLOUD_SERVICE_TYPES
-from spaceone.inventory.model.sql_databases.cloud_service_type import CLOUD_SERVICE_TYPES_SQL_DB
 from spaceone.inventory.model.sql_databases.data import *
 from spaceone.inventory.model.sql_servers.data import *
+from spaceone.inventory.manager.sql_databases.database_manager import SQLDatabasesManager
 from spaceone.core.utils import *
 
 
@@ -16,10 +16,10 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class SQLServersManager(AzureManager):
-    sql_connector_name = 'SQLServersConnector'
+    connector_name = 'SQLServersConnector'
     monitor_connector_name = 'MonitorConnector'
 
-    cloud_service_types = CLOUD_SERVICE_TYPES + CLOUD_SERVICE_TYPES_SQL_DB
+    cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
         """
@@ -41,7 +41,7 @@ class SQLServersManager(AzureManager):
 
         subscription_info = params['subscription_info']
 
-        sql_servers_conn: SQLServersConnector = self.locator.get_connector(self.sql_connector_name, **params)
+        sql_servers_conn: SQLServersConnector = self.locator.get_connector(self.connector_name, **params)
         sql_servers_monitor_conn: MonitorConnector = self.locator.get_connector(self.monitor_connector_name, **params)
 
         sql_server_responses = []
@@ -53,7 +53,7 @@ class SQLServersManager(AzureManager):
             sql_server_id = ''
 
             try:
-                sql_server_dict = self.convert_nested_dictionary(self, sql_server)
+                sql_server_dict = self.convert_nested_dictionary(sql_server)
                 sql_server_id = sql_server_dict['id']
 
                 # update sql_servers_data dict
@@ -64,23 +64,23 @@ class SQLServersManager(AzureManager):
                     'azure_monitor': {'resource_id': sql_server_id}
                 })
 
-                resource_group = sql_server_dict['resource_group']
+                resource_group_name = sql_server_dict['resource_group']
                 name = sql_server_dict['name']
 
                 # Get Server Auditing Settings, Failover groups. azure ad administrators
-                server_auditing_settings_dict = self.get_server_auditing_settings(self, sql_servers_conn, resource_group, name)
-                failover_group_list = self.list_failover_groups(self, sql_servers_conn, resource_group, name)
-                transparent_data_encryption_dict = self.list_encryption_protectors(self, sql_servers_conn, resource_group, name)
-                azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn, resource_group, name)
-                server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn, resource_group, name)
-                databases_list = self.list_databases(self, sql_servers_conn=sql_servers_conn,
+                server_auditing_settings_dict = self.get_server_auditing_settings(self, sql_servers_conn, resource_group_name, name)
+                failover_group_list = self.list_failover_groups(self, sql_servers_conn, resource_group_name, name)
+                transparent_data_encryption_dict = self.list_encryption_protectors(self, sql_servers_conn, resource_group_name, name)
+                azure_ad_admin_list = self.list_azure_ad_administrators(self, sql_servers_conn, resource_group_name, name)
+                server_automatic_tuning_dict = self.get_server_automatic_tuning(self, sql_servers_conn, resource_group_name, name)
+                databases_list = self.list_databases(sql_servers_conn=sql_servers_conn,
                                                      sql_monitor_conn=sql_servers_monitor_conn,
-                                                     rg_name=resource_group, server_name=name,
+                                                     resource_group_name=resource_group_name, server_name=name,
                                                      server_admin_name=sql_server_dict.get('administrator_login'))
-                elastic_pools_list = self.list_elastic_pools(self, sql_servers_conn, resource_group, name)
-                deleted_databases_list = self.list_deleted_databases(self, sql_servers_conn, resource_group, name)
-                virtual_network_rules_list = self.list_virtual_network_rules(self, sql_servers_conn, resource_group, name)
-                firewall_rules_list = self.list_firewall_rules(self, sql_servers_conn, resource_group, name)
+                elastic_pools_list = self.list_elastic_pools(self, sql_servers_conn, resource_group_name, name)
+                deleted_databases_list = self.list_deleted_databases(self, sql_servers_conn, resource_group_name, name)
+                virtual_network_rules_list = self.list_virtual_network_rules(self, sql_servers_conn, resource_group_name, name)
+                firewall_rules_list = self.list_firewall_rules(self, sql_servers_conn, resource_group_name, name)
 
                 sql_server_dict.update({
                     'azure_ad_administrators': azure_ad_admin_list,
@@ -114,7 +114,7 @@ class SQLServersManager(AzureManager):
                 })
 
                 sql_server_data = SQLServer(sql_server_dict, strict=False)
-                sql_servers_resource = SQLServerResource({
+                sql_server_resource = SQLServerResource({
                     'data': sql_server_data,
                     'region_code': sql_server_data.location,
                     'reference': ReferenceModel(sql_server_data.reference()),
@@ -122,121 +122,36 @@ class SQLServersManager(AzureManager):
                     'name': sql_server_data.name,
                     'account': sql_server_data.subscription_id
                 })
-                sql_server_responses.append(SQLServerResponse({'resource': sql_servers_resource}))
-                _LOGGER.debug(f'[SQL SERVER INFO] {sql_servers_resource.to_primitive()}')
+                sql_server_responses.append(SQLServerResponse({'resource': sql_server_resource}))
+                _LOGGER.debug(f'[SQL SERVER INFO] {sql_server_resource.to_primitive()}')
 
                 for sql_database in sql_server_dict.get('databases', []):
                     sql_database_data = SQLDatabase(sql_database, strict=False)
-                    sql_databases_resource = SqlDatabaseResource({
+                    sql_database_resource = SQLDatabaseResource({
                         'data': sql_database_data,
                         'region_code': sql_database_data.location,
                         'reference': ReferenceModel(sql_database_data.reference()),
-                        # 'tags': _tags,
+                        'tags': _tags,
                         'name': sql_database_data.name,
                         'account': sql_database_data.subscription_id,
                         'instance_type': sql_database_data.sku.tier,
                         'instance_size': float(sql_database_data.max_size_gb),
                         'launched_at': datetime_to_iso8601(sql_database_data.creation_date)
                     })
-                    _LOGGER.debug(f'[SQL DATABASE INFO] {sql_databases_resource.to_primitive()}')
-                    sql_server_responses.append(SqlDatabaseResponse({'resource': sql_databases_resource}))
+                    _LOGGER.debug(f'[SQL DATABASE INFO] {sql_database_resource.to_primitive()}')
+                    sql_server_responses.append(SQLDatabaseResponse({'resource': sql_database_resource}))
 
                 # Must set_region_code method for region collection
                 self.set_region_code(sql_server_data['location'])
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {sql_server_id} {e}', exc_info=True)
-                error_resource_response = self.generate_resource_error_response(e, 'Database', 'SqlServer', sql_server_id)
+                error_resource_response = self.generate_resource_error_response(e, 'Database', 'SQLServer', sql_server_id)
                 error_responses.append(error_resource_response)
 
-        _LOGGER.debug(f'** Sql Servers Finished {time.time() - start_time} Seconds **')
+        _LOGGER.debug(f'** SQL Servers Finished {time.time() - start_time} Seconds **')
 
         return sql_server_responses, error_responses
-
-    @staticmethod
-    def list_databases(self, sql_servers_conn, sql_monitor_conn, rg_name, server_name, server_admin_name):
-        databases_list = list() # todo : list() , []
-        databases = sql_servers_conn.list_databases_by_server(resource_group=rg_name, server_name=server_name)
-
-        for database in databases:
-            database_dict = self.convert_nested_dictionary(self, database)
-            if database_dict.get('sku'):
-                if database_dict.get('name') != 'master':  # No pricing tier for system database
-                    database_dict.update({
-                        'pricing_tier_display': self.get_pricing_tier_display(database_dict['sku']),
-                        'service_tier_display': database_dict['sku'].get('tier')
-                    })
-
-            if db_id := database_dict.get('id'):
-                database_dict.update({
-                    'server_name': db_id.split('/')[8],
-                    'subscription_id': db_id.split('/')[2],
-                    'resource_group': db_id.split('/')[4],
-                    'azure_monitor': {'resource_id': db_id}
-                })
-
-            if compute_tier := database_dict.get('kind'):
-                database_dict.update({
-                    'compute_tier': self.get_db_compute_tier(compute_tier)
-                })
-
-            if database_dict.get('max_size_bytes'):
-                database_dict.update({
-                    'max_size_gb': database_dict['max_size_bytes'] / 1073741824
-                })
-
-            # Get Sync Groups by databases
-            database_dict.update({
-                'sync_group': self.get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name,
-                                                               database_dict['name']),
-            })
-
-            if database_dict['sync_group']:
-                database_dict.update({
-                    'sync_group_display': self.get_sync_group_display(self, database_dict['sync_group'])
-                })
-
-            # Get Sync Agents by servers
-            database_dict.update({
-                'sync_agent': self.get_sync_agent_by_servers(self, sql_servers_conn, rg_name, server_name)
-            })
-
-            if database_dict['sync_agent']:
-                database_dict.update({
-                    'sync_agent_display': self.get_sync_agent_display(self, database_dict['sync_agent'])
-                })
-            '''
-            # Get Data masking rules
-            database_dict.update({
-                'data_masking_rules': self.list_data_masking_rules(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
-            })
-            '''
-
-            # Get Diagnostic Settings
-            database_dict.update({
-                'diagnostic_settings_resource': self.list_diagnostics_settings(self, sql_monitor_conn, database_dict['id'])
-            })
-
-            # Get Database Replication Type
-            database_dict.update({
-                'replication_link': self.list_replication_link(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
-            })
-
-            # Get azure_ad_admin name
-            if server_admin_name is not None:
-                database_dict.update({
-                    'administrator_login': server_admin_name
-                })
-            # switch tags form
-            tags = database_dict.get('tags', {})
-            _tags = self.convert_tag_format(tags)
-            database_dict.update({
-                'tags': _tags
-            })
-
-            databases_list.append(database_dict)
-
-        return databases_list
 
     @staticmethod
     def list_elastic_pools(self, sql_servers_conn, rg_name, server_name):
@@ -244,7 +159,7 @@ class SQLServersManager(AzureManager):
         elastic_pools = sql_servers_conn.list_elastic_pools_by_server(resource_group=rg_name, server_name=server_name)
 
         for elastic_pool in elastic_pools:
-            elastic_pool_dict = self.convert_nested_dictionary(self, elastic_pool)
+            elastic_pool_dict = self.convert_nested_dictionary(elastic_pool)
 
             # Get Databases list by elastic pool
             elastic_pool_dict['databases'] = self.get_databases_by_elastic_pools(self, sql_servers_conn,
@@ -272,7 +187,7 @@ class SQLServersManager(AzureManager):
         databases_obj = sql_servers_conn.list_databases_by_elastic_pool(elastic_pool_name, rg_name, server_name)
         databases_list = list()
         for database in databases_obj:
-            database_dict = self.convert_nested_dictionary(self, database)
+            database_dict = self.convert_nested_dictionary(database)
             databases_list.append(database_dict)
 
         return databases_list
@@ -283,7 +198,7 @@ class SQLServersManager(AzureManager):
                                                                                              server_name=server_name)
         deleted_databases_list = list()
         for deleted_database in deleted_databases_obj:
-            deleted_database_dict = self.convert_nested_dictionary(self, deleted_database)
+            deleted_database_dict = self.convert_nested_dictionary(deleted_database)
             deleted_databases_list.append(deleted_database_dict)
 
         return deleted_databases_list
@@ -293,7 +208,7 @@ class SQLServersManager(AzureManager):
         firewall_obj = sql_servers_conn.list_firewall_rules_by_server(resource_group=rg_name, server_name=server_name)
         firewall_list = list()
         for firewall in firewall_obj:
-            firewall_rule_dict = self.convert_nested_dictionary(self, firewall)
+            firewall_rule_dict = self.convert_nested_dictionary(firewall)
             firewall_list.append(firewall_rule_dict)
 
         return firewall_list
@@ -305,7 +220,7 @@ class SQLServersManager(AzureManager):
         virtual_network_rules_list = list()
 
         for virtual_network_rule in virtual_network_rule_obj:
-            virtual_network_rule_dict = self.convert_nested_dictionary(self, virtual_network_rule)
+            virtual_network_rule_dict = self.convert_nested_dictionary(virtual_network_rule)
 
             if virtual_network_rule_dict.get('id') is not None:  # Get Virtual Network's name
                 virtual_network_rule_dict.update({
@@ -342,23 +257,10 @@ class SQLServersManager(AzureManager):
                                                                                 server_name=server_name)
 
         for encryption_protector in encryption_protectors_obj:
-            encryption_protectors_dict = self.convert_nested_dictionary(self, encryption_protector)
+            encryption_protectors_dict = self.convert_nested_dictionary(encryption_protector)
             encryption_protectors_list.append(encryption_protectors_dict)
 
         return encryption_protectors_list
-
-    @staticmethod
-    def get_per_db_settings(per_database_settings_dict):
-        per_db_settings = f"{str(per_database_settings_dict['min_capacity'])} - " \
-                          f"{str(per_database_settings_dict['max_capacity'])} vCores"
-        return per_db_settings
-
-    @staticmethod
-    def get_pricing_tier_display(sku_dict):
-        if sku_dict.get('capacity') is not None:
-            pricing_tier = f'{str(sku_dict["tier"])} : {str(sku_dict["family"])} , {str(sku_dict["capacity"])} vCores'
-
-        return pricing_tier
 
     @staticmethod
     def list_azure_ad_administrators(self, sql_servers_conn, rg_name, server_name):
@@ -374,7 +276,7 @@ class SQLServersManager(AzureManager):
     @staticmethod
     def get_server_automatic_tuning(self, sql_servers_conn, rg_name, server_name):
         server_automatic_tuning_obj = sql_servers_conn.get_server_automatic_tuning(rg_name, server_name)
-        server_automatic_tuning_dict = self.convert_nested_dictionary(self, server_automatic_tuning_obj)
+        server_automatic_tuning_dict = self.convert_nested_dictionary(server_automatic_tuning_obj)
         server_automatic_tuning_dict.update({
             'options': self.get_server_automatic_tuning_options(self, server_automatic_tuning_dict['options'])
         })
@@ -384,9 +286,9 @@ class SQLServersManager(AzureManager):
     @staticmethod
     def get_server_automatic_tuning_options(self, options_dict):
         options_list = list()
-        created_index_dict = self.convert_nested_dictionary(self, options_dict['createIndex'])
-        drop_index_dict = self.convert_nested_dictionary(self, options_dict['dropIndex'])
-        force_plan_dict = self.convert_nested_dictionary(self, options_dict['forceLastGoodPlan'])
+        created_index_dict = self.convert_nested_dictionary(options_dict['createIndex'])
+        drop_index_dict = self.convert_nested_dictionary(options_dict['dropIndex'])
+        force_plan_dict = self.convert_nested_dictionary(options_dict['forceLastGoodPlan'])
 
         created_index_dict.update({
             'tuning_type': 'createIndex'
@@ -407,7 +309,7 @@ class SQLServersManager(AzureManager):
     @staticmethod
     def get_server_auditing_settings(self, sql_servers_conn, rg_name, server_name):
         server_auditing_settings_obj = sql_servers_conn.get_server_auditing_settings(rg_name, server_name)
-        server_auditing_settings_dict = self.convert_nested_dictionary(self, server_auditing_settings_obj)
+        server_auditing_settings_dict = self.convert_nested_dictionary(server_auditing_settings_obj)
 
         return server_auditing_settings_dict
 
@@ -416,7 +318,7 @@ class SQLServersManager(AzureManager):
         failover_groups_list = list()
         failover_groups_obj = sql_servers_conn.list_failover_groups(rg_name, server_name)
         for failover in failover_groups_obj:
-            failover_dict = self.convert_nested_dictionary(self, failover)
+            failover_dict = self.convert_nested_dictionary(failover)
 
             if failover_dict.get('id') is not None:  # Get Primary server's name
                 failover_dict.update({
@@ -469,36 +371,6 @@ class SQLServersManager(AzureManager):
         return compute_tier
 
     @staticmethod
-    def get_sync_group_by_databases(self, sql_servers_conn, rg_name, server_name, database_name):
-        sync_group_obj = sql_servers_conn.list_sync_groups_by_databases(resource_group=rg_name, server_name=server_name,
-                                                                        database_name=database_name)
-        sync_group_list = list()
-        for sync_group in sync_group_obj:
-            sync_group_dict = self.convert_nested_dictionary(self, sync_group)
-            sync_group_list.append(sync_group_dict)
-        return sync_group_list
-
-    @staticmethod
-    def get_sync_group_display(self, sync_group_list):
-        sync_group_display_list = list()
-        for sync_group in sync_group_list:
-            sync_display = f"{sync_group['name']} / {sync_group['conflict_resolution_policy']} / {sync_group['sync_state']}"
-            sync_group_display_list.append(sync_display)
-
-        return sync_group_display_list
-
-    @staticmethod
-    def get_sync_agent_by_servers(self, sql_servers_conn, rg_name, server_name):
-        sync_agent_list = list()
-        sync_agent_obj = sql_servers_conn.list_sync_agents_by_server(rg_name, server_name)
-
-        for sync_agent in sync_agent_obj:
-            sync_agent_dict = self.convert_nested_dictionary(sync_agent)
-            sync_agent_list.append(sync_agent_dict)
-
-        return sync_agent_list
-
-    @staticmethod
     def get_sync_agent_display(self, sync_agent_list):
         sync_agent_display_list = list()
         for sync_agent in sync_agent_list:
@@ -515,10 +387,137 @@ class SQLServersManager(AzureManager):
                                                                                      database_name=database_name)
 
         for data_masking_rule in data_masking_rule_obj:
-            data_masking_dict = self.convert_nested_dictionary(self, data_masking_rule)
+            data_masking_dict = self.convert_nested_dictionary(data_masking_rule)
             data_masking_rules_list.append(data_masking_dict)
 
         return data_masking_rules_list
+
+    def list_databases(self, sql_servers_conn, sql_monitor_conn, resource_group_name, server_name, server_admin_name):
+        databases_list = list()  # todo : list() , []
+        databases = sql_servers_conn.list_databases_by_server(resource_group_name=resource_group_name, server_name=server_name)
+
+        for database in databases:
+            database_dict = self.convert_nested_dictionary(database)
+            if database_dict.get('sku'):
+                if database_dict.get('name') != 'master':  # No pricing tier for system database
+                    database_dict.update({
+                        'pricing_tier_display': self.get_pricing_tier_display(database_dict['sku']),
+                        'service_tier_display': database_dict['sku'].get('tier')
+                    })
+
+            if db_id := database_dict.get('id'):
+                database_dict.update({
+                    'server_name': db_id.split('/')[8],
+                    'subscription_id': db_id.split('/')[2],
+                    'resource_group': db_id.split('/')[4],
+                    'azure_monitor': {'resource_id': db_id}
+                })
+
+            if compute_tier := database_dict.get('kind'):
+                database_dict.update({
+                    'compute_tier': self.get_db_compute_tier(compute_tier)
+                })
+
+            if database_dict.get('max_size_bytes'):
+                database_dict.update({
+                    'max_size_gb': database_dict['max_size_bytes'] / 1073741824  # 2의 30승
+                })
+
+            # Get Sync Groups by databases
+            database_dict.update({
+                'sync_group': self.get_sync_group_by_databases(self, sql_servers_conn, resource_group_name, server_name,
+                                                               database_dict['name']),
+            })
+
+            if database_dict['sync_group']:
+                database_dict.update({
+                    'sync_group_display': self.get_sync_group_display(self, database_dict['sync_group'])
+                })
+
+            # Get Sync Agents by servers
+            database_dict.update({
+                'sync_agent': self.get_sync_agent_by_servers(self, sql_servers_conn, resource_group_name, server_name)
+            })
+
+            if database_dict['sync_agent']:
+                database_dict.update({
+                    'sync_agent_display': self.get_sync_agent_display(self, database_dict['sync_agent'])
+                })
+            '''
+            # Get Data masking rules
+            database_dict.update({
+                'data_masking_rules': self.list_data_masking_rules(self, sql_servers_conn, rg_name, server_name, database_dict['name'])
+            })
+            '''
+
+            # Get Diagnostic Settings
+            database_dict.update({
+                'diagnostic_settings_resource': self.list_diagnostics_settings(self, sql_monitor_conn,
+                                                                               database_dict['id'])
+            })
+
+            # Get Database Replication Type
+            database_dict.update({
+                'replication_link': self.list_replication_link(sql_servers_conn, resource_group_name, server_name,
+                                                               database_dict['name'])
+            })
+
+            # Get azure_ad_admin name
+            if server_admin_name is not None:
+                database_dict.update({
+                    'administrator_login': server_admin_name
+                })
+
+            # switch tags form
+            tags = database_dict.get('tags', {})
+            _tags = self.convert_tag_format(tags)
+            database_dict.update({
+                'tags': _tags
+            })
+
+            databases_list.append(database_dict)
+
+        return databases_list
+
+    @staticmethod
+    def get_pricing_tier_display(sku_dict):
+        pricing_tier = None
+        if sku_dict.get('capacity') is not None:
+            pricing_tier = f'{str(sku_dict["tier"])} : {str(sku_dict["family"])} , {str(sku_dict["capacity"])} vCores'
+
+        return pricing_tier
+
+    @staticmethod
+    def get_sync_group_by_databases(self, sql_servers_conn, resource_group_name, server_name, database_name):
+        sync_group_obj = sql_servers_conn.list_sync_groups_by_databases(resource_group=resource_group_name,
+                                                                        server_name=server_name,
+                                                                        database_name=database_name)
+        sync_group_list = list()
+        for sync_group in sync_group_obj:
+            sync_group_dict = self.convert_nested_dictionary(sync_group)
+            sync_group_list.append(sync_group_dict)
+        return sync_group_list
+
+    @staticmethod
+    def get_sync_group_display(self, sync_group_list):
+        sync_group_display_list = list()
+        for sync_group in sync_group_list:
+            sync_display = f"{sync_group['name']} / {sync_group['conflict_resolution_policy']} / {sync_group['sync_state']}"
+            sync_group_display_list.append(sync_display)
+
+        return sync_group_display_list
+
+
+    @staticmethod
+    def get_sync_agent_by_servers(self, sql_servers_conn, rg_name, server_name):
+        sync_agent_list = list()
+        sync_agent_obj = sql_servers_conn.list_sync_agents_by_server(rg_name, server_name)
+
+        for sync_agent in sync_agent_obj:
+            sync_agent_dict = self.convert_nested_dictionary(sync_agent)
+            sync_agent_list.append(sync_agent_dict)
+
+        return sync_agent_list
 
     @staticmethod
     def list_diagnostics_settings(self, sql_monitor_conn, resource_uri):
@@ -526,18 +525,17 @@ class SQLServersManager(AzureManager):
         diagnostic_settings_obj = sql_monitor_conn.list_diagnostic_settings(resource_uri=resource_uri)
 
         for diagnostic_setting in diagnostic_settings_obj.value:
-            diagnostic_setting_dict = self.convert_nested_dictionary(self, diagnostic_setting)
+            diagnostic_setting_dict = self.convert_nested_dictionary(diagnostic_setting)
             diagnostic_settings_list.append(diagnostic_setting_dict)
 
         return diagnostic_settings_list
 
-    @staticmethod
     def list_replication_link(self, sql_servers_conn, rg_name, server_name, database_name):
         replication_link_list = list()
         replication_link_obj = sql_servers_conn.list_replication_link(rg_name, server_name, database_name)
 
         for replication_link in replication_link_obj:
-            replication_link_dict = self.convert_nested_dictionary(self, replication_link)
+            replication_link_dict = self.convert_nested_dictionary(replication_link)
             replication_link_list.append(replication_link_dict)
 
         return replication_link_list
