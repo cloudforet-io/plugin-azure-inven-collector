@@ -198,27 +198,45 @@ class AzureManager(BaseManager):
     def convert_dictionary(obj):
         return vars(obj)
 
-    @staticmethod
+    # def convert_nested_dictionary(self, cloud_svc_object):
+    #     cloud_svc_dict = self.convert_dictionary(cloud_svc_object)
+    #     for k, v in cloud_svc_dict.items():
+    #         if isinstance(v, object):  # object
+    #             if 'azure' in str(type(v)):  # 1) if cloud_svc_object is azure defined model class
+    #                 cloud_svc_dict[k] = self.convert_nested_dictionary(v)
+    #             elif isinstance(v, list):  # 2) if cloud_svc_object is list
+    #                 cloud_svc_converse_list = list()
+    #                 for list_obj in v:  # if cloud_svc object's child value is Azure defined model class or dict class
+    #                     if hasattr(list_obj, '__dict__') or 'azure' in str(type(list_obj)):
+    #                         cloud_svc_converse_dict = self.convert_nested_dictionary(list_obj)
+    #                         cloud_svc_converse_list.append(cloud_svc_converse_dict)
+    #                     else:  # if cloud_svc_object's child value is simple list
+    #                         cloud_svc_converse_list.append(list_obj)
+    #
+    #                     cloud_svc_dict[k] = cloud_svc_converse_list
+    #
+    #             elif hasattr(v, '__dict__'):  # if cloud_svc_object is not a list type, just a dict
+    #                 cloud_svc_converse_dict = self.convert_nested_dictionary(v)
+    #                 cloud_svc_dict[k] = cloud_svc_converse_dict
+    #
+    #     return cloud_svc_dict
+
     def convert_nested_dictionary(self, cloud_svc_object):
-        cloud_svc_dict = self.convert_dictionary(cloud_svc_object)
-        for k, v in cloud_svc_dict.items():
-            if isinstance(v, object):  # object
-                if 'azure' in str(type(v)):  # 1) if cloud_svc_object is azure defined model class
-                    cloud_svc_dict[k] = self.convert_nested_dictionary(self, v)
-                elif isinstance(v, list):  # 2) if cloud_svc_object is list
-                    cloud_svc_converse_list = list()
-                    for list_obj in v:  # if cloud_svc object's child value is Azure defined model class or dict class
-                        if hasattr(list_obj, '__dict__') or 'azure' in str(type(list_obj)):
-                            cloud_svc_converse_dict = self.convert_nested_dictionary(self, list_obj)
-                            cloud_svc_converse_list.append(cloud_svc_converse_dict)
-                        else:  # if cloud_svc_object's child value is simple list
-                            cloud_svc_converse_list.append(list_obj)
+        cloud_svc_dict = {}
+        if hasattr(cloud_svc_object, '__dict__'):  # if cloud_svc_object is not a dictionary type but has dict method
+            cloud_svc_dict = cloud_svc_object.__dict__
+        elif not isinstance(cloud_svc_object, list):  # if cloud_svc_object is one of type like int, float, char, ...
+            return cloud_svc_object
 
-                        cloud_svc_dict[k] = cloud_svc_converse_list
-
-                elif hasattr(v, '__dict__'):  # if cloud_svc_object is not a list type, just a dict
-                    cloud_svc_converse_dict = self.convert_nested_dictionary(self, v)
-                    cloud_svc_dict[k] = cloud_svc_converse_dict
+        # if cloud_svc_object is dictionary type
+        for key, value in cloud_svc_dict.items():
+            if 'azure' in str(type(value)):
+                cloud_svc_dict[key] = self.convert_nested_dictionary(value)
+            elif isinstance(value, list):
+                value_list = []
+                for v in value:
+                    value_list.append(self.convert_nested_dictionary(v))
+                cloud_svc_dict[key] = value_list
 
         return cloud_svc_dict
 
