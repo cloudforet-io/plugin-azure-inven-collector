@@ -15,9 +15,6 @@ class SQLServersConnector(AzureConnector):
     def list_servers(self):
         return self.sql_client.servers.list()
 
-    def list_databases(self, resource_group, server_name):
-        return self.sql_client.databases.list_by_server(resource_group_name=resource_group, server_name=server_name)
-
     def list_server_azure_ad_administrators(self, resource_group, server_name):
         return self.sql_client.server_azure_ad_administrators.list_by_server(resource_group, server_name)
 
@@ -33,8 +30,8 @@ class SQLServersConnector(AzureConnector):
     def list_encryption_protectors(self, resource_group, server_name):
         return self.sql_client.encryption_protectors.list_by_server(resource_group_name=resource_group, server_name=server_name)
 
-    def list_databases_by_server(self, resource_group, server_name):
-        return self.sql_client.databases.list_by_server(resource_group, server_name)
+    def list_databases_by_server(self, resource_group_name, server_name):
+        return self.sql_client.databases.list_by_server(resource_group_name=resource_group_name, server_name=server_name)
 
     def list_elastic_pools_by_server(self, resource_group, server_name):
         return self.sql_client.elastic_pools.list_by_server(resource_group, server_name)
