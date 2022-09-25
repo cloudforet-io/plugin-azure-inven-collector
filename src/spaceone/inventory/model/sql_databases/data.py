@@ -3,6 +3,14 @@ from schematics.types import ModelType, ListType, StringType, IntType, BooleanTy
 from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
+class Sku(Model):
+    capacity = IntType(serialize_when_none=False)
+    family = StringType(serialize_when_none=False)
+    name = StringType(serialize_when_none=False)
+    size = StringType(serialize_when_none=False)
+    tier = StringType(serialize_when_none=False)
+
+
 class SyncGroupSchemaColumn(Model):
     data_size = StringType(serialize_when_none=False)
     data_type = StringType(serialize_when_none=False)
@@ -31,12 +39,17 @@ class SyncGroup(Model):
     sync_database_id = StringType(serialize_when_none=False)
     sync_state = StringType(choices=('Error', 'Good', 'NotReady', 'Progressing', 'Warning'), serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    user_private_link = BooleanType(serialize_when_none=False)
+    conflict_logging_retention_in_days = IntType(serialize_when_none=False)
+    use_private_link_connection = BooleanType(serialize_when_none=False)
+    sku = ModelType(Sku, serialize_when_none=False)
+    automatic_sync = BooleanType(serialize_when_none=False)
 
 
 class SyncAgent(Model):
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    expiry_time = StringType(serialize_when_none=False)
+    expiry_time = DateTimeType(serialize_when_none=False)
     is_up_to_date = BooleanType(serialize_when_none=False)
     last_alive_time = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
@@ -93,14 +106,22 @@ class ReplicationLink(Model):
     role = StringType(choices=('Copy', 'NonReadableSecondary', 'Primary', 'Secondary', 'Source'), serialize_when_none=False)
     start_time = DateTimeType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    link_type = StringType(choices=('GEO', 'NAMED'), serialize_when_none=False)
+    replica_state = StringType(serialized_name=False)
 
 
-class Sku(Model):
-    capacity = IntType(serialize_when_none=False)
-    family = StringType(serialize_when_none=False)
+class DatabaseBlobAuditingPolicy(Model):
+    id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    size = StringType(serialize_when_none=False)
-    tier = StringType(serialize_when_none=False)
+    retention_days = IntType(serialize_when_none=False)
+    audit_actions_and_groups = ListType(StringType, serialize_when_none=False)
+    is_storage_secondary_key_in_use = BooleanType(serialize_when_none=False)
+    is_azure_monitor_target_enabled = BooleanType(serialize_when_none=False)
+    queue_delay_ms = IntType(serialize_when_none=False)
+    state = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
+    storage_endpoint = StringType(serialize_when_none=False)
+    storage_account_access_key = StringType(serialize_when_none=False)
+    storage_account_subscription_id = StringType(serialize_when_none=False)
 
 
 class SQLDatabase(AzureCloudService):  # Main Class
@@ -165,6 +186,8 @@ class SQLDatabase(AzureCloudService):  # Main Class
     service_tier_display = StringType(default='-')
     compute_tier = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    database_auditing_settings = ModelType(DatabaseBlobAuditingPolicy, serialize_when_none=False)
+
 
     def reference(self):
         return {
