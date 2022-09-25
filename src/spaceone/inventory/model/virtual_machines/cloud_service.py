@@ -38,7 +38,7 @@ virtual_machine = ItemDynamicLayout.set_fields('Virtual Machine', fields=[
     EnumDyField.data_source('Boot Diagnostics', 'data.azure.boot_diagnostics', default_badge={
         'indigo.500': ['true'], 'coral.600': ['false']
     }),
-    ListDyField.data_source('Public IP', 'nics', options={
+    ListDyField.data_source('Public IP', 'data.nics', options={
         'sub_key': 'public_ip_address',
         'delimiter': '<br>'
     }),
