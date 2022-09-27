@@ -131,7 +131,6 @@ class NATGatewaysManager(AzureManager):
         pip_name = pip_id.split('/')[8]
         resource_group_name = pip_id.split('/')[4]
         pip_obj = nat_gateway_conn.get_public_ip_addresses(resource_group_name=resource_group_name, public_ip_address_name=pip_name)
-
         pip_dict = self.convert_nested_dictionary(pip_obj)
         return pip_dict
 

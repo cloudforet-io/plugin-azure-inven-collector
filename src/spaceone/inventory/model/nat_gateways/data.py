@@ -533,10 +533,6 @@ class PublicIPPrefixSku(Model):
     tier = StringType(choices=('Global', 'Regional'), serialize_when_none=False)
 
 
-class NatGatewaySimple(Model):
-    id = StringType(serialize_when_none=False)
-
-
 class PublicIPAddress(Model):
     etag = StringType(serialize_when_none=False)
     extended_location = ModelType(ExtendedLocation, serialize_when_none=False)
@@ -551,7 +547,6 @@ class PublicIPAddress(Model):
     ip_tags = ListType(ModelType(IpTag), serialize_when_none=False)
     # linked_public_ip_address = ModelType(PublicIPAddress, serialize_when_none=False)
     migration_phase = StringType(choices=('Abort', 'Commit', 'Committed', 'None', 'Prepare'), serialize_when_none=False)
-    nat_gateway = ModelType(NatGatewaySimple, serialize_when_none=False)     # Change to NAT id
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     public_ip_address_version = StringType(choices=('IPv4', 'IPv6'), serialize_when_none=False)
     public_ip_allocation_method = StringType(choices=('Dynamic', 'Static'), serialize_when_none=False)

@@ -7,14 +7,14 @@ msrestazure
 
 # todo : version update needed
 azure-identity
-azure-mgmt-resource==15.0.0
-azure-mgmt-compute==27.2.0
-azure-mgmt-network==17.0.0
-azure-mgmt-sql==3.0.1
-azure-mgmt-monitor==2.0.0
-azure-mgmt-storage==18.0.0
-azure-mgmt-keyvault==9.0.0
-azure-keyvault-certificates==4.3.0
-azure-keyvault-secrets==4.3.0
-azure-mgmt-rdbms==9.1.0
-azure-mgmt-cosmosdb==6.4.0
+azure-mgmt-resource
+azure-mgmt-compute
+azure-mgmt-network
+azure-mgmt-sql
+azure-mgmt-monitor
+azure-mgmt-storage
+azure-mgmt-keyvault
+azure-keyvault-certificates
+azure-keyvault-secrets
+azure-mgmt-rdbms
+azure-mgmt-cosmosdb
