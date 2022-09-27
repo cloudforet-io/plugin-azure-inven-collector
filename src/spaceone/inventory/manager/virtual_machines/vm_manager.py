@@ -125,31 +125,6 @@ class VirtualMachineVmManager(BaseManager):
             except Exception as e:
                 print(f'[ERROR: GET OS Data]: {e}')
 
-    @staticmethod
-    def get_hardware_data(vm, skus_dict, compute_data):
-        """
-        skus_dict = [
-            {
-                'memory': '0.75',
-                'family': 'basicAFamily',
-                'name': 'Basic_A0',
-                'resource_type': 'virtualMachines',
-                'size': 'A0',
-                'tier': 'Basic',
-                'core': '1'},
-            },
-        ]
-        """
-
-        location = vm.location
-        instance_type = compute_data.instance_type
-
-        hardware_data = Hardware(strict=False)
-        for sku in skus_dict[location]:
-            if sku['name'] == instance_type:
-                hardware_data = Hardware(sku, strict=False)
-        return hardware_data
-
     def get_compute_data(self, vm, resource_group_name, network_security_groups, subscription_id):
         vm_info = self.azure_vm_connector.get_vm(resource_group_name, vm.name)
         compute_data = {
@@ -195,6 +170,31 @@ class VirtualMachineVmManager(BaseManager):
 
     def get_vm_size(self, location):
         return self.azure_vm_connector.list_virtual_machine_sizes(location)
+
+    @staticmethod
+    def get_hardware_data(vm, skus_dict, compute_data):
+        """
+        skus_dict = [
+            {
+                'memory': '0.75',
+                'family': 'basicAFamily',
+                'name': 'Basic_A0',
+                'resource_type': 'virtualMachines',
+                'size': 'A0',
+                'tier': 'Basic',
+                'core': '1'},
+            },
+        ]
+        """
+
+        location = vm.location
+        instance_type = compute_data.instance_type
+
+        hardware_data = Hardware(strict=False)
+        for sku in skus_dict[location]:
+            if sku['name'] == instance_type:
+                hardware_data = Hardware(sku, strict=False)
+        return hardware_data
 
     def get_os_distro(self, os_type, offer):
         return self.extract_os_distro(os_type, offer)

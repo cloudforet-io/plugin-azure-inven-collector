@@ -69,7 +69,7 @@ class NATGatewaysManager(AzureManager):
 
                     for pip in nat_gateway_dict['public_ip_addresses']:
                         public_ip_prefixes_id = pip['id']
-                        pip_dict = self.get_public_ip_address_dict(self, nat_gateway_conn, public_ip_prefixes_id)
+                        pip_dict = self.get_public_ip_address_dict(nat_gateway_conn, public_ip_prefixes_id)
                         pip_list.append(pip_dict)
                     nat_gateway_dict['public_ip_addresses'] = pip_list
 
@@ -86,14 +86,14 @@ class NATGatewaysManager(AzureManager):
 
                     for pip in nat_gateway_dict['public_ip_prefixes']:
                         public_ip_prefixes_id = pip['id']
-                        pip_dict = self.get_public_ip_prefixes_dict(self, nat_gateway_conn, public_ip_prefixes_id)
+                        pip_dict = self.get_public_ip_prefixes_dict(nat_gateway_conn, public_ip_prefixes_id)
                         pip_list.append(pip_dict)
 
                     nat_gateway_dict['public_ip_prefixes'] = pip_list
 
                 if nat_gateway_dict.get('subnets') is not None:
                     nat_gateway_dict.update({
-                        'subnets': self.get_subnets(self, nat_gateway_conn, nat_gateway_dict['subnets'])
+                        'subnets': self.get_subnets(nat_gateway_conn, nat_gateway_dict['subnets'])
                     })
 
                 # switch tags form
@@ -127,7 +127,6 @@ class NATGatewaysManager(AzureManager):
         _LOGGER.debug(f'** NAT Gateway Finished {time.time() - start_time} Seconds **')
         return nat_gateway_responses, error_responses
 
-    @staticmethod
     def get_public_ip_address_dict(self, nat_gateway_conn, pip_id):
         pip_name = pip_id.split('/')[8]
         resource_group_name = pip_id.split('/')[4]
@@ -136,7 +135,6 @@ class NATGatewaysManager(AzureManager):
         pip_dict = self.convert_nested_dictionary(pip_obj)
         return pip_dict
 
-    @staticmethod
     def get_public_ip_prefixes_dict(self, nat_gateway_conn, pip_id):
         pip_name = pip_id.split('/')[8]
         resource_group_name = pip_id.split('/')[4]
@@ -145,7 +143,6 @@ class NATGatewaysManager(AzureManager):
         pip_dict = self.convert_nested_dictionary(pip_obj)
         return pip_dict
 
-    @staticmethod
     def get_subnets(self, nat_gateway_conn, subnets):
         subnet_list = []
 

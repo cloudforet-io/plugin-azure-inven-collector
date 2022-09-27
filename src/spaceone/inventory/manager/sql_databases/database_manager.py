@@ -88,9 +88,10 @@ class SQLDatabasesManager(AzureManager):
                         })
 
                     # Get Sync Groups by databases
-                    sql_database_sync_groups = sql_databases_conn.list_sync_groups_by_databases(resource_group=resource_group_name,
-                                                                                   server_name=server_name,
-                                                                                   database_name=database_name)
+                    sql_database_sync_groups = sql_databases_conn.list_sync_groups_by_databases(
+                        resource_group=resource_group_name,
+                        server_name=server_name,
+                        database_name=database_name)
 
                     sql_database_dict.update({
                         'sync_group': self.get_sync_group_by_databases(sql_database_sync_groups)
@@ -126,7 +127,8 @@ class SQLDatabasesManager(AzureManager):
 
                     # Get Database Replication Type
                     sql_database_dict.update({
-                        'replication_link': self.list_replication_link_in_database(replication_links, database_name=database_name)
+                        'replication_link': self.list_replication_link_in_database(replication_links,
+                                                                                   database_name=database_name)
                     })
 
                     # Get azure_ad_admin name
@@ -183,23 +185,6 @@ class SQLDatabasesManager(AzureManager):
         _LOGGER.debug(f'** SQL Databases Finished {time.time() - start_time} Seconds **')
         return sql_database_responses, error_responses
 
-    @staticmethod
-    def get_pricing_tier_display(sku_dict):
-        pricing_tier = None
-        if sku_dict.get('capacity') is not None:
-            pricing_tier = f'{str(sku_dict["tier"])} : {str(sku_dict["family"])} , {str(sku_dict["capacity"])} vCores'
-
-        return pricing_tier
-
-    @staticmethod
-    def get_db_compute_tier(kind):
-        if 'serverless' in kind:
-            compute_tier = 'Serverless'
-        else:
-            compute_tier = 'Provisioned'
-
-        return compute_tier
-
     def get_sync_group_by_databases(self, replication_links_from_params: list) -> list:
         sync_groups = []
         for sync_group in replication_links_from_params:
@@ -219,6 +204,50 @@ class SQLDatabasesManager(AzureManager):
 
         return sync_agent_list
 
+    def list_diagnostics_settings(self, sql_monitor_conn, resource_uri):
+        diagnostic_settings_list = list()
+        diagnostic_settings_objs = sql_monitor_conn.list_diagnostic_settings(resource_uri=resource_uri)
+
+        for diagnostic_setting in diagnostic_settings_objs:
+            diagnostic_setting_dict = self.convert_nested_dictionary(diagnostic_setting)
+            diagnostic_settings_list.append(diagnostic_setting_dict)
+
+        return diagnostic_settings_list
+
+    def list_replication_links(self, replication_links_from_params) -> list:
+        replication_links = []
+        for replication_link in replication_links_from_params:
+            replication_link_dict = self.convert_nested_dictionary(replication_link)
+            replication_link_dict['replica_state'] = 'Online' if replication_link_dict['role'] == 'Primary' \
+                else 'Readable'
+            replication_links.append(replication_link_dict)
+
+        return replication_links
+
+    def get_database_auditing_settings(self, sql_databases_conn, resource_group_name, server_name, database_name):
+        database_auditing_settings = sql_databases_conn.get_database_auditing_settings(
+            resource_group_name=resource_group_name,
+            server_name=server_name,
+            database_name=database_name)
+        return self.convert_nested_dictionary(database_auditing_settings)
+
+    @staticmethod
+    def get_pricing_tier_display(sku_dict):
+        pricing_tier = None
+        if sku_dict.get('capacity') is not None:
+            pricing_tier = f'{str(sku_dict["tier"])} : {str(sku_dict["family"])} , {str(sku_dict["capacity"])} vCores'
+
+        return pricing_tier
+
+    @staticmethod
+    def get_db_compute_tier(kind):
+        if 'serverless' in kind:
+            compute_tier = 'Serverless'
+        else:
+            compute_tier = 'Provisioned'
+
+        return compute_tier
+
     @staticmethod
     def get_sync_group_display(sync_group_list):
         sync_group_display_list = list()
@@ -237,26 +266,6 @@ class SQLDatabasesManager(AzureManager):
 
         return sync_agent_display_list
 
-    def list_diagnostics_settings(self, sql_monitor_conn, resource_uri):
-        diagnostic_settings_list = list()
-        diagnostic_settings_obj = sql_monitor_conn.list_diagnostic_settings(resource_uri=resource_uri)
-
-        for diagnostic_setting in diagnostic_settings_obj.value:
-            diagnostic_setting_dict = self.convert_nested_dictionary(diagnostic_setting)
-            diagnostic_settings_list.append(diagnostic_setting_dict)
-
-        return diagnostic_settings_list
-
-    def list_replication_links(self, replication_links_from_params) -> list:
-        replication_links = []
-        for replication_link in replication_links_from_params:
-            replication_link_dict = self.convert_nested_dictionary(replication_link)
-            replication_link_dict['replica_state'] = 'Online' if replication_link_dict['role'] == 'Primary' \
-                else 'Readable'
-            replication_links.append(replication_link_dict)
-
-        return replication_links
-
     @staticmethod
     def list_replication_link_in_database(replication_links_from_params, database_name) -> list:
         replication_links = []
@@ -265,9 +274,3 @@ class SQLDatabasesManager(AzureManager):
                 replication_links.append(replication_link)
 
         return replication_links
-
-    def get_database_auditing_settings(self, sql_databases_conn, resource_group_name, server_name, database_name):
-        database_auditing_settings = sql_databases_conn.get_database_auditing_settings(resource_group_name=resource_group_name,
-                                                                                       server_name=server_name,
-                                                                                       database_name=database_name)
-        return self.convert_nested_dictionary(database_auditing_settings)

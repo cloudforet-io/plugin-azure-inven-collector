@@ -58,7 +58,7 @@ class MySQLServersManager(AzureManager):
                     resource_group = mysql_server_dict.get('resource_group', '')
                     server_name = mysql_server_dict['name']
                     mysql_server_dict.update({
-                        'firewall_rules': self.get_firewall_rules_by_server(self, mysql_servers_conn, resource_group, server_name),
+                        'firewall_rules': self.get_firewall_rules_by_server(mysql_servers_conn, resource_group, server_name),
                     })
 
                 if mysql_server_dict.get('firewall_rules') is not None:
@@ -102,7 +102,6 @@ class MySQLServersManager(AzureManager):
         _LOGGER.debug(f'** MySQL Server Finished {time.time() - start_time} Seconds **')
         return mysql_server_responses, error_responses
 
-    @staticmethod
     def get_firewall_rules_by_server(self, mysql_servers_conn, resource_group, server_name):
         firewall_rules = []
         firewall_rules_obj = mysql_servers_conn.list_firewall_rules_by_server(resource_group_name=resource_group, server_name=server_name)

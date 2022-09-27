@@ -69,7 +69,8 @@ class DisksManager(AzureManager):
                 # Update Network access policy to user-friendly words
                 if disk_dict.get('network_access_policy') is not None:
                     disk_dict.update({
-                        'network_access_policy_display': self.get_network_access_policy(disk_dict['network_access_policy'])
+                        'network_access_policy_display': self.get_network_access_policy(
+                            disk_dict['network_access_policy'])
                     })
 
                 # get attached vm's name
@@ -92,7 +93,7 @@ class DisksManager(AzureManager):
                     'data': disk_data,
                     'region_code': disk_data.location,
                     'reference': ReferenceModel(disk_data.reference()),
-                    'tags':  _tags,
+                    'tags': _tags,
                     'name': disk_data.name,
                     'account': disk_data.subscription_id,
                     'instance_type': disk_data.sku.name,
@@ -108,7 +109,9 @@ class DisksManager(AzureManager):
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {disk_id} {e}', exc_info=True)
-                error_resource_response = self.generate_resource_error_response(e, resource_id=disk_id, cloud_service_group='Compute', cloud_service_type='Disk')
+                error_resource_response = self.generate_resource_error_response(e, resource_id=disk_id,
+                                                                                cloud_service_group='Compute',
+                                                                                cloud_service_type='Disk')
                 error_responses.append(error_resource_response)
 
         return disk_responses, error_responses

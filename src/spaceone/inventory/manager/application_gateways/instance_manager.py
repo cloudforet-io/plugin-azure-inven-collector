@@ -66,7 +66,7 @@ class ApplicationGatewaysManager(AzureManager):
                             })
                         elif frontend_ip_configuration_dict.get('public_ip_address') is not None:
                             public_ip_address_name = frontend_ip_configuration_dict['public_ip_address']['id'].split('/')[8]
-                            public_ip_address_dict = self.get_public_ip_address(self, application_gateway_conn, application_gateway_dict['resource_group'], public_ip_address_name)
+                            public_ip_address_dict = self.get_public_ip_address(application_gateway_conn, application_gateway_dict['resource_group'], public_ip_address_name)
                             application_gateway_dict.update({
                                 'public_ip_address': public_ip_address_dict
                             })
@@ -196,7 +196,6 @@ class ApplicationGatewaysManager(AzureManager):
         _LOGGER.debug(f'** Application Gateway Finished {time.time() - start_time} Seconds **')
         return application_gateways_responses, error_responses
 
-    @staticmethod
     def get_public_ip_address(self, application_gateway_conn, resource_group_name, pip_name):
         public_ip_address_obj = application_gateway_conn.get_public_ip_addresses(resource_group_name, pip_name)
         public_ip_address_dict = self.convert_nested_dictionary(public_ip_address_obj)

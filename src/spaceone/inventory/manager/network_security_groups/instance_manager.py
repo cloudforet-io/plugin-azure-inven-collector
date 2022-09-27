@@ -91,7 +91,7 @@ class NetworkSecurityGroupsManager(AzureManager):
 
                 # Get Subnet information
                 if network_security_group_dict.get('subnets') is not None:
-                    network_security_group_dict['subnets'] = self.get_subnet(self, network_security_group_conn, network_security_group_dict['subnets'])
+                    network_security_group_dict['subnets'] = self.get_subnet(network_security_group_conn, network_security_group_dict['subnets'])
 
                     if network_security_group_dict.get('subnets'):
                         for subnet in network_security_group_dict['subnets']:
@@ -137,6 +137,45 @@ class NetworkSecurityGroupsManager(AzureManager):
         _LOGGER.debug(f'** Network Security Group Finished {time.time() - start_time} Seconds **')
         return network_security_group_responses, error_responses
 
+    def get_network_interfaces(self, network_security_group_conn, network_interfaces_list):
+        network_interfaces_new_list = []
+        virtual_machines_display_list = []
+        virtual_machines_str = ''
+
+        for network_interface in network_interfaces_list:
+            resource_group = network_interface['id'].split('/')[4]
+            network_interface_name = network_interface['id'].split('/')[8] # TODO : network interface name diverse
+            network_interface_obj = network_security_group_conn.get_network_interfaces(network_interface_name, resource_group)
+            network_interface_dict = self.convert_nested_dictionary(network_interface_obj)
+
+            if network_interface_dict['id'] == network_interface['id']:
+                # Get virtual machine display
+                if network_interface_dict.get('virtual_machine') is not None:
+                    virtual_machine_display = network_interface_dict['virtual_machine']['id'].split('/')[8]
+                    virtual_machines_display_list.append(virtual_machine_display)
+                    network_interface_dict.update({
+                        'virtual_machine_display': virtual_machine_display
+                    })
+                network_interfaces_new_list.append(network_interface_dict)
+                virtual_machines_str = ', '.join(virtual_machines_display_list)
+
+        return network_interfaces_new_list, virtual_machines_str
+
+    def get_subnet(self, network_security_group_conn, subnets_list):
+        subnets_full_list = []
+        if subnets_list:
+            for subnet in subnets_list:
+                resource_group_name = subnet['id'].split('/')[4]
+                subnet_name = subnet['id'].split('/')[10]
+                virtual_network_name = subnet['id'].split('/')[8]
+
+                subnet_obj = network_security_group_conn.get_subnet(resource_group_name, subnet_name, virtual_network_name)
+                subnet_dict = self.convert_nested_dictionary(subnet_obj)
+                subnets_full_list.append(subnet_dict)
+
+            return subnets_full_list
+        return
+
     @staticmethod
     def split_security_rules(network_security_group_dict, mode):
         inbound_security_rules = []
@@ -165,31 +204,6 @@ class NetworkSecurityGroupsManager(AzureManager):
         return
 
     @staticmethod
-    def get_network_interfaces(self, network_security_group_conn, network_interfaces_list):
-        network_interfaces_new_list = []
-        virtual_machines_display_list = []
-        virtual_machines_str = ''
-
-        for network_interface in network_interfaces_list:
-            resource_group = network_interface['id'].split('/')[4]
-            network_interface_name = network_interface['id'].split('/')[8] # TODO : network interface name diverse
-            network_interface_obj = network_security_group_conn.get_network_interfaces(network_interface_name, resource_group)
-            network_interface_dict = self.convert_nested_dictionary(network_interface_obj)
-
-            if network_interface_dict['id'] == network_interface['id']:
-                # Get virtual machine display
-                if network_interface_dict.get('virtual_machine') is not None:
-                    virtual_machine_display = network_interface_dict['virtual_machine']['id'].split('/')[8]
-                    virtual_machines_display_list.append(virtual_machine_display)
-                    network_interface_dict.update({
-                        'virtual_machine_display': virtual_machine_display
-                    })
-                network_interfaces_new_list.append(network_interface_dict)
-                virtual_machines_str = ', '.join(virtual_machines_display_list)
-
-        return network_interfaces_new_list, virtual_machines_str
-
-    @staticmethod
     def get_ip_addresses(network_interfaces_list):
         if network_interfaces_list:
             for network_interface in network_interfaces_list:
@@ -205,22 +219,6 @@ class NetworkSecurityGroupsManager(AzureManager):
                             network_interface.update({
                                 'public_ip_address': public_ip_address,
                             })
-        return
-
-    @staticmethod
-    def get_subnet(self, network_security_group_conn, subnets_list):
-        subnets_full_list = []
-        if subnets_list:
-            for subnet in subnets_list:
-                resource_group_name = subnet['id'].split('/')[4]
-                subnet_name = subnet['id'].split('/')[10]
-                virtual_network_name = subnet['id'].split('/')[8]
-
-                subnet_obj = network_security_group_conn.get_subnet(resource_group_name, subnet_name, virtual_network_name)
-                subnet_dict = self.convert_nested_dictionary(subnet_obj)
-                subnets_full_list.append(subnet_dict)
-
-            return subnets_full_list
         return
 
     @staticmethod

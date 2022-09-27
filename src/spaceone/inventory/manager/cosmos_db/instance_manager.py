@@ -64,7 +64,8 @@ class CosmosDBManager(AzureManager):
 
                 if cosmos_db_account_dict.get('virtual_network_rules') is not None:
                     cosmos_db_account_dict.update({
-                        'virtual_network_display': self.get_virtual_networks(cosmos_db_account_dict['virtual_network_rules'])
+                        'virtual_network_display': self.get_virtual_networks(
+                            cosmos_db_account_dict['virtual_network_rules'])
                     })
 
                 if cosmos_db_account_dict.get('private_endpoint_connections') is not None:
@@ -80,8 +81,10 @@ class CosmosDBManager(AzureManager):
 
                 if cosmos_db_account_dict.get('name') is not None:
                     cosmos_db_account_dict.update({
-                        'keys': self.get_keys(self, cosmos_db_conn, cosmos_db_account_dict['name'], cosmos_db_account_dict['resource_group']),
-                        'sql_databases': self.get_sql_resources(self, cosmos_db_conn, cosmos_db_account_dict['name'], cosmos_db_account_dict['resource_group'])
+                        'keys': self.get_keys(cosmos_db_conn, cosmos_db_account_dict['name'],
+                                              cosmos_db_account_dict['resource_group']),
+                        'sql_databases': self.get_sql_resources(cosmos_db_conn, cosmos_db_account_dict['name'],
+                                                                cosmos_db_account_dict['resource_group'])
                     })
 
                 # switch tags form
@@ -110,12 +113,28 @@ class CosmosDBManager(AzureManager):
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {cosmos_db_account_id} {e}', exc_info=True)
-                error_response = self.generate_resource_error_response(e, 'Database', 'AzureCosmosDB', cosmos_db_account_id)
+                error_response = self.generate_resource_error_response(e, 'Database', 'AzureCosmosDB',
+                                                                       cosmos_db_account_id)
                 error_responses.append(error_response)
 
         _LOGGER.debug(f'** CosmosDB Finished {time.time() - start_time} Seconds **')
 
         return cosmos_db_account_responses, error_responses
+
+    def get_keys(self, cosmos_db_conn, account_name, resource_group):
+        keys_obj = cosmos_db_conn.list_keys(account_name=account_name, resource_group_name=resource_group)
+        key_dict = self.convert_nested_dictionary(keys_obj)
+        return key_dict
+
+    def get_sql_resources(self, cosmos_db_conn, account_name, resource_group):
+        sql_resources = []
+        sql_resources_obj = cosmos_db_conn.list_sql_resources(account_name=account_name,
+                                                              resource_group_name=resource_group)
+
+        for sql in sql_resources_obj:
+            sql_dict = self.convert_nested_dictionary(sql)
+            sql_resources.append(sql_dict)
+        return sql_resources
 
     @staticmethod
     def get_capability_type(capabilities):
@@ -159,20 +178,3 @@ class CosmosDBManager(AzureManager):
         for cors in cors_list:
             cors_display.append(cors.get('allowed_origins', ''))
         return cors_display
-
-    @staticmethod
-    def get_keys(self, cosmos_db_conn, account_name, resource_group):
-        keys_obj = cosmos_db_conn.list_keys(account_name=account_name, resource_group_name=resource_group)
-        key_dict = self.convert_nested_dictionary(keys_obj)
-        return key_dict
-
-    @staticmethod
-    def get_sql_resources(self, cosmos_db_conn, account_name, resource_group):
-        sql_resources = []
-        sql_resources_obj = cosmos_db_conn.list_sql_resources(account_name=account_name, resource_group_name=resource_group)
-
-        for sql in sql_resources_obj:
-            sql_dict = self.convert_nested_dictionary(sql)
-            sql_resources.append(sql_dict)
-        return sql_resources
-

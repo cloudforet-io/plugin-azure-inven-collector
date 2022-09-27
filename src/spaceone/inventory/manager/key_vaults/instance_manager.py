@@ -62,9 +62,9 @@ class KeyVaultsManager(AzureManager):
                     vault_name = key_vault_dict['name']
                     vault_uri = key_vault_dict['properties']['vault_uri']
 
-                    keys = self.list_keys(self, key_vault_conn, resource_group_name, vault_name)
-                    secrets = self.list_secrets(self, key_vault_conn, subscription_id, vault_uri)
-                    certificates = self.list_certificates(self, key_vault_conn, subscription_id, vault_uri)
+                    keys = self.list_keys(key_vault_conn, resource_group_name, vault_name)
+                    secrets = self.list_secrets(key_vault_conn, subscription_id, vault_uri)
+                    certificates = self.list_certificates(key_vault_conn, subscription_id, vault_uri)
                     key_vault_dict.update({
                         'keys': keys,
                         'secrets': secrets,
@@ -74,14 +74,23 @@ class KeyVaultsManager(AzureManager):
                 # Get name of private connection from ID
                 if key_vault_dict.get('properties', {}).get('private_endpoint_connections') is not None:
                     key_vault_dict['properties'].update({
-                        'private_endpoint_connections': self.get_private_endpoint_name(key_vault_dict['properties']['private_endpoint_connections'])
+                        'private_endpoint_connections': self.get_private_endpoint_name(
+                            key_vault_dict['properties']['private_endpoint_connections'])
                     })
 
                 # Change purge protection to user-friendly word
                 if key_vault_dict.get('properties', {}).get('enable_purge_protection') is not None:
                     key_vault_dict['properties'].update({
-                        'enable_purge_protection_str': 'Disabled' if key_vault_dict['properties']['enable_purge_protection'] is False else 'Enabled'
+                        'enable_purge_protection_str': 'Disabled' if key_vault_dict['properties'][
+                                                                         'enable_purge_protection'] is False else 'Enabled'
                     })
+
+                # switch tags form
+                tags = key_vault_dict.get('tags', {})
+                _tags = self.convert_tag_format(tags)
+                key_vault_dict.update({
+                    'tags': _tags
+                })
 
                 key_vault_data = KeyVault(key_vault_dict, strict=False)
                 key_vault_resource = KeyVaultResource({
@@ -106,7 +115,6 @@ class KeyVaultsManager(AzureManager):
         _LOGGER.debug(f'** Key Vault Finished {time.time() - start_time} Seconds **')
         return key_vault_responses, error_responses
 
-    @staticmethod
     def list_keys(self, key_vault_conn, resource_group_name, vault_name):
         keys = []
         keys_obj_list = key_vault_conn.list_keys(resource_group_name=resource_group_name, vault_name=vault_name)
@@ -117,9 +125,9 @@ class KeyVaultsManager(AzureManager):
                 keys.append(key_dict)
         return keys
 
-    @staticmethod
     def list_secrets(self, key_vault_conn, subscription_id, vault_uri):
-        key_vault_secret_client = key_vault_conn.init_key_vault_secret_client(subscription_id=subscription_id, vault_uri=vault_uri)
+        key_vault_secret_client = key_vault_conn.init_key_vault_secret_client(subscription_id=subscription_id,
+                                                                              vault_uri=vault_uri)
 
         secrets = []
         secrets_obj_list = key_vault_secret_client.list_properties_of_secrets()
@@ -130,9 +138,9 @@ class KeyVaultsManager(AzureManager):
                 secrets.append(secret_dict)
         return secrets
 
-    @staticmethod
     def list_certificates(self, key_vault_conn, subscription_id, vault_uri):
-        key_vault_certificate_client = key_vault_conn.init_key_vault_certificate_client(subscription_id=subscription_id, vault_uri=vault_uri)
+        key_vault_certificate_client = key_vault_conn.init_key_vault_certificate_client(subscription_id=subscription_id,
+                                                                                        vault_uri=vault_uri)
 
         certificates = []
         certificate_obj_list = key_vault_certificate_client.list_properties_of_certificates()
@@ -151,4 +159,3 @@ class KeyVaultsManager(AzureManager):
                 'name': private_endpoint['id'].split('/')[10]
             })
         return private_endpoint_connections
-
