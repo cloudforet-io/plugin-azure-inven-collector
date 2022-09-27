@@ -1,16 +1,11 @@
 import unittest
-import time
 import os
-from datetime import datetime, timedelta
-from unittest.mock import patch
-from spaceone.core.unittest.result import print_data
 from spaceone.core.unittest.runner import RichTestRunner
 from spaceone.core import config
 from spaceone.core.transaction import Transaction
 from spaceone.core import utils
-from spaceone.inventory.error import *
 from spaceone.inventory.connector.application_gateway import ApplicationGatewayConnector
-from spaceone.inventory.manager.application_gateway_manager import ApplicationGatewayManager
+from spaceone.inventory.manager.application_gateways.instance_manager import ApplicationGatewayManager
 
 
 class TestApplicationGatewayManager(unittest.TestCase):

@@ -1,0 +1,1 @@
+from spaceone.inventory.connector.cosmos_db.connector import CosmosDBConnector

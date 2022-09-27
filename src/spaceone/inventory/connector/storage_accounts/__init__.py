@@ -1,0 +1,1 @@
+from spaceone.inventory.connector.storage_accounts.connector import StorageAccountsConnector

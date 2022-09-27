@@ -1,0 +1,16 @@
+---
+cloud_service_group: PostgreSQLServers
+cloud_service_type: Server
+name: PostgreSQLServer Total Count per Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: account
+        fields:
+          - name: value
+            key: account
+            operator: count
+options:
+  chart_type: DONUT

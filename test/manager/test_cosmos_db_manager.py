@@ -1,16 +1,11 @@
 import unittest
-import time
 import os
-from datetime import datetime, timedelta
-from unittest.mock import patch
-from spaceone.core.unittest.result import print_data
 from spaceone.core.unittest.runner import RichTestRunner
 from spaceone.core import config
 from spaceone.core.transaction import Transaction
 from spaceone.core import utils
-from spaceone.inventory.error import *
 from spaceone.inventory.connector.cosmos_db import CosmosDBConnector
-from spaceone.inventory.manager.cosmos_db_manager import CosmosDBManager
+from spaceone.inventory.manager.cosmos_db.instance_manager import CosmosDBManager
 
 
 class TestCosmosDBManager(unittest.TestCase):

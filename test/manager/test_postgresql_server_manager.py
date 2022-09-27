@@ -1,16 +1,11 @@
 import unittest
-import time
 import os
-from datetime import datetime, timedelta
-from unittest.mock import patch
-from spaceone.core.unittest.result import print_data
 from spaceone.core.unittest.runner import RichTestRunner
 from spaceone.core import config
 from spaceone.core.transaction import Transaction
 from spaceone.core import utils
-from spaceone.inventory.error import *
 from spaceone.inventory.connector.postgresql_server import PostgreSQLServerConnector
-from spaceone.inventory.manager.postgresql_server_manager import PostgreSQLServerManager
+from spaceone.inventory.manager.postgresql_servers.server_manager import PostgreSQLServerManager
 
 
 class TestPostgreSQLServerManager(unittest.TestCase):

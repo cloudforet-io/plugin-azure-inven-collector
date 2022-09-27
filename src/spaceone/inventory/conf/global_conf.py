@@ -1,4 +1,7 @@
 CONNECTORS = {
+    'AzureConnector': {
+        'backend': 'spaceone.inventory.libs.connector.AzureConnector',
+    },
 }
 
 LOG = {

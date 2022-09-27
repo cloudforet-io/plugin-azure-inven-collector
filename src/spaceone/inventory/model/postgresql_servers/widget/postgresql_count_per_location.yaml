@@ -1,0 +1,16 @@
+---
+cloud_service_group: PostgreSQLServers
+cloud_service_type: Server
+name: PostgreSQLServer Total Count per Location
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: region_code
+        fields:
+          - name: value
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN

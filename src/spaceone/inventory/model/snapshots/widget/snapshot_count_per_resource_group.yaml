@@ -1,0 +1,16 @@
+---
+cloud_service_group: Snapshots
+cloud_service_type: Instance
+name: Snapshot Total Count per Resource Group
+query:
+  aggregate:
+   - group:
+       keys:
+        - name: name
+          key: data.resource_group
+       fields:
+        - name: value
+          key: data.resource_group
+          operator: count
+options:
+  chart_type: DONUT

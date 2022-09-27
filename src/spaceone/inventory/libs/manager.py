@@ -16,6 +16,7 @@ REGION_INFO = {
     'eastus2': {'name': 'US East 2 (Virginia)', 'tags': {'latitude': '36.6681', 'longitude': '-78.3889', 'continent': 'north_america'}},
     'westus': {'name': 'US West (California)', 'tags': {'latitude': '37.783', 'longitude': '-122.417', 'continent': 'north_america'}},
     'westus2': {'name': 'US West 2 (Washington)', 'tags': {'latitude': '47.233', 'longitude': '-119.852', 'continent': 'north_america'}},
+    'westus3': {'name': 'West US 3 (Phoenix)', 'tags': {'latitude': '33.448376', 'longitude': '-112.074036', 'continent': 'north_america'}},
     'centralus': {'name': 'US Central (Iowa)', 'tags': {'latitude': '41.5908', 'longitude': '-93.6208', 'continent': 'north_america'}},
     'southcentralus': {'name': 'US South Central (Texas)',
                        'tags': {'latitude': '29.4167', 'longitude': '-98.5', 'continent': 'north_america'}},
@@ -82,10 +83,12 @@ REGION_INFO = {
                  'tags': {'latitude': '25.266666', 'longitude': '55.316666', 'continent': 'middle_east'}},
     'uaecentral': {'name': 'Middle East UAE Central (Abu Dhabi)',
                    'tags': {'latitude': '24.466667', 'longitude': '54.366669', 'continent': 'middle_east'}},
+    'qatarcentral': {'name': 'Qatar Central(Doha)',
+                     'tags': {'latitude': '25.551462', 'longitude': '51.439327', 'continent': 'middle_east'}},
     'brazilsouth': {'name': 'South America Brazil South (Sao Paulo State)',
                     'tags': {'latitude': '-23.55', 'longitude': '-46.633', 'continent': 'south_america'}},
     'brazilsoutheast': {'name': 'South America Brazil South East (Rio)',
-                        'tags': {'latitude': '-22.90278', 'longitude': '-43.2075', 'continent': 'south_america'}}
+                        'tags': {'latitude': '-22.90278', 'longitude': '-43.2075', 'continent': 'south_america'}},
 }
 
 
@@ -99,7 +102,8 @@ class AzureManager(BaseManager):
         """ Check collector's status.
         """
         connector: AzureConnector = self.locator.get_connector('AzureConnector', secret_data=secret_data)
-        connector.verify()
+        params = {'secret_data': secret_data}
+        connector.verify(**params)
 
     def collect_cloud_service_type(self, params):
         options = params.get('options', {})
@@ -197,27 +201,45 @@ class AzureManager(BaseManager):
     def convert_dictionary(obj):
         return vars(obj)
 
-    @staticmethod
+    # def convert_nested_dictionary(self, cloud_svc_object):
+    #     cloud_svc_dict = self.convert_dictionary(cloud_svc_object)
+    #     for k, v in cloud_svc_dict.items():
+    #         if isinstance(v, object):  # object
+    #             if 'azure' in str(type(v)):  # 1) if cloud_svc_object is azure defined model class
+    #                 cloud_svc_dict[k] = self.convert_nested_dictionary(v)
+    #             elif isinstance(v, list):  # 2) if cloud_svc_object is list
+    #                 cloud_svc_converse_list = list()
+    #                 for list_obj in v:  # if cloud_svc object's child value is Azure defined model class or dict class
+    #                     if hasattr(list_obj, '__dict__') or 'azure' in str(type(list_obj)):
+    #                         cloud_svc_converse_dict = self.convert_nested_dictionary(list_obj)
+    #                         cloud_svc_converse_list.append(cloud_svc_converse_dict)
+    #                     else:  # if cloud_svc_object's child value is simple list
+    #                         cloud_svc_converse_list.append(list_obj)
+    #
+    #                     cloud_svc_dict[k] = cloud_svc_converse_list
+    #
+    #             elif hasattr(v, '__dict__'):  # if cloud_svc_object is not a list type, just a dict
+    #                 cloud_svc_converse_dict = self.convert_nested_dictionary(v)
+    #                 cloud_svc_dict[k] = cloud_svc_converse_dict
+    #
+    #     return cloud_svc_dict
+
     def convert_nested_dictionary(self, cloud_svc_object):
-        cloud_svc_dict = self.convert_dictionary(cloud_svc_object)
-        for k, v in cloud_svc_dict.items():
-            if isinstance(v, object):  # object
-                if 'azure' in str(type(v)):  # 1) if cloud_svc_object is azure defined model class
-                    cloud_svc_dict[k] = self.convert_nested_dictionary(self, v)
-                elif isinstance(v, list):  # 2) if cloud_svc_object is list
-                    cloud_svc_converse_list = list()
-                    for list_obj in v:  # if cloud_svc object's child value is Azure defined model class or dict class
-                        if hasattr(list_obj, '__dict__') or 'azure' in str(type(list_obj)):
-                            cloud_svc_converse_dict = self.convert_nested_dictionary(self, list_obj)
-                            cloud_svc_converse_list.append(cloud_svc_converse_dict)
-                        else:  # if cloud_svc_object's child value is simple list
-                            cloud_svc_converse_list.append(list_obj)
+        cloud_svc_dict = {}
+        if hasattr(cloud_svc_object, '__dict__'):  # if cloud_svc_object is not a dictionary type but has dict method
+            cloud_svc_dict = cloud_svc_object.__dict__
+        elif not isinstance(cloud_svc_object, list):  # if cloud_svc_object is one of type like int, float, char, ...
+            return cloud_svc_object
 
-                        cloud_svc_dict[k] = cloud_svc_converse_list
-
-                elif hasattr(v, '__dict__'):  # if cloud_svc_object is not a list type, just a dict
-                    cloud_svc_converse_dict = self.convert_nested_dictionary(self, v)
-                    cloud_svc_dict[k] = cloud_svc_converse_dict
+        # if cloud_svc_object is dictionary type
+        for key, value in cloud_svc_dict.items():
+            if 'azure' in str(type(value)):
+                cloud_svc_dict[key] = self.convert_nested_dictionary(value)
+            elif isinstance(value, list):
+                value_list = []
+                for v in value:
+                    value_list.append(self.convert_nested_dictionary(v))
+                cloud_svc_dict[key] = value_list
 
         return cloud_svc_dict
 

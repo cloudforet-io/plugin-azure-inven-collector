@@ -1,0 +1,16 @@
+---
+cloud_service_group: NetworkSecurityGroups
+cloud_service_type: Instance
+name: NetworkSecurityGroup Total Count per Location
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: region_code
+        fields:
+          - name: value
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN

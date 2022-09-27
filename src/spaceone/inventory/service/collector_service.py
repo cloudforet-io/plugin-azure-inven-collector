@@ -2,7 +2,7 @@ import time
 import logging
 import concurrent.futures
 from spaceone.inventory.libs.manager import AzureManager
-from spaceone.inventory.manager.subscription_manager import SubscriptionManager
+from spaceone.inventory.manager.subscriptions.subscription_manager import SubscriptionsManager
 from spaceone.core.service import *
 from spaceone.inventory.conf.cloud_service_conf import *
 
@@ -39,7 +39,7 @@ class CollectorService(BaseService):
         secret_data = params.get('secret_data', {})
         if secret_data != {}:
             azure_manager = AzureManager()
-            active = azure_manager.verify({}, secret_data)
+            active = azure_manager.verify({}, secret_data=secret_data)
 
         return {}
 
@@ -88,7 +88,7 @@ class CollectorService(BaseService):
         _LOGGER.debug(f'TOTAL TIME : {time.time() - start_time} Seconds')
 
     def get_subscription_info(self, params):
-        subscription_manager: SubscriptionManager = self.locator.get_manager('SubscriptionManager')
+        subscription_manager: SubscriptionsManager = self.locator.get_manager('SubscriptionsManager')
         return subscription_manager.get_subscription_info(params)
 
     def _get_target_execute_manger(self, options):

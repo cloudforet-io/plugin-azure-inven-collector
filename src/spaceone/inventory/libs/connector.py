@@ -72,5 +72,5 @@ class AzureConnector(BaseConnector):
         self.postgre_sql_client = PostgreSQLManagementClient(credential=credential, subscription_id=subscription_id)
 
     def verify(self, **kwargs):
-        self.set_connect(**kwargs)
+        self.set_connect(kwargs['secret_data'])
         return "ACTIVE"

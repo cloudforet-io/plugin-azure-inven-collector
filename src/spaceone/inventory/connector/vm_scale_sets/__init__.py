@@ -1,0 +1,1 @@
+from spaceone.inventory.connector.vm_scale_sets.connector import VmScaleSetsConnector
