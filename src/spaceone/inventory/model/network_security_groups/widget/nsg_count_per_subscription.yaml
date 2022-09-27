@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Network
-cloud_service_type: NetworkSecurityGroup
+cloud_service_group: NetworkSecurityGroups
+cloud_service_type: Instance
 name: NetworkSecurityGroup Total Count per Subscription
 query:
   aggregate:

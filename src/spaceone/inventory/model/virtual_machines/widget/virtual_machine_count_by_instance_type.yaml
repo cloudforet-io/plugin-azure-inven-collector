@@ -1,5 +1,5 @@
 ---
-cloud_service_group: EC2
+cloud_service_group: VirtualMachines
 cloud_service_type: Instance
 name: Count By Instance Type
 query:

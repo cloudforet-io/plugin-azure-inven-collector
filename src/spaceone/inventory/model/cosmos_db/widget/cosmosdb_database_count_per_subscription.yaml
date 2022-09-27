@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Database
-cloud_service_type: AzureCosmosDB
+cloud_service_group: CosmosDB
+cloud_service_type: Instance
 name: AzureCosmosDB Total Count per Location
 query:
   aggregate:

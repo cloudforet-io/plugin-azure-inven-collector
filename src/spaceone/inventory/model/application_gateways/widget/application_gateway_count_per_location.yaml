@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Network
-cloud_service_type: ApplicationGateway
+cloud_service_group: ApplicationGateways
+cloud_service_type: Instance
 name: ApplicationGateway Total Count per Location
 query:
   aggregate:

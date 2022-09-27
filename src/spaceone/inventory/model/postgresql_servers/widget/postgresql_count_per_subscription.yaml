@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Database
-cloud_service_type: PostgreSQLServer
+cloud_service_group: PostgreSQLServers
+cloud_service_type: Server
 name: PostgreSQLServer Total Count per Subscription
 query:
   aggregate:

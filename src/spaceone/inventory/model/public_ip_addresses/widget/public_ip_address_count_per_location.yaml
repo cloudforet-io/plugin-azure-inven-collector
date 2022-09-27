@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Network
-cloud_service_type: PublicIPAddress
+cloud_service_group: PublicIPAddresses
+cloud_service_type: IPAddress
 name: PublicIPAddress Total Count per Location
 query:
   aggregate:

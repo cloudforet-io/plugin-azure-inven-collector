@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Database
-cloud_service_type: SQLServer
+cloud_service_group: SQLDatabases
+cloud_service_type: Database
 name: StorageAccount Total Count per Subscription
 query:
   aggregate:

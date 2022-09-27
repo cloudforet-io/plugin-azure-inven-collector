@@ -1,6 +1,6 @@
 ---
-cloud_service_group: KeyVault
-cloud_service_type: KeyVault
+cloud_service_group: KeyVaults
+cloud_service_type: Instance
 name: KeyVault Total Count per Location
 query:
   aggregate:

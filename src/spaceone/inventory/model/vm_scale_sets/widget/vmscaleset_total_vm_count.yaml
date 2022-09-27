@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Compute
-cloud_service_type: VmScaleSet
+cloud_service_group: VMScaleSets
+cloud_service_type: ScaleSet
 name: VmScaleSet Total Count per Subscription
 query:
   aggregate:

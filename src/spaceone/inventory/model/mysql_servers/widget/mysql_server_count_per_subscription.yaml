@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Database
-cloud_service_type: MySQLServer
+cloud_service_group: MySQLServers
+cloud_service_type: Server
 name: MySQLServer Total Count per Subscription
 query:
   aggregate:

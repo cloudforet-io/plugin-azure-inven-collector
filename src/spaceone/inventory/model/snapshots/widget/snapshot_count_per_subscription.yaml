@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Compute
-cloud_service_type: Snapshot
+cloud_service_group: Snapshots
+cloud_service_type: Instance
 name: Snapshot Total Count per Subscription
 query:
   aggregate:

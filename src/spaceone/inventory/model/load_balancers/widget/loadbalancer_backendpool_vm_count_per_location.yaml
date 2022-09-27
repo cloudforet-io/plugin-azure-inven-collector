@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Network
-cloud_service_type: LoadBalancer
+cloud_service_group: LoadBalancers
+cloud_service_type: Instance
 name: Loadbalancer Backend Pool VM Count per Location
 query:
   aggregate:

@@ -1,5 +1,5 @@
 ---
-cloud_service_group: Storage
+cloud_service_group: StorageAccounts
 cloud_service_type: StorageAccount
 name: StorageAccount Total Count per Location
 query:

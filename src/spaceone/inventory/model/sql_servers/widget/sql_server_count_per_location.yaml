@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Database
-cloud_service_type: SQLServer
+cloud_service_group: SQLServers
+cloud_service_type: Server
 name: SQLServer Total Count per Location
 query:
   aggregate:

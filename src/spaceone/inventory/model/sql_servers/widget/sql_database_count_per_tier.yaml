@@ -1,6 +1,6 @@
 ---
-cloud_service_group: Database
-cloud_service_type: SQLDatabase
+cloud_service_group: SQLServers
+cloud_service_type: Server
 name: SQLDatabase Total Count per Server
 query:
   aggregate:
