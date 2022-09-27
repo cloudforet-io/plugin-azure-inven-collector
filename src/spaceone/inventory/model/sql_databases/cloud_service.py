@@ -110,9 +110,6 @@ sql_servers_auditing = ItemDynamicLayout.set_fields('Auditing', 'data.database_a
     TextDyField.data_source('Storage Authentication Type', 'storage_account_access_key')
 ])
 
-# TAB
-
-
 # TAB - Diagnostic Settings
 sql_databases_diagnostic_settings = SimpleTableDynamicLayout.set_fields('Diagnostic Settings', 'data.diagnostic_settings_resource', fields=[
     TextDyField.data_source('Name', 'name'),
