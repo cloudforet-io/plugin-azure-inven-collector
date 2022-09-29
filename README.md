@@ -28,22 +28,22 @@ Please contact us if you need any further information.
 
 | Cloud Service Type | Cloud Service                                       |
 |--------------------|-----------------------------------------------------|
-| Instance           | [Application Gateways](#application_gateways)       |
-| Instance           | [CosmosDB](#cosmos_db)                              |
+| Instance           | [Application Gateways](#application-gateways)       |
+| Instance           | [CosmosDB](#cosmos-db)                              |
 | Disk               | [Disks](#disks)                                     |
-| Instance           | [KeyVaults](#key_vaults)                            |
-| Instance            | [Load Balancers](#load_balancer)                    |
-| Server           | [MySQL Servers](#my_sql_server)                     |
-| Instance            | [NAT Gateways](#nat_gateways)                       |
-| Instance            | [Network Security Groups](#network_security_groups) |
-| Server           | [PostgreSQL Servers](#postgre_sql_servers)          |
-| IPAddress            | [Public IP Addresses](#public_ip_addresses)         |
+| Instance           | [KeyVaults](#key-vaults)                            |
+| Instance            | [Load Balancers](#load-balancers)                   |
+| Server           | [MySQL Servers](#mysql-servers)                     |
+| Instance            | [NAT Gateways](#nat-gateways)                       |
+| Instance            | [Network Security Groups](#network-security-groups) |
+| Server           | [PostgreSQL Servers](#postgresql-servers)           |
+| IPAddress            | [Public IP Addresses](#public-ip-addresses)         |
 | Instance            | [Snapshots](#snapshots)                             |
-| Server           | [SQL Servers](#sql_servers)                         |
-| Database           | [SQL Databases](#sql_databases)                     |
-| Storage            | [Storage Accounts](#storage_accounts)               |
-| Instance            | [Virtual Networks](#virtual_networks)               |
-| ScaleSet            | [VM ScaleSets](#vm_scale_sets)                      |
+| Server           | [SQL Servers](#sql-servers)                         |
+| Database           | [SQL Databases](#sql-databases)                     |
+| Storage            | [Storage Accounts](#storage-accounts)               |
+| Instance            | [Virtual Networks](#virtual-networks)               |
+| ScaleSet            | [VM ScaleSets](#virtual-machine-scale-sets)         |
     
 ---
 ## SETTING
@@ -293,11 +293,17 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 ### Additional custom roles for SpaceONE collector
 Some of cloud services require several additional IAM settings for collecting resources. <br>
 
-#### KeyVaults
+#### [KeyVaults]()
+
+- KeyVaults
+
 For collecting Azure ```KeyVaults``` resources, you need to assign a Key Vault access policy to SpaceONE collector App in Azure portal.
 For information on assigning access policy, see [Microsoft key vault access policy document](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).
 
-#### CosmosDB
+#### [Cosmos DB]()
+
+- Cosmos DB
+
 For collecting key lists in ```CosmosDB``` azure resources, you need to assign an access policy to SpaceONE collector App in Azure portal.
 For information on creating custom roles in Azure, see the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
 
@@ -377,8 +383,8 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/providers/Microsoft.Insights/metricDefinitions/read"
         ```
         
-#### [Virtual Network](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/virtual-networks/list-all)
-- Virtual Network
+#### [Virtual Networks](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/virtual-networks/list-all)
+- Virtual Networks
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/virtual-networks/list-all
 
