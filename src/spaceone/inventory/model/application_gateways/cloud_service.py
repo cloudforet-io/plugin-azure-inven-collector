@@ -101,7 +101,7 @@ application_gateway_frontend_ip_configurations = SimpleTableDynamicLayout.set_fi
     TextDyField.data_source('Type', 'ip_type'),
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('IP Address', 'ip_address'),
-    TextDyField.data_source('Associated Listeners', 'associated_listeners')
+    TextDyField.data_source('Associated Listeners', 'associated_listener')
 ])
 
 # TAB - Listeners
