@@ -90,7 +90,7 @@ key_vault_meta = CloudServiceMeta.set_layouts(
 
 class KeyVaultResource(CloudServiceResource):
     cloud_service_group = StringType(default='KeyVaults')
-    cloud_service_type = StringType(default='Security')
+    cloud_service_type = StringType(default='Instance')
     data = ModelType(KeyVault)
     _metadata = ModelType(CloudServiceMeta, default=key_vault_meta, serialized_name='metadata')
     name = StringType()
