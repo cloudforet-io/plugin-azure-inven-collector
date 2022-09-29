@@ -26,24 +26,24 @@ Please contact us if you need any further information.
 
 ## Contents
 
-|Cloud Service Type|Cloud Service|
-|---|---|
-|Network|[Application Gateways](#Application_Gateways)|
-|Database|[CosmosDBs](#cosmos_dbs)|
-|Compute|[Disks](#disks)|
-|KeyVault|[KeyVaults](#key_vaults)|
-|Network|[Load Balancers](#Load_Balancer)|
-|Database|[MySQL Servers](#my_sql_server)|
-|Network|[NAT Gateways](#NAT_Gateways)|
-|Network|[Network Security Groups](#Network_security_groups)|
-|Database|[PostgreSQL Servers](#postgre_sql_servers)|
-|Network|[Public IP Address](#public_ip_addresses)|
-|Compute|[Snapshots](#Snapshots)|
-|Database|[SQL Servers](#SQL_Servers)|
-|Database|[SQL Databases](#SQL_databases)|
-|Storage|[Storage Account](#storage_accounts)|
-|Network|[Virtual Network](#virtual_networks)|
-|Compute|[VM ScaleSets](#vm_scale_sets)|
+| Cloud Service Type | Cloud Service                                       |
+|--------------------|-----------------------------------------------------|
+| Instance           | [Application Gateways](#application_gateways)       |
+| Instance           | [CosmosDB](#cosmos_db)                              |
+| Disk               | [Disks](#disks)                                     |
+| Instance           | [KeyVaults](#key_vaults)                            |
+| Instance            | [Load Balancers](#load_balancer)                    |
+| Server           | [MySQL Servers](#my_sql_server)                     |
+| Instance            | [NAT Gateways](#nat_gateways)                       |
+| Instance            | [Network Security Groups](#network_security_groups) |
+| Server           | [PostgreSQL Servers](#postgre_sql_servers)          |
+| IPAddress            | [Public IP Addresses](#public_ip_addresses)         |
+| Instance            | [Snapshots](#snapshots)                             |
+| Server           | [SQL Servers](#sql_servers)                         |
+| Database           | [SQL Databases](#sql_databases)                     |
+| Storage            | [Storage Accounts](#storage_accounts)               |
+| Instance            | [Virtual Networks](#virtual_networks)               |
+| ScaleSet            | [VM ScaleSets](#vm_scale_sets)                      |
     
 ---
 ## SETTING
@@ -75,25 +75,25 @@ https://management.azure.com
 
 The following is a list of services being collected and service code information.
 
-|No.|Service name|Service Code|
-|---|------|---|
-|1|Virtual Disk|Microsoft.Compute/disks|
-|2|Storage Account|Microsoft.Storage/storageAccounts|
-|3|Snapshot|Microsoft.Compute/snapshots|
-|4|VM ScaleSet|Microsoft.Compute/virtualMachineScaleSets|
-|5|Azure Costmos DB|Microsoft.DocumentDB/databaseAccounts|
-|6|MySQL Server|Microsoft.DBforMySQL/servers|
-|7|PostgreSQL Server|Microsoft.DBforPostgreSQL/servers|
-|8|SQL Database|Microsoft.Sql/servers/databases|
-|9|SQL Server|Microsoft.Sql/servers|
-|10|Virtual Network|Microsoft.Network/virtualNetworks|
-|11|Load Balancer|Microsoft.Network/loadBalancers|
-|12|Application Gateway|Microsoft.Network/applicationGateways|
-|13|NAT Gateway|Microsoft.Network/natGateways|
-|14|Network Security Group|Microsoft.Network/networkSecurityGroups|
-|15|Public IP Address|Microsoft.Network/publicIPAddresses|
-|16|Azure Key Vault|Microsoft.KeyVault/vaults|
-
+|No.| Service name            | Service Code                         |
+|---|-------------------------|--------------------------------------|
+|1| Application Gateways    | Microsoft.Network/applicationGateways |
+|2| Cosmos DB               | Microsoft.DocumentDB/databaseAccounts |
+|3| Disks                   | Microsoft.Compute/disks              |
+|4| Key Vaults              | Microsoft.KeyVault/vaults            |
+|5| Load Balancers          | Microsoft.Network/loadBalancers      |
+|6| MySQL Servers           | Microsoft.DBforMySQL/servers         |
+|7| SQL Servers             | Microsoft.Sql/servers                |
+|8| SQL Databases           | Microsoft.Sql/servers/databases      |
+|9| NAT Gateways            | Microsoft.Network/natGateways        |
+|10| Network Security Groups | Microsoft.Network/networkSecurityGroups |
+|11| PostgreSQL Servers      | Microsoft.DBforPostgreSQL/servers    |
+|12| Public IP Addresses     | Microsoft.Network/publicIPAddresses  |
+|13| Snapshots               | Microsoft.Compute/snapshots          |
+|14| Storage Accounts        | Microsoft.Storage/storageAccounts    |
+|15| Virtual Networks        | Microsoft.Network/virtualNetworks    |
+|16| VM ScaleSets            | Microsoft.Compute/virtualMachineScaleSets |
+|17| Virtual Machines        | Microsoft.Compute/virtualMachines    |
 ---
 
 ## Authentication Overview
@@ -278,7 +278,9 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
                     "Microsoft.Network/virtualNetworkTaps/networkInterfaceTapConfigurationProxies/read",
                     "Microsoft.Network/virtualRouters/read",
                     "Microsoft.Network/virtualRouters/providers/Microsoft.Insights/metricDefinitions/read",
-                    "Microsoft.Network/virtualRouters/peerings/read"
+                    "Microsoft.Network/virtualRouters/peerings/read",
+                    "Microsoft.DocumentDB/databaseAccounts/listKeys/action",
+                    
                 ],
                 "notActions": [],
                 "dataActions": [],
@@ -290,6 +292,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 ```
 ### Additional custom roles for SpaceONE collector
 Some of cloud services require several additional IAM settings for collecting resources. <br>
+
 #### KeyVaults
 For collecting Azure ```KeyVaults``` resources, you need to assign a Key Vault access policy to SpaceONE collector App in Azure portal.
 For information on assigning access policy, see [Microsoft key vault access policy document](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).
@@ -322,7 +325,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 
 #### [Virtual Machines](https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/list)
       
-- Azure VM (Instance)
+- Virtual Machines
 
     - Scope
         - https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/listall
@@ -334,12 +337,14 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networksecuritygroups
 		
     - Permissions
+        ```
         - Microsoft.Compute/*/read
         - Microsoft.Resources/*/read
         - Microsoft.Network/networkInterfaces/read	
         - Microsoft.Network/publicIPAddresses/read
         - Microsoft.Network/networkSecurityGroups/read
         - Microsoft.Network/loadBalancers/read
+        ```
 	
   
 #### [Virtual Machine Scale Sets](https://docs.microsoft.com/en-us/rest/api/compute/virtualmachinescalesets/listall)
@@ -565,7 +570,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
       ```
 
 
-#### [NetworkSecurityGroups](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/network-security-groups/list-all)
+#### [Network Security Groups](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/network-security-groups/list-all)
 - Network Security Group
     - Scope 
         - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/network-security-groups/list-all
@@ -702,21 +707,22 @@ The cloud_service_types items that can be specified are as follows.
 <code>
 {
     "cloud_service_types": [
-       'ApplicationGateway',
-        'AzureCosmosDB',
-        'Disk',
-        'KeyVault',
-        'LoadBalancer',
-        'SQLServer',
-        'MySQLServer',
-        'NATGateway',
-        'NetworkSecurityGroup,
-        'PostgreSQLServer',
-        'PublicIPAddress',
-        'Snapshot',
-        'StorageAccount',
-        'VirtualNetwork',
-        'VMScaleSet' 
+        'ApplicationGateways',
+        'Disks',
+        'KeyVaults',
+        'LoadBalancers',
+        'MySQLServers',
+        'SQLServers',
+        'SQLDatabases',
+        'NATGateways',
+        'NetworkSecurityGroups,
+        'PostgreSQLServers',
+        'PublicIPAddresses',
+        'Snapshots',
+        'StorageAccounts',
+        'VirtualNetworks',
+        'VMScaleSets',
+        'VirtualMachines'
     ]
 }
 </code>
