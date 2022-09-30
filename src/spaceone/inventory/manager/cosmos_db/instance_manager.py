@@ -94,7 +94,7 @@ class CosmosDBManager(AzureManager):
                     'tags': _tags
                 })
 
-                _LOGGER.debug(f'[COSMOS DB INFO]{cosmos_db_account_dict}')
+                # _LOGGER.debug(f'[COSMOS DB INFO]{cosmos_db_account_dict}')
                 cosmos_db_account_data = DatabaseAccountGetResults(cosmos_db_account_dict, strict=False)
                 cosmos_db_resource = CosmosDBResource({
                     'data': cosmos_db_account_data,

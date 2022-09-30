@@ -160,7 +160,7 @@ class VmScaleSetsManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(vm_scale_set_data['location'])
-                _LOGGER.debug(f'[VM_SCALE_SET_INFO] {vm_scale_set_resource.to_primitive()}')
+                # _LOGGER.debug(f'[VM_SCALE_SET_INFO] {vm_scale_set_resource.to_primitive()}')
                 vm_scale_set_responses.append(VmScaleSetResponse({'resource': vm_scale_set_resource}))
 
             except Exception as e:

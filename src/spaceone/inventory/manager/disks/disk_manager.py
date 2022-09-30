@@ -105,7 +105,6 @@ class DisksManager(AzureManager):
                 self.set_region_code(disk_data['location'])
                 # _LOGGER.debug(f'[DISK INFO: {disk_resource.to_primitive()}]')
                 disk_responses.append(DiskResponse({'resource': disk_resource}))
-                _LOGGER.debug(f'** Disk Finished {time.time() - start_time} Seconds **')
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {disk_id} {e}', exc_info=True)
@@ -114,6 +113,7 @@ class DisksManager(AzureManager):
                                                                                 cloud_service_type='Disk')
                 error_responses.append(error_resource_response)
 
+        _LOGGER.debug(f'** Disk Finished {time.time() - start_time} Seconds **')
         return disk_responses, error_responses
 
     @staticmethod

@@ -175,7 +175,7 @@ class LoadBalancersManager(AzureManager):
                 # Must set_region_code method for region collection
                 self.set_region_code(load_balancer_data['location'])
 
-                _LOGGER.debug(f'[LOAD BALANCER INFO] {load_balancer_resource.to_primitive()}')
+                # _LOGGER.debug(f'[LOAD BALANCER INFO] {load_balancer_resource.to_primitive()}')
                 load_balancer_responses.append(LoadBalancerResponse({'resource': load_balancer_resource}))
 
             except Exception as e:

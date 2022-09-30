@@ -35,7 +35,7 @@ class SQLServersManager(AzureManager):
                ErrorResourceResponse (list) : list of error resource information
 
         """
-        _LOGGER.debug(f'** Sql Servers START **')
+        _LOGGER.debug(f'** SQL Servers START **')
         start_time = time.time()
 
         subscription_info = params['subscription_info']
@@ -126,7 +126,7 @@ class SQLServersManager(AzureManager):
                     'account': sql_server_data.subscription_id
                 })
                 sql_server_responses.append(SQLServerResponse({'resource': sql_server_resource}))
-                _LOGGER.debug(f'[SQL SERVER INFO] {sql_server_resource.to_primitive()}')
+                # _LOGGER.debug(f'[SQL SERVER INFO] {sql_server_resource.to_primitive()}')
 
                 for sql_database in sql_server_dict.get('databases', []):
                     sql_database_data = SQLDatabase(sql_database, strict=False)
@@ -141,7 +141,7 @@ class SQLServersManager(AzureManager):
                         'instance_size': float(sql_database_data.max_size_gb),
                         'launched_at': datetime_to_iso8601(sql_database_data.creation_date)
                     })
-                    _LOGGER.debug(f'[SQL DATABASE INFO] {sql_database_resource.to_primitive()}')
+                    # _LOGGER.debug(f'[SQL DATABASE INFO IN SQL SERVER] {sql_database_resource.to_primitive()}')
                     sql_server_responses.append(SQLDatabaseResponse({'resource': sql_database_resource}))
 
                 # Must set_region_code method for region collection

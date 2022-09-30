@@ -104,7 +104,7 @@ class KeyVaultsManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(key_vault_data['location'])
-                _LOGGER.debug(f'[KEY VAULT INFO]{key_vault_resource.to_primitive()}')
+                # _LOGGER.debug(f'[KEY VAULT INFO]{key_vault_resource.to_primitive()}')
                 key_vault_responses.append(KeyVaultResponse({'resource': key_vault_resource}))
 
             except Exception as e:

@@ -120,7 +120,7 @@ class SnapshotsManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(snapshot_data['location'])
-                _LOGGER.debug(f'[SNAPSHOT INFO] {snapshot_resource.to_primitive()}')
+                # _LOGGER.debug(f'[SNAPSHOT INFO] {snapshot_resource.to_primitive()}')
                 snapshot_responses.append(SnapshotResponse({'resource': snapshot_resource}))
 
             except Exception as e:

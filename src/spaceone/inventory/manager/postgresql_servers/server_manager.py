@@ -89,7 +89,7 @@ class PostgreSQLServersManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(postgre_sql_server_data['location'])
-                _LOGGER.debug(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_resource.to_primitive()}')
+                # _LOGGER.debug(f'[POSTGRESQL SERVERS INFO] {postgre_sql_server_resource.to_primitive()}')
                 postgre_sql_server_responses.append(PostgreSQLServerResponse({'resource': postgre_sql_server_resource}))
 
             except Exception as e:

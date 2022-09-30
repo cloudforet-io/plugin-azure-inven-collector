@@ -116,7 +116,7 @@ class NATGatewaysManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(nat_gateway_data['location'])
-                _LOGGER.debug(f'[NAT GATEWAYS INFO] {nat_gateway_resource.to_primitive()}')
+                # _LOGGER.debug(f'[NAT GATEWAYS INFO] {nat_gateway_resource.to_primitive()}')
                 nat_gateway_responses.append(NatGatewayResponse({'resource': nat_gateway_resource}))
 
             except Exception as e:

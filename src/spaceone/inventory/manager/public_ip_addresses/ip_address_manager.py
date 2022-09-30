@@ -83,7 +83,7 @@ class PublicIPAddressesManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(public_ip_address_data['location'])
-                _LOGGER.debug(f'[PUBLIC IP ADDRESS INFO] {public_ip_address_resource.to_primitive()}')
+                # _LOGGER.debug(f'[PUBLIC IP ADDRESS INFO IN PIP MANAGER] {public_ip_address_resource.to_primitive()}')
                 public_ip_address_responses.append(PublicIPAddressResponse({'resource': public_ip_address_resource}))
 
             except Exception as e:
