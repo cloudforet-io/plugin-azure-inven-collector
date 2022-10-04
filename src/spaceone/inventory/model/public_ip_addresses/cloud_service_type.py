@@ -8,8 +8,9 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-public_ip_address_count_per_location_conf = os.path.join(current_dir, 'widget/public_ip_address_count_per_location.yaml')
-public_ip_address_count_per_subscription_conf = os.path.join(current_dir, 'widget/public_ip_address_count_per_subscription.yaml')
+public_ip_address_count_per_location_conf = os.path.join(current_dir, 'widget/public_ip_address_count_by_location.yaml')
+public_ip_address_count_per_subscription_conf = os.path.join(current_dir,
+                                                             'widget/public_ip_address_count_by_subscription.yaml')
 
 
 cst_public_ip_address = CloudServiceTypeResource()
