@@ -8,10 +8,10 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-nsg_count_per_location_conf = os.path.join(current_dir, 'widget/nsg_count_per_location.yaml')
-nsg_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_count_per_subscription.yaml')
-nsg_inbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_inbound_count_per_subscription.yaml')
-nsg_outbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_outbound_count_per_subscription.yaml')
+nsg_count_per_location_conf = os.path.join(current_dir, 'widget/nsg_count_by_region.yaml')
+nsg_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_count_by_subscription.yaml')
+nsg_inbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_inbound_count_by_subscription.yaml')
+nsg_outbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_outbound_count_by_subscription.yaml')
 
 cst_network_security_group = CloudServiceTypeResource()
 cst_network_security_group.name = 'Instance'

@@ -1,16 +1,16 @@
 ---
 cloud_service_group: NetworkSecurityGroups
 cloud_service_type: Instance
-name: NetworkSecurityGroup Total Count by Subscription
+name: Total Count
 query:
   aggregate:
     - group:
-        keys:
-          - name: name
-            key: account
         fields:
           - name: value
-            key: account
             operator: count
 options:
-  chart_type: DONUT
+  value_options:
+    key: value
+    type: count
+    options:
+      default: 0

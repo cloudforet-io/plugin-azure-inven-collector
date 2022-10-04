@@ -1,7 +1,7 @@
 ---
 cloud_service_group: NetworkSecurityGroups
 cloud_service_type: Instance
-name: NetworkSecurityGroup Total Count by Location
+name: NetworkSecurityGroup Total Count by Region
 query:
   aggregate:
     - group:
