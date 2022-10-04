@@ -87,6 +87,7 @@ class Snapshot(AzureCloudService):
     source_disk_name = StringType()
     tier_display = StringType(default='')
     type = StringType(serialize_when_none=False)
+    launched_at = DateTimeType(serialize_when_none=False)
 
     def reference(self):
         return {

@@ -78,7 +78,8 @@ class SnapshotsManager(AzureManager):
                     'size': snapshot_dict['disk_size_bytes'],
                     'sku': sku_dict,
                     'incremental_display': self.get_incremental_display(snapshot_dict['incremental']),
-                    'azure_monitor': {'resource_id': snapshot_id}
+                    'azure_monitor': {'resource_id': snapshot_id},
+                    'launched_at': datetime_to_iso8601(snapshot_dict['time_created'])
                 })
 
                 if snapshot_dict.get('network_access_policy') is not None:
@@ -114,8 +115,7 @@ class SnapshotsManager(AzureManager):
                     'tags': _tags,
                     'name': snapshot_data.name,
                     'instance_size': float(snapshot_data.disk_size_gb),
-                    'instance_type': snapshot_data.sku.name,
-                    'launched_at': datetime_to_iso8601(snapshot_data.time_created)
+                    'instance_type': snapshot_data.sku.name
                 })
 
                 # Must set_region_code method for region collection
