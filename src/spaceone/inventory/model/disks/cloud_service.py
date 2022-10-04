@@ -29,7 +29,7 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
     TextDyField.data_source('Subscription Name', 'data.subscription_name'),
     TextDyField.data_source('Encryption Type', 'data.encryption.type'),
     TextDyField.data_source('Networking', 'data.network_access_policy_display'),
-    DateTimeDyField.data_source('Created Time', 'launched_at'),
+    DateTimeDyField.data_source('Launched', 'data.time_created'),
     TextDyField.data_source('Max Shares', 'data.max_shares')
 
 ])
@@ -55,7 +55,6 @@ class DiskResource(ComputeResource):
     account = StringType(serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
-    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class DiskResponse(CloudServiceResponse):

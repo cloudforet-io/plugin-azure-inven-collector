@@ -63,7 +63,8 @@ class DisksManager(AzureManager):
                     'size': disk_dict['disk_size_bytes'],
                     'tier_display': self.get_tier_display(disk_dict['disk_iops_read_write'],
                                                           disk_dict['disk_m_bps_read_write']),
-                    'azure_monitor': {'resource_id': disk_id}
+                    'azure_monitor': {'resource_id': disk_id},
+                    'time_created': datetime_to_iso8601(disk_dict['time_created'])
                 })
 
                 # Update Network access policy to user-friendly words
@@ -97,8 +98,7 @@ class DisksManager(AzureManager):
                     'name': disk_data.name,
                     'account': disk_data.subscription_id,
                     'instance_type': disk_data.sku.name,
-                    'instance_size': float(disk_data.disk_size_gb),
-                    'launched_at': datetime_to_iso8601(disk_data.time_created)
+                    'instance_size': float(disk_data.disk_size_gb)
                 })
 
                 # Must set_region_code method for region collection
