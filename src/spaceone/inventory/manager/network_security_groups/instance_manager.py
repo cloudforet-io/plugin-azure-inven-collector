@@ -239,7 +239,6 @@ class NetworkSecurityGroupsManager(AzureManager):
         virtual_machine_name = None
 
         for network_interface in network_interfaces:
-            print(network_interface['network_security_group']['id'].split('/')[-1])
             if network_interface['network_security_group']['id'].split('/')[-1] == network_security_group_id.split('/')[-1]:
                 virtual_machine_name = network_interface['virtual_machine']['id'].split('/')[-1]
                 return virtual_machine_name
