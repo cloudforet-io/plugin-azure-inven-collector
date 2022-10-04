@@ -79,7 +79,7 @@ class SnapshotsManager(AzureManager):
                     'sku': sku_dict,
                     'incremental_display': self.get_incremental_display(snapshot_dict['incremental']),
                     'azure_monitor': {'resource_id': snapshot_id},
-                    'launched_at': datetime_to_iso8601(snapshot_dict['time_created'])
+                    'time_created': datetime_to_iso8601(snapshot_dict['time_created'])
                 })
 
                 if snapshot_dict.get('network_access_policy') is not None:

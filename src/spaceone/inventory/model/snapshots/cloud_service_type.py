@@ -33,7 +33,7 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription', 'data.subscription_name'),
-        DateTimeDyField.data_source('Launched', 'data.launched_at'),
+        DateTimeDyField.data_source('Launched', 'data.time_created'),
 
         # is_optional fields - Default
         TextDyField.data_source('Subscription ID', 'account', options={
@@ -58,7 +58,7 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Encryption', key='data.encryption.type_display'),
         SearchField.set(name='Network Access Policy', key='data.network_access_policy'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state'),
-        SearchField.set(name='Launched', key='data.launched_at', data_type='datetime')
+        SearchField.set(name='Launched', key='data.time_created', data_type='datetime')
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(snapshot_count_per_location_conf)),
