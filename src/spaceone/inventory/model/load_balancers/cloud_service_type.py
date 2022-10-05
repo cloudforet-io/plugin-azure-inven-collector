@@ -7,10 +7,10 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
-load_balancers_backendpool_vm_count_by_region_conf = os.path.join(current_dir, 'widget/load_balancers_backendpool_vm_count_by_location.yaml')
+load_balancers_backendpool_vm_count_by_region_conf = os.path.join(current_dir, 'widget/load_balancers_backendpool_vm_count_by_region.yaml')
 load_balancers_count_by_account_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_account.yaml')
-load_balancers_count_by_region_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_region.yaml.yaml')
-load_balancers_count_by_subscription_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_subscription.yaml.yaml')
+load_balancers_count_by_region_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_region.yaml')
+load_balancers_count_by_subscription_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_subscription.yaml')
 load_balancers_total_count_conf = os.path.join(current_dir, 'widget/load_balancers_total_count.yaml')
 
 cst_load_balancers = CloudServiceTypeResource()

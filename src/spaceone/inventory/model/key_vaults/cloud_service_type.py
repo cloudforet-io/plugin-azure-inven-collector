@@ -11,7 +11,7 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 key_vaults_count_by_account_conf = os.path.join(current_dir, 'widget/key_vaults_count_by_account.yaml')
 key_vaults_count_by_region_conf = os.path.join(current_dir, 'widget/key_vaults_count_by_region.yaml')
 key_vaults_count_per_subscription_conf = os.path.join(current_dir, 'widget/key_vaults_count_by_subscription.yaml')
-key_vaults_total_count_conf = os.path.join(current_dir, 'widget/key_vaults_total_count.yaml.yaml')
+key_vaults_total_count_conf = os.path.join(current_dir, 'widget/key_vaults_total_count.yaml')
 
 cst_key_vaults = CloudServiceTypeResource()
 cst_key_vaults.name = 'Instance'
