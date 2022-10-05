@@ -13,6 +13,7 @@ nsg_count_by_region_conf = os.path.join(current_dir, 'widget/nsg_count_by_region
 nsg_count_by_subscription_conf = os.path.join(current_dir, 'widget/nsg_count_by_subscription.yaml')
 nsg_inbound_count_by_subscription_conf = os.path.join(current_dir, 'widget/nsg_inbound_count_by_subscription.yaml')
 nsg_outbound_count_by_subscription_conf = os.path.join(current_dir, 'widget/nsg_outbound_count_by_subscription.yaml')
+nsg_total_count_conf = os.path.join(current_dir, 'widget/nsg_total_count.yaml')
 
 cst_network_security_groups = CloudServiceTypeResource()
 cst_network_security_groups.name = 'Instance'
@@ -130,6 +131,7 @@ cst_network_security_groups._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(nsg_count_by_subscription_conf)),
         ChartWidget.set(**get_data_from_yaml(nsg_inbound_count_by_subscription_conf)),
         ChartWidget.set(**get_data_from_yaml(nsg_outbound_count_by_subscription_conf)),
+        CardWidget.set(**get_data_from_yaml(nsg_total_count_conf))
     ]
 )
 

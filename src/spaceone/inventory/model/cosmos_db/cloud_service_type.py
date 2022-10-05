@@ -153,7 +153,7 @@ cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(cosmosdb_count_per_location_conf)),
         ChartWidget.set(**get_data_from_yaml(cosmosdb_count_per_subscription_conf)),
         ChartWidget.set(**get_data_from_yaml(cosmosdb_database_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(cosmosdb_total_count)),
+        CardWidget.set(**get_data_from_yaml(cosmosdb_total_count)),
     ]
 
 )

@@ -227,7 +227,7 @@ cst_application_gateways._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(ag_count_by_subscription_conf)),
         ChartWidget.set(**get_data_from_yaml(ag_count_by_location_conf)),
         ChartWidget.set(**get_data_from_yaml(ag_count_by_account_conf)),
-        ChartWidget.set(**get_data_from_yaml(ag_total_count_conf))
+        CardWidget.set(**get_data_from_yaml(ag_total_count_conf))
     ]
 )
 

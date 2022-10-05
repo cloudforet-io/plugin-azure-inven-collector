@@ -199,7 +199,7 @@ cst_load_balancers._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(load_balancers_count_by_account_conf)),
         ChartWidget.set(**get_data_from_yaml(load_balancers_count_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(load_balancers_count_by_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(load_balancers_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(load_balancers_total_count_conf)),
     ]
 )
 

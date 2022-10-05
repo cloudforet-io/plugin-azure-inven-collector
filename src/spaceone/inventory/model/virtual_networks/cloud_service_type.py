@@ -133,7 +133,7 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(virtual_networks_count_by_subscription_conf)),
         ChartWidget.set(**get_data_from_yaml(virtual_networks_subnet_count_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(virtual_networks_subnet_count_by_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(virtual_networks_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(virtual_networks_total_count_conf)),
     ]
 )
 

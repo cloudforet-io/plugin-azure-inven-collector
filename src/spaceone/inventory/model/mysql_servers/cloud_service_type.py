@@ -111,7 +111,7 @@ cst_mysql_servers._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(mysql_servers_count_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(mysql_servers_count_by_subscription_conf)),
         ChartWidget.set(**get_data_from_yaml(mysql_servers_count_by_tier_conf)),
-        ChartWidget.set(**get_data_from_yaml(mysql_servers_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(mysql_servers_total_count_conf)),
 
     ]
 )

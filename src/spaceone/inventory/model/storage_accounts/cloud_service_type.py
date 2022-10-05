@@ -155,7 +155,7 @@ cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_account_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(storage_accounts_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(storage_accounts_total_count_conf)),
     ]
 )
 

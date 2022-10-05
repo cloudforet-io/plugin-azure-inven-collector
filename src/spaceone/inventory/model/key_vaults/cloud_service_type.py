@@ -137,7 +137,7 @@ cst_key_vaults._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(key_vaults_count_by_account_conf)),
         ChartWidget.set(**get_data_from_yaml(key_vaults_count_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(key_vaults_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(key_vaults_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(key_vaults_total_count_conf)),
 
     ]
 
