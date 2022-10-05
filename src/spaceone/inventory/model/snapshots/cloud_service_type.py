@@ -13,7 +13,7 @@ snapshots_count_by_region_conf = os.path.join(current_dir, 'widget/snapshots_cou
 snapshots_count_by_resource_group_conf = os.path.join(current_dir, 'widget/snapshots_count_by_resource_group.yaml')
 snapshots_count_by_subscription_conf = os.path.join(current_dir, 'widget/snapshots_count_by_subscription.yaml')
 snapshots_total_count_conf = os.path.join(current_dir, 'widget/snapshots_total_count.yaml')
-snapshots_total_size_conf = os.path.join(current_dir, 'widget/snapshot_total_size.yaml')
+snapshots_total_size_conf = os.path.join(current_dir, 'widget/snapshots_total_size.yaml')
 
 
 cst_snapshots = CloudServiceTypeResource()

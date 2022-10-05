@@ -8,10 +8,10 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-storage_accounts_count_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_account.yaml.yaml')
+storage_accounts_count_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_account.yaml')
 storage_accounts_count_by_region_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_region.yaml')
 storage_accounts_count_by_subscription_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_subscription.yaml')
-storage_accounts_total_count_conf = os.path.join(current_dir, 'widget/storage_accounts_total_count.yaml.yaml')
+storage_accounts_total_count_conf = os.path.join(current_dir, 'widget/storage_accounts_total_count.yaml')
 
 cst_storage_accounts = CloudServiceTypeResource()
 cst_storage_accounts.name = 'Instance'

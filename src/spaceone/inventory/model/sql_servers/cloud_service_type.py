@@ -9,11 +9,11 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
 sql_databases_count_by_server_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_server.yaml')
-sql_databases_count_by_subscription_conf = os.path.join(current_dir, 'widget/sql_databases_count_per_subscription.yaml')
+sql_databases_count_by_subscription_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_subscription.yaml')
 sql_databases_count_by_tier_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_tier.yaml')
 sql_servers_count_by_account_conf = os.path.join(current_dir, 'widget/sql_servers_count_by_account.yaml')
 sql_servers_count_by_region_conf = os.path.join(current_dir, 'widget/sql_servers_count_by_region.yaml')
-sql_servers_count_by_subscription_conf = os.path.join(current_dir, 'widget/sql_servers_count_per_subscription.yaml')
+sql_servers_count_by_subscription_conf = os.path.join(current_dir, 'widget/sql_servers_count_by_subscription.yaml')
 sql_servers_failover_count_by_region_conf = os.path.join(current_dir, 'widget/sql_servers_failover_count_by_region.yaml')
 sql_servers_failover_count_by_server_conf = os.path.join(current_dir, 'widget/sql_servers_failover_count_by_server.yaml')
 sql_servers_total_count_conf = os.path.join(current_dir, 'widget/sql_servers_total_count.yaml')
