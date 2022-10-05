@@ -20,7 +20,6 @@ virtual_machine_count_by_region_conf = os.path.join(current_dir, 'widget/virtual
 
 cst_virtual_machine = CloudServiceTypeResource()
 cst_virtual_machine.name = 'Instance'
-cst_virtual_machine.provider = 'azure'
 cst_virtual_machine.group = 'VirtualMachines'
 cst_virtual_machine.labels = ['Compute', 'Server']
 cst_virtual_machine.is_major = True

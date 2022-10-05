@@ -8,21 +8,23 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-nat_gateway_count_per_location_conf = os.path.join(current_dir, 'widget/nat_gateway_count_per_location.yaml')
-nat_gateway_count_per_subscription_conf = os.path.join(current_dir, 'widget/nat_gateway_count_per_subscription.yaml')
+nat_gateways_count_by_account_conf = os.path.join(current_dir, 'widget/nat_gateways_count_by_account.yaml')
+nat_gateways_count_by_region_conf = os.path.join(current_dir, 'widget/nat_gateways_count_by_region.yaml')
+nat_gateways_count_by_subscription_conf = os.path.join(current_dir, 'widget/nat_gateways_count_by_subscription.yaml')
+nat_gateways_total_count_conf = os.path.join(current_dir, 'widget/nat_gateways_total_count.yaml')
 
-cst_nat_gateway = CloudServiceTypeResource()
-cst_nat_gateway.name = 'Instance'
-cst_nat_gateway.group = 'NATGateways'
-cst_nat_gateway.service_code = 'Microsoft.Network/natGateways'
-cst_nat_gateway.labels = ['Networking']
-cst_nat_gateway.is_major = True
-cst_nat_gateway.is_primary = True
-cst_nat_gateway.tags = {
+cst_nat_gateways = CloudServiceTypeResource()
+cst_nat_gateways.name = 'Instance'
+cst_nat_gateways.group = 'NATGateways'
+cst_nat_gateways.service_code = 'Microsoft.Network/natGateways'
+cst_nat_gateways.labels = ['Networking']
+cst_nat_gateways.is_major = True
+cst_nat_gateways.is_primary = True
+cst_nat_gateways.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-nat.svg',
 }
 
-cst_nat_gateway._metadata = CloudServiceTypeMeta.set_meta(
+cst_nat_gateways._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
@@ -74,13 +76,15 @@ cst_nat_gateway._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Virtual Network', key='data.subnets.virtual_network')
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(nat_gateway_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(nat_gateway_count_per_subscription_conf))
+        ChartWidget.set(**get_data_from_yaml(nat_gateways_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(nat_gateways_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(nat_gateways_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(nat_gateways_total_count_conf))
     ]
 
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_nat_gateway}),
+    CloudServiceTypeResponse({'resource': cst_nat_gateways}),
 ]

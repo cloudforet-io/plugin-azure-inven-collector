@@ -1,0 +1,16 @@
+---
+cloud_service_group: CosmosDB
+cloud_service_type: Instance
+name: AzureCosmosDB Total Count by Location
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: region_code
+            key: region_code
+        fields:
+          - name: value
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN

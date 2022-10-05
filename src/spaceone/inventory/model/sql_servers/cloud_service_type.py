@@ -8,28 +8,29 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-sql_database_count_per_location_conf = os.path.join(current_dir, 'widget/sql_database_count_per_location.yaml')
-sql_database_count_per_server_conf = os.path.join(current_dir, 'widget/sql_database_count_per_server.yaml')
-sql_database_count_per_subscription_conf = os.path.join(current_dir, 'widget/sql_database_count_per_subscription.yaml')
-sql_database_count_per_tier_conf = os.path.join(current_dir, 'widget/sql_database_count_per_tier.yaml')
-sql_server_count_per_location_conf = os.path.join(current_dir, 'widget/sql_server_count_per_location.yaml')
-sql_server_count_per_subscription_conf = os.path.join(current_dir, 'widget/sql_server_count_per_subscription.yaml')
-sql_server_failover_count_per_location_conf = os.path.join(current_dir, 'widget/sql_server_failover_count_per_location.yaml')
-sql_server_failover_count_per_server_conf = os.path.join(current_dir, 'widget/sql_server_failover_count_per_server.yaml')
+sql_databases_count_by_server_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_server.yaml')
+sql_databases_count_by_subscription_conf = os.path.join(current_dir, 'widget/sql_databases_count_per_subscription.yaml')
+sql_databases_count_by_tier_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_tier.yaml')
+sql_servers_count_by_account_conf = os.path.join(current_dir, 'widget/sql_servers_count_by_account.yaml')
+sql_servers_count_by_region_conf = os.path.join(current_dir, 'widget/sql_servers_count_by_region.yaml')
+sql_servers_count_by_subscription_conf = os.path.join(current_dir, 'widget/sql_servers_count_per_subscription.yaml')
+sql_servers_failover_count_by_region_conf = os.path.join(current_dir, 'widget/sql_servers_failover_count_by_region.yaml')
+sql_servers_failover_count_by_server_conf = os.path.join(current_dir, 'widget/sql_servers_failover_count_by_server.yaml')
+sql_servers_total_count_conf = os.path.join(current_dir, 'widget/sql_servers_total_count.yaml')
 
 
-cst_sql_server = CloudServiceTypeResource()
-cst_sql_server.name = 'Server'
-cst_sql_server.group = 'SQLServers'
-cst_sql_server.service_code = 'Microsoft.Sql/servers'
-cst_sql_server.labels = ['Database']
-cst_sql_server.is_primary = True
-cst_sql_server.is_major = True
-cst_sql_server.tags = {
+cst_sql_servers = CloudServiceTypeResource()
+cst_sql_servers.name = 'Server'
+cst_sql_servers.group = 'SQLServers'
+cst_sql_servers.service_code = 'Microsoft.Sql/servers'
+cst_sql_servers.labels = ['Database']
+cst_sql_servers.is_primary = True
+cst_sql_servers.is_major = True
+cst_sql_servers.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-servers.svg',
 }
 
-cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
+cst_sql_servers._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         EnumDyField.data_source('Status', 'data.state', default_state={
             'safe': ['Ready'],
@@ -253,18 +254,18 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Tuning Current State', key='data.server_automatic_tuning.options.actual_state'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(sql_server_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(sql_server_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(sql_server_failover_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(sql_server_failover_count_per_server_conf)),
-        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_server_conf)),
-        ChartWidget.set(**get_data_from_yaml(sql_database_count_per_tier_conf)),
-
+        ChartWidget.set(**get_data_from_yaml(sql_servers_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_servers_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_servers_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_servers_failover_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_servers_failover_count_by_server_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_databases_count_by_server_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_databases_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_databases_count_by_tier_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_servers_total_count_conf))
     ]
 )
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_sql_server}),
+    CloudServiceTypeResponse({'resource': cst_sql_servers}),
 ]

@@ -8,23 +8,25 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-postgresql_count_per_location_conf = os.path.join(current_dir, 'widget/postgresql_count_per_location.yaml')
-postgresql_count_per_subscription_conf = os.path.join(current_dir, 'widget/postgresql_count_per_subscription.yaml')
-postgresql_count_per_tier_conf = os.path.join(current_dir, 'widget/postgresql_count_per_tier.yaml')
+postgresql_count_by_account_conf = os.path.join(current_dir, 'widget/postgresql_count_by_account.yaml')
+postgresql_count_by_region_conf = os.path.join(current_dir, 'widget/postgresql_count_by_region.yaml')
+postgresql_count_by_subscription_conf = os.path.join(current_dir, 'widget/postgresql_count_by_subscription.yaml')
+postgresql_count_by_tier_conf = os.path.join(current_dir, 'widget/postgresql_count_by_tier.yaml')
+postgresql_total_count_conf = os.path.join(current_dir, 'widget/postgresql_total_count.yaml')
 
 
-cst_postgre_sql_server = CloudServiceTypeResource()
-cst_postgre_sql_server.name = 'Server'
-cst_postgre_sql_server.group = 'PostgreSQLServers'
-cst_postgre_sql_server.service_code = 'Microsoft.DBforPostgreSQL/servers'
-cst_postgre_sql_server.labels = ['Database']
-cst_postgre_sql_server.is_primary = True
-cst_postgre_sql_server.is_major = True
-cst_postgre_sql_server.tags = {
+cst_postgre_sql_servers = CloudServiceTypeResource()
+cst_postgre_sql_servers.name = 'Server'
+cst_postgre_sql_servers.group = 'PostgreSQLServers'
+cst_postgre_sql_servers.service_code = 'Microsoft.DBforPostgreSQL/servers'
+cst_postgre_sql_servers.labels = ['Database']
+cst_postgre_sql_servers.is_primary = True
+cst_postgre_sql_servers.is_major = True
+cst_postgre_sql_servers.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-postgresql-server.svg',
 }
 
-cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
+cst_postgre_sql_servers._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Type', 'instance_type'),
         EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
@@ -149,12 +151,14 @@ cst_postgre_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Firewall Rule End IP', key='data.firewall_rules.end_ip_address'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(postgresql_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(postgresql_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(postgresql_count_per_tier_conf))
+        ChartWidget.set(**get_data_from_yaml(postgresql_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(postgresql_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(postgresql_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(postgresql_count_by_tier_conf)),
+        ChartWidget.set(**get_data_from_yaml(postgresql_total_count_conf)),
     ]
 )
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_postgre_sql_server}),
+    CloudServiceTypeResponse({'resource': cst_postgre_sql_servers}),
 ]

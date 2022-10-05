@@ -1,0 +1,16 @@
+---
+cloud_service_group: LoadBalancers
+cloud_service_type: Instance
+name: LoadBalancers Total Count by Region
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: region_code
+        fields:
+          - name: value
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN

@@ -8,21 +8,23 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-storage_account_count_per_location_conf = os.path.join(current_dir, 'widget/storage_account_count_per_location.yaml')
-storage_account_count_per_subscription_conf = os.path.join(current_dir, 'widget/storage_account_count_per_subscription.yaml')
+storage_accounts_count_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_account.yaml.yaml')
+storage_accounts_count_by_region_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_region.yaml')
+storage_accounts_count_by_subscription_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_subscription.yaml')
+storage_accounts_total_count_conf = os.path.join(current_dir, 'widget/storage_accounts_total_count.yaml.yaml')
 
-cst_storage_account = CloudServiceTypeResource()
-cst_storage_account.name = 'Instance'
-cst_storage_account.group = 'StorageAccounts'
-cst_storage_account.service_code = 'Microsoft.Storage/storageAccounts'
-cst_storage_account.labels = ['Storage']
-cst_storage_account.is_major = True
-cst_storage_account.is_primary = True
-cst_storage_account.tags = {
+cst_storage_accounts = CloudServiceTypeResource()
+cst_storage_accounts.name = 'Instance'
+cst_storage_accounts.group = 'StorageAccounts'
+cst_storage_accounts.service_code = 'Microsoft.Storage/storageAccounts'
+cst_storage_accounts.labels = ['Storage']
+cst_storage_accounts.is_major = True
+cst_storage_accounts.is_primary = True
+cst_storage_accounts.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-service-accounts.svg',
 }
 
-cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
+cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Type', 'data.type'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -150,12 +152,14 @@ cst_storage_account._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Secondary Location', key='data.secondary_location'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(storage_account_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(storage_account_count_per_subscription_conf))
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_total_count_conf)),
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_storage_account}),
+    CloudServiceTypeResponse({'resource': cst_storage_accounts}),
 ]

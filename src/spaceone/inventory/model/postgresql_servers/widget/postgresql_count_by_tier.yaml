@@ -1,0 +1,16 @@
+---
+cloud_service_group: PostgreSQLServers
+cloud_service_type: Server
+name: PostgreSQLServers Inbound Total Count by Tier
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: data.user_visible_state
+        fields:
+          - name: value
+            key: data.user_visible_state
+            operator: count
+options:
+  chart_type: COLUMN

@@ -8,23 +8,25 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-mysql_server_count_per_location_conf = os.path.join(current_dir, 'widget/mysql_server_count_per_location.yaml')
-mysql_server_count_per_subscription_conf = os.path.join(current_dir, 'widget/mysql_server_count_per_subscription.yaml')
-mysql_server_count_per_tier_conf = os.path.join(current_dir, 'widget/mysql_server_count_per_tier.yaml')
+mysql_servers_count_by_account_conf = os.path.join(current_dir, 'widget/mysql_servers_count_by_account.yaml')
+mysql_servers_count_by_region_conf = os.path.join(current_dir, 'widget/mysql_servers_count_by_region.yaml')
+mysql_servers_count_by_subscription_conf = os.path.join(current_dir, 'widget/mysql_servers_count_by_subscription.yaml')
+mysql_servers_count_by_tier_conf = os.path.join(current_dir, 'widget/mysql_servers_count_by_tier.yaml')
+mysql_servers_total_count_conf = os.path.join(current_dir, 'widget/mysql_servers_total_count.yaml')
 
 
-cst_mysql_server = CloudServiceTypeResource()
-cst_mysql_server.name = 'Server'
-cst_mysql_server.group = 'MySQLServers'
-cst_mysql_server.service_code = 'Microsoft.DBforMySQL/servers'
-cst_mysql_server.labels = ['Database']
-cst_mysql_server.is_major = True
-cst_mysql_server.is_primary = True
-cst_mysql_server.tags = {
+cst_mysql_servers = CloudServiceTypeResource()
+cst_mysql_servers.name = 'Server'
+cst_mysql_servers.group = 'MySQLServers'
+cst_mysql_servers.service_code = 'Microsoft.DBforMySQL/servers'
+cst_mysql_servers.labels = ['Database']
+cst_mysql_servers.is_major = True
+cst_mysql_servers.is_primary = True
+cst_mysql_servers.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-mysql-servers.svg',
 }
 
-cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
+cst_mysql_servers._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Type', 'instance_type'),
         EnumDyField.data_source('Status', 'data.user_visible_state', default_state={
@@ -105,14 +107,16 @@ cst_mysql_server._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Backup Retention Period', key='data.storage_profile.backup_retention_days'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(mysql_server_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(mysql_server_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(mysql_server_count_per_tier_conf)),
+        ChartWidget.set(**get_data_from_yaml(mysql_servers_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(mysql_servers_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(mysql_servers_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(mysql_servers_count_by_tier_conf)),
+        ChartWidget.set(**get_data_from_yaml(mysql_servers_total_count_conf)),
 
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_mysql_server}),
+    CloudServiceTypeResponse({'resource': cst_mysql_servers}),
 ]

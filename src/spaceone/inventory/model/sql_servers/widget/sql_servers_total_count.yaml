@@ -1,0 +1,16 @@
+---
+cloud_service_group: SQLServers
+cloud_service_type: Server
+name: Total Count
+query:
+  aggregate:
+    - group:
+        fields:
+          - name: value
+            operator: count
+options:
+  value_options:
+    key: value
+    type: count
+    options:
+      default: 0

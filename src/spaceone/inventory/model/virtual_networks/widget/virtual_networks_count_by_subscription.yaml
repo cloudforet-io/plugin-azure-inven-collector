@@ -1,0 +1,15 @@
+---
+cloud_service_group: VirtualNetworks
+cloud_service_type: Instance
+name: VirtualNetworks Total Count per Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: account
+        fields:
+          - name: value
+            operator: count
+options:
+  chart_type: DONUT

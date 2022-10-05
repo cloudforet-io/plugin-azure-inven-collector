@@ -8,21 +8,23 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-ag_count_per_subscription_conf = os.path.join(current_dir, 'widget/application_gateway_count_per_subscription.yaml')
-ag_count_per_location_conf = os.path.join(current_dir, 'widget/application_gateway_count_per_location.yaml')
+ag_count_by_account_conf = os.path.join(current_dir, 'widget/application_gateways_count_by_account.yaml')
+ag_count_by_subscription_conf = os.path.join(current_dir, 'widget/application_gateways_count_by_subscription.yaml')
+ag_count_by_location_conf = os.path.join(current_dir, 'widget/application_gateways_count_by_region.yaml')
+ag_total_count_conf = os.path.join(current_dir, 'widget/application_gateways_total_count.yaml')
 
-cst_application_gateway = CloudServiceTypeResource()
-cst_application_gateway.name = 'Instance'
-cst_application_gateway.group = 'ApplicationGateways'
-cst_application_gateway.service_code = 'Microsoft.Network/applicationGateways'
-cst_application_gateway.labels = ['Networking']
-cst_application_gateway.is_major = True
-cst_application_gateway.is_primary = True
-cst_application_gateway.tags = {
+cst_application_gateways = CloudServiceTypeResource()
+cst_application_gateways.name = 'Instance'
+cst_application_gateways.group = 'ApplicationGateways'
+cst_application_gateways.service_code = 'Microsoft.Network/applicationGateways'
+cst_application_gateways.labels = ['Networking']
+cst_application_gateways.is_major = True
+cst_application_gateways.is_primary = True
+cst_application_gateways.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-application-gateways.svg',
 }
 
-cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
+cst_application_gateways._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Public IP Address', 'data.public_ip_address.ip_address'),
         TextDyField.data_source('Private IP Address', 'data.private_ip_address'),
@@ -222,12 +224,14 @@ cst_application_gateway._metadata = CloudServiceTypeMeta.set_meta(
                         data_type='integer'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(ag_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(ag_count_per_location_conf))
+        ChartWidget.set(**get_data_from_yaml(ag_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(ag_count_by_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(ag_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(ag_total_count_conf))
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_application_gateway}),
+    CloudServiceTypeResponse({'resource': cst_application_gateways}),
 ]

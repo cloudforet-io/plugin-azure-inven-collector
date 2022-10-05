@@ -7,11 +7,12 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-virtualnetwork_count_per_location_conf = os.path.join(current_dir, 'widget/virtualnetwork_count_per_location.yaml')
-virtualnetwork_count_per_subscription_conf = os.path.join(current_dir, 'widget/virtualnetwork_count_per_subscription.yaml')
-virtualnetwork_subnet_count_per_location_conf = os.path.join(current_dir, 'widget/virtualnetwork_subnet_count_per_location.yaml')
-virtualnetwork_subnet_count_per_subscription_conf = os.path.join(current_dir, 'widget/virtualnetwork_subnet_count_per_subscription.yaml')
-
+virtual_networks_count_by_account_conf = os.path.join(current_dir, 'widget/virtual_networks_count_by_account.yaml')
+virtual_networks_count_by_region_conf = os.path.join(current_dir, 'widget/virtual_networks_count_by_region.yaml')
+virtual_networks_count_by_subscription_conf = os.path.join(current_dir, 'widget/virtual_networks_count_by_subscription.yaml')
+virtual_networks_subnet_count_by_region_conf = os.path.join(current_dir, 'widget/virtual_networks_subnet_count_by_region.yaml')
+virtual_networks_subnet_count_by_subscription_conf = os.path.join(current_dir, 'widget/virtual_networks_subnet_count_by_subscription.yaml')
+virtual_networks_total_count_conf = os.path.join(current_dir, 'widget/virtual_networks_total_count.yaml')
 
 cst_virtual_network = CloudServiceTypeResource()
 cst_virtual_network.name = 'Instance'
@@ -127,10 +128,12 @@ cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Subnet Network Security Group', key='data.subnets.network_security_group.name'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(virtualnetwork_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(virtualnetwork_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(virtualnetwork_subnet_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(virtualnetwork_subnet_count_per_location_conf))
+        ChartWidget.set(**get_data_from_yaml(virtual_networks_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtual_networks_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtual_networks_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtual_networks_subnet_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtual_networks_subnet_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(virtual_networks_total_count_conf)),
     ]
 )
 

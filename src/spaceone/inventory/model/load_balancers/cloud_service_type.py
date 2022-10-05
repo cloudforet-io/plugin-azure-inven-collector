@@ -7,22 +7,24 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
-loadbalancer_backendpool_vm_count_per_location_conf = os.path.join(current_dir, 'widget/loadbalancer_backendpool_vm_count_per_location.yaml')
-loadbalancer_count_per_location_conf = os.path.join(current_dir, 'widget/loadbalancer_count_per_location.yaml')
-loadbalancer_count_per_subscription_conf = os.path.join(current_dir, 'widget/loadbalancer_count_per_subscription.yaml')
+load_balancers_backendpool_vm_count_by_region_conf = os.path.join(current_dir, 'widget/load_balancers_backendpool_vm_count_by_location.yaml')
+load_balancers_count_by_account_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_account.yaml')
+load_balancers_count_by_region_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_region.yaml.yaml')
+load_balancers_count_by_subscription_conf = os.path.join(current_dir, 'widget/load_balancers_count_by_subscription.yaml.yaml')
+load_balancers_total_count_conf = os.path.join(current_dir, 'widget/load_balancers_total_count.yaml')
 
-cst_load_balancer = CloudServiceTypeResource()
-cst_load_balancer.name = 'Instance'
-cst_load_balancer.group = 'LoadBalancers'
-cst_load_balancer.service_code = 'Microsoft.Network/loadBalancers'
-cst_load_balancer.labels = ['Networking']
-cst_load_balancer.is_major = True
-cst_load_balancer.is_primary = True
-cst_load_balancer.tags = {
+cst_load_balancers = CloudServiceTypeResource()
+cst_load_balancers.name = 'Instance'
+cst_load_balancers.group = 'LoadBalancers'
+cst_load_balancers.service_code = 'Microsoft.Network/loadBalancers'
+cst_load_balancers.labels = ['Networking']
+cst_load_balancers.is_major = True
+cst_load_balancers.is_primary = True
+cst_load_balancers.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-loadbalancers.svg',
 }
 
-cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
+cst_load_balancers._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
@@ -193,13 +195,15 @@ cst_load_balancer._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Inbound NAT Rule Target Port', key='data.inbound_nat_rules.backend_port', data_type='integer'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(loadbalancer_backendpool_vm_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(loadbalancer_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(loadbalancer_count_per_subscription_conf))
+        ChartWidget.set(**get_data_from_yaml(load_balancers_backendpool_vm_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(load_balancers_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(load_balancers_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(load_balancers_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(load_balancers_total_count_conf)),
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_load_balancer}),
+    CloudServiceTypeResponse({'resource': cst_load_balancers}),
 ]

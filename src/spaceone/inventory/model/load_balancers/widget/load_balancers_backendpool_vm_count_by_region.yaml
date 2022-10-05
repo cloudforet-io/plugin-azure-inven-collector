@@ -1,0 +1,18 @@
+---
+cloud_service_group: LoadBalancers
+cloud_service_type: Instance
+name: LoadBalancers Backend Pool VM Count by Region
+query:
+  aggregate:
+   - unwind:
+       path: data.network_interfaces
+   - group:
+       keys:
+       - name: name
+         key: data.network_interfaces.location
+       fields:
+        - name: value
+          key: data.network_interfaces.location
+          operator: count
+options:
+  chart_type: COLUMN

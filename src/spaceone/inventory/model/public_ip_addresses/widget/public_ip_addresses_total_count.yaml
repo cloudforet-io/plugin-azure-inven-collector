@@ -1,0 +1,11 @@
+---
+cloud_service_group: PublicIPAddresses
+cloud_service_type: IPAddress
+name: Total Count
+query:
+  aggregate:
+    - group:
+        fields:
+          - name: value
+            key: region_code
+            operator: count
