@@ -252,7 +252,7 @@ cst_virtual_machine._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Cloud Service Type', key='cloud_service_type'),
         SearchField.set(name='Service Account', key='collection_info.service_accounts',
                         reference='identity.ServiceAccount'),
-        SearchField.set(name='Launched', key='launched_at'),
+        SearchField.set(name='Launched', key='data.launched_at'),
     ],
     widget=[
         CardWidget.set(**get_data_from_yaml(virtual_machine_total_count_conf)),
