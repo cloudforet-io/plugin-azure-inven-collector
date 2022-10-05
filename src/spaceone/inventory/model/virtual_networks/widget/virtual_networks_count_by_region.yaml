@@ -1,0 +1,16 @@
+---
+cloud_service_group: VirtualNetworks
+cloud_service_type: Instance
+name: VirtualNetworks Total Count by Region
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: region_code
+        fields:
+          - name: location
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN

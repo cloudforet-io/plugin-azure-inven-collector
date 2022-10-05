@@ -8,23 +8,24 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-nsg_count_per_location_conf = os.path.join(current_dir, 'widget/nsg_count_by_region.yaml')
-nsg_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_count_by_subscription.yaml')
-nsg_inbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_inbound_count_by_subscription.yaml')
-nsg_outbound_count_per_subscription_conf = os.path.join(current_dir, 'widget/nsg_outbound_count_by_subscription.yaml')
+nsg_count_by_account_conf = os.path.join(current_dir, 'widget/nsg_count_by_account.yaml')
+nsg_count_by_region_conf = os.path.join(current_dir, 'widget/nsg_count_by_region.yaml')
+nsg_count_by_subscription_conf = os.path.join(current_dir, 'widget/nsg_count_by_subscription.yaml')
+nsg_inbound_count_by_subscription_conf = os.path.join(current_dir, 'widget/nsg_inbound_count_by_subscription.yaml')
+nsg_outbound_count_by_subscription_conf = os.path.join(current_dir, 'widget/nsg_outbound_count_by_subscription.yaml')
 
-cst_network_security_group = CloudServiceTypeResource()
-cst_network_security_group.name = 'Instance'
-cst_network_security_group.group = 'NetworkSecurityGroups'
-cst_network_security_group.service_code = 'Microsoft.Network/networkSecurityGroups'
-cst_network_security_group.labels = ['Networking']
-cst_network_security_group.is_major = True
-cst_network_security_group.is_primary = True
-cst_network_security_group.tags = {
+cst_network_security_groups = CloudServiceTypeResource()
+cst_network_security_groups.name = 'Instance'
+cst_network_security_groups.group = 'NetworkSecurityGroups'
+cst_network_security_groups.service_code = 'Microsoft.Network/networkSecurityGroups'
+cst_network_security_groups.labels = ['Networking']
+cst_network_security_groups.is_major = True
+cst_network_security_groups.is_primary = True
+cst_network_security_groups.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-network-security-groups.svg',
 }
 
-cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
+cst_network_security_groups._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
@@ -124,14 +125,15 @@ cst_network_security_group._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Virtual Network', key='data.subnets.virtual_network'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(nsg_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(nsg_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(nsg_inbound_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(nsg_outbound_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(nsg_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(nsg_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(nsg_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(nsg_inbound_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(nsg_outbound_count_by_subscription_conf)),
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_network_security_group}),
+    CloudServiceTypeResponse({'resource': cst_network_security_groups}),
 ]

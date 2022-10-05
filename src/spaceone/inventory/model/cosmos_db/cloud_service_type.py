@@ -8,17 +8,20 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-cosmosdb_count_per_subscription_conf = os.path.join(current_dir, 'widget/cosmosdb_count_per_subscription.yaml')
-cosmosdb_count_per_location_conf = os.path.join(current_dir, 'widget/cosmosdb_count_per_location.yaml')
-cosmosdb_database_count_per_subscription_conf = os.path.join(current_dir, 'widget/cosmosdb_database_count_per_subscription.yaml')
+cosmosdb_count_by_account_conf = os.path.join(current_dir, 'widget/cosmosdb_count_by_account.yaml')
+cosmosdb_count_per_subscription_conf = os.path.join(current_dir, 'widget/cosmosdb_count_by_subscription.yaml')
+cosmosdb_count_per_location_conf = os.path.join(current_dir, 'widget/cosmosdb_count_by_region.yaml')
+cosmosdb_database_count_per_subscription_conf = os.path.join(current_dir,
+                                                             'widget/cosmosdb_database_count_by_subscription.yaml')
+cosmosdb_total_count = os.path.join(current_dir, 'widget/cosmosdb_total_count.yaml')
 
 cst_cosmos_db = CloudServiceTypeResource()
-cst_cosmos_db.name = 'AzureCosmosDB'
-cst_cosmos_db.group = 'Database'
+cst_cosmos_db.name = 'Instance'
+cst_cosmos_db.group = 'CosmosDB'
 cst_cosmos_db.service_code = 'Microsoft.DocumentDB/databaseAccounts'
 cst_cosmos_db.labels = ['Database']
-cst_cosmos_db.is_major = False
-cst_cosmos_db.is_primary = False
+cst_cosmos_db.is_major = True
+cst_cosmos_db.is_primary = True
 cst_cosmos_db.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-cosmos-db.svg',
 }
@@ -146,9 +149,11 @@ cst_cosmos_db._metadata = CloudServiceTypeMeta.set_meta(
                         key='data.private_endpoint_connections.name'),
     ],
     widget=[
+        ChartWidget.set(**get_data_from_yaml(cosmosdb_total_count)),
         ChartWidget.set(**get_data_from_yaml(cosmosdb_count_per_location_conf)),
         ChartWidget.set(**get_data_from_yaml(cosmosdb_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(cosmosdb_database_count_per_subscription_conf))
+        ChartWidget.set(**get_data_from_yaml(cosmosdb_database_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(cosmosdb_total_count)),
     ]
 
 )

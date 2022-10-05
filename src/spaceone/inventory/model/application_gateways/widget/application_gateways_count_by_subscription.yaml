@@ -1,0 +1,16 @@
+---
+cloud_service_group: ApplicationGateways
+cloud_service_type: Instance
+name: ApplicationGateways Total Count by Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: account
+        fields:
+          - name: value
+            key: account
+            operator: count
+options:
+  chart_type: DONUT

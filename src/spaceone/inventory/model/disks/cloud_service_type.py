@@ -11,28 +11,28 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 """
 DISK
 """
-disk_total_size_conf = os.path.join(current_dir, 'widget/disk_total_size.yaml')
-disk_total_count_conf = os.path.join(current_dir, 'widget/disk_total_count.yaml')
-disk_total_size_per_location_conf = os.path.join(current_dir, 'widget/disk_total_size_by_region.yaml')
-disk_total_size_per_subscription_conf = os.path.join(current_dir, 'widget/disk_total_size_by_subscription.yaml')
-disk_count_per_resource_group_conf = os.path.join(current_dir, 'widget/disk_count_by_resource_group.yaml')
-disk_total_size_per_status_conf = os.path.join(current_dir, 'widget/disk_total_size_by_status.yaml')
-disk_total_size_per_type_conf = os.path.join(current_dir, 'widget/disk_total_size_by_type.yaml')
+disks_total_size_conf = os.path.join(current_dir, 'widget/disks_total_size.yaml')
+disks_total_count_conf = os.path.join(current_dir, 'widget/disks_total_count.yaml')
+disks_total_size_per_location_conf = os.path.join(current_dir, 'widget/disks_total_size_by_region.yaml')
+disks_total_size_per_subscription_conf = os.path.join(current_dir, 'widget/disks_total_size_by_subscription.yaml')
+disks_count_per_resource_group_conf = os.path.join(current_dir, 'widget/disks_count_by_resource_group.yaml')
+disks_total_size_per_status_conf = os.path.join(current_dir, 'widget/disks_total_size_by_status.yaml')
+disks_total_size_per_type_conf = os.path.join(current_dir, 'widget/disks_total_size_by_type.yaml')
 
-cst_disk = CloudServiceTypeResource()
-cst_disk.group = 'Disks'
-cst_disk.name = 'Disk'
-cst_disk.provider = 'azure'
-cst_disk.labels = ['Compute', 'Storage']
-cst_disk.service_code = 'Microsoft.Compute/disks'
-cst_disk.is_major = True
-cst_disk.is_primary = True
-cst_disk.tags = {
+cst_disks = CloudServiceTypeResource()
+cst_disks.group = 'Disks'
+cst_disks.name = 'Disk'
+cst_disks.provider = 'azure'
+cst_disks.labels = ['Compute', 'Storage']
+cst_disks.service_code = 'Microsoft.Compute/disks'
+cst_disks.is_major = True
+cst_disks.is_primary = True
+cst_disks.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk.svg',
     'spaceone:display_name': 'Disk'
 }
 
-cst_disk._metadata = CloudServiceTypeMeta.set_meta(
+cst_disks._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Storage Account Type', 'data.sku.name'),
         SizeField.data_source('Size', 'data.size'),
@@ -80,17 +80,17 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Launched', key='data.time_created', data_type='datetime'),
     ],
     widget=[
-        CardWidget.set(**get_data_from_yaml(disk_total_count_conf)),
-        CardWidget.set(**get_data_from_yaml(disk_total_size_conf)),
-        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(disk_count_per_resource_group_conf)),
-        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_status_conf)),
-        ChartWidget.set(**get_data_from_yaml(disk_total_size_per_type_conf)),
+        CardWidget.set(**get_data_from_yaml(disks_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(disks_total_size_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_location_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_count_per_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_status_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_type_conf)),
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_disk})
+    CloudServiceTypeResponse({'resource': cst_disks})
 ]

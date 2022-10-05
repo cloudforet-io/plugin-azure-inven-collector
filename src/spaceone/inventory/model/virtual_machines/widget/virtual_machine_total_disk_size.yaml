@@ -17,4 +17,4 @@ options:
     type: size
     options:
       default: 0
-      source_unit: GB
+      source_unit: Byte

@@ -1,0 +1,16 @@
+---
+cloud_service_group: Disks
+cloud_service_type: Disk
+name: Disks Total Size per Type
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: instance_type
+        fields:
+          - name: value
+            key: instance_size
+            operator: sum
+options:
+  chart_type: TREEMAP

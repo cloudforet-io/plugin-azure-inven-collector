@@ -1,0 +1,16 @@
+---
+cloud_service_group: SQLDatabases
+cloud_service_type: Database
+name: SQLDatabases Total Count per Location
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: region_code
+        fields:
+          - name: value
+            key: region_code
+            operator: count
+options:
+  chart_type: COLUMN

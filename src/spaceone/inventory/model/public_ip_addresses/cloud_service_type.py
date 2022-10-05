@@ -8,23 +8,25 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-public_ip_address_count_per_location_conf = os.path.join(current_dir, 'widget/public_ip_address_count_by_location.yaml')
-public_ip_address_count_per_subscription_conf = os.path.join(current_dir,
-                                                             'widget/public_ip_address_count_by_subscription.yaml')
+public_ip_address_count_by_account_conf = os.path.join(current_dir, 'widget/public_ip_addresses_count_by_account.yaml')
+public_ip_address_count_by_region_conf = os.path.join(current_dir, 'widget/public_ip_addresses_count_by_region.yaml')
+public_ip_address_count_by_subscription_conf = os.path.join(current_dir,
+                                                             'widget/public_ip_addresses_count_by_subscription.yaml')
+public_ip_address_total_count_conf = os.path.join(current_dir, 'widget/public_ip_addresses_total_count.yaml')
 
 
-cst_public_ip_address = CloudServiceTypeResource()
-cst_public_ip_address.name = 'IPAddress'
-cst_public_ip_address.group = 'PublicIPAddresses'
-cst_public_ip_address.service_code = 'Microsoft.Network/publicIPAddresses'
-cst_public_ip_address.labels = ['Networking']
-cst_public_ip_address.is_major = True
-cst_public_ip_address.is_primary = True
-cst_public_ip_address.tags = {
+cst_public_ip_addresses = CloudServiceTypeResource()
+cst_public_ip_addresses.name = 'IPAddress'
+cst_public_ip_addresses.group = 'PublicIPAddresses'
+cst_public_ip_addresses.service_code = 'Microsoft.Network/publicIPAddresses'
+cst_public_ip_addresses.labels = ['Networking']
+cst_public_ip_addresses.is_major = True
+cst_public_ip_addresses.is_primary = True
+cst_public_ip_addresses.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-public-ip-address.svg',
 }
 
-cst_public_ip_address._metadata = CloudServiceTypeMeta.set_meta(
+cst_public_ip_addresses._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
@@ -74,12 +76,14 @@ cst_public_ip_address._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Associated To', key='data.associated_to')
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(public_ip_address_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(public_ip_address_count_per_subscription_conf))
+        ChartWidget.set(**get_data_from_yaml(public_ip_address_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(public_ip_address_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(public_ip_address_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(public_ip_address_total_count_conf))
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_public_ip_address}),
+    CloudServiceTypeResponse({'resource': cst_public_ip_addresses}),
 ]

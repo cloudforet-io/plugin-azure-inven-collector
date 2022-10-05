@@ -1,0 +1,16 @@
+---
+cloud_service_group: SQLDatabases
+cloud_service_type: Database
+name: SQLDatabases Total Count per Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: account
+        fields:
+          - name: value
+            key: account
+            operator: count
+options:
+  chart_type: DONUT

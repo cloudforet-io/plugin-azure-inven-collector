@@ -7,22 +7,24 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
-key_vault_count_per_location_conf = os.path.join(current_dir, 'widget/keyvault_count_per_location.yaml')
-key_vault_count_per_subscription_conf = os.path.join(current_dir, 'widget/keyvault_count_per_subscription.yaml')
-key_vault_key_count_per_location_conf = os.path.join(current_dir, 'widget/keyvault_key_count_per_location.yaml')
 
-cst_key_vault = CloudServiceTypeResource()
-cst_key_vault.name = 'Instance'
-cst_key_vault.group = 'KeyVaults'
-cst_key_vault.service_code = 'Microsoft.KeyVault/vaults'
-cst_key_vault.labels = ['Security']
-cst_key_vault.is_major = True
-cst_key_vault.is_primary = True
-cst_key_vault.tags = {
+key_vaults_count_by_account_conf = os.path.join(current_dir, 'widget/key_vaults_count_by_account.yaml')
+key_vaults_count_by_region_conf = os.path.join(current_dir, 'widget/key_vaults_count_by_region.yaml')
+key_vaults_count_per_subscription_conf = os.path.join(current_dir, 'widget/key_vaults_count_by_subscription.yaml')
+key_vaults_total_count_conf = os.path.join(current_dir, 'widget/key_vaults_total_count.yaml.yaml')
+
+cst_key_vaults = CloudServiceTypeResource()
+cst_key_vaults.name = 'Instance'
+cst_key_vaults.group = 'KeyVaults'
+cst_key_vaults.service_code = 'Microsoft.KeyVault/vaults'
+cst_key_vaults.labels = ['Security']
+cst_key_vaults.is_major = True
+cst_key_vaults.is_primary = True
+cst_key_vaults.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-key-vault.svg',
 }
 
-cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
+cst_key_vaults._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Type', 'instance_type'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -132,14 +134,16 @@ cst_key_vault._metadata = CloudServiceTypeMeta.set_meta(
                         key='data.properties.private_endpoint_connections.private_endpoint.id'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(key_vault_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(key_vault_count_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(key_vault_key_count_per_location_conf))
+        ChartWidget.set(**get_data_from_yaml(key_vaults_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(key_vaults_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(key_vaults_count_per_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(key_vaults_total_count_conf)),
+
     ]
 
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_key_vault}),
+    CloudServiceTypeResponse({'resource': cst_key_vaults}),
 ]

@@ -8,19 +8,24 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-cst_sql_database = CloudServiceTypeResource()
-cst_sql_database.name = 'Database'
-cst_sql_database.group = 'SQLDatabases'
-cst_sql_database.service_code = 'Microsoft.Sql/servers/databases'
-cst_sql_database.labels = ['Database']
-cst_sql_database.is_major = True
-cst_sql_database.is_primary = True
-cst_sql_database.service_code = 'Microsoft.Sql/servers/databases'
-cst_sql_database.tags = {
+sql_databases_count_by_account_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_account.yaml')
+sql_databases_count_by_region_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_region.yaml')
+sql_databases_count_by_subscription_conf = os.path.join(current_dir, 'widget/sql_databases_count_by_subscription.yaml')
+sql_databases_total_count_conf = os.path.join(current_dir, 'widget/sql_databases_total_count.yaml')
+
+cst_sql_databases = CloudServiceTypeResource()
+cst_sql_databases.name = 'Database'
+cst_sql_databases.group = 'SQLDatabases'
+cst_sql_databases.service_code = 'Microsoft.Sql/servers/databases'
+cst_sql_databases.labels = ['Database']
+cst_sql_databases.is_major = True
+cst_sql_databases.is_primary = True
+cst_sql_databases.service_code = 'Microsoft.Sql/servers/databases'
+cst_sql_databases.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-sql-databases.svg',
 }
 
-cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
+cst_sql_databases._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         EnumDyField.data_source('Status', 'data.status', default_state={
             'safe': ['Online', 'Creating', 'Copying', 'Creating', 'OnlineChangingDwPerformanceTiers', 'Restoring',
@@ -126,11 +131,17 @@ cst_sql_database._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Event Hub', key='data.diagnostic_settings_resource.event_hub_name'),
         SearchField.set(name='Log Analytics Workspace', key='data.diagnostic_settings_resource.workspace_id'),
         SearchField.set(name='Creation Date', key='launched_at', data_type='datetime'),
+    ],
+    widget=[
+        ChartWidget.set(**get_data_from_yaml(sql_databases_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_databases_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_databases_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(sql_databases_total_count_conf))
     ]
 
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_sql_database}),
+    CloudServiceTypeResponse({'resource': cst_sql_databases}),
 ]

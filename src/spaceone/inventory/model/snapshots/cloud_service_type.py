@@ -8,24 +8,26 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-snapshot_count_per_location_conf = os.path.join(current_dir, 'widget/snapshot_count_per_location.yaml')
-snapshot_count_per_resource_group_conf = os.path.join(current_dir, 'widget/snapshot_count_per_resource_group.yaml')
-snapshot_count_per_subscription_conf = os.path.join(current_dir, 'widget/snapshot_count_per_subscription.yaml')
-snapshot_total_size_conf = os.path.join(current_dir, 'widget/snapshot_total_size.yaml')
+snapshots_count_by_account_conf = os.path.join(current_dir, 'widget/snapshots_count_by_account.yaml')
+snapshots_count_by_region_conf = os.path.join(current_dir, 'widget/snapshots_count_by_region.yaml')
+snapshots_count_by_resource_group_conf = os.path.join(current_dir, 'widget/snapshots_count_by_resource_group.yaml')
+snapshots_count_by_subscription_conf = os.path.join(current_dir, 'widget/snapshots_count_by_subscription.yaml')
+snapshots_total_count_conf = os.path.join(current_dir, 'widget/snapshots_total_count.yaml')
+snapshots_total_size_conf = os.path.join(current_dir, 'widget/snapshot_total_size.yaml')
 
 
-cst_snapshot = CloudServiceTypeResource()
-cst_snapshot.name = 'Instance'
-cst_snapshot.group = 'Snapshots'
-cst_snapshot.service_code = 'Microsoft.Compute/snapshots'
-cst_snapshot.labels = ['Compute', 'Storage']
-cst_snapshot.is_primary = True
-cst_snapshot.is_major = True
-cst_snapshot.tags = {
+cst_snapshots = CloudServiceTypeResource()
+cst_snapshots.name = 'Instance'
+cst_snapshots.group = 'Snapshots'
+cst_snapshots.service_code = 'Microsoft.Compute/snapshots'
+cst_snapshots.labels = ['Compute', 'Storage']
+cst_snapshots.is_primary = True
+cst_snapshots.is_major = True
+cst_snapshots.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk-snapshot.svg',
 }
 
-cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
+cst_snapshots._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Source disk', 'data.source_disk_name'),
         TextDyField.data_source('Snapshot type', 'data.incremental_display'),
@@ -61,14 +63,16 @@ cst_snapshot._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Launched', key='data.time_created', data_type='datetime')
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(snapshot_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(snapshot_count_per_resource_group_conf)),
-        ChartWidget.set(**get_data_from_yaml(snapshot_count_per_subscription_conf)),
-        CardWidget.set(**get_data_from_yaml(snapshot_total_size_conf))
+        ChartWidget.set(**get_data_from_yaml(snapshots_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(snapshots_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(snapshots_count_by_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(snapshots_count_by_subscription_conf)),
+        CardWidget.set(**get_data_from_yaml(snapshots_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(snapshots_total_size_conf))
     ]
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_snapshot}),
+    CloudServiceTypeResponse({'resource': cst_snapshots}),
 ]
