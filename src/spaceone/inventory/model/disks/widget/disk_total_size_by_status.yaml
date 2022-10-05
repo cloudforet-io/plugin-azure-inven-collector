@@ -1,16 +1,16 @@
 ---
 cloud_service_group: Disks
 cloud_service_type: Disk
-name: Disk Total Size per Location
+name: Disk Total Size by Status
 query:
   aggregate:
     - group:
         keys:
           - name: name
-            key: region_code
+            key: data.disk_state
         fields:
           - name: value
             key: instance_size
             operator: sum
 options:
-  chart_type: COLUMN
+  chart_type: DONUT

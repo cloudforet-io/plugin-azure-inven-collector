@@ -8,8 +8,9 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-public_ip_address_count_per_location_conf = os.path.join(current_dir, 'widget/public_ip_address_count_per_location.yaml')
-public_ip_address_count_per_subscription_conf = os.path.join(current_dir, 'widget/public_ip_address_count_per_subscription.yaml')
+public_ip_address_count_per_location_conf = os.path.join(current_dir, 'widget/public_ip_address_count_by_location.yaml')
+public_ip_address_count_per_subscription_conf = os.path.join(current_dir,
+                                                             'widget/public_ip_address_count_by_subscription.yaml')
 
 
 cst_public_ip_address = CloudServiceTypeResource()
@@ -70,6 +71,7 @@ cst_public_ip_address._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='IP Address Assignment', key='data.public_ip_allocation_method'),
         SearchField.set(name='Idle Timeout(Minutes)', key='data.idle_timeout_in_minutes', data_type='integer'),
         SearchField.set(name='DNS Name Label(Optional)', key='data.dns_settings.domain_name_label'),
+        SearchField.set(name='Associated To', key='data.associated_to')
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(public_ip_address_count_per_location_conf)),

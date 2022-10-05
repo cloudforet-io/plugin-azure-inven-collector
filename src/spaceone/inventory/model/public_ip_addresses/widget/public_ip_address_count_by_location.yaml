@@ -1,16 +1,16 @@
 ---
 cloud_service_group: PublicIPAddresses
 cloud_service_type: IPAddress
-name: PublicIPAddress Total Count per Subscription
+name: PublicIPAddress Total Count by Location
 query:
   aggregate:
     - group:
         keys:
           - name: name
-            key: account
+            key: region_code
         fields:
           - name: value
-            key: account
+            key: region_code
             operator: count
 options:
-  chart_type: DONUT
+  chart_type: COLUMN

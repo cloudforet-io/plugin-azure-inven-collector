@@ -91,7 +91,7 @@ class MySQLServersManager(AzureManager):
 
                 # Must set_region_code method for region collection
                 self.set_region_code(mysql_server_data['location'])
-                _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_resource.to_primitive()}')
+                # _LOGGER.debug(f'[MYSQL SERVER INFO] {mysql_server_resource.to_primitive()}')
                 mysql_server_responses.append(MySQLServerResponse({'resource': mysql_server_resource}))
 
             except Exception as e:

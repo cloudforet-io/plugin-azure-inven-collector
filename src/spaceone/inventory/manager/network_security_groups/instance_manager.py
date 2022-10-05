@@ -41,6 +41,7 @@ class NetworkSecurityGroupsManager(AzureManager):
         network_security_group_responses = []
         error_responses = []
         network_security_groups = network_security_group_conn.list_all_network_security_groups()
+        network_interfaces = [self.convert_nested_dictionary(ni) for ni in network_security_group_conn.list_all_network_interfaces()]
 
         for network_security_group in network_security_groups:
             network_security_group_id = ''
@@ -81,6 +82,13 @@ class NetworkSecurityGroupsManager(AzureManager):
                         'virtual_machines_display': virtual_machines_display_str
                     })
                 '''
+
+                virtual_machines_display_str = self.get_virtual_machine_name(network_interfaces, network_security_group_id)
+                if virtual_machines_display_str is not None:
+                    network_security_group_dict.update({
+                        'virtual_machines_display': virtual_machines_display_str
+                    })
+
                 # Change Subnet models to ID
                 if network_security_group_dict.get('network_interfaces') is not None:
                     self.replace_subnet_model_to_id(network_security_group_dict['network_interfaces'])
@@ -225,4 +233,14 @@ class NetworkSecurityGroupsManager(AzureManager):
     def get_virtual_network(subnet_id):
         virtual_network = subnet_id.split('/')[8]
         return virtual_network
+
+    @staticmethod
+    def get_virtual_machine_name(network_interfaces, network_security_group_id):
+        virtual_machine_name = None
+
+        for network_interface in network_interfaces:
+            if network_interface['network_security_group']['id'].split('/')[-1] == network_security_group_id.split('/')[-1]:
+                virtual_machine_name = network_interface['virtual_machine']['id'].split('/')[-1]
+                return virtual_machine_name
+        return virtual_machine_name
 

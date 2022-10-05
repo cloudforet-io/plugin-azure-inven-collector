@@ -12,11 +12,12 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 DISK
 """
 disk_total_size_conf = os.path.join(current_dir, 'widget/disk_total_size.yaml')
-disk_total_size_per_location_conf = os.path.join(current_dir, 'widget/disk_total_size_per_location.yaml')
-disk_total_size_per_subscription_conf = os.path.join(current_dir, 'widget/disk_total_size_per_subscription.yaml')
-disk_count_per_resource_group_conf = os.path.join(current_dir, 'widget/disk_count_per_resource_group.yaml')
-disk_total_size_per_status_conf = os.path.join(current_dir, 'widget/disk_total_size_per_status.yaml')
-disk_total_size_per_type_conf = os.path.join(current_dir, 'widget/disk_total_size_per_type.yaml')
+disk_total_count_conf = os.path.join(current_dir, 'widget/disk_total_count.yaml')
+disk_total_size_per_location_conf = os.path.join(current_dir, 'widget/disk_total_size_by_region.yaml')
+disk_total_size_per_subscription_conf = os.path.join(current_dir, 'widget/disk_total_size_by_subscription.yaml')
+disk_count_per_resource_group_conf = os.path.join(current_dir, 'widget/disk_count_by_resource_group.yaml')
+disk_total_size_per_status_conf = os.path.join(current_dir, 'widget/disk_total_size_by_status.yaml')
+disk_total_size_per_type_conf = os.path.join(current_dir, 'widget/disk_total_size_by_type.yaml')
 
 cst_disk = CloudServiceTypeResource()
 cst_disk.group = 'Disks'
@@ -76,9 +77,10 @@ cst_disk._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Disk IOPS', key='data.disk_iops_read_write', data_type='integer'),
         SearchField.set(name='OS Type', key='data.os_type', data_type='string'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
-        SearchField.set(name='Creation Time', key='data.time_created', data_type='datetime'),
+        SearchField.set(name='Launched', key='data.time_created', data_type='datetime'),
     ],
     widget=[
+        CardWidget.set(**get_data_from_yaml(disk_total_count_conf)),
         CardWidget.set(**get_data_from_yaml(disk_total_size_conf)),
         ChartWidget.set(**get_data_from_yaml(disk_total_size_per_location_conf)),
         ChartWidget.set(**get_data_from_yaml(disk_total_size_per_subscription_conf)),

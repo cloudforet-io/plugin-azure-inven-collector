@@ -223,7 +223,7 @@ cst_sql_server._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Elastic Pool Resource Group', key='data.elastic_pools.resource_group_display'),
         SearchField.set(name='Per DB Settings', key='data.elastic_pools.per_db_settings_display'),
         SearchField.set(name='Pricing Tier', key='data.elastic_pools.pricing_tier_display'),
-        SearchField.set(name='# of DBs', key='data.elastic_pools.number_of_databases', data_type='integer'),
+        SearchField.set(name='Number of DBs', key='data.elastic_pools.number_of_databases', data_type='integer'),
         SearchField.set(name='Elastic Pool Unit', key='data.elastic_pools.unit_display'),
         SearchField.set(name='Elastic Pool Server Name', key='data.elastic_pools.server_name_display'),
         SearchField.set(name='Elastic Pool Resource Configuration', key='data.elastic_pools.pricing_tier_display'),

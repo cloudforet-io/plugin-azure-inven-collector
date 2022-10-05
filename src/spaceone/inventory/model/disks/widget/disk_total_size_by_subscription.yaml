@@ -1,15 +1,16 @@
 ---
 cloud_service_group: Disks
 cloud_service_type: Disk
-name: Disk Total Count per Resource Group
+name: Disk Total Size by Subscription
 query:
   aggregate:
     - group:
         keys:
           - name: name
-            key: data.resource_group
+            key: account
         fields:
           - name: value
-            operator: count
+            key: instance_size
+            operator: sum
 options:
-  chart_type: DONUT
+  chart_type: COLUMN

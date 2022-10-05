@@ -182,7 +182,7 @@ class ApplicationGatewaysManager(AzureManager):
                     'instance_type': application_gateway_data.sku.name,
                     'account': application_gateway_data.subscription_id
                 })
-                _LOGGER.debug(f'[APPLICATION GATEWAYS INFO] {application_gateway_resource.to_primitive()}')
+                # _LOGGER.debug(f'[APPLICATION GATEWAYS INFO] {application_gateway_resource.to_primitive()}')
 
                 # Must set_region_code method for region collection
                 self.set_region_code(application_gateway_data['location'])
@@ -200,7 +200,7 @@ class ApplicationGatewaysManager(AzureManager):
         public_ip_address_obj = application_gateway_conn.get_public_ip_addresses(resource_group_name, pip_name)
         public_ip_address_dict = self.convert_nested_dictionary(public_ip_address_obj)
 
-        _LOGGER.debug(f'[Public IP Address]{public_ip_address_dict}')
+        # _LOGGER.debug(f'[Public IP Address]{public_ip_address_dict}')
 
         return public_ip_address_dict
 

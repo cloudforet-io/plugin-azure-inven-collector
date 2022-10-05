@@ -1,18 +1,16 @@
 ---
 cloud_service_group: NetworkSecurityGroups
 cloud_service_type: Instance
-name: NetworkSecurityGroup Outbound Rule Total Count per Subscription
+name: NetworkSecurityGroup Total Count by Subscription
 query:
   aggregate:
-    - unwind:
-        path: data.outbound_security_rules
     - group:
         keys:
           - name: name
             key: account
         fields:
           - name: value
-            key: data.outbound_security_rules
+            key: account
             operator: count
 options:
   chart_type: DONUT

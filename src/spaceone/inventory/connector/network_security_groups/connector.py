@@ -16,6 +16,9 @@ class NetworkSecurityGroupsConnector(AzureConnector):
     def list_all_network_security_groups(self):
         return self.network_client.network_security_groups.list_all()
 
+    def list_all_network_interfaces(self):
+        return self.network_client.network_interfaces.list_all()
+
     def get_network_interfaces(self, network_interface_name, resource_group):
         return self.network_client.network_interfaces.get(network_interface_name=network_interface_name, resource_group_name=resource_group)
 
