@@ -1,4 +1,4 @@
-<h1 align="center">Microsoft Azure Cloud Service Collector</h1>  
+<h1 align="center">Microsoft Azure Collector</h1>  
 
 <br/>  
 <div align="center" style="display:flex;">  
@@ -13,11 +13,11 @@
 #### Plugin to collect Microsoft Azure Cloud Services
 
 
-> SpaceONE's [plugin-azure-cloud-services](https://github.com/spaceone-dev/plugin-azure-cloud-services) is a convenient tool to 
+> SpaceONE's [plugin-azure-cloud-services](https://github.com/cloudforet-io/plugin-azure-inven-collector) is a convenient tool to 
 get cloud service data from Azure Cloud Services. 
 
 
-Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-cloud-services)
+Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-inven-collector)
 > Latest stable version : 1.2.15
 
 Please contact us if you need any further information. 
