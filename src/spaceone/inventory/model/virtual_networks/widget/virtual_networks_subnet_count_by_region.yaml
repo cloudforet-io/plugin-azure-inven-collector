@@ -1,7 +1,7 @@
 ---
 cloud_service_group: VirtualNetworks
 cloud_service_type: Instance
-name: Subnet Count per Location
+name: Subnet Count by Region
 query:
   aggregate:
    - unwind:

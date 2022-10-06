@@ -8,22 +8,22 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-vmscaleset_count_per_location_conf = os.path.join(current_dir, 'widget/vmscaleset_count_per_location.yaml')
-vmscaleset_count_per_subscription_conf = os.path.join(current_dir, 'widget/vmscaleset_count_per_subscription.yaml')
-vmscaleset_total_vm_count_conf = os.path.join(current_dir, 'widget/vmscaleset_total_vm_count.yaml')
+vm_scale_sets_count_by_region_conf = os.path.join(current_dir, 'widget/vm_scale_sets_count_by_region.yaml')
+vm_scale_sets_count_by_subscription_conf = os.path.join(current_dir, 'widget/vm_scale_sets_count_by_subscription.yaml')
+vm_scale_sets_total_instance_count_conf = os.path.join(current_dir, 'widget/vm_scale_sets_total_instance_count.yaml')
 
-cst_vm_scale_set = CloudServiceTypeResource()
-cst_vm_scale_set.name = 'ScaleSet'
-cst_vm_scale_set.group = 'VMScaleSets'
-cst_vm_scale_set.service_code = 'Microsoft.Compute/virtualMachineScaleSets'
-cst_vm_scale_set.labels = ['Compute']
-cst_vm_scale_set.is_major = True
-cst_vm_scale_set.is_primary = True
-cst_vm_scale_set.tags = {
+cst_vm_scale_sets = CloudServiceTypeResource()
+cst_vm_scale_sets.name = 'ScaleSet'
+cst_vm_scale_sets.group = 'VMScaleSets'
+cst_vm_scale_sets.service_code = 'Microsoft.Compute/virtualMachineScaleSets'
+cst_vm_scale_sets.labels = ['Compute']
+cst_vm_scale_sets.is_major = True
+cst_vm_scale_sets.is_primary = True
+cst_vm_scale_sets.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-vm-scale-set.svg',
 }
 
-cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
+cst_vm_scale_sets._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Instance Count', 'data.instance_count'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
@@ -92,14 +92,14 @@ cst_vm_scale_set._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Fault Domains (count)', key='data.platform_fault_domain_count', data_type='integer'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(vmscaleset_count_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(vmscaleset_count_per_subscription_conf)),
-        CardWidget.set(**get_data_from_yaml(vmscaleset_total_vm_count_conf))
+        ChartWidget.set(**get_data_from_yaml(vm_scale_sets_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(vm_scale_sets_count_by_subscription_conf)),
+        CardWidget.set(**get_data_from_yaml(vm_scale_sets_total_instance_count_conf))
     ]
 
 )
 
 
 CLOUD_SERVICE_TYPES = [
-    CloudServiceTypeResponse({'resource': cst_vm_scale_set}),
+    CloudServiceTypeResponse({'resource': cst_vm_scale_sets}),
 ]

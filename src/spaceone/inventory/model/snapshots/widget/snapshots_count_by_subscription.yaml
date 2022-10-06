@@ -10,6 +10,7 @@ query:
             key: account
         fields:
           - name: value
+            key: account
             operator: count
 options:
   chart_type: DONUT

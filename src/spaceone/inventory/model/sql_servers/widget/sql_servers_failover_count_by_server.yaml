@@ -1,7 +1,7 @@
 ---
 cloud_service_group: SQLServers
 cloud_service_type: Server
-name: SQLServers Failover Count by Region
+name: Failover Count by Region
 query:
   aggregate:
     - unwind:

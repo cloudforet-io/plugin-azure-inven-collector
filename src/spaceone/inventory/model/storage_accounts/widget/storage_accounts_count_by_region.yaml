@@ -1,7 +1,7 @@
 ---
 cloud_service_group: StorageAccounts
 cloud_service_type: Instance
-name: StorageAccounts Total Count per Location
+name: Total Count by Region
 query:
   aggregate:
     - group:
@@ -10,7 +10,11 @@ query:
             key: region_code
         fields:
           - name: value
-            key: region_code
             operator: count
 options:
   chart_type: COLUMN
+  name_options:
+    key: name
+    reference:
+      resource_type: inventory.Region
+      reference_key: region_code

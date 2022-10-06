@@ -1,7 +1,7 @@
 ---
 cloud_service_group: VirtualNetworks
 cloud_service_type: Instance
-name: VirtualNetworks Total Count by Region
+name: Total Count by Region
 query:
   aggregate:
     - group:
@@ -9,8 +9,12 @@ query:
           - name: name
             key: region_code
         fields:
-          - name: location
-            key: region_code
+          - name: value
             operator: count
 options:
   chart_type: COLUMN
+  name_options:
+    key: name
+    reference:
+      resource_type: inventory.Region
+      reference_key: region_code
