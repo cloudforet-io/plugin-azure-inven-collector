@@ -1,7 +1,7 @@
 ---
 cloud_service_group: VirtualNetworks
 cloud_service_type: Instance
-name: Subnet Count per Subscription
+name: Subnet Count by Subscription
 query:
   aggregate:
    - unwind:

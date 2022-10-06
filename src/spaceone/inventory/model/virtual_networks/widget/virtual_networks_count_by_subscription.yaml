@@ -1,7 +1,7 @@
 ---
 cloud_service_group: VirtualNetworks
 cloud_service_type: Instance
-name: VirtualNetworks Total Count per Subscription
+name: Total Count by Subscription
 query:
   aggregate:
     - group:

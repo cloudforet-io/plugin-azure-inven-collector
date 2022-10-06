@@ -1,7 +1,7 @@
 ---
 cloud_service_group: PostgreSQLServers
 cloud_service_type: Server
-name: PostgreSQLServers Inbound Total Count by Tier
+name: Inbound Total Count by Tier
 query:
   aggregate:
     - group:

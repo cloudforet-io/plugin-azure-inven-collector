@@ -1,7 +1,7 @@
 ---
 cloud_service_group: LoadBalancers
 cloud_service_type: Instance
-name: LoadBalancers Backend Pool VM Count by Region
+name: Backend Pool VM Count by Region
 query:
   aggregate:
    - unwind:

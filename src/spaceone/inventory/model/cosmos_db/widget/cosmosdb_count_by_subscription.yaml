@@ -1,12 +1,12 @@
 ---
 cloud_service_group: CosmosDB
 cloud_service_type: Instance
-name: AzureCosmosDB Total Count by Subscription
+name: Total Count by Subscription
 query:
   aggregate:
     - group:
         keys:
-          - name: account
+          - name: name
             key: account
         fields:
           - name: value

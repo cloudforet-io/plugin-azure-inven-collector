@@ -1,7 +1,7 @@
 ---
 cloud_service_group: SQLServers
 cloud_service_type: Server
-name: SQLServers Total Count by Subscription
+name: Total Count by Subscription
 query:
   aggregate:
     - group:
