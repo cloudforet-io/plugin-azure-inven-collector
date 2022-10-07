@@ -19,4 +19,3 @@ options:
     reference:
       resource_type: inventory.Region
       reference_key: region_code
-å
