@@ -1,7 +1,7 @@
 ---
 cloud_service_group: Snapshots
 cloud_service_type: Instance
-name: Snapshots Total Count by Subscription
+name: Snapshots Count by Subscription
 query:
   aggregate:
     - group:

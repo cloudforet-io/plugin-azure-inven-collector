@@ -1,16 +1,19 @@
 ---
 cloud_service_group: Disks
 cloud_service_type: Disk
-name: Disks Total Size by Status
+name: Count By Account
 query:
   aggregate:
     - group:
         keys:
           - name: name
-            key: data.disk_state
+            key: account
         fields:
           - name: value
-            key: instance_size
-            operator: sum
+            operator: count
+  filter:
+    - key: account
+      value: true
+      operator: exists
 options:
   chart_type: DONUT

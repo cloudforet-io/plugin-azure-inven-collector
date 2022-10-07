@@ -1,15 +1,16 @@
 ---
 cloud_service_group: Disks
 cloud_service_type: Disk
-name: Count by Resource Group
+name: Size by Status
 query:
   aggregate:
     - group:
         keys:
           - name: name
-            key: data.resource_group
+            key: data.disk_state
         fields:
           - name: value
-            operator: count
+            key: instance_size
+            operator: sum
 options:
   chart_type: DONUT

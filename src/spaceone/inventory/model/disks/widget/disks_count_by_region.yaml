@@ -1,16 +1,20 @@
 ---
 cloud_service_group: Disks
 cloud_service_type: Disk
-name: Disks Total Size by Subscription
+name: Count by Region
 query:
   aggregate:
     - group:
         keys:
           - name: name
-            key: account
+            key: region_code
         fields:
           - name: value
-            key: instance_size
-            operator: sum
+            operator: count
 options:
   chart_type: COLUMN
+  name_options:
+    key: name
+    reference:
+      resource_type: inventory.Region
+      reference_key: region_code

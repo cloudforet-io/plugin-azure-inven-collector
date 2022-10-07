@@ -114,6 +114,7 @@ class SnapshotsManager(AzureManager):
                     'reference': ReferenceModel(snapshot_data.reference()),
                     'tags': _tags,
                     'name': snapshot_data.name,
+                    'account': snapshot_data.subscription_id,
                     'instance_size': float(snapshot_data.disk_size_gb),
                     'instance_type': snapshot_data.sku.name
                 })

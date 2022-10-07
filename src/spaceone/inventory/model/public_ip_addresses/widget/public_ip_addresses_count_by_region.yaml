@@ -1,7 +1,7 @@
 ---
 cloud_service_group: PublicIPAddresses
 cloud_service_type: IPAddress
-name: Total Count by Region
+name: Count by Region
 query:
   aggregate:
     - group:
