@@ -1,7 +1,7 @@
 ---
 cloud_service_group: VMScaleSets
 cloud_service_type: ScaleSet
-name: Total Instance Count
+name: Instance Count
 query:
   aggregate:
    - group:

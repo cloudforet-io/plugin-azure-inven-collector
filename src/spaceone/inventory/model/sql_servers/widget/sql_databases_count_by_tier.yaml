@@ -1,7 +1,7 @@
 ---
 cloud_service_group: SQLServers
 cloud_service_type: Server
-name: Databases Total Count by Server
+name: Databases Count by Server
 query:
   aggregate:
     - unwind:

@@ -1,7 +1,7 @@
 ---
 cloud_service_group: PostgreSQLServers
 cloud_service_type: Server
-name: Total Count by Subscription
+name: Count by Subscription
 query:
   aggregate:
     - group:

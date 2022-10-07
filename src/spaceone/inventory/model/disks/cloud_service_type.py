@@ -11,13 +11,15 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 """
 DISK
 """
+disks_count_by_account_conf = os.path.join(current_dir, 'widget/disks_count_by_account.yaml')
+disks_count_by_region_conf = os.path.join(current_dir, 'widget/disks_count_by_region.yaml')
+disks_count_by_resource_group_conf = os.path.join(current_dir, 'widget/disks_count_by_resource_group.yaml')
+disks_size_by_region_conf = os.path.join(current_dir, 'widget/disks_size_by_region.yaml')
+disks_size_by_status_conf = os.path.join(current_dir, 'widget/disks_size_by_status.yaml')
+disks_size_by_subscription_conf = os.path.join(current_dir, 'widget/disks_size_by_subscription.yaml')
+disks_size_by_type_conf = os.path.join(current_dir, 'widget/disks_size_by_type.yaml')
 disks_total_size_conf = os.path.join(current_dir, 'widget/disks_total_size.yaml')
 disks_total_count_conf = os.path.join(current_dir, 'widget/disks_total_count.yaml')
-disks_total_size_per_location_conf = os.path.join(current_dir, 'widget/disks_total_size_by_region.yaml')
-disks_total_size_per_subscription_conf = os.path.join(current_dir, 'widget/disks_total_size_by_subscription.yaml')
-disks_count_per_resource_group_conf = os.path.join(current_dir, 'widget/disks_count_by_resource_group.yaml')
-disks_total_size_per_status_conf = os.path.join(current_dir, 'widget/disks_total_size_by_status.yaml')
-disks_total_size_per_type_conf = os.path.join(current_dir, 'widget/disks_total_size_by_type.yaml')
 
 cst_disks = CloudServiceTypeResource()
 cst_disks.group = 'Disks'
@@ -82,11 +84,13 @@ cst_disks._metadata = CloudServiceTypeMeta.set_meta(
     widget=[
         CardWidget.set(**get_data_from_yaml(disks_total_count_conf)),
         CardWidget.set(**get_data_from_yaml(disks_total_size_conf)),
-        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_location_conf)),
-        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_subscription_conf)),
-        ChartWidget.set(**get_data_from_yaml(disks_count_per_resource_group_conf)),
-        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_status_conf)),
-        ChartWidget.set(**get_data_from_yaml(disks_total_size_per_type_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_count_by_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_size_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_size_by_status_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_size_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(disks_size_by_type_conf))
     ]
 )
 

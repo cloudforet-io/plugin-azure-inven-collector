@@ -1,7 +1,7 @@
 ---
 cloud_service_group: MySQLServers
 cloud_service_type: Server
-name: Total Count by Tier
+name: Count by Tier
 query:
   aggregate:
     - group:

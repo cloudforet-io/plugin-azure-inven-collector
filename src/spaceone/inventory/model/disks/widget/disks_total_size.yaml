@@ -1,7 +1,7 @@
 ---
 cloud_service_group: Disks
 cloud_service_type: Disk
-name: Disks Total Size
+name: Total Size
 query:
   aggregate:
     - group:

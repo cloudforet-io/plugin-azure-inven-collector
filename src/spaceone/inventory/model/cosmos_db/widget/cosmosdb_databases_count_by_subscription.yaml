@@ -1,7 +1,7 @@
 ---
 cloud_service_group: CosmosDB
 cloud_service_type: Instance
-name: Databases Total Count by Region
+name: Databases Count by Region
 query:
   aggregate:
     - unwind:

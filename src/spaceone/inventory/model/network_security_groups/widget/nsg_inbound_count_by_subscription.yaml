@@ -1,7 +1,7 @@
 ---
 cloud_service_group: NetworkSecurityGroups
 cloud_service_type: Instance
-name: Inbound Rule Total Count by Subscription
+name: Inbound Rule Count by Subscription
 query:
   aggregate:
     - unwind:
