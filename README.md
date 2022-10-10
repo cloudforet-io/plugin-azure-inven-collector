@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.2.15-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.4.0-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-inven-collector)
-> Latest stable version : 1.2.15
+> Latest stable version : 1.4.0
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -42,6 +42,7 @@ Please contact us if you need any further information.
 | Server           | [SQL Servers](#sql-servers)                         |
 | Database           | [SQL Databases](#sql-databases)                     |
 | Storage            | [Storage Accounts](#storage-accounts)               |
+| Instance            | [Virtual Machines](#virtual-machines)               |
 | Instance            | [Virtual Networks](#virtual-networks)               |
 | ScaleSet            | [VM ScaleSets](#virtual-machine-scale-sets)         |
     
@@ -75,25 +76,25 @@ https://management.azure.com
 
 The following is a list of services being collected and service code information.
 
-|No.| Service name            | Service Code                         |
-|---|-------------------------|--------------------------------------|
-|1| Application Gateways    | Microsoft.Network/applicationGateways |
-|2| Cosmos DB               | Microsoft.DocumentDB/databaseAccounts |
-|3| Disks                   | Microsoft.Compute/disks              |
-|4| Key Vaults              | Microsoft.KeyVault/vaults            |
-|5| Load Balancers          | Microsoft.Network/loadBalancers      |
-|6| MySQL Servers           | Microsoft.DBforMySQL/servers         |
-|7| SQL Servers             | Microsoft.Sql/servers                |
-|8| SQL Databases           | Microsoft.Sql/servers/databases      |
-|9| NAT Gateways            | Microsoft.Network/natGateways        |
-|10| Network Security Groups | Microsoft.Network/networkSecurityGroups |
-|11| PostgreSQL Servers      | Microsoft.DBforPostgreSQL/servers    |
-|12| Public IP Addresses     | Microsoft.Network/publicIPAddresses  |
-|13| Snapshots               | Microsoft.Compute/snapshots          |
-|14| Storage Accounts        | Microsoft.Storage/storageAccounts    |
-|15| Virtual Networks        | Microsoft.Network/virtualNetworks    |
-|16| VM ScaleSets            | Microsoft.Compute/virtualMachineScaleSets |
-|17| Virtual Machines        | Microsoft.Compute/virtualMachines    |
+| No. | Service name            | Service Code                         |
+|-----|-------------------------|--------------------------------------|
+| 1   | Application Gateways    | Microsoft.Network/applicationGateways |
+| 2   | Cosmos DB               | Microsoft.DocumentDB/databaseAccounts |
+| 3   | Disks                   | Microsoft.Compute/disks              |
+| 4   | Key Vaults              | Microsoft.KeyVault/vaults            |
+| 5   | Load Balancers          | Microsoft.Network/loadBalancers      |
+| 6   | MySQL Servers           | Microsoft.DBforMySQL/servers         |
+| 7   | SQL Servers             | Microsoft.Sql/servers                |
+| 8   | SQL Databases           | Microsoft.Sql/servers/databases      |
+| 9   | NAT Gateways            | Microsoft.Network/natGateways        |
+| 10  | Network Security Groups | Microsoft.Network/networkSecurityGroups |
+| 11  | PostgreSQL Servers      | Microsoft.DBforPostgreSQL/servers    |
+| 12  | Public IP Addresses     | Microsoft.Network/publicIPAddresses  |
+| 13  | Snapshots               | Microsoft.Compute/snapshots          |
+| 14  | Storage Accounts        | Microsoft.Storage/storageAccounts    |
+| 15  | Virtual Machines        | Microsoft.Compute/virtualMachines    |
+| 16  | Virtual Networks        | Microsoft.Network/virtualNetworks    |
+| 17  | VM ScaleSets            | Microsoft.Compute/virtualMachineScaleSets |
 ---
 
 ## Authentication Overview
@@ -293,7 +294,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 ### Additional custom roles for SpaceONE collector
 Some of cloud services require several additional IAM settings for collecting resources. <br>
 
-#### [KeyVaults]()
+#### [Key Vaults]()
 
 - KeyVaults
 
@@ -533,8 +534,29 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         - https://docs.microsoft.com/en-us/rest/api/sql/2021-02-01-preview/servers
 
     - Permissions
-        - Microsoft.Sql/servers/*/read
+    ```
+      "Microsoft.Sql/servers/*/read"
+    ```
 
+#### [SQL Databases](https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.operations.databasesoperations?view=azure-python)
+- SQL Databases
+  - Scope
+    - https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.sqlmanagementclient?view=azure-python
+        - servers
+        - databases
+        - sync_groups
+        - sync_agents
+        - replication_links
+        - database_blob_auditing_policies
+  - Permissions
+    ```
+    "Microsoft.Sql/servers/read",
+    "Microsoft.Sql/servers/syncAgents/read",
+    "Microsoft.Sql/servers/replicationLinks/read",
+    "Microsoft.Sql/servers/databases/read",
+    "Microsoft.Sql/servers/databases/auditingSettings/read",
+    "Microsoft.Sql/servers/databases/syncGroups/read"
+    ```
 #### [Load Balancers](https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall)
 - Load Balancer
     - Scope 
@@ -677,6 +699,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
     
     - SpaceONE Inventory Collector only supports ``Single Servers`` type. 
 
+
 #### [PostgreSQL Servers](https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list)
 - PostgreSQL Servers
     - Scope
@@ -714,6 +737,7 @@ The cloud_service_types items that can be specified are as follows.
 {
     "cloud_service_types": [
         'ApplicationGateways',
+        'CosmosDB',
         'Disks',
         'KeyVaults',
         'LoadBalancers',
@@ -726,9 +750,9 @@ The cloud_service_types items that can be specified are as follows.
         'PublicIPAddresses',
         'Snapshots',
         'StorageAccounts',
+        'VirtualMachines',
         'VirtualNetworks',
         'VMScaleSets',
-        'VirtualMachines'
     ]
 }
 </code>
@@ -776,6 +800,12 @@ The `service_code_mappers` items that can be specified are as follows.
 ---
 
 ## Release Note
+
+### Ver 1.4.0
+* [Merge Azure vm plugin to Azure inventory collector](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/2)
+
+### Ver 1.3.0
+* [Add feature for monitoring metrics](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/190)
 
 ### Ver 1.2.15
 * [Add feature to convert service_code to what you want using options](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/186)
