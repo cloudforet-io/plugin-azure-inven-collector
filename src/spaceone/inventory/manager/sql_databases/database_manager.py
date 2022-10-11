@@ -63,6 +63,9 @@ class SQLDatabasesManager(AzureManager):
                     sql_database_dict = self.convert_nested_dictionary(sql_database)
                     database_name = sql_database_dict['name']
 
+                    import pprint
+                    pprint.pprint(f'sql_database {sql_database_dict}')
+                    print('=============')
                     if sql_database_dict.get('sku'):
                         if sql_database_dict.get('name') != 'master':  # No pricing tier for system database
                             sql_database_dict.update({
@@ -233,10 +236,10 @@ class SQLDatabasesManager(AzureManager):
 
     @staticmethod
     def get_pricing_tier_display(sku_dict):
-        pricing_tier = None
-        if sku_dict.get('capacity') is not None:
+        if sku_dict['name'] in ['Basic', 'Standard', 'Premium']:
+            pricing_tier = f'{sku_dict["tier"]}: {sku_dict["capacity"]} DTU'
+        else:
             pricing_tier = f'{str(sku_dict["tier"])} : {str(sku_dict["family"])} , {str(sku_dict["capacity"])} vCores'
-
         return pricing_tier
 
     @staticmethod
