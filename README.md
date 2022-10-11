@@ -543,11 +543,17 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
   - Scope
     - https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.sqlmanagementclient?view=azure-python
         - servers
+          - list()
         - databases
+          - list_by_server()
         - sync_groups
+          - list_by_database()
         - sync_agents
+          - list_by_server()
         - replication_links
+          - list_by_server()
         - database_blob_auditing_policies
+          - list_by_database()
   - Permissions
     ```
     "Microsoft.Sql/servers/read",
@@ -803,6 +809,10 @@ The `service_code_mappers` items that can be specified are as follows.
 
 ### Ver 1.4.0
 * [Merge Azure vm plugin to Azure inventory collector](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/2)
+* Split SQL Servers to SQL Servers and SQL Databases
+* [Update Azure sdk version](https://github.com/cloudforet-io/plugin-azure-inven-collector/pull/4)
+* Fix Snapshot collecting issue
+* Change cloud_service_name and cloud_service_group
 
 ### Ver 1.3.0
 * [Add feature for monitoring metrics](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/190)
