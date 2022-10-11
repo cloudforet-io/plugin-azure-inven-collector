@@ -63,9 +63,6 @@ class SQLDatabasesManager(AzureManager):
                     sql_database_dict = self.convert_nested_dictionary(sql_database)
                     database_name = sql_database_dict['name']
 
-                    import pprint
-                    pprint.pprint(f'sql_database {sql_database_dict}')
-                    print('=============')
                     if sql_database_dict.get('sku'):
                         if sql_database_dict.get('name') != 'master':  # No pricing tier for system database
                             sql_database_dict.update({
