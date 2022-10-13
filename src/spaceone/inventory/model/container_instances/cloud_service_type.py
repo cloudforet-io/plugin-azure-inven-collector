@@ -30,7 +30,6 @@ cst_container_instances.tags = {
 
 cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Container Group Name', 'name'),
         TextDyField.data_source('Status', 'state'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('OS type', 'data.os_type'),

@@ -72,7 +72,6 @@ class ContainerInstanceResource(ContainerResource):
     account = StringType(serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
-    state = StringType(serialize_when_none=False)
 
 
 class ContainerInstanceResponse(CloudServiceResponse):
