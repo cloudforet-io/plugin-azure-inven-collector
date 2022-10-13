@@ -68,7 +68,6 @@ class ContainerInstancesManager(AzureManager):
                 container_instance_resource = ContainerInstanceResource({
                     'name': container_instance_data.name,
                     'account': container_instance_dict['subscription_id'],
-                    'state': container_instance_data.instance_view.state,
                     'data': container_instance_data,
                     'tags': _tags,
                     'region_code': container_instance_data.location
