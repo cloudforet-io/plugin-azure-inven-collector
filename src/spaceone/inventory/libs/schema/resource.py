@@ -62,5 +62,4 @@ class AzureCloudService(Model):
     resource_group = StringType(serialize_when_none=False)
     subscription_id = StringType(serialize_when_none=False)
     subscription_name = StringType(serialize_when_none=False)
-    tags = ListType(ModelType(AzureTags), default=[])
     azure_monitor = ModelType(AzureMonitorModel, serialize_when_none=False)

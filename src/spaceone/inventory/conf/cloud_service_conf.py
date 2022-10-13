@@ -7,6 +7,7 @@ FILTER_FORMAT = []
 
 CLOUD_SERVICE_GROUP_MAP = {
     'ApplicationGateways': 'ApplicationGatewaysManager',
+    'ContainerInstances': 'ContainerInstancesManager',
     'CosmosDB': 'CosmosDBManager',
     'Disks': 'DisksManager',
     'KeyVaults': 'KeyVaultsManager',
@@ -20,7 +21,8 @@ CLOUD_SERVICE_GROUP_MAP = {
     'PublicIPAddresses': 'PublicIPAddressesManager',
     'Snapshots': 'SnapshotsManager',
     'StorageAccounts': 'StorageAccountsManager',
+    'VirtualMachines': 'VirtualMachinesManager',
     'VirtualNetworks': 'VirtualNetworksManager',
     'VMScaleSets': 'VmScaleSetsManager',
-    'VirtualMachines': 'VirtualMachinesManager',
+
 }
