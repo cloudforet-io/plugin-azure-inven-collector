@@ -18,3 +18,4 @@ azure-keyvault-certificates
 azure-keyvault-secrets
 azure-mgmt-rdbms
 azure-mgmt-cosmosdb
+azure-mgmt-containerinstance

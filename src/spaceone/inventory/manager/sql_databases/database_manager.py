@@ -233,10 +233,10 @@ class SQLDatabasesManager(AzureManager):
 
     @staticmethod
     def get_pricing_tier_display(sku_dict):
-        pricing_tier = None
-        if sku_dict.get('capacity') is not None:
+        if sku_dict['name'] in ['Basic', 'Standard', 'Premium']:
+            pricing_tier = f'{sku_dict["tier"]}: {sku_dict["capacity"]} DTU'
+        else:
             pricing_tier = f'{str(sku_dict["tier"])} : {str(sku_dict["family"])} , {str(sku_dict["capacity"])} vCores'
-
         return pricing_tier
 
     @staticmethod
