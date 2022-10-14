@@ -30,7 +30,7 @@ cst_container_instances.tags = {
 
 cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Status', 'state'),
+        TextDyField.data_source('Status', 'data.instance_view.state'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('OS type', 'data.os_type'),
         TextDyField.data_source('Total Containers', 'data.container_count_display'),
@@ -50,11 +50,13 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         }),
         TextDyField.data_source('FQDN', 'data.ip_address.fqdn', options={
             'is_optional': True
-        })
+        }),
+        TextDyField.data_source('Launched', 'data.time_created', options={
+            'is_optional': True})
     ],
     search=[
         SearchField.set(name='Container Group Name', key='name'),
-        SearchField.set(name='Status', key='state'),
+        SearchField.set(name='Status', key='data.instance_view.state'),
         SearchField.set(name='Resource Group', key='data.resource_group'),
         SearchField.set(name='OS type', key='data.os_type'),
         SearchField.set(name='Total Containers', key='data.container_count_display'),
@@ -64,6 +66,7 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Restart Policy', key='data.restart_policy'),
         SearchField.set(name='IP Address', key='data.ip_address.ip'),
         SearchField.set(name='FQDN', key='data.ip_address.fqdn'),
+        SearchField.set(name='Launched', key='data.time_created')
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(container_instances_count_by_account_conf)),
@@ -72,7 +75,7 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         CardWidget.set(**get_data_from_yaml(container_instances_total_count_conf)),
         CardWidget.set(**get_data_from_yaml(container_instances_total_container_conf)),
         CardWidget.set(**get_data_from_yaml(container_instances_total_vcpu_conf)),
-        CardWidget.set(**get_data_from_yaml(container_instances_total_gpu_conf)),
+        CardWidget.set(**get_data_from_yaml(container_instances_total_memory_conf)),
         CardWidget.set(**get_data_from_yaml(container_instances_total_gpu_conf))
     ]
 )

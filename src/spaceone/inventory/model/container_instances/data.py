@@ -236,7 +236,7 @@ class ContainerInstance(AzureCloudService):  # Main Class
     provisioning_state = StringType(serialize_when_none=False)
     containers = ListType(ModelType(Container), serialize_when_none=False)
     image_registry_credentials = ListType(ModelType(ImageRegistryCredential), serialize_when_none=False)
-    restart_policy = StringType(choices=('ALWAYS', 'NEVER', 'ON_FAILURE'))
+    restart_policy = StringType(choices=('ALWAYS', 'NEVER', 'ON_FAILURE'), serialize_when_none=False)
     ip_address = ModelType(IpAddress, serialize_when_none=False)
     os_type = StringType(choices=('LINUX', 'WINDOWS'))
     volumes = ListType(ModelType(Volume), serialize_when_none=False)
@@ -251,6 +251,7 @@ class ContainerInstance(AzureCloudService):  # Main Class
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
     container_count_display = IntType(serialize_when_none=False)
+    time_created = DateTimeType(serialize_when_none=False)
 
     def reference(self):
         return {
