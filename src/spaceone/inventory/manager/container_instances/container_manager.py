@@ -5,6 +5,7 @@ from spaceone.inventory.connector.container_instances import ContainerInstancesC
 from spaceone.inventory.model.container_instances.cloud_service import *
 from spaceone.inventory.model.container_instances.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.container_instances.data import *
+from spaceone.inventory.libs.schema.base import ReferenceModel
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,7 +30,6 @@ class ContainerInstancesManager(AzureManager):
         """
 
         _LOGGER.debug(f'** Container Instances START **')
-
         start_time = time.time()
         subscription_info = params['subscription_info']
 
@@ -70,7 +70,8 @@ class ContainerInstancesManager(AzureManager):
                     'account': container_instance_dict['subscription_id'],
                     'data': container_instance_data,
                     'tags': _tags,
-                    'region_code': container_instance_data.location
+                    'region_code': container_instance_data.location,
+                    'reference': ReferenceModel(container_instance_data.reference())
                 })
 
                 self.set_region_code(container_instance_data['location'])
