@@ -29,7 +29,7 @@ class CloudServiceResource(Model):
     instance_size = FloatType(serialize_when_none=False)
     account = StringType(serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)
-    tags = DictType(StringType(), StringType(), serialize_when_none=False)
+    tags = DictType(StringType, serialize_when_none=False)
     data = PolyModelType(Model, default=lambda: {})
     reference = ModelType(ReferenceModel)
     region_code = StringType()

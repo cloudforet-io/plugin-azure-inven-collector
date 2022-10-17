@@ -1,7 +1,7 @@
 ---
 cloud_service_group: ContainerInstances
 cloud_service_type: Container
-name: Total Gpu Count
+name: Total GPU Count
 query:
   aggregate:
     - unwind:

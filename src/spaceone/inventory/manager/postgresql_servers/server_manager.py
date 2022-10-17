@@ -25,7 +25,7 @@ class PostgreSQLServersManager(AzureManager):
                         - 'zones' : 'list'
                         - 'subscription_info' :  'dict'
                 Response:
-                    CloudServiceResponse (list) : dictionary of azure cosmosdb data resource information
+                    CloudServiceResponse (list) : dictionary of azure postgresql servers data resource information
                     ErrorResourceResponse (list) : list of error resource information
 
 

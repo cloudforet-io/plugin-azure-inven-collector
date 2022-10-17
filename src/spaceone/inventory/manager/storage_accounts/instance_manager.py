@@ -82,8 +82,7 @@ class StorageAccountsManager(AzureManager):
                     'reference': ReferenceModel(storage_account_data.reference()),
                     'name': storage_account_data.name,
                     'account': storage_account_data.subscription_id,
-                    'instance_type': storage_account_data.sku.tier,
-                    'launched_at': storage_account_data.creation_time
+                    'instance_type': storage_account_data.sku.tier
                 })
 
                 # Must set_region_code method for region collection

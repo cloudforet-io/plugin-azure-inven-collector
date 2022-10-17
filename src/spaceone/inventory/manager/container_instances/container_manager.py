@@ -55,9 +55,9 @@ class ContainerInstancesManager(AzureManager):
 
                 # Update data info in Container's Raw Data
                 for container in container_instance_dict['containers']:
-                    launched_at = container['instance_view']['current_state']['start_time']
-                    if launched_at is not None:
-                        container_instance_dict['launched_at'] = datetime_to_iso8601(launched_at)
+                    _start_time = container['instance_view']['current_state']['start_time']
+                    if _start_time is not None:
+                        container_instance_dict['start_time'] = datetime_to_iso8601(_start_time)
 
                 container_instance_dict.update({
                     'resource_group': self.get_resource_group_from_id(container_instance_id),

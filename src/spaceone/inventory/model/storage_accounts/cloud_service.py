@@ -24,7 +24,7 @@ storage_account_info_meta = ItemDynamicLayout.set_fields('Storage Account', fiel
     TextDyField.data_source('Replication', 'data.sku.name'),
     TextDyField.data_source('Account Kind', 'data.kind'),
     TextDyField.data_source('Provisioning State', 'data.provisioning_state'),
-    DateTimeDyField.data_source('Created', 'launched_at')
+    DateTimeDyField.data_source('Creation Time', 'data.creation_time')
 ])
 
 # TAB - Networking
@@ -102,7 +102,6 @@ class StorageAccountResource(StorageResource):
     account = StringType(serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
-    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class StorageAccountResponse(CloudServiceResponse):

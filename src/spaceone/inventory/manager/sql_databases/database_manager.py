@@ -27,7 +27,7 @@ class SQLDatabasesManager(AzureManager):
                    - 'zones' : 'list'
                    - 'subscription_info' :  'dict'
            Response:
-               CloudServiceResponse (list) : dictionary of azure sql servers data resource information
+               CloudServiceResponse (list) : dictionary of azure sql databases data resource information
                ErrorResourceResponse (list) : list of error resource information
 
         """

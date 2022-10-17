@@ -19,7 +19,7 @@ class ContainerGroupIdentity(Model):
 # Container
 class ContainerPort(Model):
     protocol = StringType(choices=('TCP', 'UDP'), default='TCP')
-    port = IntType(serialize_when_none=False)
+    port = StringType(serialize_when_none=False)
 
 
 class EnvironmentVariable(Model):
@@ -251,7 +251,7 @@ class ContainerInstance(AzureCloudService):  # Main Class
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
     container_count_display = IntType(serialize_when_none=False)
-    time_created = DateTimeType(serialize_when_none=False)
+    start_time = DateTimeType(serialize_when_none=False)
 
     def reference(self):
         return {
