@@ -17,7 +17,7 @@ container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instance
     TextDyField.data_source('Subscription', 'data.subscription_name'),
     TextDyField.data_source('Subscription ID', 'account'),
     TextDyField.data_source('SKU', 'data.sku'),
-    TextDyField.data_source('OS type', 'data'),
+    TextDyField.data_source('OS type', 'data.os_type'),
     TextDyField.data_source('Container count', 'data.container_count_display'),
     TextDyField.data_source('IP Address', 'data.ip_address.ip'),
     TextDyField.data_source('IP Address Type', 'data.ip_address.type'),
@@ -28,9 +28,9 @@ container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instance
 ])
 
 # TAB -Container
-container_instances_info_container = TableDynamicLayout.set_fields('Containers', 'data', fields=[
+container_instances_info_container = TableDynamicLayout.set_fields('Containers', root_path='data', fields=[
     TextDyField.data_source('Name', 'containers.name'),
-    TextDyField.data_source('Container Instance', 'name'),
+    TextDyField.data_source('Container Instance Name', 'name'),
     TextDyField.data_source('Image', 'containers.image'),
     TextDyField.data_source('State', 'containers.instance_view.current_state.state'),
     TextDyField.data_source('Start time', 'containers.instance_view.current_state.start_time'),
@@ -47,7 +47,7 @@ container_instances_info_container = TableDynamicLayout.set_fields('Containers',
 ])
 
 # TAB - Volume
-container_instances_info_volumes = TableDynamicLayout.set_fields('Volumes', 'data', fields=[
+container_instances_info_volumes = TableDynamicLayout.set_fields('Volumes', root_path='data', fields=[
     TextDyField.data_source('Name', 'volumes.name'),
     TextDyField.data_source('Container Instance', 'name'),
     TextDyField.data_source('Volume type', 'containers.volume_mounts.name'),

@@ -7,7 +7,7 @@ query:
     - group:
         fields:
           - name: value
-            key: data.containers
+            key: data.container_count_display
             operator: sum
 options:
   value_options:

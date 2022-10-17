@@ -4,6 +4,8 @@ cloud_service_type: Container
 name: Total Gpu Count
 query:
   aggregate:
+    - unwind:
+        path: data.containers
     - group:
         fields:
           - name: value
