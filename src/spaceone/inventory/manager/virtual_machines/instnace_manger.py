@@ -134,7 +134,8 @@ class VirtualMachinesManager(AzureManager):
                     }),
                     'account': subscription_data['subscription_id'],
                     'instance_type': vm_resource['data']['compute']['instance_type'],
-                    'launched_at': datetime_to_iso8601(vm_resource['data']['compute']['launched_at'])
+                    'launched_at': datetime_to_iso8601(vm_resource['data']['compute']['launched_at']),
+                    'tags': vm.tags
                 })
 
                 self.set_region_code(vm_resource['region_code'])

@@ -71,17 +71,10 @@ class MySQLServersManager(AzureManager):
                         'storage_gb': self.get_storage_gb(mysql_server_dict['storage_profile'].get('storage_mb', ''))
                     })
 
-                # switch tags form
-                tags = mysql_server_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                mysql_server_dict.update({
-                    'tags': _tags
-                })
-
                 mysql_server_data = MySQLServer(mysql_server_dict, strict=False)
                 mysql_server_resource = MySQLServerResource({
                     'data': mysql_server_data,
-                    'tags': _tags,
+                    'tags': mysql_server_dict.get('tags', {}),
                     'region_code': mysql_server_data.location,
                     'reference': ReferenceModel(mysql_server_data.reference()),
                     'name': mysql_server_data.name,

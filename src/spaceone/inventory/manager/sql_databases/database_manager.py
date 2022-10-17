@@ -145,13 +145,6 @@ class SQLDatabasesManager(AzureManager):
                                                                                           database_name=database_name)
                     })
 
-                    # switch tags form
-                    tags = sql_database_dict.get('tags', {})
-                    _tags = self.convert_tag_format(tags)
-                    sql_database_dict.update({
-                        'tags': _tags
-                    })
-
                     sql_database_dict.update({
                         'resource_group': resource_group_name,
                         'subscription_id': subscription_info['subscription_id'],
@@ -168,7 +161,8 @@ class SQLDatabasesManager(AzureManager):
                         'account': subscription_info['subscription_id'],
                         'instance_type': sql_database_data.sku.tier,
                         'instance_size': float(sql_database_data.max_size_gb),
-                        'launched_at': datetime_to_iso8601(sql_database_data.creation_date)
+                        'launched_at': datetime_to_iso8601(sql_database_data.creation_date),
+                        'tags': sql_database_dict.get('tags', {})
                     })
 
                     # Must set_region_code method for region collection

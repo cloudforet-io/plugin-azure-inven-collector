@@ -86,11 +86,6 @@ class KeyVaultsManager(AzureManager):
                     })
 
                 # switch tags form
-                tags = key_vault_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                key_vault_dict.update({
-                    'tags': _tags
-                })
 
                 key_vault_data = KeyVault(key_vault_dict, strict=False)
                 key_vault_resource = KeyVaultResource({
@@ -99,7 +94,8 @@ class KeyVaultsManager(AzureManager):
                     'reference': ReferenceModel(key_vault_data.reference()),
                     'name': key_vault_data.name,
                     'instance_type': key_vault_data.properties.sku.name,
-                    'account': key_vault_data.subscription_id
+                    'account': key_vault_data.subscription_id,
+                    'tags': key_vault_dict.get('tags', {})
                 })
 
                 # Must set_region_code method for region collection

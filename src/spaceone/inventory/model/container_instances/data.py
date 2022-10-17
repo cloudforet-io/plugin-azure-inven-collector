@@ -13,7 +13,7 @@ class ContainerGroupIdentity(Model):
     principal_id = StringType(serialize_when_none=False)
     tenant_id = StringType(serialize_when_none=False)
     type = StringType(choices=('NONE', 'SYSTEM_ASSIGNED', 'SYSTEM_ASSIGNED_USER_ASSIGNED', 'USER_ASSIGNED'), serialize_when_none=False)
-    user_assigned_identities = DictType(StringType, ModelType(UserAssignedIdentity), serialize_when_none=False)
+    user_assigned_identities = DictType(StringType(), ModelType(UserAssignedIdentity), serialize_when_none=False)
 
 
 # Container
@@ -167,8 +167,8 @@ class GitRepoVolume(Model):
 class Volume(Model):
     name = StringType(serialize_when_none=False)
     azure_file = ModelType(AzureFileVolume, serialize_when_none=False)
-    empty_dir = DictType(StringType, StringType)
-    secret = DictType(StringType, StringType, serialize_when_none=False)
+    empty_dir = DictType(StringType(), StringType())
+    secret = DictType(StringType(), StringType(), serialize_when_none=False)
     git_repo = ModelType(GitRepoVolume, serialize_when_none=False)
 
 
@@ -185,7 +185,7 @@ class LogAnalytics(Model):
     workspace_id = StringType(serialize_when_none=False)
     workspace_key = StringType(serialize_when_none=False)
     log_type = StringType(choices=('CONTAINER_INSIGHTS', 'CONTAINER_INSTANCE_LOGS'))
-    metadata = DictType(StringType, StringType, serialize_when_none=False)
+    metadata = DictType(StringType(), StringType(), serialize_when_none=False)
     workspace_resource_id = StringType(serialize_when_none=False)
 
 

@@ -80,13 +80,6 @@ class VirtualNetworksManager(AzureManager):
                         'dhcp_options': dhcp_option_dict
                     })
 
-                # switch tags form
-                tags = vnet_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                vnet_dict.update({
-                    'tags': _tags
-                })
-
                 '''
                 # Get IP Address Range, Count
                 if vnet_dict.get('address_space') is not None:
@@ -102,7 +95,8 @@ class VirtualNetworksManager(AzureManager):
                     'region_code': vnet_data.location,
                     'reference': ReferenceModel(vnet_data.reference()),
                     'name': vnet_data.name,
-                    'account': vnet_data.subscription_id
+                    'account': vnet_data.subscription_id,
+                    'tags': vnet_dict.get('tags', {})
                 })
 
                 # Must set_region_code method for region collection

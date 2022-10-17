@@ -81,20 +81,13 @@ class DisksManager(AzureManager):
                         'managed_by': self.get_attached_vm_name_from_managed_by(managed_by)
                     })
 
-                # switch tags form
-                tags = disk_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                disk_dict.update({
-                    'tags': _tags
-                })
-
                 disk_data = Disk(disk_dict, strict=False)
 
                 disk_resource = DiskResource({
                     'data': disk_data,
                     'region_code': disk_data.location,
                     'reference': ReferenceModel(disk_data.reference()),
-                    'tags': _tags,
+                    'tags': disk_dict.get('tags', {}),
                     'name': disk_data.name,
                     'account': disk_data.subscription_id,
                     'instance_type': disk_data.sku.name,

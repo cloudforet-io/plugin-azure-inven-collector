@@ -68,19 +68,12 @@ class PostgreSQLServersManager(AzureManager):
                                                                                  server_name)
                     })
 
-                # switch tags form
-                tags = postgre_sql_server_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                postgre_sql_server_dict.update({
-                    'tags': _tags
-                })
-
                 postgre_sql_server_data = PostgreSQLServer(postgre_sql_server_dict, strict=False)
                 postgre_sql_server_resource = PostgreSQLServerResource({
                     'data': postgre_sql_server_data,
                     'region_code': postgre_sql_server_data.location,
                     'reference': ReferenceModel(postgre_sql_server_data.reference()),
-                    'tags': _tags,
+                    'tags': postgre_sql_server_dict.get('tags', {}),
                     'name': postgre_sql_server_data.name,
                     'account': postgre_sql_server_data.subscription_id,
                     'instance_type': postgre_sql_server_data.sku.tier,

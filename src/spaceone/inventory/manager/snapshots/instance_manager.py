@@ -100,19 +100,12 @@ class SnapshotsManager(AzureManager):
                         'source_disk_name': self.get_source_disk_name(source_resource_id)
                     })
 
-                # switch tags form
-                tags = snapshot_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                snapshot_dict.update({
-                    'tags': _tags
-                })
-
                 snapshot_data = Snapshot(snapshot_dict, strict=False)
                 snapshot_resource = SnapshotResource({
                     'data': snapshot_data,
                     'region_code': snapshot_data.location,
                     'reference': ReferenceModel(snapshot_data.reference()),
-                    'tags': _tags,
+                    'tags': snapshot_dict.get('tags', {}),
                     'name': snapshot_data.name,
                     'account': snapshot_data.subscription_id,
                     'instance_size': float(snapshot_data.disk_size_gb),

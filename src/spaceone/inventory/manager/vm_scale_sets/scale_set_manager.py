@@ -140,19 +140,12 @@ class VmScaleSetsManager(AzureManager):
                     'autoscale_setting_resource_collection': auto_scale_setting_resource_col_dict
                 })
 
-                # switch tags form
-                tags = vm_scale_set_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                vm_scale_set_dict.update({
-                    'tags': _tags
-                })
-
                 vm_scale_set_data = VirtualMachineScaleSet(vm_scale_set_dict, strict=False)
                 vm_scale_set_resource = VmScaleSetResource({
                     'data': vm_scale_set_data,
                     'region_code': vm_scale_set_data.location,
                     'reference': ReferenceModel(vm_scale_set_data.reference()),
-                    'tags': _tags,
+                    'tags': vm_scale_set_dict.get('tags', {}),
                     'name': vm_scale_set_data.name,
                     'account': vm_scale_set_data.subscription_id,
                     'instance_type': vm_scale_set_data.sku.name

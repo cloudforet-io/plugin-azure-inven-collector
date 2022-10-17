@@ -109,19 +109,12 @@ class SQLServersManager(AzureManager):
                                                                                                   'private_endpoint_connections'])
                     })
 
-                # switch tags form
-                tags = sql_server_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                sql_server_dict.update({
-                    'tags': _tags
-                })
-
                 sql_server_data = SQLServer(sql_server_dict, strict=False)
                 sql_server_resource = SQLServerResource({
                     'data': sql_server_data,
                     'region_code': sql_server_data.location,
                     'reference': ReferenceModel(sql_server_data.reference()),
-                    'tags': _tags,
+                    'tags': sql_server_dict.get('tags', {}),
                     'name': sql_server_data.name,
                     'account': sql_server_data.subscription_id
                 })
