@@ -26,7 +26,7 @@ class ContainerInstancesManager(AzureManager):
                         - 'zones' : 'list'
                         - 'subscription_info' :  'dict'
                 Response:
-                    CloudServiceResponse (list) : list of azure application gateway data resource information
+                    CloudServiceResponse (list) : list of azure container instances data resource information
                     ErrorResourceResponse (list) : list of error resource information
         """
 
@@ -55,9 +55,9 @@ class ContainerInstancesManager(AzureManager):
 
                 # Update data info in Container's Raw Data
                 for container in container_instance_dict['containers']:
-                    start_time = container['instance_view']['current_state']['start_time']
-                    if start_time is not None:
-                        container_instance_dict['time_created'] = datetime_to_iso8601(start_time)
+                    launched_at = container['instance_view']['current_state']['start_time']
+                    if launched_at is not None:
+                        container_instance_dict['launched_at'] = datetime_to_iso8601(launched_at)
 
                 container_instance_dict.update({
                     'resource_group': self.get_resource_group_from_id(container_instance_id),
@@ -67,15 +67,12 @@ class ContainerInstancesManager(AzureManager):
                     'container_count_display': container_instance_dict['containers'].__len__()
                 })
 
-                # switch tags form and update tag info
-                _tags = self.convert_tag_format(container_instance_dict.get('tags', {}))
-
                 container_instance_data = ContainerInstance(container_instance_dict, strict=False)
                 container_instance_resource = ContainerInstanceResource({
                     'name': container_instance_data.name,
                     'account': container_instance_dict['subscription_id'],
                     'data': container_instance_data,
-                    'tags': _tags,
+                    'tags': container_instance_dict.get('tags', {}),
                     'region_code': container_instance_data.location,
                     'reference': ReferenceModel(container_instance_data.reference())
                 })
