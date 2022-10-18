@@ -109,40 +109,17 @@ class SQLServersManager(AzureManager):
                                                                                                   'private_endpoint_connections'])
                     })
 
-                # switch tags form
-                tags = sql_server_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                sql_server_dict.update({
-                    'tags': _tags
-                })
-
                 sql_server_data = SQLServer(sql_server_dict, strict=False)
                 sql_server_resource = SQLServerResource({
                     'data': sql_server_data,
                     'region_code': sql_server_data.location,
                     'reference': ReferenceModel(sql_server_data.reference()),
-                    'tags': _tags,
+                    'tags': sql_server_dict.get('tags', {}),
                     'name': sql_server_data.name,
                     'account': sql_server_data.subscription_id
                 })
                 sql_server_responses.append(SQLServerResponse({'resource': sql_server_resource}))
                 # _LOGGER.debug(f'[SQL SERVER INFO] {sql_server_resource.to_primitive()}')
-
-                for sql_database in sql_server_dict.get('databases', []):
-                    sql_database_data = SQLDatabase(sql_database, strict=False)
-                    sql_database_resource = SQLDatabaseResource({
-                        'data': sql_database_data,
-                        'region_code': sql_database_data.location,
-                        'reference': ReferenceModel(sql_database_data.reference()),
-                        'tags': _tags,
-                        'name': sql_database_data.name,
-                        'account': sql_database_data.subscription_id,
-                        'instance_type': sql_database_data.sku.tier,
-                        'instance_size': float(sql_database_data.max_size_gb),
-                        'launched_at': datetime_to_iso8601(sql_database_data.creation_date)
-                    })
-                    # _LOGGER.debug(f'[SQL DATABASE INFO IN SQL SERVER] {sql_database_resource.to_primitive()}')
-                    sql_server_responses.append(SQLDatabaseResponse({'resource': sql_database_resource}))
 
                 # Must set_region_code method for region collection
                 self.set_region_code(sql_server_data['location'])

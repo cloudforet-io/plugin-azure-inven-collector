@@ -1,7 +1,7 @@
 import os
 from spaceone.inventory.libs.utils import *
 from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, ChartWidget
-from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
@@ -30,8 +30,14 @@ cst_container_instances.tags = {
 
 cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Status', 'data.instance_view.state'),
+        EnumDyField.data_source('Status', 'data.instance_view.state',  default_state={
+            'safe': ['RUNNING'],
+            'warning': ['PENDING', 'REBOOTING', 'SHUTTING-DOWN', 'STOPPING', 'STARTING',
+                        'PROVISIONING', 'STAGING', 'DEALLOCATING', 'REPAIRING'],
+            'alert': ['STOPPED', 'DEALLOCATED', 'SUSPENDED'],
+            'disable': ['TERMINATED']}),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
+        TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('OS type', 'data.os_type'),
         TextDyField.data_source('Total Containers', 'data.container_count_display'),
         TextDyField.data_source('Subscription ID', 'account'),
@@ -51,7 +57,7 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('FQDN', 'data.ip_address.fqdn', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Launched', 'data.time_created', options={
+        TextDyField.data_source('Start Time', 'data.start_time', options={
             'is_optional': True})
     ],
     search=[
@@ -66,7 +72,8 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Restart Policy', key='data.restart_policy'),
         SearchField.set(name='IP Address', key='data.ip_address.ip'),
         SearchField.set(name='FQDN', key='data.ip_address.fqdn'),
-        SearchField.set(name='Launched', key='data.time_created')
+        SearchField.set(name='Start Time', key='data.start_time'),
+        SearchField.set(name='Location', key='data.location')
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(container_instances_count_by_account_conf)),

@@ -168,13 +168,11 @@ class VirtualMachineResource(ComputeResource):
     _metadata = ModelType(CloudServiceMeta, default=virtual_machine_meta, serialized_name='metadata')
     name = StringType()
     account = StringType(serialize_when_none=False)
-    tags = ListType(ModelType(Tags))
     ip_addresses = ListType(StringType())
     server_type = StringType(default='VM')
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)
-
 
 
 class VirtualMachineResponse(CloudServiceResponse):

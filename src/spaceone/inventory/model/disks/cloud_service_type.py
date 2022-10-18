@@ -64,7 +64,10 @@ cst_disks._metadata = CloudServiceTypeMeta.set_meta(
         }),
         TextDyField.data_source('Max Shares', 'data.max_shares', options={
             'is_optional': True
-        })
+        }),
+        TextDyField.data_source('Time Created', 'data.time_created', options={
+            'is_optional': True
+        }),
     ],
     search=[
         SearchField.set(name='Tier', key='data.tier', data_type='string'),
@@ -79,7 +82,7 @@ cst_disks._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Disk IOPS', key='data.disk_iops_read_write', data_type='integer'),
         SearchField.set(name='OS Type', key='data.os_type', data_type='string'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state', data_type='string'),
-        SearchField.set(name='Launched', key='data.time_created', data_type='datetime'),
+        SearchField.set(name='Time Created', key='data.time_created', data_type='datetime'),
     ],
     widget=[
         CardWidget.set(**get_data_from_yaml(disks_total_count_conf)),

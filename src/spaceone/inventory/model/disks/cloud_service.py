@@ -29,7 +29,7 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
     TextDyField.data_source('Subscription Name', 'data.subscription_name'),
     TextDyField.data_source('Encryption Type', 'data.encryption.type'),
     TextDyField.data_source('Networking', 'data.network_access_policy_display'),
-    DateTimeDyField.data_source('Launched', 'data.time_created'),
+    DateTimeDyField.data_source('Time Created', 'data.time_created'),
     TextDyField.data_source('Max Shares', 'data.max_shares')
 
 ])

@@ -63,17 +63,10 @@ class PublicIPAddressesManager(AzureManager):
                             'associated_to': associated_to
                         })
 
-                # switch tags form
-                tags = public_ip_address_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                public_ip_address_dict.update({
-                    'tags': _tags
-                })
-
                 public_ip_address_data = PublicIPAddress(public_ip_address_dict, strict=False)
                 public_ip_address_resource = PublicIPAddressResource({
                     'data': public_ip_address_data,
-                    'tags': _tags,
+                    'tags': public_ip_address_dict.get('tags', {}),
                     'region_code': public_ip_address_data.location,
                     'reference': ReferenceModel(public_ip_address_data.reference()),
                     'name': public_ip_address_data.name,

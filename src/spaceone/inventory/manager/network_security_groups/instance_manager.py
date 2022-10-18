@@ -115,17 +115,10 @@ class NetworkSecurityGroupsManager(AzureManager):
                     'azure_monitor': {'resource_id': network_security_group_id}
                 })
 
-                # switch tags form
-                tags = network_security_group_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                network_security_group_dict.update({
-                    'tags': _tags
-                })
-
                 network_security_group_data = NetworkSecurityGroup(network_security_group_dict, strict=False)
                 network_security_group_resource = NetworkSecurityGroupResource({
                     'data': network_security_group_data,
-                    'tags': _tags,
+                    'tags': network_security_group_dict.get('tags', {}),
                     'region_code': network_security_group_data.location,
                     'reference': ReferenceModel(network_security_group_data.reference()),
                     'name': network_security_group_data.name,

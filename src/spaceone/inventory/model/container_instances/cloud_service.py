@@ -11,6 +11,12 @@ CONTAINER_INSTANCES
 # TAB - Default
 container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instances', fields=[
     TextDyField.data_source('Name', 'name'),
+    EnumDyField.data_source('Status', 'data.instance_view.state', default_state={
+        'safe': ['RUNNING'],
+        'warning': ['PENDING', 'REBOOTING', 'SHUTTING-DOWN', 'STOPPING', 'STARTING',
+                    'PROVISIONING', 'STAGING', 'DEALLOCATING', 'REPAIRING'],
+        'alert': ['STOPPED', 'DEALLOCATED', 'SUSPENDED'],
+        'disable': ['TERMINATED']}),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
     TextDyField.data_source('Region', 'region_code'),
@@ -24,7 +30,9 @@ container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instance
     TextDyField.data_source('FQDN', 'data.ip_address.fqdn'),
     TextDyField.data_source('DNS name label', 'data.ip_address.auto_generated_domain_name_label_scope'),
     TextDyField.data_source('DNS name label scope reuse', 'data.ip_address.dns_name_label'),
-    ListDyField.data_source('Ports', 'data.ip_address.ports.port', options={'delimiter': '<br>'})
+    ListDyField.data_source('Ports', 'data.ip_address.ports.port', options={'delimiter': '<br>'}),
+    TextDyField.data_source('Start Time', 'data.start_time')
+
 ])
 
 # TAB -Container
@@ -33,7 +41,7 @@ container_instances_info_container = TableDynamicLayout.set_fields('Containers',
     TextDyField.data_source('Container Instance Name', 'name'),
     TextDyField.data_source('Image', 'containers.image'),
     TextDyField.data_source('State', 'containers.instance_view.current_state.state'),
-    TextDyField.data_source('Start time', 'containers.instance_view.current_state.start_time'),
+    TextDyField.data_source('Container Start time', 'containers.instance_view.current_state.start_time'),
     TextDyField.data_source('Restart count', 'containers.instance_view.restart_count'),
     TextDyField.data_source('CPU cores', 'containers.resources.requests.cpu', options={
         'translation_id': 'PAGE_SCHEMA.CPU_CORE',
@@ -49,7 +57,7 @@ container_instances_info_container = TableDynamicLayout.set_fields('Containers',
 # TAB - Volume
 container_instances_info_volumes = TableDynamicLayout.set_fields('Volumes', root_path='data', fields=[
     TextDyField.data_source('Name', 'volumes.name'),
-    TextDyField.data_source('Container Instance', 'name'),
+    TextDyField.data_source('Container Instance Name', 'name'),
     TextDyField.data_source('Volume type', 'containers.volume_mounts.name'),
     TextDyField.data_source('Mount path', 'containers.volume_mounts.mount_path')
 

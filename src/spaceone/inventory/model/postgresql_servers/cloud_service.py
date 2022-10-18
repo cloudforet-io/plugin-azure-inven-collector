@@ -125,7 +125,6 @@ class PostgreSQLServerResource(DatabaseResource):
     account = StringType(serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
     instance_size = FloatType(serialize_when_none=False)
-    launched_at = DateTimeType(serialize_when_none=False)
 
 
 class PostgreSQLServerResponse(CloudServiceResponse):

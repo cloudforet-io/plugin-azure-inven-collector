@@ -155,19 +155,12 @@ class LoadBalancersManager(AzureManager):
                         'probes_display': self.get_probe_display_list(load_balancer_dict['probes'])
                     })
 
-                # switch tags form
-                tags = load_balancer_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                load_balancer_dict.update({
-                    'tags': _tags
-                })
-
                 load_balancer_data = LoadBalancer(load_balancer_dict, strict=False)
                 load_balancer_resource = LoadBalancerResource({
                     'data': load_balancer_data,
                     'region_code': load_balancer_data.location,
                     'reference': ReferenceModel(load_balancer_data.reference()),
-                    'tags': _tags,
+                    'tags': load_balancer_dict.get('tags', {}),
                     'name': load_balancer_data.name,
                     'instance_type': load_balancer_data.sku.name,
                     'account': load_balancer_data.subscription_id

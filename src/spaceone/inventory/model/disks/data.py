@@ -86,7 +86,6 @@ class Disk(AzureCloudService):
     network_access_policy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'), serialize_when_none=False)
     network_access_policy_display = StringType()
     tier_display = StringType(default='')
-    launched_at = DateTimeType(serialize_when_none=False)
 
     def reference(self):
         return {

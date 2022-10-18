@@ -165,17 +165,10 @@ class ApplicationGatewaysManager(AzureManager):
 
                             self.update_backend_pool_dict(application_gateway_dict['backend_address_pools'], backend_address_pool_id, rule_name_list)
 
-                # switch tags form
-                tags = application_gateway_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                application_gateway_dict.update({
-                    'tags': _tags
-                })
-
                 application_gateway_data = ApplicationGateway(application_gateway_dict, strict=False)
                 application_gateway_resource = ApplicationGatewayResource({
                     'data': application_gateway_data,
-                    'tags': _tags,
+                    'tags': application_gateway_dict.get('tags', {}),
                     'region_code': application_gateway_data.location,
                     'reference': ReferenceModel(application_gateway_data.reference()),
                     'name': application_gateway_data.name,

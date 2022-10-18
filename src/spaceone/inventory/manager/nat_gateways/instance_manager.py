@@ -96,17 +96,10 @@ class NATGatewaysManager(AzureManager):
                         'subnets': self.get_subnets(nat_gateway_conn, nat_gateway_dict['subnets'])
                     })
 
-                # switch tags form
-                tags = nat_gateway_dict.get('tags', {})
-                _tags = self.convert_tag_format(tags)
-                nat_gateway_dict.update({
-                    'tags': _tags
-                })
-
                 nat_gateway_data = NatGateway(nat_gateway_dict, strict=False)
                 nat_gateway_resource = NatGatewayResource({
                     'data': nat_gateway_data,
-                    'tags': _tags,
+                    'tags': nat_gateway_dict.get('tags', {}),
                     'region_code': nat_gateway_data.location,
                     'reference': ReferenceModel(nat_gateway_data.reference()),
                     'name': nat_gateway_data.name,
