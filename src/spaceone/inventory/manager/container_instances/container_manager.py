@@ -117,6 +117,7 @@ class ContainerInstancesManager(AzureManager):
         for container in containers:
             if container['volume_mounts'] is not None:
                 volume_mounts = container['volume_mounts']
+                container['volume_mount_count_display'] = volume_mounts.__len__()
                 for volume_mount in volume_mounts:
                     if volume_mount['name'] == volume['name']:
                         volume.update({

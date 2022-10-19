@@ -26,8 +26,6 @@ cst_container_instances.is_primary = True
 cst_container_instances.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-container-instances.svg',
 }
-
-
 cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         EnumDyField.data_source('Status', 'data.instance_view.state',  default_state={
@@ -38,7 +36,8 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('OS type', 'data.os_type'),
-        TextDyField.data_source('Total Containers', 'data.container_count_display'),
+        TextDyField.data_source('Container count', 'data.container_count_display'),
+        TextDyField.data_source('Volume count', 'data.volume_count_display'),
         TextDyField.data_source('Subscription ID', 'account'),
         TextDyField.data_source('Subscription Name', 'data.subscription_name'),
         TextDyField.data_source('Provisioning State', 'data.provisioning_state', options={
@@ -57,7 +56,12 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
             'is_optional': True
         }),
         TextDyField.data_source('Start Time', 'data.start_time', options={
-            'is_optional': True})
+            'is_optional': True}),
+        TextDyField.data_source('DNS name label', 'data.ip_address.dns_name_label', options={
+            'is_optional': True}),
+        TextDyField.data_source('DNS name label scope reuse', 'data.ip_address.auto_generated_domain_name_label_scope',
+                                options={'is_optional': True}),
+
     ],
     search=[
         SearchField.set(name='Container Group Name', key='name'),
@@ -72,7 +76,12 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='IP Address', key='data.ip_address.ip'),
         SearchField.set(name='FQDN', key='data.ip_address.fqdn'),
         SearchField.set(name='Start Time', key='data.start_time'),
-        SearchField.set(name='Location', key='data.location')
+        SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='SKU', key='data.sku'),
+        SearchField.set(name='Container count', key='data.container_count_display'),
+        SearchField.set(name='Volume count', key='data.volume_count_display'),
+        SearchField.set(name='DNS name label', key='data.ip_address.dns_name_label'),
+        SearchField.set(name='DNS name label scope reuse', key='data.ip_address.auto_generated_domain_name_label_scope')
     ],
     widget=[
         ChartWidget.set(**get_data_from_yaml(container_instances_count_by_account_conf)),
@@ -85,6 +94,7 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         CardWidget.set(**get_data_from_yaml(container_instances_total_gpu_conf))
     ]
 )
+
 
 CLOUD_SERVICE_TYPES = [
     CloudServiceTypeResponse({'resource': cst_container_instances}),
