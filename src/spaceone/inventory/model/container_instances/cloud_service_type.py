@@ -31,11 +31,10 @@ cst_container_instances.tags = {
 cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         EnumDyField.data_source('Status', 'data.instance_view.state',  default_state={
-            'safe': ['RUNNING'],
-            'warning': ['PENDING', 'REBOOTING', 'SHUTTING-DOWN', 'STOPPING', 'STARTING',
-                        'PROVISIONING', 'STAGING', 'DEALLOCATING', 'REPAIRING'],
-            'alert': ['STOPPED', 'DEALLOCATED', 'SUSPENDED'],
-            'disable': ['TERMINATED']}),
+            'safe': ['Running', 'Succeeded'],
+            'warning': ['Pending'],
+            'alert': ['Stopped', 'Failed'],
+            'disable': []}),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('OS type', 'data.os_type'),
