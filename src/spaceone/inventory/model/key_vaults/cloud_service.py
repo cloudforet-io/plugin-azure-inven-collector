@@ -78,14 +78,9 @@ key_vault_networking = SimpleTableDynamicLayout.set_fields('Private Endpoint Con
     TextDyField.data_source('Private Endpoint', 'private_endpoint.id'),
 ])
 
-# TAB - tags
-key_vault_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 key_vault_meta = CloudServiceMeta.set_layouts(
-    [key_vault_info_meta, key_vault_keys, key_vault_secrets, key_vault_certificates, key_vault_access_policies, key_vault_networking, key_vault_tags])
+    [key_vault_info_meta, key_vault_keys, key_vault_secrets, key_vault_certificates, key_vault_access_policies,
+     key_vault_networking])
 
 
 class KeyVaultResource(CloudServiceResource):

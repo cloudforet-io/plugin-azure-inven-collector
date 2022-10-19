@@ -149,13 +149,7 @@ lb = TableDynamicLayout.set_fields('Load Balancer', root_path='data.load_balance
     }),
 ])
 
-# Tab - Tags
-tags = TableDynamicLayout.set_fields('Azure Tags', root_path='data.azure.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value'),
-])
-
-virtual_machine_meta = CloudServiceMeta.set_layouts([azure_vm, tags, disk, nic, security_group, lb])
+virtual_machine_meta = CloudServiceMeta.set_layouts([azure_vm, disk, nic, security_group, lb])
 
 
 class ComputeResource(CloudServiceResource):

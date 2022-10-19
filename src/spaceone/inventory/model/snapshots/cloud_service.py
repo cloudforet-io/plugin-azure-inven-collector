@@ -32,13 +32,7 @@ snapshot_info_meta = ItemDynamicLayout.set_fields('Snapshots', fields=[
     DateTimeDyField.data_source('Created Time', 'launched_at')
 ])
 
-# TAB - tags
-snapshot_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
-snapshot_meta = CloudServiceMeta.set_layouts([snapshot_info_meta, snapshot_info_tags])
+snapshot_meta = CloudServiceMeta.set_layouts([snapshot_info_meta])
 
 
 class ComputeResource(CloudServiceResource):

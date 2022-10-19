@@ -52,14 +52,8 @@ nat_gateway_subnets = SimpleTableDynamicLayout.set_fields('Subnets', 'data.subne
     })
 ])
 
-# TAB - tags
-nat_gateway_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 nat_gateway_meta = CloudServiceMeta.set_layouts(
-    [nat_gateway_info_meta, nat_gateway_outbound_ip_info, nat_gateway_subnets, nat_gateway_tags])
+    [nat_gateway_info_meta, nat_gateway_outbound_ip_info, nat_gateway_subnets])
 
 
 class NetworkResource(CloudServiceResource):

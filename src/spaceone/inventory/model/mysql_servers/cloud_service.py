@@ -70,14 +70,8 @@ mysql_servers_pricing_tiers = ItemDynamicLayout.set_fields('Pricing Tier', field
     TextDyField.data_source('Backup Retention Period', 'data.storage_profile.backup_retention_days'),
 ])
 
-# TAB - tags
-mysql_servers_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 mysql_servers_meta = CloudServiceMeta.set_layouts(
-    [mysql_servers_info_meta, mysql_servers_connection_security, mysql_servers_parameters, mysql_servers_pricing_tiers, mysql_servers_tags])
+    [mysql_servers_info_meta, mysql_servers_connection_security, mysql_servers_parameters, mysql_servers_pricing_tiers])
 
 
 class DatabaseResource(CloudServiceResource):

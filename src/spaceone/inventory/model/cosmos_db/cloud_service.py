@@ -95,15 +95,9 @@ cosmos_db_database = SimpleTableDynamicLayout.set_fields('Database', 'data.sql_d
     TextDyField.data_source('ID', 'id')
 ])
 
-# TAB - tags
-cosmos_db_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 cosmos_db_meta = CloudServiceMeta.set_layouts(
     [cosmos_db_info_meta, cosmos_db_features, cosmos_db_default_consistency, cosmos_db_backup,
-     cosmos_db_virtual_network, cosmos_db_private_endpoint, cosmos_db_cors, cosmos_db_database, cosmos_db_tags])
+     cosmos_db_virtual_network, cosmos_db_private_endpoint, cosmos_db_cors, cosmos_db_database])
 
 
 class DatabaseResource(CloudServiceResource):

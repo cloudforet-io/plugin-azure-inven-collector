@@ -222,19 +222,12 @@ sql_servers_automatic_tuning_options = TableDynamicLayout.set_fields('Tuning Opt
 ])
 
 
-# TAB - tags
-sql_servers_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 # TAB - SQL Databases
 sql_servers_meta = CloudServiceMeta.set_layouts(
-    [sql_servers_info_meta, sql_server_failover_group, sql_server_backups, sql_servers_active_directory_admin, sql_servers_databases_info,
-     sql_servers_elastic_pools,
-     sql_servers_deleted_databases, sql_servers_auditing, sql_servers_network, sql_servers_transparent_data_encryption, sql_servers_automatic_tuning_options,
-     sql_servers_firewalls_and_vn,
-     sql_servers_private_endpoint_connections, sql_servers_info_tags])
+    [sql_servers_info_meta, sql_server_failover_group, sql_server_backups, sql_servers_active_directory_admin,
+     sql_servers_databases_info, sql_servers_elastic_pools, sql_servers_deleted_databases, sql_servers_auditing,
+     sql_servers_network, sql_servers_transparent_data_encryption, sql_servers_automatic_tuning_options,
+     sql_servers_firewalls_and_vn, sql_servers_private_endpoint_connections])
 
 
 class DatabaseResource(CloudServiceResource):

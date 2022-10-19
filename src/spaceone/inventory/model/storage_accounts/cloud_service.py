@@ -80,14 +80,9 @@ storage_account_geo_replication = TableDynamicLayout.set_fields('Geo-Replication
     })
 ])
 
-# TAB - tags
-network_security_group_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 storage_account_meta = CloudServiceMeta.set_layouts(
-    [storage_account_info_meta, storage_group_networking, storage_account_primary_endpoints, storage_account_containers, storage_account_encryption, storage_account_geo_replication, network_security_group_tags])
+    [storage_account_info_meta, storage_group_networking, storage_account_primary_endpoints, storage_account_containers,
+     storage_account_encryption, storage_account_geo_replication])
 
 
 class StorageResource(CloudServiceResource):

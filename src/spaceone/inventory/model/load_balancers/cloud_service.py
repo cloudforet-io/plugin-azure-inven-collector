@@ -112,7 +112,7 @@ load_balancer_info_load_balancing_rules = TableDynamicLayout.set_fields('Load Ba
 # TAB - Inbound NAT Rules
 # Forwards incoming traffic sent to a selected IP address and port combination to a specific virtual machine
 # NAT rule Name, IP version, destination, target, service
-load_balancer_info_load_balancing_rules = TableDynamicLayout.set_fields('Inbound NAT Rules', 'data.inbound_nat_rules',
+load_balancer_info_inbound_nat_rules = TableDynamicLayout.set_fields('Inbound NAT Rules', 'data.inbound_nat_rules',
                                                                         fields=[
                                                                             TextDyField.data_source('Name', 'name'),
                                                                             TextDyField.data_source('Protocol',
@@ -139,16 +139,9 @@ load_balancer_info_load_balancing_rules = TableDynamicLayout.set_fields('Inbound
 # TextDyField.data_source('IP Version', 'frontend_ip_configurations...private_ip_address_version'),
 # TextDyField.data_source('Destination', 'private_ip_address'),
 
-# TAB - tags
-load_balancer_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 load_balancer_meta = CloudServiceMeta.set_layouts(
     [load_balancer_info_meta, load_balancer_info_frontend_ip_config_meta, load_balancer_info_backend_pools_meta,
-     load_balancer_info_health_probes,
-     load_balancer_info_load_balancing_rules, load_balancer_info_tags])
+     load_balancer_info_health_probes, load_balancer_info_inbound_nat_rules, load_balancer_info_load_balancing_rules])
 
 
 class NetworkResource(CloudServiceResource):
