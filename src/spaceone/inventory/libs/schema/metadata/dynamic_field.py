@@ -327,66 +327,6 @@ class EnumDyField(BaseDynamicField):
         return cls(_data_source)
 
 
-class AzureEnumField(BaseDynamicField):
-    type = StringType(default="enum")
-    options = PolyModelType([EnumOptionDyField, FieldViewOption], serialize_when_none=False, default={})
-
-    @classmethod
-    def data_source(cls, name, key, **kwargs):
-        _data_source = {'key': key, 'name': name}
-        _default_badge = kwargs.get('default_badge', {})
-        _default_state = kwargs.get('default_state', {})
-        _default_outline_badge = kwargs.get('default_outline_badge', [])
-        _options_item_dic = {}
-
-        for _key in _default_outline_badge:
-            _round_index = len(TYPE_BADGE)
-            _index = _default_outline_badge.index(_key)
-            _num = math.floor(_index / len(TYPE_BADGE))
-
-            if _num > 0:
-                _round_index = len(TYPE_BADGE) * _num
-
-            if _round_index - 1 < _index:
-                _index = _index - _round_index
-
-            _options_item_dic[_key] = BadgeItemDyField.set({'outline_color': TYPE_BADGE[_index]})
-
-        for _key in _default_badge:
-            for _badge in _default_badge[_key]:
-                _options_item_dic[_badge] = BadgeItemDyField.set({'background_color': _key})
-
-        for _key in _default_state:
-            for _state in _default_state[_key]:
-                _state_options = {'icon': {'color': 'gray.400'}}
-
-                if _key == 'safe':
-                    _state_options = {'icon': {'color': 'green.500'}}
-                elif _key == 'disable':
-                    _state_options.update({'text_color': 'gray.400'})
-                elif _key == 'warning':
-                    _state_options = {'icon': {'color': 'yellow.500'}}
-                elif _key == 'available':
-                    _state_options = {'icon': {'color': 'blue.400'}}
-                elif _key == 'alert':
-                    _state_options = {'text_color': 'red.500', 'icon': {'color': 'red.500'}}
-
-                _options_item_dic[_state] = StateItemDyField.set(_state_options)
-
-        _enum_options = {'items': _options_item_dic}
-
-        if 'options' in kwargs:
-            print(f'options {kwargs.get("options")}')
-            _enum_options.update(kwargs.get('options'))
-
-        if 'reference' in kwargs:
-            _data_source.update({'reference': kwargs.get('reference')})
-
-        _data_source.update({'options': EnumOptionDyField(_enum_options)})
-        print(_data_source)
-        return cls(_data_source)
-
-
 class ProgressField(BaseDynamicField):
     type = StringType(default="progress")
     options = PolyModelType(ProgressFieldOptions, serialize_when_none=False, )

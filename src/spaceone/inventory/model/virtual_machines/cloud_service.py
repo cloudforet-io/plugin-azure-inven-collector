@@ -1,6 +1,6 @@
 from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType, DictType, ListType
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, SizeField, \
-    ListDyField, AzureEnumField
+    ListDyField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta, Tags
