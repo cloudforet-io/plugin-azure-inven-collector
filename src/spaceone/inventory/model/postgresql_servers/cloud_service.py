@@ -101,16 +101,9 @@ postgresql_servers_pricing_tier = ItemDynamicLayout.set_fields('Pricing Tier', f
     TextDyField.data_source('Backup Retention Period (Days)', 'data.storage_profile.backup_retention_days')
 ])
 
-# TAB - Postgresql server - tags
-postgresql_servers_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
-
 postgresql_servers_meta = CloudServiceMeta.set_layouts(
     [postgresql_servers_info_meta, postgresql_servers_connection_security, postgresql_servers_replication,
-     postgresql_servers_server_admin, postgresql_servers_pricing_tier, postgresql_servers_tags])
+     postgresql_servers_server_admin, postgresql_servers_pricing_tier])
 
 
 class DatabaseResource(CloudServiceResource):

@@ -3,7 +3,7 @@ from spaceone.inventory.libs.utils import *
 from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, ChartWidget
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, DateTimeDyField, \
     ListDyField, \
-    EnumDyField, SizeField, AzureEnumField
+    EnumDyField, SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 

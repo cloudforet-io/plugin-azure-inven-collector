@@ -38,12 +38,6 @@ vm_scale_set_info_meta = ItemDynamicLayout.set_fields('VmScaleSets', fields=[
 
 ])
 
-# TAB - tags
-vm_scale_set_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 # TAB - Instances
 # name, computer name, location, status,  provisioning state, fault domain,
 #       protection policy, and latest model
@@ -164,7 +158,7 @@ vm_scale_set_info_os_profile = ItemDynamicLayout.set_fields('Operating System', 
     ])
 
 vm_scale_set_meta = CloudServiceMeta.set_layouts(
-    [vm_scale_set_info_meta, vm_scale_set_info_tags, vm_scale_set_instance, vm_scale_set_info_network, vm_scale_set_info_scaling,
+    [vm_scale_set_info_meta, vm_scale_set_instance, vm_scale_set_info_network, vm_scale_set_info_scaling,
      vm_scale_set_info_disk, vm_scale_set_info_os_profile])
 
 

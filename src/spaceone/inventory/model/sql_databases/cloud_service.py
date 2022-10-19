@@ -118,16 +118,9 @@ sql_databases_diagnostic_settings = SimpleTableDynamicLayout.set_fields('Diagnos
     TextDyField.data_source('Log Analytics Workspace', 'workspace_id'),
 ])
 
-
-# TAB - tags
-sql_databases_info_tags = TableDynamicLayout.set_fields('Tags', 'data', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 sql_databases_meta = CloudServiceMeta.set_layouts(
     [sql_databases_info_meta, sql_databases_configure, sql_databases_diagnostic_settings, sql_databases_backups,
-     sql_databases_replication, sql_databases_sync_to_other_databases_info, sql_databases_info_tags])
+     sql_databases_replication, sql_databases_sync_to_other_databases_info])
 
 
 class DatabaseResource(CloudServiceResource):

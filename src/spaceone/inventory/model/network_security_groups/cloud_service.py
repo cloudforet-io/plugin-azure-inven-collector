@@ -57,15 +57,9 @@ network_subnets = TableDynamicLayout.set_fields('Subnets', 'data.subnets', field
     TextDyField.data_source('Virtual Network', 'virtual_network')
 ])
 
-# TAB - tags
-network_security_group_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 network_security_group_meta = CloudServiceMeta.set_layouts(
-    [network_security_group_info_meta, network_security_group_inbound_security_rules, network_security_group_outbound_security_rules,
-     network_security_group_network_interfaces, network_subnets, network_security_group_tags])
+    [network_security_group_info_meta, network_security_group_inbound_security_rules, network_subnets,
+     network_security_group_outbound_security_rules, network_security_group_network_interfaces])
 
 
 class NetworkResource(CloudServiceResource):

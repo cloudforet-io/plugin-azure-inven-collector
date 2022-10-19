@@ -34,13 +34,7 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
 
 ])
 
-# TAB - tags
-disk_info_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
-disk_meta = CloudServiceMeta.set_layouts([disk_info_meta, disk_info_tags])
+disk_meta = CloudServiceMeta.set_layouts([disk_info_meta])
 
 
 class ComputeResource(CloudServiceResource):

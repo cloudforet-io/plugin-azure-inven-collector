@@ -167,9 +167,13 @@ class GitRepoVolume(Model):
 class Volume(Model):
     name = StringType(serialize_when_none=False)
     azure_file = ModelType(AzureFileVolume, serialize_when_none=False)
-    empty_dir = DictType(StringType(), StringType())
-    secret = DictType(StringType(), StringType(), serialize_when_none=False)
+    empty_dir = DictType(StringType, serialize_when_none=False)
+    secret = DictType(StringType, serialize_when_none=False)
     git_repo = ModelType(GitRepoVolume, serialize_when_none=False)
+    volume_type = StringType(serialize_when_none=False)
+    mount_path = StringType(serialize_when_none=False)
+    container_name = StringType(serialize_when_none=False)
+
 
 
 # ContainerGroupPropertiesInstanceView
@@ -232,7 +236,7 @@ class InitContainerDefinition(Model):
 class ContainerInstance(AzureCloudService):  # Main Class
     id = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
-    identity = ModelType(ContainerGroupIdentity)
+    identity = ModelType(ContainerGroupIdentity, serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     containers = ListType(ModelType(Container), serialize_when_none=False)
     image_registry_credentials = ListType(ModelType(ImageRegistryCredential), serialize_when_none=False)
@@ -251,6 +255,7 @@ class ContainerInstance(AzureCloudService):  # Main Class
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
     container_count_display = IntType(serialize_when_none=False)
+    volume_count_display = IntType(default=0, serialize_when_none=False)
     start_time = DateTimeType(serialize_when_none=False)
 
     def reference(self):

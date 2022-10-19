@@ -43,12 +43,6 @@ public_ip_address_alias_record_sets = TableDynamicLayout.set_fields('Alias Recor
     TextDyField.data_source('TTL', '')
 ])
 
-# TAB - tags
-virtual_network_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 public_addresses_meta = CloudServiceMeta.set_layouts([public_ip_address_meta, public_ip_address_configuration])
 
 

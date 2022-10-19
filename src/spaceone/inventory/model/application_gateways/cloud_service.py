@@ -148,17 +148,11 @@ application_gateway_health_probes = SimpleTableDynamicLayout.set_fields('Health 
     TextDyField.data_source('Timeout(Seconds)', 'timeout')
 ])
 
-# TAB - tags
-application_gateway_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 application_gateway_meta = CloudServiceMeta.set_layouts(
     [application_gateway_info_meta, application_gateway_configuration,
      application_gateway_web_app_firewall_meta, application_gateway_backend_pools, application_gateway_http_settings,
      application_gateway_frontend_ip_configurations, application_gateway_rules, application_gateway_listeners_info,
-     application_gateway_rewrites, application_gateway_health_probes, application_gateway_tags])
+     application_gateway_rewrites, application_gateway_health_probes])
 
 
 class NetworkResource(CloudServiceResource):

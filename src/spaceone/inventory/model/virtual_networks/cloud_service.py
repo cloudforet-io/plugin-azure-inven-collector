@@ -94,15 +94,10 @@ virtual_network_private_endpoints = SimpleTableDynamicLayout.set_fields('Private
     TextDyField.data_source('Resource Group', 'resource_group')
 ])
 
-# TAB - tags
-virtual_network_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
-    TextDyField.data_source('Key', 'key'),
-    TextDyField.data_source('Value', 'value')
-])
-
 virtual_network_meta = CloudServiceMeta.set_layouts(
     [virtual_network_info_meta, virtual_network_connected_devices,
-     virtual_network_subnets, virtual_network_firewall, virtual_network_peerings, virtual_network_service_endpoints, virtual_network_private_endpoints, virtual_network_tags])
+     virtual_network_subnets, virtual_network_firewall, virtual_network_peerings, virtual_network_service_endpoints,
+     virtual_network_private_endpoints])
 
 
 class NetworkResource(CloudServiceResource):

@@ -48,16 +48,26 @@ class ContainerInstancesManager(AzureManager):
                 # if bug fix these code will be deleted
                 resource_group_name = self.get_resource_group_from_id(container_instance_id)
                 container_group_name = container_instance_dict['name']
-                container_instance = container_instances_conn.get_container_groups(resource_group_name=resource_group_name,
-                                                              container_group_name=container_group_name)
+                container_instance = container_instances_conn.get_container_groups(
+                    resource_group_name=resource_group_name,
+                    container_group_name=container_group_name)
                 container_instance_dict = self.convert_nested_dictionary(container_instance)
                 time.sleep(0.2)  # end code
 
-                # Update data info in Container's Raw Data
+                # Update data info in Container Instance's Raw Data
                 for container in container_instance_dict['containers']:
                     _start_time = container['instance_view']['current_state']['start_time']
                     if _start_time is not None:
                         container_instance_dict['start_time'] = datetime_to_iso8601(_start_time)
+
+                # Set detail volume info for container
+                if container_instance_dict['volumes'] is not None:
+                    for volume in container_instance_dict['volumes']:
+                        self.set_volumes_detail_info(volume, container_instance_dict['containers'])
+
+                    # Set Container Instance volume type and volume count
+                    self.set_container_instance_volume_type(container_instance_dict['volumes'])
+                    container_instance_dict['volume_count_display'] = container_instance_dict['volumes'].__len__()
 
                 container_instance_dict.update({
                     'resource_group': self.get_resource_group_from_id(container_instance_id),
@@ -78,12 +88,39 @@ class ContainerInstancesManager(AzureManager):
                 })
 
                 self.set_region_code(container_instance_data['location'])
-                container_instances_responses.append(ContainerInstanceResponse({'resource': container_instance_resource}))
+                container_instances_responses.append(
+                    ContainerInstanceResponse({'resource': container_instance_resource}))
 
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {container_instance_id} {e}', exc_info=True)
-                error_response = self.generate_resource_error_response(e, 'Container', 'ContainerInstances', container_instance_id)
+                error_response = self.generate_resource_error_response(e, 'Container', 'ContainerInstances',
+                                                                       container_instance_id)
                 error_responses.append(error_response)
 
         _LOGGER.debug(f'** Container Instances Finished {time.time() - start_time} Seconds **')
         return container_instances_responses, error_responses
+
+    @staticmethod
+    def set_container_instance_volume_type(volumes):
+        for volume in volumes:
+            if volume.get('git_repo') is not None:
+                volume['volume_type'] = 'Git repo'
+            elif volume.get('azure_file') is not None:
+                volume['volume_type'] = 'Azure file'
+            elif volume.get('empty_dir') is not None:
+                volume['volume_type'] = 'Empty directory'
+            elif volume.get('secret') is not None:
+                volume['volume_type'] = 'Secret'
+
+    @staticmethod
+    def set_volumes_detail_info(volume, containers):
+        for container in containers:
+            if container['volume_mounts'] is not None:
+                volume_mounts = container['volume_mounts']
+                for volume_mount in volume_mounts:
+                    if volume_mount['name'] == volume['name']:
+                        volume.update({
+                            'mount_path': volume_mount['mount_path'],
+                            'container_name': container['name']
+                        })
+                        return
