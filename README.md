@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.4.0-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.5.0-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -17,8 +17,8 @@
 get cloud service data from Azure Cloud Services. 
 
 
-Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/azure-inven-collector)
-> Latest stable version : 1.4.0
+Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
+> Latest stable version : 1.5.0
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -29,22 +29,23 @@ Please contact us if you need any further information.
 | Cloud Service Type | Cloud Service                                       |
 |--------------------|-----------------------------------------------------|
 | Instance           | [Application Gateways](#application-gateways)       |
+| Container          | [Container Instances](#container-instances)         |
 | Instance           | [CosmosDB](#cosmos-db)                              |
 | Disk               | [Disks](#disks)                                     |
 | Instance           | [KeyVaults](#key-vaults)                            |
-| Instance            | [Load Balancers](#load-balancers)                   |
-| Server           | [MySQL Servers](#mysql-servers)                     |
-| Instance            | [NAT Gateways](#nat-gateways)                       |
-| Instance            | [Network Security Groups](#network-security-groups) |
-| Server           | [PostgreSQL Servers](#postgresql-servers)           |
-| IPAddress            | [Public IP Addresses](#public-ip-addresses)         |
-| Instance            | [Snapshots](#snapshots)                             |
-| Server           | [SQL Servers](#sql-servers)                         |
+| Instance           | [Load Balancers](#load-balancers)                   |
+| Server             | [MySQL Servers](#mysql-servers)                     |
+| Instance           | [NAT Gateways](#nat-gateways)                       |
+| Instance           | [Network Security Groups](#network-security-groups) |
+| Server             | [PostgreSQL Servers](#postgresql-servers)           |
+| IPAddress          | [Public IP Addresses](#public-ip-addresses)         |
+| Instance           | [Snapshots](#snapshots)                             |
+| Server             | [SQL Servers](#sql-servers)                         |
 | Database           | [SQL Databases](#sql-databases)                     |
 | Storage            | [Storage Accounts](#storage-accounts)               |
-| Instance            | [Virtual Machines](#virtual-machines)               |
-| Instance            | [Virtual Networks](#virtual-networks)               |
-| ScaleSet            | [VM ScaleSets](#virtual-machine-scale-sets)         |
+| Instance           | [Virtual Machines](#virtual-machines)               |
+| Instance           | [Virtual Networks](#virtual-networks)               |
+| ScaleSet           | [VM ScaleSets](#virtual-machine-scale-sets)         |
     
 ---
 ## SETTING
@@ -95,6 +96,7 @@ The following is a list of services being collected and service code information
 | 15  | Virtual Machines        | Microsoft.Compute/virtualMachines    |
 | 16  | Virtual Networks        | Microsoft.Network/virtualNetworks    |
 | 17  | VM ScaleSets            | Microsoft.Compute/virtualMachineScaleSets |
+| 18  | Container Instances     | Microsoft.ContainerInstance/containerGroups |
 ---
 
 ## Authentication Overview
@@ -281,6 +283,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
                     "Microsoft.Network/virtualRouters/providers/Microsoft.Insights/metricDefinitions/read",
                     "Microsoft.Network/virtualRouters/peerings/read",
                     "Microsoft.DocumentDB/databaseAccounts/listKeys/action",
+                    "Microsoft.ContainerInstance/containerGroups/read",
                     
                 ],
                 "notActions": [],
@@ -726,6 +729,16 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.DBforPostgreSQL/servers/recoverableServers/read",
         "Microsoft.DBforPostgreSQL/servers/securityAlertPolicies/read",
         "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules/read"
+      ```
+#### [Container Instances](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerinstance/azure.mgmt.containerinstance.containerinstancemanagementclient?view=azure-python)
+- PostgreSQL Servers
+    - Scope
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerinstance/azure.mgmt.containerinstance.containerinstancemanagementclient?view=azure-python
+          - container_groups
+            - list()
+    - Permissions
+      ```
+        "Microsoft.ContainerInstance/containerGroups/read"
       ``` 
 
 ---
@@ -759,6 +772,7 @@ The cloud_service_types items that can be specified are as follows.
         'VirtualMachines',
         'VirtualNetworks',
         'VMScaleSets',
+        'ContainerInstances',
     ]
 }
 </code>
@@ -806,6 +820,8 @@ The `service_code_mappers` items that can be specified are as follows.
 ---
 
 ## Release Note
+### Ver 1.5.0
+* [Add ```Container Instances``` cloud service](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/14)
 
 ### Ver 1.4.0
 * [Merge Azure vm plugin to Azure inventory collector](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/2)
@@ -829,11 +845,11 @@ The `service_code_mappers` items that can be specified are as follows.
 * [Add ErrorResources to collect error messages as resources](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/157)
 
 ### Ver 1.2.12
-* [Add ```PostgreSQL``` Servers cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/154)
+* [Add ```PostgreSQL Servers```  cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/154)
 
 ### Ver 1.2.10
 * [Add CosmosDB Syntax bug](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/152/commits)
-* [Add ```CosmosDB cloud``` service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/commit/c50693a222555611cb1fb27b2ce222543e1cf174)
+* [Add ```CosmosDB``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/commit/c50693a222555611cb1fb27b2ce222543e1cf174)
 * [Update CI workflow](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/142)
 
 ### Ver 1.2.8
