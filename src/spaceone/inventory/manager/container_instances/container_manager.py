@@ -67,14 +67,14 @@ class ContainerInstancesManager(AzureManager):
 
                     # Set Container Instance volume type and volume count
                     self.set_container_instance_volume_type(container_instance_dict['volumes'])
-                    container_instance_dict['volume_count_display'] = container_instance_dict['volumes'].__len__()
+                    container_instance_dict['volume_count_display'] = len(container_instance_dict['volumes'])
 
                 container_instance_dict.update({
                     'resource_group': self.get_resource_group_from_id(container_instance_id),
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
                     'azure_monitor': {'resource_id': container_instance_id},
-                    'container_count_display': container_instance_dict['containers'].__len__()
+                    'container_count_display': len(container_instance_dict['containers'])
                 })
 
                 container_instance_data = ContainerInstance(container_instance_dict, strict=False)
@@ -117,6 +117,7 @@ class ContainerInstancesManager(AzureManager):
         for container in containers:
             if container['volume_mounts'] is not None:
                 volume_mounts = container['volume_mounts']
+                container['volume_mount_count_display'] = len(volume_mounts)
                 for volume_mount in volume_mounts:
                     if volume_mount['name'] == volume['name']:
                         volume.update({

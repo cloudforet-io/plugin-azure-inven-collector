@@ -12,7 +12,8 @@ class UserAssignedIdentity(Model):
 class ContainerGroupIdentity(Model):
     principal_id = StringType(serialize_when_none=False)
     tenant_id = StringType(serialize_when_none=False)
-    type = StringType(choices=('NONE', 'SYSTEM_ASSIGNED', 'SYSTEM_ASSIGNED_USER_ASSIGNED', 'USER_ASSIGNED'), serialize_when_none=False)
+    type = StringType(choices=('NONE', 'SYSTEM_ASSIGNED', 'SYSTEM_ASSIGNED_USER_ASSIGNED', 'USER_ASSIGNED'),
+                      serialize_when_none=False)
     user_assigned_identities = DictType(StringType(), ModelType(UserAssignedIdentity), serialize_when_none=False)
 
 
@@ -119,6 +120,7 @@ class Container(Model):
     instance_view = ModelType(ContainerPropertiesInstanceView)
     resources = ModelType(ResourceRequirements, serialize_when_none=False)
     volume_mounts = ListType(ModelType(VolumeMount), serialize_when_none=None)
+    volume_mount_count_display = IntType(default=0)
     liveness_probe = ModelType(ContainerProbe, serialize_when_none=False)
     readiness_probe = ModelType(ContainerProbe, serialize_when_none=False)
 
@@ -173,7 +175,6 @@ class Volume(Model):
     volume_type = StringType(serialize_when_none=False)
     mount_path = StringType(serialize_when_none=False)
     container_name = StringType(serialize_when_none=False)
-
 
 
 # ContainerGroupPropertiesInstanceView
@@ -254,8 +255,8 @@ class ContainerInstance(AzureCloudService):  # Main Class
     name = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     zones = ListType(StringType, serialize_when_none=False)
-    container_count_display = IntType(serialize_when_none=False)
-    volume_count_display = IntType(default=0, serialize_when_none=False)
+    container_count_display = IntType(default=0)
+    volume_count_display = IntType(default=0)
     start_time = DateTimeType(serialize_when_none=False)
 
     def reference(self):
