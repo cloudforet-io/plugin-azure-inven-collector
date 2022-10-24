@@ -25,6 +25,8 @@ container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instance
     TextDyField.data_source('SKU', 'data.sku'),
     TextDyField.data_source('OS type', 'data.os_type'),
     TextDyField.data_source('Container count', 'data.container_count_display'),
+    TextDyField.data_source('Memory size(GB)', 'data.memory_size_display'),
+    TextDyField.data_source('GPU count', 'data.gpu_count_display'),
     TextDyField.data_source('Volume count', 'data.volume_count_display'),
     TextDyField.data_source('IP Address', 'data.ip_address.ip'),
     TextDyField.data_source('IP Address Type', 'data.ip_address.type'),
