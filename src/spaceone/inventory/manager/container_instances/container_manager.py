@@ -55,10 +55,13 @@ class ContainerInstancesManager(AzureManager):
                 time.sleep(0.2)  # end code
 
                 # Update data info in Container Instance's Raw Data
+                _gpu_count_display = 0
+                _memory_size_display = 0.0
+
                 for container in container_instance_dict['containers']:
-                    _start_time = container['instance_view']['current_state']['start_time']
-                    if _start_time is not None:
-                        container_instance_dict['start_time'] = datetime_to_iso8601(_start_time)
+                    container_instance_dict['start_time'] = self.convert_start_time_iso861_to_datetime(container)
+                    _gpu_count_display += self.get_gpu_count_display(container)
+                    _memory_size_display += container['resources']['requests']['memory_in_gb']
 
                 # Set detail volume info for container
                 if container_instance_dict['volumes'] is not None:
@@ -74,7 +77,9 @@ class ContainerInstancesManager(AzureManager):
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
                     'azure_monitor': {'resource_id': container_instance_id},
-                    'container_count_display': len(container_instance_dict['containers'])
+                    'container_count_display': len(container_instance_dict['containers']),
+                    'gpu_count_display': _gpu_count_display,
+                    'memory_size_display': _memory_size_display
                 })
 
                 container_instance_data = ContainerInstance(container_instance_dict, strict=False)
@@ -125,3 +130,21 @@ class ContainerInstancesManager(AzureManager):
                             'container_name': container['name']
                         })
                         return
+
+    @staticmethod
+    def convert_start_time_iso861_to_datetime(container):
+        _start_time = None
+        if container['instance_view'] is not None:
+            _start_time = container['instance_view']['current_state']['start_time']
+            if _start_time is not None:
+                _start_time = datetime_to_iso8601(_start_time)
+        return _start_time
+
+    @staticmethod
+    def get_gpu_count_display(container):
+        _gpu_count = 0
+        if container['resources']['requests']['gpu'] is not None:
+            _gpu_count = container['resources']['requests']['gpu']['count']
+        return _gpu_count
+
+
