@@ -25,6 +25,9 @@ container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instance
     TextDyField.data_source('SKU', 'data.sku'),
     TextDyField.data_source('OS type', 'data.os_type'),
     TextDyField.data_source('Container count', 'data.container_count_display'),
+    TextDyField.data_source('vCPU count', 'data.container_count_display'),
+    TextDyField.data_source('Memory size(GB)', 'data.memory_size_display'),
+    TextDyField.data_source('GPU count', 'data.gpu_count_display'),
     TextDyField.data_source('Volume count', 'data.volume_count_display'),
     TextDyField.data_source('IP Address', 'data.ip_address.ip'),
     TextDyField.data_source('IP Address Type', 'data.ip_address.type'),
@@ -32,8 +35,6 @@ container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instance
     TextDyField.data_source('DNS name label', 'data.ip_address.dns_name_label'),
     TextDyField.data_source('DNS name label scope reuse', 'data.ip_address.auto_generated_domain_name_label_scope'),
     ListDyField.data_source('Ports', 'data.ip_address.ports.port', options={'delimiter': '<br>'}),
-    DateTimeDyField.data_source('Start Time', 'data.start_time')
-
 ])
 
 # TAB -Container
@@ -45,16 +46,17 @@ container_instances_info_container = TableDynamicLayout.set_fields('Containers',
         'alert': ['Terminated'],
         'disable': []}),
     TextDyField.data_source('Previous state', 'instance_view.previous_state.state'),
-    DateTimeDyField.data_source('Container Start time', 'instance_view.current_state.start_time'),
     TextDyField.data_source('Restart count', 'instance_view.restart_count'),
     TextDyField.data_source('Volume count', 'volume_mount_count_display'),
-    TextDyField.data_source('Image', 'image'),
     TextDyField.data_source('CPU cores', 'resources.requests.cpu', options={
         'translation_id': 'PAGE_SCHEMA.CPU_CORE',
     }),
     TextDyField.data_source('Memory(GB)', 'resources.requests.memory_in_gb', options={
         'translation_id': 'PAGE_SCHEMA.MEMORY',
     }),
+    TextDyField.data_source('Image', 'image'),
+    DateTimeDyField.data_source('Start time', 'instance_view.current_state.start_time'),
+    DateTimeDyField.data_source('Finish time', 'instance_view.current_state.finish'),
     TextDyField.data_source('GPU SKU', 'resources.requests.gpu.sku'),
     TextDyField.data_source('GPU count', 'resources.requests.gpu.count'),
     ListDyField.data_source('Ports', 'ports.port', options={'delimiter': '<br>'}),
