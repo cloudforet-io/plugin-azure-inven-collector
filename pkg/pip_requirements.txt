@@ -1,11 +1,8 @@
 spaceone-core
 spaceone-api
 schematics
-
 adal
 msrestazure
-
-# todo : version update needed
 azure-identity
 azure-mgmt-resource
 azure-mgmt-compute

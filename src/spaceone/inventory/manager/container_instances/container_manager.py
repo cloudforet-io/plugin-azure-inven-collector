@@ -48,6 +48,7 @@ class ContainerInstancesManager(AzureManager):
                 # if bug fix these code will be deleted
                 resource_group_name = self.get_resource_group_from_id(container_instance_id)
                 container_group_name = container_instance_dict['name']
+
                 container_instance = container_instances_conn.get_container_groups(
                     resource_group_name=resource_group_name,
                     container_group_name=container_group_name)
@@ -59,17 +60,16 @@ class ContainerInstancesManager(AzureManager):
                 _memory_size_display = 0.0
 
                 for container in container_instance_dict['containers']:
-                    container_instance_dict['start_time'] = self.convert_start_time_iso861_to_datetime(container)
-                    _gpu_count_display += self.get_gpu_count_display(container)
-                    _memory_size_display += container['resources']['requests']['memory_in_gb']
+                    _gpu_count_display += int(self._get_gpu_count_display(container))
+                    _memory_size_display += float(container['resources']['requests']['memory_in_gb'])
 
                 # Set detail volume info for container
                 if container_instance_dict['volumes'] is not None:
                     for volume in container_instance_dict['volumes']:
-                        self.set_volumes_detail_info(volume, container_instance_dict['containers'])
+                        self._set_volumes_detail_info(volume, container_instance_dict['containers'])
 
                     # Set Container Instance volume type and volume count
-                    self.set_container_instance_volume_type(container_instance_dict['volumes'])
+                    self._set_container_instance_volume_type(container_instance_dict['volumes'])
                     container_instance_dict['volume_count_display'] = len(container_instance_dict['volumes'])
 
                 container_instance_dict.update({
@@ -106,7 +106,7 @@ class ContainerInstancesManager(AzureManager):
         return container_instances_responses, error_responses
 
     @staticmethod
-    def set_container_instance_volume_type(volumes):
+    def _set_container_instance_volume_type(volumes):
         for volume in volumes:
             if volume.get('git_repo') is not None:
                 volume['volume_type'] = 'Git repo'
@@ -118,10 +118,9 @@ class ContainerInstancesManager(AzureManager):
                 volume['volume_type'] = 'Secret'
 
     @staticmethod
-    def set_volumes_detail_info(volume, containers):
+    def _set_volumes_detail_info(volume, containers):
         for container in containers:
-            if container['volume_mounts'] is not None:
-                volume_mounts = container['volume_mounts']
+            if volume_mounts := container['volume_mounts']:
                 container['volume_mount_count_display'] = len(volume_mounts)
                 for volume_mount in volume_mounts:
                     if volume_mount['name'] == volume['name']:
@@ -132,19 +131,17 @@ class ContainerInstancesManager(AzureManager):
                         return
 
     @staticmethod
-    def convert_start_time_iso861_to_datetime(container):
-        _start_time = None
-        if container['instance_view'] is not None:
-            _start_time = container['instance_view']['current_state']['start_time']
-            if _start_time is not None:
-                _start_time = datetime_to_iso8601(_start_time)
-        return _start_time
-
-    @staticmethod
-    def get_gpu_count_display(container):
+    def _get_gpu_count_display(container):
         _gpu_count = 0
-        if container['resources']['requests']['gpu'] is not None:
-            _gpu_count = container['resources']['requests']['gpu']['count']
+        if _gpu_info := container.get('resources', {}).get('requests', {}).get('gpu', {}):
+            _gpu_count = _gpu_info.get('count', 0)
         return _gpu_count
 
-
+    @staticmethod
+    def _convert_start_time_datetime_to_iso861(container):
+        if _start_time := container.get('instance_view', {}).get('current_state', {}).get('start_time'):
+            _start_time = datetime_to_iso8601(_start_time)
+            container['instance_view']['current_state']['start_time'] = _start_time
+        elif _finish_time := container.get('instance_view', {}).get('current_state', {}).get('_finish_time'):
+            _finish_time = datetime_to_iso8601(_finish_time)
+            container['instance_view']['current_state']['finished_time'] = _finish_time

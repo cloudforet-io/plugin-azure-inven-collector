@@ -57,8 +57,6 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('FQDN', 'data.ip_address.fqdn', options={
             'is_optional': True
         }),
-        TextDyField.data_source('Start Time', 'data.start_time', options={
-            'is_optional': True}),
         TextDyField.data_source('DNS name label', 'data.ip_address.dns_name_label', options={
             'is_optional': True}),
         TextDyField.data_source('DNS name label scope reuse', 'data.ip_address.auto_generated_domain_name_label_scope',
@@ -77,7 +75,6 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Restart Policy', key='data.restart_policy'),
         SearchField.set(name='IP Address', key='data.ip_address.ip'),
         SearchField.set(name='FQDN', key='data.ip_address.fqdn'),
-        SearchField.set(name='Start Time', key='data.start_time', data_type='datetime'),
         SearchField.set(name='Location', key='data.location'),
         SearchField.set(name='SKU', key='data.sku'),
         SearchField.set(name='Container count', key='data.container_count_display', data_type='integer'),

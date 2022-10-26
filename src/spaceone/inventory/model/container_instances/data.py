@@ -259,7 +259,6 @@ class ContainerInstance(AzureCloudService):  # Main Class
     volume_count_display = IntType(default=0)
     gpu_count_display = IntType(default=0)
     memory_size_display = FloatType(default=0.0)
-    start_time = DateTimeType(serialize_when_none=False)
 
     def reference(self):
         return {

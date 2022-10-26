@@ -171,6 +171,25 @@ class AzureManager(BaseManager):
         if region not in self.collected_region_codes:
             self.collected_region_codes.append(region)
 
+    def convert_nested_dictionary(self, cloud_svc_object):
+        cloud_svc_dict = {}
+        if hasattr(cloud_svc_object, '__dict__'):  # if cloud_svc_object is not a dictionary type but has dict method
+            cloud_svc_dict = cloud_svc_object.__dict__
+        elif not isinstance(cloud_svc_object, list):  # if cloud_svc_object is one of type like int, float, char, ...
+            return cloud_svc_object
+
+        # if cloud_svc_object is dictionary type
+        for key, value in cloud_svc_dict.items():
+            if 'azure' in str(type(value)):
+                cloud_svc_dict[key] = self.convert_nested_dictionary(value)
+            elif isinstance(value, list):
+                value_list = []
+                for v in value:
+                    value_list.append(self.convert_nested_dictionary(v))
+                cloud_svc_dict[key] = value_list
+
+        return cloud_svc_dict
+
     @staticmethod
     def convert_tag_format(tags):
         convert_tags = []
@@ -223,25 +242,6 @@ class AzureManager(BaseManager):
     #                 cloud_svc_dict[k] = cloud_svc_converse_dict
     #
     #     return cloud_svc_dict
-
-    def convert_nested_dictionary(self, cloud_svc_object):
-        cloud_svc_dict = {}
-        if hasattr(cloud_svc_object, '__dict__'):  # if cloud_svc_object is not a dictionary type but has dict method
-            cloud_svc_dict = cloud_svc_object.__dict__
-        elif not isinstance(cloud_svc_object, list):  # if cloud_svc_object is one of type like int, float, char, ...
-            return cloud_svc_object
-
-        # if cloud_svc_object is dictionary type
-        for key, value in cloud_svc_dict.items():
-            if 'azure' in str(type(value)):
-                cloud_svc_dict[key] = self.convert_nested_dictionary(value)
-            elif isinstance(value, list):
-                value_list = []
-                for v in value:
-                    value_list.append(self.convert_nested_dictionary(v))
-                cloud_svc_dict[key] = value_list
-
-        return cloud_svc_dict
 
     @staticmethod
     def get_resource_group_from_id(dict_id):
