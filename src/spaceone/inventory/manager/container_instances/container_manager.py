@@ -56,12 +56,14 @@ class ContainerInstancesManager(AzureManager):
                 time.sleep(0.2)  # end code
 
                 # Update data info in Container Instance's Raw Data
+                _cpu_count_display = 0
                 _gpu_count_display = 0
                 _memory_size_display = 0.0
 
                 for container in container_instance_dict['containers']:
-                    _gpu_count_display += int(self._get_gpu_count_display(container))
+                    _cpu_count_display += int(container['resources']['requests']['cpu'])
                     _memory_size_display += float(container['resources']['requests']['memory_in_gb'])
+                    _gpu_count_display += int(self._get_gpu_count_display(container))
 
                 # Set detail volume info for container
                 if container_instance_dict['volumes'] is not None:
@@ -78,8 +80,9 @@ class ContainerInstancesManager(AzureManager):
                     'subscription_name': subscription_info['subscription_name'],
                     'azure_monitor': {'resource_id': container_instance_id},
                     'container_count_display': len(container_instance_dict['containers']),
+                    'cpu_count_display': _cpu_count_display,
+                    'memory_size_display': _memory_size_display,
                     'gpu_count_display': _gpu_count_display,
-                    'memory_size_display': _memory_size_display
                 })
 
                 container_instance_data = ContainerInstance(container_instance_dict, strict=False)
