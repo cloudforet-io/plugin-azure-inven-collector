@@ -24,5 +24,5 @@ CLOUD_SERVICE_GROUP_MAP = {
     'VirtualMachines': 'VirtualMachinesManager',
     'VirtualNetworks': 'VirtualNetworksManager',
     'VMScaleSets': 'VmScaleSetsManager',
-
+    'WebPubSubService': 'WebPubSubServiceManager',
 }

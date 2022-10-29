@@ -14,6 +14,7 @@ from azure.mgmt.rdbms.mysql import MySQLManagementClient
 from azure.mgmt.cosmosdb import CosmosDBManagementClient
 from azure.mgmt.rdbms.postgresql import PostgreSQLManagementClient
 from azure.mgmt.containerinstance import ContainerInstanceManagementClient
+from azure.mgmt.webpubsub import WebPubSubManagementClient
 from spaceone.core.connector import BaseConnector
 
 DEFAULT_SCHEMA = 'azure_client_secret'
@@ -50,6 +51,7 @@ class AzureConnector(BaseConnector):
         self.cosmosdb_client = None
         self.postgre_sql_client = None
         self.container_instance_client = None
+        self.web_pubsub_service_client = None
 
     def set_connect(self, secret_data):
         subscription_id = secret_data['subscription_id']
@@ -73,6 +75,7 @@ class AzureConnector(BaseConnector):
         self.cosmosdb_client = CosmosDBManagementClient(credential=credential, subscription_id=subscription_id)
         self.postgre_sql_client = PostgreSQLManagementClient(credential=credential, subscription_id=subscription_id)
         self.container_instance_client = ContainerInstanceManagementClient(credential=credential, subscription_id=subscription_id)
+        self.web_pubsub_service_client = WebPubSubManagementClient(credential=credential, subscription_id=subscription_id)
 
     def verify(self, **kwargs):
         self.set_connect(kwargs['secret_data'])

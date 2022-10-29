@@ -1,0 +1,15 @@
+---
+cloud_service_group: WebPubSubService
+cloud_service_type: Hub
+name: Count by Resource Group
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: data.resource_group
+        fields:
+          - name: value
+            operator: count
+options:
+  chart_type: DONUT

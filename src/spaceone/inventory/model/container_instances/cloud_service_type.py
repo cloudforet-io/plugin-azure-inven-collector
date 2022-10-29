@@ -28,11 +28,15 @@ cst_container_instances.tags = {
 }
 cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        EnumDyField.data_source('Status', 'data.instance_view.state',  default_state={
+        EnumDyField.data_source('State', 'data.instance_view.state',  default_state={
             'safe': ['Running', 'Succeeded'],
             'warning': ['Pending'],
             'alert': ['Stopped', 'Failed'],
             'disable': []}),
+        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
+        TextDyField.data_source('Subscription ID', 'account', options={
+            'is_optional': True
+        }),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('OS type', 'data.os_type'),
@@ -41,8 +45,6 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Memory size(GB)', 'data.memory_size_display'),
         TextDyField.data_source('Volume count', 'data.volume_count_display'),
         TextDyField.data_source('GPU count', 'data.gpu_count_display'),
-        TextDyField.data_source('Subscription ID', 'account'),
-        TextDyField.data_source('Subscription Name', 'data.subscription_name'),
         TextDyField.data_source('Provisioning State', 'data.provisioning_state', options={
             'is_optional': True
         }),
@@ -65,11 +67,9 @@ cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
 
     ],
     search=[
-        SearchField.set(name='Container Group Name', key='name'),
         SearchField.set(name='Status', key='data.instance_view.state'),
         SearchField.set(name='Resource Group', key='data.resource_group'),
         SearchField.set(name='OS type', key='data.os_type'),
-        SearchField.set(name='Total Containers', key='data.container_count_display'),
         SearchField.set(name='Subscription ID', key='account'),
         SearchField.set(name='Subscription Name', key='data.subscription_name'),
         SearchField.set(name='Provisioning State', key='data.provisioning_state'),

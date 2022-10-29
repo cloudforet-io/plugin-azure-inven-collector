@@ -17,3 +17,4 @@ from spaceone.inventory.manager.cosmos_db.instance_manager import CosmosDBManage
 from spaceone.inventory.manager.postgresql_servers.server_manager import PostgreSQLServersManager
 from spaceone.inventory.manager.virtual_machines.instnace_manger import VirtualMachinesManager
 from spaceone.inventory.manager.container_instances.container_manager import ContainerInstancesManager
+from spaceone.inventory.manager.web_pubsub_service.service_manager import WebPubSubServiceManager
