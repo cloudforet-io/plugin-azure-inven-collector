@@ -1,0 +1,16 @@
+---
+cloud_service_group: WebPubSubService
+cloud_service_type: Service
+name: Total Unit Count
+query:
+  aggregate:
+    - group:
+        fields:
+          - name: value
+            key: data.sku.capacity
+            operator: sum
+options:
+  value_options:
+    key: value
+    options:
+      default: 0

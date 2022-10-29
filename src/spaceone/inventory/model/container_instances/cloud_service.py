@@ -2,8 +2,7 @@ from schematics.types import ModelType, StringType, PolyModelType, FloatType, Da
 from spaceone.inventory.model.container_instances.data import ContainerInstance
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout
-from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField, \
-    DictDyField
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField
 
 '''
 CONTAINER_INSTANCES
@@ -12,16 +11,16 @@ CONTAINER_INSTANCES
 # TAB - Default
 container_instances_info_meta = ItemDynamicLayout.set_fields('Container Instances', fields=[
     TextDyField.data_source('Name', 'name'),
-    EnumDyField.data_source('Status', 'data.instance_view.state', default_state={
+    EnumDyField.data_source('State', 'data.instance_view.state', default_state={
         'safe': ['Running', 'Succeeded'],
         'warning': ['Pending'],
         'alert': ['Stopped', 'Failed'],
         'disable': []}),
     TextDyField.data_source('Resource ID', 'data.id'),
     TextDyField.data_source('Resource Group', 'data.resource_group'),
-    TextDyField.data_source('Region', 'region_code'),
     TextDyField.data_source('Subscription', 'data.subscription_name'),
     TextDyField.data_source('Subscription ID', 'account'),
+    TextDyField.data_source('Region', 'region_code'),
     TextDyField.data_source('SKU', 'data.sku'),
     TextDyField.data_source('OS type', 'data.os_type'),
     TextDyField.data_source('Container count', 'data.container_count_display'),

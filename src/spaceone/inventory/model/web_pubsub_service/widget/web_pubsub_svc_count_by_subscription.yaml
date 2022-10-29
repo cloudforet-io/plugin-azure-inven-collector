@@ -1,0 +1,16 @@
+---
+cloud_service_group: WebPubSubService
+cloud_service_type: Service
+name: Count by Subscription
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: account
+        fields:
+          - name: value
+            key: account
+            operator: count
+options:
+  chart_type: DONUT

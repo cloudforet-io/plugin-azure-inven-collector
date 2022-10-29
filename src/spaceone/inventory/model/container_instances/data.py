@@ -235,8 +235,8 @@ class InitContainerDefinition(Model):
 
 
 class ContainerInstance(AzureCloudService):  # Main Class
-    id = StringType(serialize_when_none=False)
-    location = StringType(serialize_when_none=False)
+    id = StringType()
+    location = StringType()
     identity = ModelType(ContainerGroupIdentity, serialize_when_none=False)
     provisioning_state = StringType(serialize_when_none=False)
     containers = ListType(ModelType(Container), serialize_when_none=False)

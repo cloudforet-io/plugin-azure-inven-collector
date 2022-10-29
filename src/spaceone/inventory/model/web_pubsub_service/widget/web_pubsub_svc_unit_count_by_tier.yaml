@@ -1,0 +1,16 @@
+---
+cloud_service_group: WebPubSubService
+cloud_service_type: Service
+name: Unit Count by Tier
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: data.sku.tier
+        fields:
+          - name: value
+            key: data.sku.tier
+            operator: count
+options:
+  chart_type: DONUT
