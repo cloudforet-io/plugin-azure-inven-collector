@@ -121,7 +121,6 @@ web_pub_sub_svc_system_data_info = ItemDynamicLayout.set_fields('System data', r
     DateTimeDyField.data_source('Last modified at', 'last_modified_at'),
     TextDyField.data_source('Last modified by', 'last_modified_by'),
     TextDyField.data_source('Last modified by type', 'last_modified_by_type'),
-    DateTimeDyField.data_source('Created at', 'system_data.created_at')
 ])
 
 # TAB - Custom domain is not yet supported
@@ -168,7 +167,7 @@ web_pubsub_hub_info_meta = ItemDynamicLayout.set_fields('Web PubSub Hub', fields
 ])
 
 # TAB - Event Handlers
-web_pubsub_hub_event_handlers_info = TableDynamicLayout.set_fields('Event Handlers', root_path='data.properties', fields=[
+web_pubsub_hub_event_handlers_info = TableDynamicLayout.set_fields('Event Handlers', root_path='data.properties.event_handlers', fields=[
     TextDyField.data_source('Url template', 'url_template'),
     TextDyField.data_source('User events', 'user_event_pattern'),
     ListDyField.data_source('System events', 'system_events', options={'delimiter': ','}),
@@ -183,12 +182,10 @@ web_pubsub_hub_system_data_info = ItemDynamicLayout.set_fields('System data', ro
     DateTimeDyField.data_source('Last modified at', 'last_modified_at'),
     TextDyField.data_source('Last modified by', 'last_modified_by'),
     TextDyField.data_source('Last modified by type', 'last_modified_by_type'),
-    DateTimeDyField.data_source('Created at', 'system_data.created_at')
 ])
 
 web_pubsub_hub_meta = CloudServiceMeta.set_layouts(
-    [web_pubsub_hub_info_meta, web_pubsub_hub_event_handlers_info, web_pubsub_hub_event_handlers_info,
-     web_pubsub_hub_system_data_info])
+    [web_pubsub_hub_info_meta, web_pubsub_hub_event_handlers_info, web_pubsub_hub_system_data_info])
 
 
 class WebPubSubHubResource(ApplicationIntegrationResource):

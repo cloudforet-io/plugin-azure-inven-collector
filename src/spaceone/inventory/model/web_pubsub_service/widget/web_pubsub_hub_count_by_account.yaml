@@ -1,7 +1,7 @@
 ---
 cloud_service_group: WebPubSubService
-cloud_service_type: Service
-name: Count by Subscription
+cloud_service_type: Hub
+name: Count by Account
 query:
   aggregate:
     - group:

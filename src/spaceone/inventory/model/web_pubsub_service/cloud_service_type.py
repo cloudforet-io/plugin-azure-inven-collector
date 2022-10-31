@@ -14,7 +14,8 @@ Service
 '''
 
 web_pubsub_svc_count_by_region_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_region.yaml')
-web_pubsub_svc_count_by_subscription_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_subscription.yaml')
+web_pubsub_svc_count_by_resource_group_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_count_by_resource_group.yaml')
+web_pubsub_svc_count_by_account_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_account.yaml')
 web_pubsub_svc_total_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_count.yaml')
 web_pubsub_svc_total_unit_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_unit_count_by_tier.yaml')
 web_pubsub_svc_unit_count_by_tier_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_unit_count.yaml')
@@ -85,7 +86,8 @@ cst_web_pubsub_svc._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set('TLS', key='data.tls.client_cert_enabled'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(web_pubsub_svc_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(web_pubsub_svc_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(web_pubsub_svc_count_by_resource_group_conf)),
         ChartWidget.set(**get_data_from_yaml(web_pubsub_svc_count_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(web_pubsub_svc_unit_count_by_tier_conf)),
         CardWidget.set(**get_data_from_yaml(web_pubsub_svc_total_count_conf)),
@@ -98,7 +100,7 @@ Hub
 '''
 web_pubsub_hub_count_by_region_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_count_by_region.yaml')
 web_pubsub_hub_count_by_resource_group_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_count_by_resource_group.yaml')
-web_pubsub_hub_count_by_subscription_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_count_by_subscription.yaml')
+web_pubsub_hub_count_by_account_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_count_by_account.yaml')
 web_pubsub_hub_event_handler_total_count_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_event_handler_total_count.yaml')
 web_pubsub_hub_total_count_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_total_count.yaml')
 
@@ -107,8 +109,8 @@ cst_web_pubsub_hub.name = 'Hub'
 cst_web_pubsub_hub.group = 'WebPubSubService'
 cst_web_pubsub_hub.service_code = 'Microsoft.SignalRService/WebPubSub/hubs'
 cst_web_pubsub_hub.labels = ['Application Integration']
-cst_web_pubsub_hub.is_major = True
-cst_web_pubsub_hub.is_primary = True
+cst_web_pubsub_hub.is_major = False
+cst_web_pubsub_hub.is_primary = False
 cst_web_pubsub_hub.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-web-pubsub-service.svg',
 }
@@ -134,13 +136,12 @@ cst_web_pubsub_hub._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set('Location', key='data.location'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(web_pubsub_hub_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(web_pubsub_hub_count_by_account_conf)),
         ChartWidget.set(**get_data_from_yaml(web_pubsub_hub_count_by_resource_group_conf)),
         ChartWidget.set(**get_data_from_yaml(web_pubsub_hub_count_by_region_conf)),
         CardWidget.set(**get_data_from_yaml(web_pubsub_hub_total_count_conf)),
         CardWidget.set(**get_data_from_yaml(web_pubsub_hub_event_handler_total_count_conf))
     ]
-
 )
 
 CLOUD_SERVICE_TYPES = [
