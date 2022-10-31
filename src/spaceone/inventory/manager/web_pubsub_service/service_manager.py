@@ -97,7 +97,7 @@ class WebPubSubServiceManager(AzureManager):
                 })
 
                 self.set_region_code(web_pubsub_service_data['location'])
-                # web_pubsub_responses.append(WebPubSubServiceResponse({'resource': web_pubsub_service_resource}))
+                web_pubsub_responses.append(WebPubSubServiceResponse({'resource': web_pubsub_service_resource}))
             except Exception as e:
                 _LOGGER.error(f'[list_instances] {web_pubsub_service_id} {e}', exc_info=True)
                 error_response = self.generate_resource_error_response(e, 'Service', 'WebPubSubService',
