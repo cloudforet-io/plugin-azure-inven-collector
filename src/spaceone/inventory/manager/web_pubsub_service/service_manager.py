@@ -62,7 +62,7 @@ class WebPubSubServiceManager(AzureManager):
                 web_pubsub_hubs = web_pubsub_service_conn.list_hubs(resource_group_name=resource_group_name,
                                                                     resource_name=resource_name)
 
-                _hub_responses, _hub_errors = self._collect_web_pubsub_hub(web_pubsub_hubs, subscription_info, web_pubsub_service_dict['location'])
+                _hub_responses, _hub_errors = self._collect_web_pubsub_hub(copy.deepcopy(web_pubsub_hubs), subscription_info, web_pubsub_service_dict['location'])
                 web_pubsub_responses.extend(_hub_responses)
                 error_responses.extend(_hub_errors)
 
