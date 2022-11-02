@@ -17,8 +17,8 @@ web_pubsub_svc_count_by_region_conf = os.path.join(current_dir, 'widget/web_pubs
 web_pubsub_svc_count_by_resource_group_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_resource_group.yaml')
 web_pubsub_svc_count_by_account_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_account.yaml')
 web_pubsub_svc_total_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_count.yaml')
-web_pubsub_svc_total_unit_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_unit_count_by_tier.yaml')
-web_pubsub_svc_unit_count_by_tier_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_unit_count.yaml')
+web_pubsub_svc_total_unit_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_unit_count.yaml')
+web_pubsub_svc_unit_count_by_tier_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_unit_count_by_tier.yaml')
 
 cst_web_pubsub_svc = CloudServiceTypeResource()
 cst_web_pubsub_svc.name = 'Service'
