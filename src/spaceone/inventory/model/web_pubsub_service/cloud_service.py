@@ -99,7 +99,7 @@ default_action_access_control_rules = ItemDynamicLayout.set_fields('Default acti
 ])
 
 public_network_access_control_rules = ItemDynamicLayout.set_fields('Public network', fields=[
-    ListDyField.data_source('Allow', 'data.public_network.allow', options={'delimiter': ','})
+    ListDyField.data_source('Allow', 'data.network_ac_ls.public_network.allow', options={'delimiter': ','})
 ])
 
 private_endpoint_connections_access_control_rules = TableDynamicLayout.set_fields('Private endpoint connections',
@@ -163,14 +163,14 @@ web_pubsub_hub_info_meta = ItemDynamicLayout.set_fields('Web PubSub Hub', fields
     EnumDyField.data_source('Anonymous Connect', 'data.properties.anonymous_connect_policy', default_badge={
         'indigo.500': ['allow'], 'coral.600': ['deny']
     }),
-    TextDyField.data_source('EventHandler count', 'web_pubsub_hub_evnet_handler_count_display')
+    TextDyField.data_source('EventHandler count', 'data.web_pubsub_hub_evnet_handler_count_display')
 ])
 
 # TAB - Event Handlers
 web_pubsub_hub_event_handlers_info = TableDynamicLayout.set_fields('Event Handlers', root_path='data.properties.event_handlers', fields=[
     TextDyField.data_source('Url template', 'url_template'),
     TextDyField.data_source('User events', 'user_event_pattern'),
-    ListDyField.data_source('System events', 'system_events', options={'delimiter': ','}),
+    ListDyField.data_source('System events', 'system_events', options={'delimiter': ', '}),
     TextDyField.data_source('Authentication', 'auth.type')
 ])
 
