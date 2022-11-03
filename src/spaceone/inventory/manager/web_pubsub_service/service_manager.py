@@ -59,16 +59,15 @@ class WebPubSubServiceManager(AzureManager):
                             private_endpoint['private_endpoint']['id'])
 
                 # Collect Web PubSub Hub resource
-                web_pubsub_hubs = web_pubsub_service_conn.list_hubs(resource_group_name=resource_group_name,
-                                                                    resource_name=resource_name)
+                web_pubsub_hubs = web_pubsub_service_conn.list_hubs(resource_group_name=resource_group_name, resource_name=resource_name)
+                web_pubsub_hubs_dict = [self.convert_nested_dictionary(hub) for hub in web_pubsub_hubs]
 
-                _hub_responses, _hub_errors = self._collect_web_pubsub_hub(web_pubsub_hubs, subscription_info, web_pubsub_service_dict['location'])
+                _hub_responses, _hub_errors = self._collect_web_pubsub_hub(web_pubsub_hubs_dict, subscription_info, web_pubsub_service_dict['location'])
                 web_pubsub_responses.extend(_hub_responses)
                 error_responses.extend(_hub_errors)
 
                 # Add Web PubSub Hub info in data
-                web_pubsub_hub_datas = [WebPubSubHub(self.convert_nested_dictionary(hub), strict=False) for hub in
-                                        web_pubsub_hubs]
+                web_pubsub_hub_datas = [WebPubSubHub(hub_dict, strict=False) for hub_dict in web_pubsub_hubs_dict]
 
                 # Add Web PubSub Key info in data
                 web_pubsub_key = web_pubsub_service_conn.list_keys(resource_group_name=resource_group_name,
@@ -107,16 +106,15 @@ class WebPubSubServiceManager(AzureManager):
         _LOGGER.debug(f'** Web PubSub Service Finished {time.time() - start_time} Seconds **')
         return web_pubsub_responses, error_responses
 
-    def _collect_web_pubsub_hub(self, web_pubsub_hubs, subscription_info, location):
+    def _collect_web_pubsub_hub(self, web_pubsub_hubs_dict, subscription_info, location):
         web_pubsub_hub_responses = []
         error_responses = []
-        for web_pubsub_hub in web_pubsub_hubs:
+        for web_pubsub_hub_dict in web_pubsub_hubs_dict:
             web_pubsub_hub_id = ''
             try:
-                web_pubsub_hub_id = web_pubsub_hub.id
+                web_pubsub_hub_id = web_pubsub_hub_dict['id']
                 resource_group_name = self.get_resource_group_from_id(web_pubsub_hub_id)
 
-                web_pubsub_hub_dict = self.convert_nested_dictionary(web_pubsub_hub)
                 web_pubsub_hub_dict.update({
                     'location': location,
                     'resource_group': resource_group_name,

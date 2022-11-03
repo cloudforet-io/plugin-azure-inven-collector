@@ -24,7 +24,7 @@ web_pubsub_svc_info_meta = ItemDynamicLayout.set_fields('Web PubSub Service', fi
     TextDyField.data_source('Region', 'data.location'),
     TextDyField.data_source('Hub count', 'data.web_pubsub_hub_count_display'),
     TextDyField.data_source('SKU', 'data.sku.tier'),
-    TextDyField.data_source('Unit', 'data.sku.unit'),
+    TextDyField.data_source('Unit', 'data.sku.capacity'),
     TextDyField.data_source('Version', 'data.version'),
     TextDyField.data_source('Host name', 'data.host_name'),
     TextDyField.data_source('Host name prefix', 'data.host_name_prefix'),
@@ -80,7 +80,7 @@ shared_private_endpoints_private_access = TableDynamicLayout.set_fields('Shared 
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Private link resource ID', 'private_link_resource_id'),
     TextDyField.data_source('Group ID', 'group_id'),
-    EnumDyField.data_source('Connection state', 'status', efault_state={
+    EnumDyField.data_source('Connection state', 'status', default_state={
         'safe': ['Approved'],
         'warning': ['Pending'],
         'alert': ['Disconnected', 'Rejected'],
@@ -99,17 +99,17 @@ default_action_access_control_rules = ItemDynamicLayout.set_fields('Default acti
 ])
 
 public_network_access_control_rules = ItemDynamicLayout.set_fields('Public network', fields=[
-    ListDyField.data_source('Allow', 'data.public_network.allow', options={'delimiter': ','})
+    ListDyField.data_source('Allow', 'data.public_network.allow', options={'delimiter': ', '})
 ])
 
 private_endpoint_connections_access_control_rules = TableDynamicLayout.set_fields('Private endpoint connections',
                                                                                   root_path='data.network_ac_ls.private_endpoints' ,fields=[
         TextDyField.data_source('Connection name', 'name'),
-        ListDyField.data_source('Allow', 'allow',  options={'delimiter': ','})
+        ListDyField.data_source('Allow', 'allow',  options={'delimiter': ', '})
     ])
 
 web_pubsub_svc_access_control_rules_info = ListDynamicLayout.set_layouts(' Access control rules', layouts=[
-    default_action_access_control_rules, default_action_access_control_rules,
+    default_action_access_control_rules, public_network_access_control_rules,
     private_endpoint_connections_access_control_rules
 ])
 
