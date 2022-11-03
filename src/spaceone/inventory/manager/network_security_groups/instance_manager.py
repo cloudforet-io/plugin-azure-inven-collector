@@ -230,10 +230,9 @@ class NetworkSecurityGroupsManager(AzureManager):
     @staticmethod
     def get_virtual_machine_name(network_interfaces, network_security_group_id):
         virtual_machine_name = None
-
         for network_interface in network_interfaces:
-            if network_interface['network_security_group']['id'].split('/')[-1] == network_security_group_id.split('/')[-1]:
-                virtual_machine_name = network_interface['virtual_machine']['id'].split('/')[-1]
-                return virtual_machine_name
+            if _network_security_group := network_interface['network_security_group']:
+                if _network_security_group['id'].split('/')[-1] == network_security_group_id.split('/')[-1]:
+                    return virtual_machine_name
         return virtual_machine_name
 

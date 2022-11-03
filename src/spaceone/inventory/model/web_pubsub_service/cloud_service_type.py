@@ -14,11 +14,11 @@ Service
 '''
 
 web_pubsub_svc_count_by_region_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_region.yaml')
-web_pubsub_svc_count_by_resource_group_conf = os.path.join(current_dir, 'widget/web_pubsub_hub_count_by_resource_group.yaml')
+web_pubsub_svc_count_by_resource_group_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_resource_group.yaml')
 web_pubsub_svc_count_by_account_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_count_by_account.yaml')
 web_pubsub_svc_total_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_count.yaml')
-web_pubsub_svc_total_unit_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_unit_count_by_tier.yaml')
-web_pubsub_svc_unit_count_by_tier_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_unit_count.yaml')
+web_pubsub_svc_total_unit_count_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_total_unit_count.yaml')
+web_pubsub_svc_unit_count_by_tier_conf = os.path.join(current_dir, 'widget/web_pubsub_svc_unit_count_by_tier.yaml')
 
 cst_web_pubsub_svc = CloudServiceTypeResource()
 cst_web_pubsub_svc.name = 'Service'
@@ -46,7 +46,7 @@ cst_web_pubsub_svc._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Hub count', 'data.web_pubsub_hub_count_display'),
         TextDyField.data_source('SKU', 'data.sku.tier'),
-        TextDyField.data_source('Unit', 'data.sku.unit'),
+        TextDyField.data_source('Unit', 'data.sku.capacity'),
         TextDyField.data_source('Version', 'data.version', options={
             'is_optional': True
         }),
@@ -75,7 +75,7 @@ cst_web_pubsub_svc._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set('Location', key='data.location'),
         SearchField.set('Hub count', key='data.web_pubsub_hub_count_display', data_type='integer'),
         SearchField.set('SKU', key='data.sku.tier'),
-        SearchField.set('Unit', key='data.sku.unit', data_type='integer'),
+        SearchField.set('Unit', key='data.sku.capacity', data_type='integer'),
         SearchField.set('Version', key='data.version', data_type='float'),
         SearchField.set('Host name', key='data.host_name'),
         SearchField.set('Host name prefix', key='data.host_name_prefix'),
