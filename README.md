@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.5.0-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.0-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
-> Latest stable version : 1.5.0
+> Latest stable version : 1.6.0
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -46,6 +46,7 @@ Please contact us if you need any further information.
 | Instance           | [Virtual Machines](#virtual-machines)               |
 | Instance           | [Virtual Networks](#virtual-networks)               |
 | ScaleSet           | [VM ScaleSets](#virtual-machine-scale-sets)         |
+| Service            | [Web PubSub Service](#web-pubsub-service)           |
     
 ---
 ## SETTING
@@ -97,6 +98,7 @@ The following is a list of services being collected and service code information
 | 16  | Virtual Networks        | Microsoft.Network/virtualNetworks    |
 | 17  | VM ScaleSets            | Microsoft.Compute/virtualMachineScaleSets |
 | 18  | Container Instances     | Microsoft.ContainerInstance/containerGroups |
+| 19  | Web PubSub Service      | Microsoft.SignalRService/WebPubSub |
 ---
 
 ## Authentication Overview
@@ -284,7 +286,9 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
                     "Microsoft.Network/virtualRouters/peerings/read",
                     "Microsoft.DocumentDB/databaseAccounts/listKeys/action",
                     "Microsoft.ContainerInstance/containerGroups/read",
-                    
+                    "Microsoft.SignalRService/WebPubSub/read",
+                    "Microsoft.SignalRService/WebPubSub/hubs/read",
+                    "Microsoft.SignalRService/webPubSub/listKeys/action"
                 ],
                 "notActions": [],
                 "dataActions": [],
@@ -297,7 +301,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 ### Additional custom roles for SpaceONE collector
 Some of cloud services require several additional IAM settings for collecting resources. <br>
 
-#### [Key Vaults]()
+#### [Key Vaults](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-keyvault/azure.mgmt.keyvault?view=azure-python)
 
 - KeyVaults
 
@@ -731,7 +735,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules/read"
       ```
 #### [Container Instances](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerinstance/azure.mgmt.containerinstance.containerinstancemanagementclient?view=azure-python)
-- PostgreSQL Servers
+- Container Instances
     - Scope
         - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerinstance/azure.mgmt.containerinstance.containerinstancemanagementclient?view=azure-python
           - container_groups
@@ -741,6 +745,21 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.ContainerInstance/containerGroups/read"
       ``` 
 
+#### [Web PubSub Service](https://learn.microsoft.com/en-us/python/api/overview/azure/web-pubsub?view=azure-python)
+- Web PubSub Service
+    - Scope
+        - https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-webpubsub_1.1.0b1/sdk/webpubsub/azure-mgmt-webpubsub/azure/mgmt/webpubsub/operations
+          - web_pub_sub
+            - list_by_subscription()
+            - list_keys()
+          - web_pub_sub_hubs
+            - list()
+    - Permissions
+      ```
+      "Microsoft.SignalRService/WebPubSub/read",
+      "Microsoft.SignalRService/WebPubSub/hubs/read",
+      "Microsoft.SignalRService/webPubSub/listKeys/action"
+      ```
 ---
 ## Options
 
@@ -773,6 +792,7 @@ The cloud_service_types items that can be specified are as follows.
         'VirtualNetworks',
         'VMScaleSets',
         'ContainerInstances',
+        'WebPubSubService'
     ]
 }
 </code>
@@ -820,6 +840,9 @@ The `service_code_mappers` items that can be specified are as follows.
 ---
 
 ## Release Note
+### Ver 1.6.0
+* [Add ```Web PubSub Service``` cloud service](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/21)
+
 ### Ver 1.5.0
 * [Add ```Container Instances``` cloud service](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/14)
 
