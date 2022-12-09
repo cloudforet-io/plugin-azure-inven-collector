@@ -1,7 +1,7 @@
 ---
 cloud_service_group: StorageAccounts
 cloud_service_type: Instance
-name: Blob Size by Resource Group
+name: Blob Count by Resource Group
 query:
   aggregate:
     - group:
@@ -10,7 +10,7 @@ query:
             key: data.resource_group
         fields:
           - name: value
-            key: data.blob_size_display
+            key: data.blob_count_display
             operator: sum
 options:
   chart_type: DONUT

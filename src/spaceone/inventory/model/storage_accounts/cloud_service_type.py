@@ -10,7 +10,9 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 
 storage_accounts_blob_count_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_count_by_account.yaml')
 storage_accounts_blob_count_by_region_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_count_by_region.yaml')
+storage_accounts_blob_count_by_resource_group_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_count_by_resource_group.yaml')
 storage_accounts_blob_size_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_size_by_account.yaml')
+storage_accounts_blob_size_by_region_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_size_by_region.yaml')
 storage_accounts_blob_size_by_resource_group_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_size_by_resource_group.yaml')
 storage_accounts_count_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_account.yaml')
 storage_accounts_count_by_region_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_region.yaml')
@@ -29,11 +31,10 @@ cst_storage_accounts.is_primary = True
 cst_storage_accounts.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-service-accounts.svg',
 }
-
 cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Container count', 'data.container_count_display'),
-        SizeField.data_source('Blob count', 'data.blob_count_display'),
+        TextDyField.data_source('Blob count', 'data.blob_count_display'),
         SizeField.data_source('Blob total size', 'data.blob_size_display'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
@@ -169,17 +170,17 @@ cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
         ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_resource_group_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_account_conf)),
-        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_count_by_account_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_count_by_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_size_by_region_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_size_by_resource_group_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_size_by_account_conf)),
         CardWidget.set(**get_data_from_yaml(storage_accounts_total_count_conf)),
         CardWidget.set(**get_data_from_yaml(storage_accounts_total_blob_count_conf)),
         CardWidget.set(**get_data_from_yaml(storage_accounts_total_blob_size_conf)),
-
     ]
 )
-
 
 CLOUD_SERVICE_TYPES = [
     CloudServiceTypeResponse({'resource': cst_storage_accounts}),

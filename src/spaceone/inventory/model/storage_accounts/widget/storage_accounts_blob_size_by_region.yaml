@@ -1,7 +1,7 @@
 ---
 cloud_service_group: StorageAccounts
 cloud_service_type: Instance
-name: Blob Count By Region
+name: Blob Size by Region
 query:
   aggregate:
     - group:
@@ -10,17 +10,15 @@ query:
             key: region_code
         fields:
           - name: value
-            key: data.blob_count_display
+            key: data.blob_size_display
             operator: sum
-  filter:
-    - key: account
-      value: true
-      operator: exists
 options:
   chart_type: COLUMN
   name_options:
     key: name
     reference:
-      resource_type: inventory.Region
+      resource_type: "inventory.Region"
       reference_key: region_code
-
+  value_options:
+    key: value
+    type: size
