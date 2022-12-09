@@ -175,6 +175,8 @@ class AzureManager(BaseManager):
         cloud_svc_dict = {}
         if hasattr(cloud_svc_object, '__dict__'):  # if cloud_svc_object is not a dictionary type but has dict method
             cloud_svc_dict = cloud_svc_object.__dict__
+        elif isinstance(cloud_svc_object, dict):
+            cloud_svc_dict = cloud_svc_object
         elif not isinstance(cloud_svc_object, list):  # if cloud_svc_object is one of type like int, float, char, ...
             return cloud_svc_object
 

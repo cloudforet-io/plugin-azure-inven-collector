@@ -24,7 +24,10 @@ storage_account_info_meta = ItemDynamicLayout.set_fields('Storage Account', fiel
     TextDyField.data_source('Replication', 'data.sku.name'),
     TextDyField.data_source('Account Kind', 'data.kind'),
     TextDyField.data_source('Provisioning State', 'data.provisioning_state'),
-    DateTimeDyField.data_source('Creation Time', 'data.creation_time')
+    DateTimeDyField.data_source('Creation Time', 'data.creation_time'),
+    TextDyField.data_source('Container count', 'data.container_count_display'),
+    TextDyField.data_source('Blob count', 'data.blob_count_display'),
+    SizeField.data_source('Blob total size', 'data.blob_size_display')
 ])
 
 # TAB - Networking
@@ -52,7 +55,7 @@ storage_account_primary_endpoints = ItemDynamicLayout.set_fields('Primary Endpoi
 ])
 
 # TAB - Containers
-storage_account_containers = TableDynamicLayout.set_fields('Containers', 'data.container_item', fields=[
+storage_account_containers = TableDynamicLayout.set_fields('Containers', 'data', fields=[
     TextDyField.data_source('Name', 'name'),
     DateTimeDyField.data_source('Last Modified', 'last_modified_time'),
     TextDyField.data_source('Public Access Level', 'public_access'),

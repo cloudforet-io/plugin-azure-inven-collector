@@ -2,15 +2,21 @@ import os
 from spaceone.inventory.libs.utils import *
 from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, ChartWidget
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, DateTimeDyField, ListDyField, \
-    EnumDyField
+    SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
+storage_accounts_blob_count_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_count_by_account.yaml')
+storage_accounts_blob_count_by_region_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_count_by_region.yaml')
+storage_accounts_blob_size_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_size_by_account.yaml')
+storage_accounts_blob_size_by_resource_group_conf = os.path.join(current_dir, 'widget/storage_accounts_blob_size_by_resource_group.yaml')
 storage_accounts_count_by_account_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_account.yaml')
 storage_accounts_count_by_region_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_region.yaml')
-storage_accounts_count_by_subscription_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_subscription.yaml')
+storage_accounts_count_by_resource_group_conf = os.path.join(current_dir, 'widget/storage_accounts_count_by_resource_group.yaml')
+storage_accounts_total_blob_count_conf = os.path.join(current_dir, 'widget/storage_accounts_total_blob_count.yaml')
+storage_accounts_total_blob_size_conf = os.path.join(current_dir, 'widget/storage_accounts_total_blob_size.yaml')
 storage_accounts_total_count_conf = os.path.join(current_dir, 'widget/storage_accounts_total_count.yaml')
 
 cst_storage_accounts = CloudServiceTypeResource()
@@ -26,11 +32,15 @@ cst_storage_accounts.tags = {
 
 cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        TextDyField.data_source('Type', 'data.type'),
+        SizeField.data_source('Container count', 'data.container_count_display'),
+        SizeField.data_source('Blob count', 'data.blob_count_display'),
+        SizeField.data_source('Blob total size', 'data.container_size_display'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'account'),
         TextDyField.data_source('Subscription Name', 'data.subscription_name'),
+        TextDyField.data_source('SKU', 'data.sku.name'),
+        TextDyField.data_source('Type', 'data.type'),
         TextDyField.data_source('State of Primary', 'data.status_of_primary', options={
             'is_optional': True
         }),
@@ -117,11 +127,15 @@ cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
         })
     ],
     search=[
-        SearchField.set(name='Type', key='data.type'),
+        SearchField.set(name='Container count', key='data.container_count_display', data_type='integer'),
+        SearchField.set(name='Blob count', key='data.blob_count_display', data_type='integer'),
+        SearchField.set(name='Blob total size(Bytes)', key='data.container_size_display', data_type='integer'),
         SearchField.set(name='Subscription ID', key='account'),
         SearchField.set(name='Subscription Name', key='data.subscription_name'),
         SearchField.set(name='Resource Group', key='data.resource_group'),
         SearchField.set(name='Location', key='data.location'),
+        SearchField.set(name='SKU', key='data.sku.name'),
+        SearchField.set(name='Type', key='data.type'),
         SearchField.set(name='State of Primary', key='data.status_of_primary'),
         SearchField.set(name='Performance Tier', key='instance_type'),
         SearchField.set(name='Access Tier', key='data.access_tier'),
@@ -152,10 +166,17 @@ cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Secondary Location', key='data.secondary_location'),
     ],
     widget=[
-        ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_account_conf)),
         ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_region_conf)),
-        ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_subscription_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_count_by_account_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_count_by_region_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_size_by_resource_group_conf)),
+        ChartWidget.set(**get_data_from_yaml(storage_accounts_blob_size_by_account_conf)),
         CardWidget.set(**get_data_from_yaml(storage_accounts_total_count_conf)),
+        CardWidget.set(**get_data_from_yaml(storage_accounts_total_blob_count_conf)),
+        CardWidget.set(**get_data_from_yaml(storage_accounts_total_blob_size_conf)),
+
     ]
 )
 

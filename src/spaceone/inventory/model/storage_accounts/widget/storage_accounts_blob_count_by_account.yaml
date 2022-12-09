@@ -1,7 +1,7 @@
 ---
 cloud_service_group: StorageAccounts
 cloud_service_type: Instance
-name: Total Count by Subscription
+name: Blob Count By Account
 query:
   aggregate:
     - group:
@@ -10,7 +10,11 @@ query:
             key: account
         fields:
           - name: value
-            key: account
-            operator: count
+            key: data.blob_count_display
+            operator: sum
+  filter:
+    - key: account
+      value: true
+      operator: exists
 options:
   chart_type: DONUT

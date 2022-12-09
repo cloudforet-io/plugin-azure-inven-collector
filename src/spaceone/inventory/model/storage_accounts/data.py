@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, DictType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, DictType, FloatType
 from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
@@ -229,10 +229,18 @@ class Sku(Model):
 
 
 class ContainerItem(Model):
+    id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
-    last_modified_time = DateTimeType(serialize_when_none=False)
+    type = StringType(serialize_when_none=False)
+    etag = StringType(serialize_when_none=False)
+    version = StringType(serialize_when_none=False)
+    deleted = BooleanType(serialize_when_none=False)
+    deleted_time = DateTimeType(serialize_when_none=False)
+    remaining_retention_days = IntType(serialize_when_none=False)
     public_access = StringType(serialize_when_none=False)
+    last_modified_time = DateTimeType(serialize_when_none=False)
     lease_state = StringType(serialize_when_none=False)
+    metadata = DictType(StringType)
 
 
 class StorageAccount(AzureCloudService):
@@ -278,6 +286,9 @@ class StorageAccount(AzureCloudService):
     supports_https_traffic_only = BooleanType(serialize_when_none=False)
     sku = ModelType(Sku, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
+    blob_size_display = FloatType(default=0.0)
+    blob_count_display = IntType(default=0)
+    container_count_display = IntType(default=0)
 
     def reference(self):
         return {

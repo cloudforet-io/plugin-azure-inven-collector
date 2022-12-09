@@ -1,0 +1,23 @@
+---
+cloud_service_group: StorageAccounts
+cloud_service_type: Instance
+name: Blob Size By Account
+query:
+  aggregate:
+    - group:
+        keys:
+          - name: name
+            key: account
+        fields:
+          - name: value
+            key: data.blob_size_display
+            operator: sum
+  filter:
+    - key: account
+      value: true
+      operator: exists
+options:
+  chart_type: DONUT
+  value_options:
+    key: value
+    type: size
