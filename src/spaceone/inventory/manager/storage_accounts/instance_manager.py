@@ -1,3 +1,4 @@
+import datetime
 import time
 import logging
 from spaceone.inventory.libs.manager import AzureManager
@@ -159,18 +160,26 @@ class StorageAccountsManager(AzureManager):
         return blob_list
 
     def _get_blob_count_from_monitoring(self, monitor_conn, storage_account_id):
+        timespan = self._get_timespan_from_now(1)
+        aggregation = 'total'
+        interval = 'PT1H'
         container_blob_count_metric = self._get_metric_data(monitor_conn, f'{storage_account_id}/blobServices/default',
-                                                            metricnames='BlobCount')
+                                                            metricnames='BlobCount', aggregation=aggregation,
+                                                            timespan=timespan, interval=interval)
 
         container_blob_count_metric_dict = self.convert_nested_dictionary(container_blob_count_metric)
-        return container_blob_count_metric_dict['value'][0]['timeseries'][0]['data'][0]['average']
+        return container_blob_count_metric_dict['value'][0]['timeseries'][0]['data'][0][aggregation]
 
     def _get_blob_size_from_monitoring(self, monitor_conn, storage_account_id):
+        timespan = self._get_timespan_from_now(1)
+        aggregation = 'total'
+        interval = 'PT1H'
         container_blob_capacity_metric = self._get_metric_data(monitor_conn,
                                                                f'{storage_account_id}/blobServices/default',
-                                                               metricnames='BlobCapacity', aggregation='Total')
+                                                               metricnames='BlobCapacity', aggregation=aggregation,
+                                                               timespan=timespan, interval=interval)
         container_blob_capacity_metric_dict = self.convert_nested_dictionary(container_blob_capacity_metric)
-        return container_blob_capacity_metric_dict['value'][0]['timeseries'][0]['data'][0]['total']
+        return container_blob_capacity_metric_dict['value'][0]['timeseries'][0]['data'][0][aggregation]
 
     @staticmethod
     def get_associated_listener(frontend_ip_configuration_dict, http_listeners_list):
@@ -202,7 +211,6 @@ class StorageAccountsManager(AzureManager):
                     'associated_rules': request_rules
                 })
 
-
     @staticmethod
     def update_rewrite_ruleset_dict(rewrite_rule_sets_list, rewrite_rule_id, applied_rules_list):
         for rewrite_rule in rewrite_rule_sets_list:
@@ -233,5 +241,11 @@ class StorageAccountsManager(AzureManager):
         return names
 
     @staticmethod
-    def _get_metric_data(monitor_conn, resource_uri, metricnames, aggregation=None):
-        return monitor_conn.monitor_client.metrics.list(resource_uri, metricnames=metricnames, aggregation=aggregation)
+    def _get_metric_data(monitor_conn, resource_uri, metricnames, aggregation=None, timespan=None, interval=None):
+        return monitor_conn.list_metrics(resource_uri, metricnames=metricnames, aggregation=aggregation, timespan=timespan, interval=interval)
+
+    @staticmethod
+    def _get_timespan_from_now(hours):
+        time_now = datetime.datetime.utcnow()
+        time_now_hours_ago = time_now - datetime.timedelta(hours=hours)
+        return "{}/{}".format(time_now_hours_ago, time_now)
