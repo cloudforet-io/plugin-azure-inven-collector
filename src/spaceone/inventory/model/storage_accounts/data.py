@@ -240,7 +240,10 @@ class ContainerItem(Model):
     public_access = StringType(serialize_when_none=False)
     last_modified_time = DateTimeType(serialize_when_none=False)
     lease_state = StringType(serialize_when_none=False)
+    lease_status = StringType(choices=['LOCKED', 'UNLOCKED'])
+    lease_duration = StringType(choices=['FIXED', 'INFINITE'])
     metadata = DictType(StringType)
+    default_encryption_scope = StringType(serialize_when_none=False)
 
 
 class StorageAccount(AzureCloudService):
