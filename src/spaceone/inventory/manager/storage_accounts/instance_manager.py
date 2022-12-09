@@ -3,6 +3,7 @@ import logging
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.storage_accounts import StorageAccountsConnector
+from spaceone.inventory.connector.monitor import MonitorConnector
 from spaceone.inventory.model.storage_accounts.cloud_service import *
 from spaceone.inventory.model.storage_accounts.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.storage_accounts.data import *
@@ -35,6 +36,8 @@ class StorageAccountsManager(AzureManager):
 
         subscription_info = params['subscription_info']
         storage_account_conn: StorageAccountsConnector = self.locator.get_connector(self.connector_name, **params)
+        monitor_conn: MonitorConnector = self.locator.get_connector('MonitorConnector', **params)
+
         storage_account_responses = []
         error_responses = []
 
@@ -54,8 +57,10 @@ class StorageAccountsManager(AzureManager):
                     })
 
                 if storage_account_dict.get('name') is not None:
+                    container_item = self.list_containers(storage_account_conn, resource_group, storage_account_dict['name'])
                     storage_account_dict.update({
-                        'container_item': self.list_containers(storage_account_conn, resource_group, storage_account_dict['name'])
+                        'container_item': container_item,
+                        'container_count_display': len(container_item)
                     })
 
                 if storage_account_dict.get('routing_preference') is not None:
@@ -71,7 +76,9 @@ class StorageAccountsManager(AzureManager):
                     'resource_group': resource_group,
                     'subscription_id': subscription_info['subscription_id'],
                     'subscription_name': subscription_info['subscription_name'],
-                    'azure_monitor': {'resource_id': storage_account_id}
+                    'azure_monitor': {'resource_id': storage_account_id},
+                    'blob_count_display': self._get_blob_count_from_monitoring(monitor_conn, storage_account_id),
+                    'blob_size_display': self._get_blob_size_from_monitoring(monitor_conn, storage_account_id),
                 })
 
                 storage_account_data = StorageAccount(storage_account_dict, strict=False)
@@ -151,6 +158,20 @@ class StorageAccountsManager(AzureManager):
 
         return blob_list
 
+    def _get_blob_count_from_monitoring(self, monitor_conn, storage_account_id):
+        container_blob_count_metric = self._get_metric_data(monitor_conn, f'{storage_account_id}/blobServices/default',
+                                                            metricnames='BlobCount')
+
+        container_blob_count_metric_dict = self.convert_nested_dictionary(container_blob_count_metric)
+        return container_blob_count_metric_dict['value'][0]['timeseries'][0]['data'][0]['average']
+
+    def _get_blob_size_from_monitoring(self, monitor_conn, storage_account_id):
+        container_blob_capacity_metric = self._get_metric_data(monitor_conn,
+                                                               f'{storage_account_id}/blobServices/default',
+                                                               metricnames='BlobCapacity', aggregation='Total')
+        container_blob_capacity_metric_dict = self.convert_nested_dictionary(container_blob_capacity_metric)
+        return container_blob_capacity_metric_dict['value'][0]['timeseries'][0]['data'][0]['total']
+
     @staticmethod
     def get_associated_listener(frontend_ip_configuration_dict, http_listeners_list):
         associated_listener = ''
@@ -210,3 +231,7 @@ class StorageAccountsManager(AzureManager):
             _LOGGER.error(f'[ERROR: Azure Storage Account Network Rule Get Name]: {e}')
 
         return names
+
+    @staticmethod
+    def _get_metric_data(monitor_conn, resource_uri, metricnames, aggregation=None):
+        return monitor_conn.monitor_client.metrics.list(resource_uri, metricnames=metricnames, aggregation=aggregation)

@@ -34,7 +34,7 @@ cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         SizeField.data_source('Container count', 'data.container_count_display'),
         SizeField.data_source('Blob count', 'data.blob_count_display'),
-        SizeField.data_source('Blob total size', 'data.container_size_display'),
+        SizeField.data_source('Blob total size', 'data.blob_size_display'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
         TextDyField.data_source('Location', 'data.location'),
         TextDyField.data_source('Subscription ID', 'account'),
@@ -129,7 +129,7 @@ cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
     search=[
         SearchField.set(name='Container count', key='data.container_count_display', data_type='integer'),
         SearchField.set(name='Blob count', key='data.blob_count_display', data_type='integer'),
-        SearchField.set(name='Blob total size(Bytes)', key='data.container_size_display', data_type='integer'),
+        SearchField.set(name='Blob total size(Bytes)', key='data.blob_size_display', data_type='integer'),
         SearchField.set(name='Subscription ID', key='account'),
         SearchField.set(name='Subscription Name', key='data.subscription_name'),
         SearchField.set(name='Resource Group', key='data.resource_group'),
