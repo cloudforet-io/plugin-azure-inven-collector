@@ -32,7 +32,7 @@ cst_storage_accounts.tags = {
 
 cst_storage_accounts._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
-        SizeField.data_source('Container count', 'data.container_count_display'),
+        TextDyField.data_source('Container count', 'data.container_count_display'),
         SizeField.data_source('Blob count', 'data.blob_count_display'),
         SizeField.data_source('Blob total size', 'data.blob_size_display'),
         TextDyField.data_source('Resource Group', 'data.resource_group'),
