@@ -246,6 +246,6 @@ class StorageAccountsManager(AzureManager):
 
     @staticmethod
     def _get_timespan_from_now(hours):
-        time_now = datetime.datetime.utcnow()
+        time_now = datetime.datetime.utcnow() - datetime.timedelta(hours=1)
         time_now_hours_ago = time_now - datetime.timedelta(hours=hours)
         return "{}/{}".format(time_now_hours_ago, time_now)
