@@ -187,7 +187,6 @@ class LoadBalancersManager(AzureManager):
         # network_interfaces >> network_interfaces >> ip_configurations
         for nil in network_interface_object_list:
             network_interface_dict = self.convert_nested_dictionary(nil)
-            _LOGGER.debug(f'[NETWORK_INTERFACE_DICT] {network_interface_dict}')
             nic_rg_name = network_interface_dict.get('id', '').split('/')[4]
 
             if network_interface_dict.get('ip_configurations') is not None:
