@@ -55,11 +55,16 @@ storage_account_primary_endpoints = ItemDynamicLayout.set_fields('Primary Endpoi
 ])
 
 # TAB - Containers
-storage_account_containers = TableDynamicLayout.set_fields('Containers', 'data', fields=[
+storage_account_containers = TableDynamicLayout.set_fields('Containers', 'data.container_item', fields=[
     TextDyField.data_source('Name', 'name'),
-    DateTimeDyField.data_source('Last Modified', 'last_modified_time'),
     TextDyField.data_source('Public Access Level', 'public_access'),
-    TextDyField.data_source('Lease State', 'lease_state')
+    DateTimeDyField.data_source('Last Modified', 'last_modified_time'),
+    TextDyField.data_source('ETAG', 'etag'),
+    TextDyField.data_source('Lease Status', 'lease_status'),
+    TextDyField.data_source('Lease State', 'lease_state'),
+    TextDyField.data_source('Lease Duration', 'lease_duration'),
+    TextDyField.data_source('Encryption Score', 'default_encryption_scope')
+
 ])
 
 # TAB - Encryption
