@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.0-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.1-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -13,12 +13,12 @@
 #### Plugin to collect Microsoft Azure Cloud Services
 
 
-> SpaceONE's [plugin-azure-cloud-services](https://github.com/cloudforet-io/plugin-azure-inven-collector) is a convenient tool to 
+> Cloudforet's [plugin-azure-cloud-services](https://github.com/cloudforet-io/plugin-azure-inven-collector) is a convenient tool to 
 get cloud service data from Azure Cloud Services. 
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
-> Latest stable version : 1.6.0
+> Latest stable version : 1.6.1
 
 Please contact us if you need any further information. 
 <support@spaceone.dev>
@@ -288,7 +288,8 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
                     "Microsoft.ContainerInstance/containerGroups/read",
                     "Microsoft.SignalRService/WebPubSub/read",
                     "Microsoft.SignalRService/WebPubSub/hubs/read",
-                    "Microsoft.SignalRService/webPubSub/listKeys/action"
+                    "Microsoft.SignalRService/webPubSub/listKeys/action",
+                    "Microsoft.Insights/Metrics/Read"
                 ],
                 "notActions": [],
                 "dataActions": [],
@@ -668,7 +669,14 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 #### [Storage Accounts](https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list#blobrestorerange)
 - Storage Accounts
     - Scope 
-        - https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-storage/azure.mgmt.storage.storagemanagementclient?view=azure-python
+          - storage_accounts
+            - list()
+          - blob_containers
+            - list()
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-monitor/azure.mgmt.monitor.monitormanagementclient?view=azure-python
+          - metrics
+            - list()
     - Permissions
       ```
         "Microsoft.Storage/deletedAccounts/read",
@@ -680,7 +688,8 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.Storage/storageAccounts/tableServices/providers/Microsoft.Insights/diagnosticSettings/read",
         "Microsoft.Storage/storageAccounts/privateLinkResources/read",
         "Microsoft.Storage/storageAccounts/objectReplicationPolicies/read",
-        "Microsoft.Storage/storageAccounts/encryptionScopes/read"
+        "Microsoft.Storage/storageAccounts/encryptionScopes/read",
+        "Microsoft.Insights/Metrics/Read"
       ```
 
 
@@ -840,6 +849,9 @@ The `service_code_mappers` items that can be specified are as follows.
 ---
 
 ## Release Note
+### Ver 1.6.1
+* [Collect the total size in use of the Azure ```Storage Account``` ](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/33)
+
 ### Ver 1.6.0
 * [Add ```Web PubSub Service``` cloud service](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/21)
 
