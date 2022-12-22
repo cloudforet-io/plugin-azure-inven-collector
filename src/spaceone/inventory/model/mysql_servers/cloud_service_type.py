@@ -5,6 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,7 +24,7 @@ cst_mysql_servers.labels = ['Database']
 cst_mysql_servers.is_major = True
 cst_mysql_servers.is_primary = True
 cst_mysql_servers.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-mysql-servers.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-mysql-servers.svg',
 }
 
 cst_mysql_servers._metadata = CloudServiceTypeMeta.set_meta(

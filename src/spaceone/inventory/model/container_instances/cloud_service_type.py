@@ -4,6 +4,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, C
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -24,7 +25,7 @@ cst_container_instances.labels = ['Container']
 cst_container_instances.is_major = True
 cst_container_instances.is_primary = True
 cst_container_instances.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-container-instances.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-container-instances.svg',
 }
 cst_container_instances._metadata = CloudServiceTypeMeta.set_meta(
     fields=[

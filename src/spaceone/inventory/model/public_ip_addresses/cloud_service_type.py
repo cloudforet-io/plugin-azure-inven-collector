@@ -5,6 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,7 +24,7 @@ cst_public_ip_addresses.labels = ['Networking']
 cst_public_ip_addresses.is_major = True
 cst_public_ip_addresses.is_primary = True
 cst_public_ip_addresses.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-public-ip-address.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-public-ip-address.svg',
 }
 
 cst_public_ip_addresses._metadata = CloudServiceTypeMeta.set_meta(

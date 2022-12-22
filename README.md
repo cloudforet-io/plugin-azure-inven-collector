@@ -846,6 +846,20 @@ The `service_code_mappers` items that can be specified are as follows.
 </code>
 </pre>
 
+### Custom Asset URL : Update ASSET_URL in Cloud Service Type.
+
+If `custom_asset_url` is in options, You can change it to an asset_url that users will use instead of the default asset_url.  
+The default ASSET_URL in cloud_service_conf is 
+`https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure`
+
+<pre>
+<code>
+{
+    "custom_asset_url": "https://xxxxx.cloudforet.dev/icon/azure"
+}
+</code>
+</pre>
+
 ---
 
 ## Release Note

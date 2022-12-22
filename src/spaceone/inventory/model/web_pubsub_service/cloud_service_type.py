@@ -6,6 +6,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -28,7 +29,7 @@ cst_web_pubsub_svc.labels = ['Application Integration']
 cst_web_pubsub_svc.is_major = True
 cst_web_pubsub_svc.is_primary = True
 cst_web_pubsub_svc.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-web-pubsub-service.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-web-pubsub-service.svg',
 }
 
 cst_web_pubsub_svc._metadata = CloudServiceTypeMeta.set_meta(

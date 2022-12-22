@@ -32,8 +32,10 @@ class TestCollector(TestCase):
         print_json(v_info)
 
     def test_collect(self):
-
-        options = {'cloud_service_types': ['WebPubSubService']}
+        options = {
+            'cloud_service_types': ['WebPubSubService'],
+            # 'custom_asset_url': 'https://xxxxx.cloudforet.dev.icon/azure'
+        }
         # options = {}
         filter = {}
         resource_stream = self.inventory.Collector.collect({'options': options, 'secret_data': self.azure_credentials,

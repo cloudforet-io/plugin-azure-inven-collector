@@ -5,6 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField, SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -30,7 +31,7 @@ cst_disks.service_code = 'Microsoft.Compute/disks'
 cst_disks.is_major = True
 cst_disks.is_primary = True
 cst_disks.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-disk.svg',
     'spaceone:display_name': 'Disk'
 }
 
