@@ -4,6 +4,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_widget import CardWidget, C
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, SearchField, ListDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,7 +23,7 @@ cst_virtual_network.labels = ['Networking']
 cst_virtual_network.is_major = True
 cst_virtual_network.is_primary = True
 cst_virtual_network.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-virtual-networks.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-virtual-networks.svg',
 }
 
 cst_virtual_network._metadata = CloudServiceTypeMeta.set_meta(

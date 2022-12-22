@@ -5,6 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,7 +22,7 @@ cst_application_gateways.labels = ['Networking']
 cst_application_gateways.is_major = True
 cst_application_gateways.is_primary = True
 cst_application_gateways.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-application-gateways.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-application-gateways.svg',
 }
 
 cst_application_gateways._metadata = CloudServiceTypeMeta.set_meta(
@@ -230,7 +231,6 @@ cst_application_gateways._metadata = CloudServiceTypeMeta.set_meta(
         CardWidget.set(**get_data_from_yaml(ag_total_count_conf))
     ]
 )
-
 
 CLOUD_SERVICE_TYPES = [
     CloudServiceTypeResponse({'resource': cst_application_gateways}),

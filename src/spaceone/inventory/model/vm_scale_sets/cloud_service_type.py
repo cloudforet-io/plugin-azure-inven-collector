@@ -5,6 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,7 +21,7 @@ cst_vm_scale_sets.labels = ['Compute']
 cst_vm_scale_sets.is_major = True
 cst_vm_scale_sets.is_primary = True
 cst_vm_scale_sets.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-vm-scale-set.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-vm-scale-set.svg',
 }
 
 cst_vm_scale_sets._metadata = CloudServiceTypeMeta.set_meta(

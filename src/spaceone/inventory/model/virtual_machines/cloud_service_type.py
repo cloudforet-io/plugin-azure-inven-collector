@@ -6,6 +6,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField, SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -26,7 +27,7 @@ cst_virtual_machine.is_major = True
 cst_virtual_machine.is_primary = True
 cst_virtual_machine.service_code = 'Microsoft.Compute/virtualMachines'
 cst_virtual_machine.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-vm.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-vm.svg',
 }
 
 

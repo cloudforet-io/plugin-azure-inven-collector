@@ -5,6 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 load_balancers_backendpool_vm_count_by_region_conf = os.path.join(current_dir, 'widget/load_balancers_backendpool_vm_count_by_region.yaml')
@@ -21,7 +22,7 @@ cst_load_balancers.labels = ['Networking']
 cst_load_balancers.is_major = True
 cst_load_balancers.is_primary = True
 cst_load_balancers.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-loadbalancers.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-loadbalancers.svg',
 }
 
 cst_load_balancers._metadata = CloudServiceTypeMeta.set_meta(

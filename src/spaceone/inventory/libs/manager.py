@@ -115,6 +115,13 @@ class AzureManager(BaseManager):
                         cloud_service_type.resource.service_code in svc_code_maps:
                     cloud_service_type.resource.service_code = svc_code_maps[cloud_service_type.resource.service_code]
 
+            if 'custom_asset_url' in options:
+                _tags = cloud_service_type.resource.tags
+
+                if 'spaceone:icon' in _tags:
+                    _icon = _tags['spaceone:icon']
+                    _tags['spaceone:icon'] = f'{options["custom_asset_url"]}/{_icon.split("/")[-1]}'
+
             yield cloud_service_type
 
     def collect_cloud_service(self, params) -> list:

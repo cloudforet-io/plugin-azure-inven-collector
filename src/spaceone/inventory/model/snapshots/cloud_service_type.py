@@ -5,6 +5,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, S
     EnumDyField, SizeField
 from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeResource, CloudServiceTypeResponse, \
     CloudServiceTypeMeta
+from spaceone.inventory.conf.cloud_service_conf import ASSET_URL
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -24,7 +25,7 @@ cst_snapshots.labels = ['Compute', 'Storage']
 cst_snapshots.is_primary = True
 cst_snapshots.is_major = True
 cst_snapshots.tags = {
-    'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk-snapshot.svg',
+    'spaceone:icon': f'{ASSET_URL}/azure-disk-snapshot.svg',
 }
 
 cst_snapshots._metadata = CloudServiceTypeMeta.set_meta(
