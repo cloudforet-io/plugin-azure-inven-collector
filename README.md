@@ -21,7 +21,7 @@ Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven
 > Latest stable version : 1.6.1
 
 Please contact us if you need any further information. 
-<support@spaceone.dev>
+<admin@cloudforet.io>
 
 
 ## Contents
@@ -70,6 +70,7 @@ You should insert information about account in SpaceONE's **Service Account** in
 
 <pre>
 https://management.azure.com
+https://login.microsoftonline.com
 </pre>
 
 ---
