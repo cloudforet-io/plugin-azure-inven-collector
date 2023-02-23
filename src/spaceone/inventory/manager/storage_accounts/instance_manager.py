@@ -168,7 +168,7 @@ class StorageAccountsManager(AzureManager):
                                                             timespan=timespan, interval=interval)
 
         container_blob_count_metric_dict = self.convert_nested_dictionary(container_blob_count_metric)
-        return container_blob_count_metric_dict['value'][0]['timeseries'][0]['data'][0][aggregation]
+        return self._get_timeseries_data_from_metric(container_blob_count_metric_dict, aggregation)
 
     def _get_blob_size_from_monitoring(self, monitor_conn, storage_account_id):
         timespan = self._get_timespan_from_now(1)
@@ -179,7 +179,14 @@ class StorageAccountsManager(AzureManager):
                                                                metricnames='BlobCapacity', aggregation=aggregation,
                                                                timespan=timespan, interval=interval)
         container_blob_capacity_metric_dict = self.convert_nested_dictionary(container_blob_capacity_metric)
-        return container_blob_capacity_metric_dict['value'][0]['timeseries'][0]['data'][0][aggregation]
+        return self._get_timeseries_data_from_metric(container_blob_capacity_metric_dict, aggregation)
+
+    @staticmethod
+    def _get_timeseries_data_from_metric(metric_dict, aggregation):
+        if not metric_dict['value'][0].get('timeseries'):
+            return 0
+        else:
+            return metric_dict['value'][0].get('timeseries')[0].get('data')[0][aggregation]
 
     @staticmethod
     def get_associated_listener(frontend_ip_configuration_dict, http_listeners_list):
