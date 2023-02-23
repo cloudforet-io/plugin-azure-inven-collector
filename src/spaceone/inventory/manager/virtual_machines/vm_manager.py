@@ -187,7 +187,7 @@ class VirtualMachineVmManager(BaseManager):
         ]
         """
 
-        location = vm.location
+        location = vm.location.lower()
         instance_type = compute_data.instance_type
 
         hardware_data = Hardware(strict=False)
