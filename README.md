@@ -864,6 +864,9 @@ The default ASSET_URL in cloud_service_conf is
 ---
 
 ## Release Note
+### Ver 1.6.2
+* [Fix error when collecting virtual machine](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/40)
+
 ### Ver 1.6.1
 * [Collect the total size in use of the Azure ```Storage Account``` ](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/33)
 

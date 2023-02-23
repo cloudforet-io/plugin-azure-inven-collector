@@ -192,7 +192,7 @@ class VirtualMachinesManager(AzureManager):
         skus_dict = {}
         for sku in skus:
             if sku.resource_type == 'virtualMachines':
-                location = sku.locations[0]
+                location = sku.locations[0].lower()
                 if location not in skus_dict:
                     skus_dict[location] = []
                 info = {}
