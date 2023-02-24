@@ -184,7 +184,8 @@ class StorageAccountsManager(AzureManager):
     @staticmethod
     def _get_timeseries_data_from_metric(metric_dict, aggregation):
         try:
-            return metric_dict['value'][0]['timeseries'][0]['data'][0][aggregation]
+            timeseries_data = metric_dict['value'][0]['timeseries'][0]['data'][0].get(aggregation)
+            return timeseries_data if timeseries_data is not None else 0
         except Exception as e:
             _LOGGER.warning(f'[_get_timeseries_data_from_metric]: {e}')
             return 0
