@@ -183,10 +183,11 @@ class StorageAccountsManager(AzureManager):
 
     @staticmethod
     def _get_timeseries_data_from_metric(metric_dict, aggregation):
-        if not metric_dict['value'][0].get('timeseries'):
+        try:
+            return metric_dict['value'][0]['timeseries'][0]['data'][0][aggregation]
+        except Exception as e:
+            _LOGGER.warning(f'[_get_timeseries_data_from_metric]: {e}')
             return 0
-        else:
-            return metric_dict['value'][0].get('timeseries')[0].get('data')[0][aggregation]
 
     @staticmethod
     def get_associated_listener(frontend_ip_configuration_dict, http_listeners_list):
