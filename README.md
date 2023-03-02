@@ -71,6 +71,7 @@ You should insert information about account in SpaceONE's **Service Account** in
 <pre>
 https://management.azure.com
 https://login.microsoftonline.com
+https://*.vault.azure.net
 </pre>
 
 ---
