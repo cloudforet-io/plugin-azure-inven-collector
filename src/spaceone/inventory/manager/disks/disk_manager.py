@@ -91,7 +91,7 @@ class DisksManager(AzureManager):
                     'name': disk_data.name,
                     'account': disk_data.subscription_id,
                     'instance_type': disk_data.sku.name,
-                    'instance_size': float(disk_data.disk_size_gb)
+                    'instance_size': float(disk_data.disk_size_bytes)
                 })
 
                 # Must set_region_code method for region collection
