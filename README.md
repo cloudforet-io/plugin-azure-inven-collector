@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.4-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.7-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
-> Latest stable version : 1.6.4
+> Latest stable version : 1.6.7
 
 Please contact us if you need any further information. 
 <admin@cloudforet.io>
@@ -865,6 +865,9 @@ The default ASSET_URL in cloud_service_conf is
 ---
 
 ## Release Note
+
+### Ver 1.6.7
+* [Size of storage service(ex.disk, snapshot) display error at console](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/49)
 ### Ver 1.6.4
 * [Error 'list index out of range' occur when collecting StorageAccounts](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/45)
 
