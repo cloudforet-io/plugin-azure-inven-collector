@@ -108,7 +108,7 @@ class SnapshotsManager(AzureManager):
                     'tags': snapshot_dict.get('tags', {}),
                     'name': snapshot_data.name,
                     'account': snapshot_data.subscription_id,
-                    'instance_size': float(snapshot_data.disk_size_gb),
+                    'instance_size': float(snapshot_data.disk_size_bytes),
                     'instance_type': snapshot_data.sku.name
                 })
 
