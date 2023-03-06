@@ -14,6 +14,11 @@ query:
             operator: sum
 options:
   chart_type: COLUMN
+  value_options:
+    key: value
+    type: size
+    options:
+      default: 0
   name_options:
     key: name
     reference:
