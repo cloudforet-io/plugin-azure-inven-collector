@@ -20,10 +20,10 @@ class SubscriptionsManager(AzureManager):
     def list_location_info(self, params):
         secret_data = params['secret_data']
         subscription_connector: SubscriptionsConnector = self.locator.get_connector(self.connector_name, secret_data=secret_data)
-        location_info = subscription_connector.list_location_info(secret_data['subscription_id'])
+        location_infos = subscription_connector.list_location_info(secret_data['subscription_id'])
 
         region_info = {}
-        for location_info in location_info:
+        for location_info in location_infos:
             _loc_info = self.convert_nested_dictionary(location_info)
             _name = f'{re.sub(r"[/()]", "", _loc_info.get("regional_display_name"))} ({_loc_info.get("metadata").get("physical_location")})'
             _latitude = _loc_info.get('metadata', {}).get('latitude')
