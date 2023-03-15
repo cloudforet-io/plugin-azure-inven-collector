@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.7-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.9-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
-> Latest stable version : 1.6.7
+> Latest stable version : 1.6.9
 
 Please contact us if you need any further information. 
 <admin@cloudforet.io>
@@ -50,7 +50,7 @@ Please contact us if you need any further information.
     
 ---
 ## SETTING
-You should insert information about account in SpaceONE's **Service Account** initially.
+You should insert information about account in Cloudforet's **Service Account** initially.
 * Base Information
 	* `name`
 	* `Tenant ID`
@@ -104,20 +104,20 @@ The following is a list of services being collected and service code information
 ---
 
 ## Authentication Overview
-Registered service account on SpaceONE must have certain permissions to collect cloud service data 
+Registered service account on Cloudforet must have certain permissions to collect cloud service data 
 Please, set authentication privilege for followings:
 
-### Custom roles for SpaceONE collector
-SpaceONE collector requires several privileges for collecting resources. <br>
-Please create custom roles in Azure portal, and assign following roles to SpaceONE collector apps before collect resources.
+### Custom roles for collecting Azure cloud resources 
+Cloudforet Azure collector requires several privileges for collecting resources. <br>
+Please create custom roles in Azure portal, and assign following roles to Cloudforet Azure collector apps before collect resources.
 For information on creating custom roles in Azure, see the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
 ```
 {
     "properties": {
-        "roleName": "spaceone_collector_role",
-        "description": "",
+        "roleName": "cloudforet_azure_collector_role",
+        "description": "custom role for cloudforet azure collector",
         "assignableScopes": [
-            "/subscriptions/3ec64e1e-1ce8-4f2c-82a0-a7f6db0899ca"
+            "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx"
         ],
         "permissions": [
             {
@@ -301,17 +301,17 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
     }
 }
 ```
-### Additional custom roles for SpaceONE collector
+### Additional custom roles for Cloudforet collector
 Some of cloud services require several additional IAM settings for collecting resources. <br>
 
-#### [Key Vaults](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-keyvault/azure.mgmt.keyvault?view=azure-python)
+#### [Key Vaults](https://learn.microsoft.com/en-us/python/api/azure-mgmt-keyvault/azure.mgmt.keyvault?view=azure-python)
 
 - KeyVaults
 
 For collecting Azure ```KeyVaults``` resources, you need to assign a Key Vault access policy to SpaceONE collector App in Azure portal.
 For information on assigning access policy, see [Microsoft key vault access policy document](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).
 
-#### [Cosmos DB]()
+#### [Cosmos DB](https://learn.microsoft.com/en-us/python/api/azure-mgmt-cosmosdb/azure.mgmt.cosmosdb?view=azure-python)
 
 - Cosmos DB
 
@@ -865,9 +865,13 @@ The default ASSET_URL in cloud_service_conf is
 ---
 
 ## Release Note
+### Ver 1.6.9
+* [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)
+* [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)
 
 ### Ver 1.6.7
 * [Size of storage service(ex.disk, snapshot) display error at console](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/49)
+
 ### Ver 1.6.4
 * [Error 'list index out of range' occur when collecting StorageAccounts](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/45)
 
