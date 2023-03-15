@@ -48,6 +48,7 @@ class CosmosDBManager(AzureManager):
             try:
                 cosmos_db_account_dict = self.convert_nested_dictionary(cosmos_db_account)
                 cosmos_db_account_id = cosmos_db_account_dict.get('id')
+                cosmos_db_account_dict['location'] = cosmos_db_account_dict['location'].replace(' ', '').lower()
 
                 # update cosmosdb_dict
                 cosmos_db_account_dict.update({
