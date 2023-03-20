@@ -52,6 +52,9 @@ class AzureManager(BaseManager):
         total_resources = []
 
         try:
+            subscription_manager = self.locator.get_manager('SubscriptionsManager')
+            self.region_info = subscription_manager.list_location_info(params)
+
             total_resources.extend(self.collect_cloud_service_type(params))
             resources, error_resources = self.collect_cloud_service(params)
 
@@ -93,7 +96,7 @@ class AzureManager(BaseManager):
         return results
 
     def set_region_code(self, region):
-        if region not in AzureManager.region_info:
+        if region not in self.region_info:
             region = 'global'
 
         if region not in self.collected_region_codes:
