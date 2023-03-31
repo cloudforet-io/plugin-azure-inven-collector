@@ -123,6 +123,18 @@ class AzureManager(BaseManager):
 
         return cloud_svc_dict
 
+    def match_region_info(self, region_code):
+        match_region_info = self.region_info.get(region_code)
+
+        if match_region_info:
+            region_info = match_region_info.copy()
+            region_info.update({
+                'region_code': region_code
+            })
+            return RegionResource(region_info, strict=False)
+
+        return None
+
     @staticmethod
     def convert_tag_format(tags):
         convert_tags = []
@@ -135,19 +147,6 @@ class AzureManager(BaseManager):
                 })
 
         return convert_tags
-
-    @staticmethod
-    def match_region_info(region_code):
-        match_region_info = AzureManager.region_info.get(region_code)
-
-        if match_region_info:
-            region_info = match_region_info.copy()
-            region_info.update({
-                'region_code': region_code
-            })
-            return RegionResource(region_info, strict=False)
-
-        return None
 
     @staticmethod
     def convert_dictionary(obj):

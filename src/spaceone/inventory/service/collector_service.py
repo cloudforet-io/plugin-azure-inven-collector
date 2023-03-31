@@ -58,11 +58,10 @@ class CollectorService(BaseService):
         start_time = time.time()
         secret_data = params.get('secret_data', {})
         params.update({
-            'subscription_info': self.get_subscription_info(params),
+            'subscription_info': self.get_subscription_info(params)
         })
 
         _LOGGER.debug("[ EXECUTOR START: Azure Cloud Service ]")
-        AzureManager.region_info = self.list_location_info(params)
         target_execute_managers = self._get_target_execute_manger(params.get('options', {}))
 
         # Thread per cloud services
