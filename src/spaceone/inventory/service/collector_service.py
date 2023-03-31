@@ -91,6 +91,10 @@ class CollectorService(BaseService):
         subscription_manager: SubscriptionsManager = self.locator.get_manager('SubscriptionsManager')
         return subscription_manager.get_subscription_info(params)
 
+    def list_location_info(self, params):
+        subscription_manager: SubscriptionsManager = self.locator.get_manager('SubscriptionsManager')
+        return subscription_manager.list_location_info(params)
+
     def _get_target_execute_manger(self, options):
         if 'cloud_service_types' in options:
             execute_managers = self._match_execute_manager(options['cloud_service_types'])
