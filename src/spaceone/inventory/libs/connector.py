@@ -23,7 +23,7 @@ _LOGGER = logging.getLogger(__name__)
 
 class AzureConnector(BaseConnector):
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
         kwargs
             - schema
@@ -37,7 +37,7 @@ class AzureConnector(BaseConnector):
             - ...
         """
 
-        super().__init__(transaction=None, connector_conf=None)
+        super().__init__(*args, **kwargs)
         self.compute_client = None
         self.resource_client = None
         self.subscription_client = None
@@ -74,8 +74,10 @@ class AzureConnector(BaseConnector):
         self.mysql_client = MySQLManagementClient(credential=credential, subscription_id=subscription_id)
         self.cosmosdb_client = CosmosDBManagementClient(credential=credential, subscription_id=subscription_id)
         self.postgre_sql_client = PostgreSQLManagementClient(credential=credential, subscription_id=subscription_id)
-        self.container_instance_client = ContainerInstanceManagementClient(credential=credential, subscription_id=subscription_id)
-        self.web_pubsub_service_client = WebPubSubManagementClient(credential=credential, subscription_id=subscription_id)
+        self.container_instance_client = ContainerInstanceManagementClient(credential=credential,
+                                                                           subscription_id=subscription_id)
+        self.web_pubsub_service_client = WebPubSubManagementClient(credential=credential,
+                                                                   subscription_id=subscription_id)
 
     def verify(self, **kwargs):
         self.set_connect(kwargs['secret_data'])
