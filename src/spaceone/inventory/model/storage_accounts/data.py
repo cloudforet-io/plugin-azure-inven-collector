@@ -242,7 +242,7 @@ class ContainerItem(Model):
     lease_state = StringType(serialize_when_none=False)
     lease_status = StringType(choices=['LOCKED', 'UNLOCKED'])
     lease_duration = StringType(choices=['FIXED', 'INFINITE'])
-    metadata = DictType(StringType)
+    # metadata = DictType(StringType)
     default_encryption_scope = StringType(serialize_when_none=False)
 
 
