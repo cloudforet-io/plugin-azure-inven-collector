@@ -135,7 +135,7 @@ class SQLServersManager(AzureManager):
         return sql_server_responses, error_responses
 
     def list_elastic_pools(self, sql_servers_conn, rg_name, server_name):
-        elastic_pools_list = list()
+        elastic_pools_list = []
         elastic_pools = sql_servers_conn.list_elastic_pools_by_server(resource_group=rg_name, server_name=server_name)
 
         for elastic_pool in elastic_pools:
@@ -164,7 +164,7 @@ class SQLServersManager(AzureManager):
 
     def get_databases_by_elastic_pools(self, sql_servers_conn, elastic_pool_name, rg_name, server_name):
         databases_obj = sql_servers_conn.list_databases_by_elastic_pool(elastic_pool_name, rg_name, server_name)
-        databases_list = list()
+        databases_list = []
         for database in databases_obj:
             database_dict = self.convert_nested_dictionary(database)
             databases_list.append(database_dict)
@@ -174,7 +174,7 @@ class SQLServersManager(AzureManager):
     def list_deleted_databases(self, sql_servers_conn, rg_name, server_name):
         deleted_databases_obj = sql_servers_conn.list_restorable_dropped_databases_by_server(resource_group=rg_name,
                                                                                              server_name=server_name)
-        deleted_databases_list = list()
+        deleted_databases_list = []
         for deleted_database in deleted_databases_obj:
             deleted_database_dict = self.convert_nested_dictionary(deleted_database)
             deleted_databases_list.append(deleted_database_dict)
@@ -183,7 +183,7 @@ class SQLServersManager(AzureManager):
 
     def list_firewall_rules(self, sql_servers_conn, rg_name, server_name):
         firewall_obj = sql_servers_conn.list_firewall_rules_by_server(resource_group=rg_name, server_name=server_name)
-        firewall_list = list()
+        firewall_list = []
         for firewall in firewall_obj:
             firewall_rule_dict = self.convert_nested_dictionary(firewall)
             firewall_list.append(firewall_rule_dict)
@@ -193,7 +193,7 @@ class SQLServersManager(AzureManager):
     def list_virtual_network_rules(self, sql_servers_conn, rg_name, server_name):
         virtual_network_rule_obj = sql_servers_conn.list_virtual_network_rules_by_server(resource_group=rg_name,
                                                                                          server_name=server_name)
-        virtual_network_rules_list = list()
+        virtual_network_rules_list = []
 
         for virtual_network_rule in virtual_network_rule_obj:
             virtual_network_rule_dict = self.convert_nested_dictionary(virtual_network_rule)
@@ -210,7 +210,7 @@ class SQLServersManager(AzureManager):
         return virtual_network_rules_list
 
     def list_encryption_protectors(self, sql_servers_conn, rg_name, server_name):
-        encryption_protectors_list = list()
+        encryption_protectors_list = []
         encryption_protectors_obj = sql_servers_conn.list_encryption_protectors(resource_group=rg_name,
                                                                                 server_name=server_name)
 
@@ -221,7 +221,7 @@ class SQLServersManager(AzureManager):
         return encryption_protectors_list
 
     def list_azure_ad_administrators(self, sql_servers_conn, rg_name, server_name):
-        ad_admin_list = list()  # return list
+        ad_admin_list = [] # return list
         ad_admin_obj = sql_servers_conn.list_server_azure_ad_administrators(resource_group=rg_name,
                                                                             server_name=server_name)
 
@@ -240,7 +240,7 @@ class SQLServersManager(AzureManager):
         return server_automatic_tuning_dict
 
     def get_server_automatic_tuning_options(self, options_dict):
-        options_list = list()
+        options_list = []
         created_index_dict = self.convert_nested_dictionary(options_dict['createIndex'])
         drop_index_dict = self.convert_nested_dictionary(options_dict['dropIndex'])
         force_plan_dict = self.convert_nested_dictionary(options_dict['forceLastGoodPlan'])
@@ -268,7 +268,7 @@ class SQLServersManager(AzureManager):
         return server_auditing_settings_dict
 
     def list_failover_groups(self, sql_servers_conn, rg_name, server_name):
-        failover_groups_list = list()
+        failover_groups_list = []
         failover_groups_obj = sql_servers_conn.list_failover_groups(rg_name, server_name)
         for failover in failover_groups_obj:
             failover_dict = self.convert_nested_dictionary(failover)
@@ -295,7 +295,7 @@ class SQLServersManager(AzureManager):
         return failover_groups_list
 
     def list_data_masking_rules(self, sql_servers_conn, rg_name, server_name, database_name):
-        data_masking_rules_list = list()
+        data_masking_rules_list = []
         data_masking_rule_obj = sql_servers_conn.list_data_masking_rules_by_database(resource_group=rg_name,
                                                                                      server_name=server_name,
                                                                                      database_name=database_name)

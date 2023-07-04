@@ -81,6 +81,11 @@ class DisksManager(AzureManager):
                         'managed_by': self.get_attached_vm_name_from_managed_by(managed_by)
                     })
 
+                max_shares = disk_dict.get('max_shares')
+                if max_shares is not None and max_shares > 0:
+                    disk_dict.update({
+                        'enable_shared_disk_display': True
+                    })
                 disk_data = Disk(disk_dict, strict=False)
 
                 disk_resource = DiskResource({

@@ -16,6 +16,6 @@ class StorageAccountsConnector(AzureConnector):
     def list_storage_accounts(self):
         return self.storage_client.storage_accounts.list()
 
-    def list_blobs(self, rg_name, account_name):
+    def list_blob_containers(self, rg_name, account_name):
         return self.storage_client.blob_containers.list(resource_group_name=rg_name, account_name=account_name)
 
