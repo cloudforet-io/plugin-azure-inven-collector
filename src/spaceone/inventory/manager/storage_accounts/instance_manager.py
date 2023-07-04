@@ -58,7 +58,7 @@ class StorageAccountsManager(AzureManager):
                     })
 
                 if storage_account_dict.get('name') is not None:
-                    container_item = self.list_containers(storage_account_conn, resource_group, storage_account_dict['name'])
+                    container_item = self.list_blob_containers(storage_account_conn, resource_group, storage_account_dict['name'])
                     storage_account_dict.update({
                         'container_item': container_item,
                         'container_count_display': len(container_item)
@@ -150,14 +150,14 @@ class StorageAccountsManager(AzureManager):
 
         return network_rule_dict
 
-    def list_containers(self, storage_conn, rg_name, account_name):
-        blob_list = []
-        blob_obj = storage_conn.list_blobs(rg_name=rg_name, account_name=account_name)
-        for blob in blob_obj:
-            blob_dict = self.convert_nested_dictionary(blob)
-            blob_list.append(blob_dict)
+    def list_blob_containers(self, storage_conn, rg_name, account_name):
+        blob_containers_list = []
+        blob_containers_obj = storage_conn.list_blob_containers(rg_name=rg_name, account_name=account_name)
+        for blob_container in blob_containers_obj:
+            blob_dict = self.convert_nested_dictionary(blob_container)
+            blob_containers_list.append(blob_dict)
 
-        return blob_list
+        return blob_containers_list
 
     def _get_blob_count_from_monitoring(self, monitor_conn, storage_account_id):
         timespan = self._get_timespan_from_now(1)
