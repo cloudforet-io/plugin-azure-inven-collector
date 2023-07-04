@@ -56,7 +56,7 @@ on_demand_bursting = ItemDynamicLayout.set_fields('On-demand bursting', fields=[
 disk_configure_info = ListDynamicLayout.set_layouts('Configuration', layouts=[shared_disk, on_demand_bursting])
 
 # TAB - Default
-disk_meta = CloudServiceMeta.set_layouts([disk_info_meta, disk_configure_info])
+disk_meta = CloudServiceMeta.set_layouts([disk_info_meta, disk_configure_info, disk_networking_info])
 
 
 class ComputeResource(CloudServiceResource):

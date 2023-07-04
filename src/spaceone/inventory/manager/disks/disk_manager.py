@@ -86,6 +86,10 @@ class DisksManager(AzureManager):
                     disk_dict.update({
                         'enable_shared_disk_display': True
                     })
+
+                if disk_dict.get('bursting_enabled') is None:
+                    disk_dict['bursting_enabled'] = False
+
                 disk_data = Disk(disk_dict, strict=False)
 
                 disk_resource = DiskResource({
