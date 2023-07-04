@@ -5,10 +5,6 @@ from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, D
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout,ListDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
 
-'''
-DISK
-'''
-# TAB - Default
 disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Storage Account Type', 'instance_type'),
@@ -29,12 +25,38 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
     TextDyField.data_source('Subscription Name', 'data.subscription_name'),
     TextDyField.data_source('Encryption Type', 'data.encryption.type'),
     TextDyField.data_source('Networking', 'data.network_access_policy_display'),
-    DateTimeDyField.data_source('Time Created', 'data.time_created'),
-    TextDyField.data_source('Max Shares', 'data.max_shares')
+    TextDyField.data_source('Os Type', 'data.os_type'),
+    TextDyField.data_source('Max Shares', 'data.max_shares'),
+    TextDyField.data_source('VM Generation', 'data.hyper_v_generation'),
+    TextDyField.data_source('VM architecture', 'data.supported_capabilities.architecture'),
+    DateTimeDyField.data_source('Time Created', 'data.time_created')
+
 
 ])
+'''
+DISK
+'''
+# TAB - Networking
+disk_networking_info = ItemDynamicLayout.set_layouts('Networking', fields=[
+    TextDyField.data_source('Network access', 'data.network_access_policy_display')
+])
 
-disk_meta = CloudServiceMeta.set_layouts([disk_info_meta])
+# TAB - Configuration
+
+shared_disk = ItemDynamicLayout.set_fields('Shared Disk', fields=[
+    TextDyField.data_source('Enable shared disk', 'data.enable_shared_disk_display'),
+    TextDyField.data_source('Max shares', 'data.max_shares'),
+])
+
+on_demand_bursting = ItemDynamicLayout.set_fields('On-demand bursting', fields=[
+    TextDyField.data_source('Enable bursting', 'data.bursting_enabled'),
+    DateTimeDyField.data_source('Enable bursting time', 'data.bursting_enabled_time'),
+])
+
+disk_configure_info = ListDynamicLayout.set_layouts('Configuration', layouts=[shared_disk, on_demand_bursting])
+
+# TAB - Default
+disk_meta = CloudServiceMeta.set_layouts([disk_info_meta, disk_configure_info])
 
 
 class ComputeResource(CloudServiceResource):
