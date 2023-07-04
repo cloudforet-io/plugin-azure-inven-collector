@@ -56,6 +56,12 @@ class ShareInfoElement(Model):
     vm_uri = StringType(serialize_when_none=False)
 
 
+class SupportedCapabilities(Model):
+    disk_controller_types = StringType(serialize_when_none=False)
+    accelerated_network = BooleanType(serialize_when_none=False)
+    architecture = StringType(serialize_when_none=False)
+
+
 class Disk(AzureCloudService):
     name = StringType()
     id = StringType()
@@ -63,12 +69,13 @@ class Disk(AzureCloudService):
     location = StringType()
     managed_by = StringType(default='')
     managed_by_extended = ListType(StringType, serialize_when_none=False)
-    max_shares = IntType(serialize_when_none=False, default=0)
+    max_shares = IntType(default=0)
+    enable_shared_disk_display = BooleanType(default=False)
     sku = ModelType(Sku)
     zones = ListType(StringType(), serialize_when_none=False)
     disk_size_gb = IntType()
     disk_iops_read_write = IntType()
-    disk_iops_read_only = BooleanType(serialize_when_none=False)
+    disk_iops_read_only = IntType(serialize_when_none=False)
     disk_size_bytes = IntType()
     size = IntType()  # disk size for statistics
     encryption_settings_collection = ModelType(EncryptionSettingsCollection, serialize_when_none=False)
@@ -81,11 +88,14 @@ class Disk(AzureCloudService):
     share_info = ModelType(ShareInfoElement, serialize_when_none=False)
     unique_id = StringType()
     disk_m_bps_read_write = IntType()
-    disk_m_bps_read_only = BooleanType(serialize_when_none=False)
+    disk_m_bps_read_only = IntType(serialize_when_none=False)
     disk_state = StringType(choices=('ActiveSAS', 'ActiveUpload', 'Attached', 'ReadyToUpload', 'Reserved', 'Unattached'))
     network_access_policy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'), serialize_when_none=False)
     network_access_policy_display = StringType()
     tier_display = StringType(default='')
+    supported_capabilities = ModelType(SupportedCapabilities, serialize_when_none=False)
+    bursting_enabled = BooleanType(default=False)
+    bursting_enabled_time = DateTimeType()
 
     def reference(self):
         return {
