@@ -307,7 +307,7 @@ class SQLServersManager(AzureManager):
         return data_masking_rules_list
 
     def list_databases(self, sql_servers_conn, sql_monitor_conn, resource_group_name, server_name, server_admin_name):
-        databases_list = list()  # todo : list() , []
+        databases_list = []
         databases = sql_servers_conn.list_databases_by_server(resource_group_name=resource_group_name,
                                                               server_name=server_name)
 
@@ -339,12 +339,13 @@ class SQLServersManager(AzureManager):
                 })
 
             # Get Sync Groups by databases
-            database_dict.update({
-                'sync_group': self.get_sync_group_by_databases(sql_servers_conn, resource_group_name, server_name,
-                                                               database_dict['name']),
-            })
+            if database_dict.get('service_tier_display') != 'DataWarehouse':
+                database_dict.update({
+                    'sync_group': self.get_sync_group_by_databases(sql_servers_conn, resource_group_name, server_name,
+                                                                   database_dict['name']),
+                })
 
-            if database_dict['sync_group']:
+            if database_dict.get('sync_group'):
                 database_dict.update({
                     'sync_group_display': self.get_sync_group_display(database_dict['sync_group'])
                 })
@@ -354,7 +355,7 @@ class SQLServersManager(AzureManager):
                 'sync_agent': self.get_sync_agent_by_servers(sql_servers_conn, resource_group_name, server_name)
             })
 
-            if database_dict['sync_agent']:
+            if database_dict.get('sync_agent'):
                 database_dict.update({
                     'sync_agent_display': self.get_sync_agent_display(database_dict['sync_agent'])
                 })
@@ -395,7 +396,7 @@ class SQLServersManager(AzureManager):
         return databases_list
 
     def get_sync_agent_by_servers(self, sql_servers_conn, rg_name, server_name):
-        sync_agent_list = list()
+        sync_agent_list = []
         sync_agent_obj = sql_servers_conn.list_sync_agents_by_server(rg_name, server_name)
 
         for sync_agent in sync_agent_obj:
@@ -405,7 +406,7 @@ class SQLServersManager(AzureManager):
         return sync_agent_list
 
     def list_diagnostics_settings(self, sql_monitor_conn, resource_uri):
-        diagnostic_settings_list = list()
+        diagnostic_settings_list = []
         diagnostic_settings_objs = sql_monitor_conn.list_diagnostic_settings(resource_uri=resource_uri)
 
         for diagnostic_setting in diagnostic_settings_objs:
@@ -415,7 +416,7 @@ class SQLServersManager(AzureManager):
         return diagnostic_settings_list
 
     def list_replication_link(self, sql_servers_conn, rg_name, server_name, database_name):
-        replication_link_list = list()
+        replication_link_list = []
         replication_link_obj = sql_servers_conn.list_replication_link(rg_name, server_name, database_name)
 
         for replication_link in replication_link_obj:
@@ -428,7 +429,7 @@ class SQLServersManager(AzureManager):
         sync_group_obj = sql_servers_conn.list_sync_groups_by_databases(resource_group=resource_group_name,
                                                                         server_name=server_name,
                                                                         database_name=database_name)
-        sync_group_list = list()
+        sync_group_list = []
         for sync_group in sync_group_obj:
             sync_group_dict = self.convert_nested_dictionary(sync_group)
             sync_group_list.append(sync_group_dict)
@@ -488,7 +489,7 @@ class SQLServersManager(AzureManager):
 
     @staticmethod
     def get_sync_agent_display(sync_agent_list):
-        sync_agent_display_list = list()
+        sync_agent_display_list = []
         for sync_agent in sync_agent_list:
             sync_display = f"{sync_agent['name']} / {sync_agent['state']}"
             sync_agent_display_list.append(sync_display)
@@ -505,7 +506,7 @@ class SQLServersManager(AzureManager):
 
     @staticmethod
     def get_sync_group_display(sync_group_list):
-        sync_group_display_list = list()
+        sync_group_display_list = []
         for sync_group in sync_group_list:
             sync_display = f"{sync_group['name']} / {sync_group['conflict_resolution_policy']} / {sync_group['sync_state']}"
             sync_group_display_list.append(sync_display)
