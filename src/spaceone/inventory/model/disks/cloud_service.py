@@ -37,7 +37,7 @@ disk_info_meta = ItemDynamicLayout.set_fields('Disks', fields=[
 DISK
 '''
 # TAB - Networking
-disk_networking_info = ItemDynamicLayout.set_layouts('Networking', fields=[
+disk_networking_info = ItemDynamicLayout.set_fields('Networking', fields=[
     TextDyField.data_source('Network access', 'data.network_access_policy_display')
 ])
 
