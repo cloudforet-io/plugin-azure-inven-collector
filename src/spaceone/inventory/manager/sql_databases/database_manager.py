@@ -62,6 +62,7 @@ class SQLDatabasesManager(AzureManager):
                 for sql_database in sql_databases:
                     sql_database_dict = self.convert_nested_dictionary(sql_database)
                     database_name = sql_database_dict['name']
+                    current_sku_tier = sql_database_dict.get('current_sku').get('tier')
 
                     if sql_database_dict.get('sku'):
                         if sql_database_dict.get('name') != 'master':  # No pricing tier for system database
@@ -88,16 +89,17 @@ class SQLDatabasesManager(AzureManager):
                         })
 
                     # Get Sync Groups by databases
-                    sql_database_sync_groups = sql_databases_conn.list_sync_groups_by_databases(
-                        resource_group=resource_group_name,
-                        server_name=server_name,
-                        database_name=database_name)
+                    if current_sku_tier != 'DataWarehouse':
+                        sql_database_sync_groups = sql_databases_conn.list_sync_groups_by_databases(
+                            resource_group=resource_group_name,
+                            server_name=server_name,
+                            database_name=database_name)
 
-                    sql_database_dict.update({
-                        'sync_group': self.get_sync_group_by_databases(sql_database_sync_groups)
-                    })
+                        sql_database_dict.update({
+                            'sync_group': self.get_sync_group_by_databases(sql_database_sync_groups)
+                        })
 
-                    if sql_database_dict['sync_group']:
+                    if sql_database_dict.get('sync_group'):
                         sql_database_dict.update({
                             'sync_group_display': self.get_sync_group_display(sql_database_dict['sync_group'])
                         })
@@ -244,7 +246,7 @@ class SQLDatabasesManager(AzureManager):
 
     @staticmethod
     def get_sync_group_display(sync_group_list):
-        sync_group_display_list = list()
+        sync_group_display_list = []
         for sync_group in sync_group_list:
             sync_display = f"{sync_group['name']} / {sync_group['conflict_resolution_policy']} / {sync_group['sync_state']}"
             sync_group_display_list.append(sync_display)
@@ -253,7 +255,7 @@ class SQLDatabasesManager(AzureManager):
 
     @staticmethod
     def get_sync_agent_display(sync_agent_list):
-        sync_agent_display_list = list()
+        sync_agent_display_list = []
         for sync_agent in sync_agent_list:
             sync_display = f"{sync_agent['name']} / {sync_agent['state']}"
             sync_agent_display_list.append(sync_display)
