@@ -11,6 +11,6 @@ query:
 options:
   value_options:
     key: value
-    type: count
+    type: text
     options:
       default: 0
