@@ -734,7 +734,7 @@ class Subnet(Model):
     name = StringType(serialize_when_none=False)
     address_prefix = StringType(serialize_when_none=False)
     address_prefixes = ListType(StringType, serialize_when_none=False)
-    application_gateway_ip_configurations = ModelType(ApplicationGatewayIPConfiguration, serialize_when_none=False)
+    application_gateway_ip_configurations = ListType(ModelType(ApplicationGatewayIPConfiguration, serialize_when_none=False))
     delegations = ListType(ModelType(Delegation), serialize_when_none=False)
     ip_allocations = ListType(ModelType(SubResource), serialize_when_none=False)
     ip_configuration_profiles = ListType(ModelType(IPConfigurationProfile), serialize_when_none=False)
