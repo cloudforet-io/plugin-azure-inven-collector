@@ -149,7 +149,7 @@ class ApplicationGatewaysManager(AzureManager):
                             applied_rules_list = []
 
                             for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
-                                if rewrite_rule_id in request_routing_rule.get('rewrite_rule_set', {}).get('id', ''):
+                                if request_routing_rule.get('rewrite_rule_set', {}):
                                     applied_rules_list.append(request_routing_rule['name'])
 
                                 self.update_rewrite_ruleset_dict(application_gateway_dict['rewrite_rule_sets'], rewrite_rule_id, applied_rules_list)
@@ -159,9 +159,10 @@ class ApplicationGatewaysManager(AzureManager):
                             backend_address_pool_id = request_routing_rule['backend_address_pool']['id']
 
                             rule_name_list = []
-                            for request_routing_rule in application_gateway_dict['request_routing_rules']:
-                                if backend_address_pool_id in request_routing_rule['backend_address_pool']['id']:
-                                    rule_name_list.append(request_routing_rule['name'])
+                            for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
+                                if request_routing_rule.get('backend_address_pool') is not None:
+                                    if backend_address_pool_id in request_routing_rule.get('backend_address_pool').get('id'):
+                                        rule_name_list.append(request_routing_rule['name'])
 
                             self.update_backend_pool_dict(application_gateway_dict['backend_address_pools'], backend_address_pool_id, rule_name_list)
 
