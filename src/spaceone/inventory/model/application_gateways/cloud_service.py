@@ -72,7 +72,7 @@ application_gateway_web_app_firewall_meta = ListDynamicLayout.set_layouts('Web A
 application_gateway_backend_pools = SimpleTableDynamicLayout.set_fields('Backend Pools', 'data.backend_address_pools', fields=[
     TextDyField.data_source('Name', 'name'),
     ListDyField.data_source('Rule Associated', 'associated_rules'),
-    ListDyField.data_source('Targets', 'backend_addresses')
+    ListDyField.data_source('Targets', 'backend_addresses_display', )
 ])
 
 # TAB - Backend HTTP Settings

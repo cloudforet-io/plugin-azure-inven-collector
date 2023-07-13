@@ -149,21 +149,16 @@ class ApplicationGatewaysManager(AzureManager):
 
                             self.update_http_listeners_list(application_gateway_dict['http_listeners'], http_listener_id, http_applied_rules_list)
 
-                    # Find rewrite rule set attached to this rule, and put rule's name to rewrite rule dict
-                    if request_routing_rule.get('rewrite_rule_set') is not None:
-                        rewrite_rule_id = request_routing_rule['rewrite_rule_set']['id']
-                        applied_rules_list = []
-
-                        for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
-                            if request_routing_rule.get('rewrite_rule_set', {}):
-                                applied_rules_list.append(request_routing_rule['name'])
-
-                            self.update_rewrite_ruleset_dict(application_gateway_dict['rewrite_rule_sets'], rewrite_rule_id, applied_rules_list)
-
                 for backend_address_pool in backend_address_pools:
                     backend_address_pool_associated_rules = self.get_backend_pool_associated_rules(backend_address_pool, url_path_maps, request_routing_rules)
                     backend_address_pool.update({
                         'associated_rules': backend_address_pool_associated_rules
+                    })
+
+                    backend_addresses = backend_address_pool.get('backend_addresses', [])
+                    backend_addresses_display = [backend_address.get('fqdn') for backend_address in backend_addresses]
+                    backend_address_pool.update({
+                        'backend_addresses_display': backend_addresses_display
                     })
 
                 application_gateway_data = ApplicationGateway(application_gateway_dict, strict=False)
@@ -232,14 +227,6 @@ class ApplicationGatewaysManager(AzureManager):
                     'id') == backend_address_pool_id:
                 backend_address_pool_associated_rules.append(request_routing_rule.get('name'))
         return backend_address_pool_associated_rules
-
-    @staticmethod
-    def update_rewrite_ruleset_dict(rewrite_rule_sets_list, rewrite_rule_id, applied_rules_list):
-        for rewrite_rule in rewrite_rule_sets_list:
-            if rewrite_rule['id'] == rewrite_rule_id:
-                rewrite_rule.update({
-                    'rules_applied': applied_rules_list
-                })
 
     @staticmethod
     def update_http_listeners_list(http_listeners_list, http_listener_id, http_applied_rules):

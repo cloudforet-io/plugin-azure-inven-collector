@@ -580,6 +580,7 @@ class ApplicationGatewayBackendAddressPool(Model):
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     backend_addresses = ListType(ModelType(ApplicationGatewayBackendAddress), serialize_when_none=False)
+    backend_addresses_display = ListType(StringType, serialize_when_none=False)
     backend_ip_configurations = ListType(ModelType(NetworkInterfaceIPConfiguration), serialize_when_none=False)
     provisioning_state = StringType(choices=('Deleting', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
     type = StringType(serialize_when_none=False)
