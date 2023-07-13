@@ -54,34 +54,39 @@ class ApplicationGatewaysManager(AzureManager):
                     'azure_monitor': {'resource_id': application_gateway_id}
                 })
 
-                if application_gateway_dict.get('frontend_ip_configurations') is not None:
-                    for frontend_ip_configuration_dict in application_gateway_dict['frontend_ip_configurations']:
-                        if frontend_ip_configuration_dict.get('private_ip_address') is not None:
-                            application_gateway_dict.update({
-                                'private_ip_address': frontend_ip_configuration_dict['private_ip_address']
-                            })
-                            frontend_ip_configuration_dict.update({
-                                'ip_type': 'Private',
-                                'ip_address': frontend_ip_configuration_dict['private_ip_address']
-                            })
-                        elif frontend_ip_configuration_dict.get('public_ip_address') is not None:
-                            public_ip_address_name = frontend_ip_configuration_dict['public_ip_address']['id'].split('/')[8]
-                            public_ip_address_dict = self.get_public_ip_address(application_gateway_conn, application_gateway_dict['resource_group'], public_ip_address_name)
-                            application_gateway_dict.update({
-                                'public_ip_address': public_ip_address_dict
-                            })
-                            frontend_ip_configuration_dict.update({
-                                'ip_type': 'Public',
-                                'ip_address': public_ip_address_dict.get('ip_address', '-'),
-                                'associated_listener': self.get_associated_listener(frontend_ip_configuration_dict, application_gateway_dict.get('http_listeners', []))
-                            })
+                backend_address_pools = application_gateway_dict.get('backend_address_pools', [])
+                url_path_maps = application_gateway_dict.get('url_path_maps', [])
+                request_routing_rules = application_gateway_dict.get('request_routing_rules', [])
+                rewrite_rule_sets = application_gateway_dict.get('rewrite_rule_sets', [])
+                frontend_ip_configurations = application_gateway_dict.get('frontend_ip_configurations', [])
+                ip_configurations = application_gateway_dict.get('gateway_ip_configurations', [])
 
-                if application_gateway_dict.get('gateway_ip_configurations') is not None:
-                    for ip_configuration in application_gateway_dict['gateway_ip_configurations']:
+                for frontend_ip_configuration_dict in frontend_ip_configurations:
+                    if frontend_ip_configuration_dict.get('private_ip_address') is not None:
                         application_gateway_dict.update({
-                            'virtual_network': ip_configuration.get('subnet')['id'].split('/')[8],
-                            'subnet': ip_configuration.get('subnet')['id'].split('/')[10]
+                            'private_ip_address': frontend_ip_configuration_dict['private_ip_address']
                         })
+                        frontend_ip_configuration_dict.update({
+                            'ip_type': 'Private',
+                            'ip_address': frontend_ip_configuration_dict['private_ip_address']
+                        })
+                    elif frontend_ip_configuration_dict.get('public_ip_address') is not None:
+                        public_ip_address_name = frontend_ip_configuration_dict['public_ip_address']['id'].split('/')[8]
+                        public_ip_address_dict = self.get_public_ip_address(application_gateway_conn, application_gateway_dict['resource_group'], public_ip_address_name)
+                        application_gateway_dict.update({
+                            'public_ip_address': public_ip_address_dict
+                        })
+                        frontend_ip_configuration_dict.update({
+                            'ip_type': 'Public',
+                            'ip_address': f'{public_ip_address_dict.get("ip_address", "-")} ({public_ip_address_dict.get("name","")})',
+                            'associated_listener': self.get_associated_listener(frontend_ip_configuration_dict, application_gateway_dict.get('http_listeners', []))
+                        })
+
+                for ip_configuration in ip_configurations:
+                    application_gateway_dict.update({
+                        'virtual_network': ip_configuration.get('subnet')['id'].split('/')[8],
+                        'subnet': ip_configuration.get('subnet')['id'].split('/')[10]
+                    })
 
                 if application_gateway_dict.get('backend_http_settings_collection') is not None:
                     for backend_setting in application_gateway_dict['backend_http_settings_collection']:
@@ -115,56 +120,51 @@ class ApplicationGatewaysManager(AzureManager):
                             application_gateway_dict.update({
                                 'custom_error_configurations': custom_error_configurations_list
                             })
-                if application_gateway_dict.get('rewrite_rule_sets'):
-                    for rewrite_rule in application_gateway_dict['rewrite_rule_sets']:
-                        rewrite_rule_list = rewrite_rule.get('rewrite_rules', [])
-                        rewrite_rule_str_list = []
-                        for rule in rewrite_rule_list:
-                            rewrite_rule_str_list.append(str(rule.get('name')) + ", " + str(rule.get('rule_sequence')))
 
-                        rewrite_rule.update({
-                            'rewrite_rules_display': rewrite_rule_str_list
-                        })
+                for rewrite_rule in rewrite_rule_sets:
+                    rewrite_rule_id = rewrite_rule.get('id')
+                    rewrite_config_rule_displays = self.list_rewrite_config_rule_display(rewrite_rule)
+                    rewrite_rule.update({
+                        'rewrite_rules_display': rewrite_config_rule_displays
+                    })
+
+                    rules_applied_list = self.list_rewrite_rule_rules_applied(rewrite_rule_id, request_routing_rules, url_path_maps)
+                    rewrite_rule.update({
+                        'rules_applied': rules_applied_list
+                    })
 
                 # Update request routing rules
-                if application_gateway_dict.get('request_routing_rules') is not None:
-                    for request_routing_rule in application_gateway_dict['request_routing_rules']:
-                        if request_routing_rule.get('http_listener') is not None:
-                            request_routing_rule.update({
-                                'http_listener_name': request_routing_rule['http_listener']['id'].split('/')[10]
-                            })
-                            # Find http listener attached to this rule, and put rule's name to http_listeners dict
-                            http_applied_rules_list = []
-                            http_listener_id = request_routing_rule['http_listener']['id']
+                for request_routing_rule in request_routing_rules:
+                    if request_routing_rule.get('http_listener') is not None:
+                        request_routing_rule.update({
+                            'http_listener_name': request_routing_rule['http_listener']['id'].split('/')[10]
+                        })
+                        # Find http listener attached to this rule, and put rule's name to http_listeners dict
+                        http_applied_rules_list = []
+                        http_listener_id = request_routing_rule['http_listener']['id']
 
-                            for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
-                                if http_listener_id in request_routing_rule.get('http_listener').get('id', ''):
-                                    http_applied_rules_list.append(request_routing_rule['name'])
+                        for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
+                            if http_listener_id in request_routing_rule.get('http_listener').get('id', ''):
+                                http_applied_rules_list.append(request_routing_rule['name'])
 
-                                self.update_http_listeners_list(application_gateway_dict['http_listeners'], http_listener_id, http_applied_rules_list)
+                            self.update_http_listeners_list(application_gateway_dict['http_listeners'], http_listener_id, http_applied_rules_list)
 
-                        # Find rewrite rule set attached to this rule, and put rule's name to rewrite rule dict
-                        if request_routing_rule.get('rewrite_rule_set') is not None:
-                            rewrite_rule_id = request_routing_rule['rewrite_rule_set']['id']
-                            applied_rules_list = []
+                    # Find rewrite rule set attached to this rule, and put rule's name to rewrite rule dict
+                    if request_routing_rule.get('rewrite_rule_set') is not None:
+                        rewrite_rule_id = request_routing_rule['rewrite_rule_set']['id']
+                        applied_rules_list = []
 
-                            for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
-                                if request_routing_rule.get('rewrite_rule_set', {}):
-                                    applied_rules_list.append(request_routing_rule['name'])
+                        for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
+                            if request_routing_rule.get('rewrite_rule_set', {}):
+                                applied_rules_list.append(request_routing_rule['name'])
 
-                                self.update_rewrite_ruleset_dict(application_gateway_dict['rewrite_rule_sets'], rewrite_rule_id, applied_rules_list)
+                            self.update_rewrite_ruleset_dict(application_gateway_dict['rewrite_rule_sets'], rewrite_rule_id, applied_rules_list)
 
-                        # Find backend address pool attached to this rule, and put rule's name to backend address pool dict
-                        if request_routing_rule.get('backend_address_pool') is not None:
-                            backend_address_pool_id = request_routing_rule['backend_address_pool']['id']
-
-                            rule_name_list = []
-                            for request_routing_rule in application_gateway_dict.get('request_routing_rules', []):
-                                if request_routing_rule.get('backend_address_pool') is not None:
-                                    if backend_address_pool_id in request_routing_rule.get('backend_address_pool').get('id'):
-                                        rule_name_list.append(request_routing_rule['name'])
-
-                            self.update_backend_pool_dict(application_gateway_dict['backend_address_pools'], backend_address_pool_id, rule_name_list)
+                for backend_address_pool in backend_address_pools:
+                    backend_address_pool_associated_rules = self.get_backend_pool_associated_rules(backend_address_pool, url_path_maps, request_routing_rules)
+                    backend_address_pool.update({
+                        'associated_rules': backend_address_pool_associated_rules
+                    })
 
                 application_gateway_data = ApplicationGateway(application_gateway_dict, strict=False)
                 application_gateway_resource = ApplicationGatewayResource({
@@ -176,7 +176,6 @@ class ApplicationGatewaysManager(AzureManager):
                     'instance_type': application_gateway_data.sku.name,
                     'account': application_gateway_data.subscription_id
                 })
-                # _LOGGER.debug(f'[APPLICATION GATEWAYS INFO] {application_gateway_resource.to_primitive()}')
 
                 # Must set_region_code method for region collection
                 self.set_region_code(application_gateway_data['location'])
@@ -200,33 +199,39 @@ class ApplicationGatewaysManager(AzureManager):
 
     @staticmethod
     def get_associated_listener(frontend_ip_configuration_dict, http_listeners_list):
-        associated_listener = ''
+        associated_listener = []
         for http_listener in http_listeners_list:
             if http_listener.get('frontend_ip_configuration') is not None:
                 if frontend_ip_configuration_dict['id'] in http_listener.get('frontend_ip_configuration', {}).get('id', ''):
-                    associated_listener = http_listener.get('name', '-')
-                else:
-                    associated_listener = '-'
-
+                    associated_listener.append(http_listener.get('name'))
         return associated_listener
 
     @staticmethod
     def get_port(port_id, frontend_ports_list):
         port = 0
         for fe_port in frontend_ports_list:
-            if port_id in fe_port['id']:
-                port = fe_port.get('port', 0)
-                return port
-            else:
-                return port
+            if port_id == fe_port.get('id'):
+                port = fe_port.get('port')
+                break
+        return port
 
     @staticmethod
-    def update_backend_pool_dict(backend_pool_list, backend_pool_id, request_rules):
-        for backend_pool in backend_pool_list:
-            if backend_pool['id'] == backend_pool_id:
-                backend_pool.update({
-                    'associated_rules': request_rules
-                })
+    def get_backend_pool_associated_rules(backend_address_pool, url_path_maps, request_routing_rules):
+        backend_address_pool_associated_rules = []
+        backend_address_pool_id = backend_address_pool.get('id')
+
+        for url_path_map in url_path_maps:
+            default_backend_address_pool = url_path_map.get('default_backend_address_pool')
+            if default_backend_address_pool is not None and default_backend_address_pool.get(
+                    'id') == backend_address_pool_id:
+                backend_address_pool_associated_rules.append(url_path_map.get('name'))
+
+        for request_routing_rule in request_routing_rules:
+            request_backend_address_pool = request_routing_rule.get('backend_address_pool')
+            if request_backend_address_pool is not None and request_backend_address_pool.get(
+                    'id') == backend_address_pool_id:
+                backend_address_pool_associated_rules.append(request_routing_rule.get('name'))
+        return backend_address_pool_associated_rules
 
     @staticmethod
     def update_rewrite_ruleset_dict(rewrite_rule_sets_list, rewrite_rule_id, applied_rules_list):
@@ -243,3 +248,31 @@ class ApplicationGatewaysManager(AzureManager):
                 http_listener.update({
                     'associated_rules': http_applied_rules
                 })
+
+    @staticmethod
+    def list_rewrite_config_rule_display(rewrite_rule):
+        rewrite_config_rule_displays = []
+        rewrite_rule_list = rewrite_rule.get('rewrite_rules', [])
+        for rule in rewrite_rule_list:
+            rewrite_config_rule_displays.append(str(rule.get('name')) + ", " + str(rule.get('rule_sequence')))
+        return rewrite_config_rule_displays
+
+    @staticmethod
+    def list_rewrite_rule_rules_applied(rewrite_rule_id, request_routing_rules, url_path_maps):
+        rules_applied_list = []
+        for request_routing_rule in request_routing_rules:
+            if request_routing_rule.get('rewrite_rule_set') is not None:
+                if request_routing_rule['rewrite_rule_set'].get('id') == rewrite_rule_id:
+                    rules_applied_list.append(request_routing_rule['name'])
+
+        for url_path_map in url_path_maps:
+            if url_path_map.get('default_rewrite_rule_set') is not None:
+                if url_path_map['default_rewrite_rule_set'].get('id') == rewrite_rule_id:
+                    rules_applied_list.append(url_path_map['name'])
+
+            if url_path_map.get('path_rules') is not None:
+                for path_rule in url_path_map['path_rules']:
+                    if path_rule.get('rewrite_rule_set') is not None:
+                        if path_rule['rewrite_rule_set'].get('id') == rewrite_rule_id:
+                            rules_applied_list.append(url_path_map['name'])
+        return rules_applied_list

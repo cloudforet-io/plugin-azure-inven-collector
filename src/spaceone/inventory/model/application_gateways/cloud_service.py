@@ -72,11 +72,11 @@ application_gateway_web_app_firewall_meta = ListDynamicLayout.set_layouts('Web A
 application_gateway_backend_pools = SimpleTableDynamicLayout.set_fields('Backend Pools', 'data.backend_address_pools', fields=[
     TextDyField.data_source('Name', 'name'),
     ListDyField.data_source('Rule Associated', 'associated_rules'),
-    # TextDyField.data_source('Targets', '')
+    ListDyField.data_source('Targets', 'backend_addresses')
 ])
 
-# TAB - HTTP Settings
-application_gateway_http_settings = SimpleTableDynamicLayout.set_fields('HTTP Settings', 'data.backend_http_settings_collection', fields=[
+# TAB - Backend HTTP Settings
+application_gateway_http_settings = SimpleTableDynamicLayout.set_fields('Backend HTTP Settings', 'data.backend_http_settings_collection', fields=[
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Port', 'port'),
     TextDyField.data_source('Protocol', 'protocol'),
@@ -84,7 +84,12 @@ application_gateway_http_settings = SimpleTableDynamicLayout.set_fields('HTTP Se
         'safe': ['Enabled'],
         'warning': ['Disabled']
     }),
-    TextDyField.data_source('Custom Probe', 'custom_probe')
+    TextDyField.data_source('Custom Probe', 'custom_probe'),
+    TextDyField.data_source('Connection draining', 'connection_draining.enabled'),
+    TextDyField.data_source('Request time-out', 'request_timeout'),
+    TextDyField.data_source('Override backend path', 'path'),
+    TextDyField.data_source('Override with new host name', 'pick_host_name_from_backend_address'),
+    TextDyField.data_source('Host name', 'host_name')
 ])
 
 # TAB - SSL Settings
@@ -101,7 +106,7 @@ application_gateway_frontend_ip_configurations = SimpleTableDynamicLayout.set_fi
     TextDyField.data_source('Type', 'ip_type'),
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('IP Address', 'ip_address'),
-    TextDyField.data_source('Associated Listeners', 'associated_listener')
+    ListDyField.data_source('Associated Listeners', 'associated_listener')
 ])
 
 # TAB - Listeners
@@ -129,7 +134,7 @@ application_gateway_rules = SimpleTableDynamicLayout.set_fields('Rules', 'data.r
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Type', 'rule_type'),
     TextDyField.data_source('Listener', 'http_listener_name'),
-    ListDyField.data_source('Rule Configuration', 'rule_configuration')
+    TextDyField.data_source('Priority', 'priority')
 ])
 
 # TAB - Rewrites
@@ -151,7 +156,7 @@ application_gateway_health_probes = SimpleTableDynamicLayout.set_fields('Health 
 application_gateway_meta = CloudServiceMeta.set_layouts(
     [application_gateway_info_meta, application_gateway_configuration,
      application_gateway_web_app_firewall_meta, application_gateway_backend_pools, application_gateway_http_settings,
-     application_gateway_frontend_ip_configurations, application_gateway_rules, application_gateway_listeners_info,
+     application_gateway_frontend_ip_configurations, application_gateway_listeners_info, application_gateway_rules,
      application_gateway_rewrites, application_gateway_health_probes])
 
 
