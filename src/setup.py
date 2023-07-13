@@ -25,9 +25,9 @@ setup(
     version=VERSION,
     description='MS Azure cloud service inventory collector',
     long_description='',
-    url='https://www.spaceone.dev/',
-    author='MEGAZONE SpaceONE Team',
-    author_email='admin@spaceone.dev',
+    url='https://cloudforet.io/',
+    author='Cloudforet Admin',
+    author_email='admin@cloudforet.io',
     license='Apache License 2.0',
     packages=find_packages(),
     install_requires=[
@@ -38,8 +38,19 @@ setup(
         'adal',
         'msrestazure',
         'azure-identity',
-        'azure-mgmt-resource==15.0.0',
-        'azure-mgmt-compute==18.0.0'
+        'azure-mgmt-resource',
+        'azure-mgmt-compute',
+        'azure-mgmt-network',
+        'azure-mgmt-sql',
+        'azure-mgmt-monitor',
+        'azure-mgmt-storage',
+        'azure-mgmt-keyvault',
+        'azure-keyvault-certificates',
+        'azure-keyvault-secrets',
+        'azure-mgmt-rdbms',
+        'azure-mgmt-cosmosdb',
+        'azure-mgmt-containerinstance',
+        'azure-mgmt-webpubsub'
     ],
     package_data={
         'spaceone': ['inventory/model/*/widget/*.yaml']
