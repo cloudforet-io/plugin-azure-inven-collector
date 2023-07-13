@@ -631,7 +631,7 @@ class ApplicationGatewayFrontendIPConfiguration(Model):
     public_ip_address = ModelType(SubResource, serialize_when_none=False)
     ip_type = StringType(choices=('Public', 'Private'), serialize_when_none=False)
     ip_address = StringType(serialize_when_none=False)
-    associated_listener = StringType(default='-')
+    associated_listener = ListType(StringType, serialize_when_none=False)
     subnet = ModelType(SubResource, serialize_when_none=False)
 
 
