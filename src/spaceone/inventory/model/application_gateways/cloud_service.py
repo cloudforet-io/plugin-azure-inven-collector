@@ -134,7 +134,7 @@ application_gateway_rules = SimpleTableDynamicLayout.set_fields('Rules', 'data.r
     TextDyField.data_source('Name', 'name'),
     TextDyField.data_source('Type', 'rule_type'),
     TextDyField.data_source('Listener', 'http_listener_name'),
-    ListDyField.data_source('Rule Configuration', 'rule_configuration')
+    TextDyField.data_source('Priority', 'priority')
 ])
 
 # TAB - Rewrites
@@ -156,7 +156,7 @@ application_gateway_health_probes = SimpleTableDynamicLayout.set_fields('Health 
 application_gateway_meta = CloudServiceMeta.set_layouts(
     [application_gateway_info_meta, application_gateway_configuration,
      application_gateway_web_app_firewall_meta, application_gateway_backend_pools, application_gateway_http_settings,
-     application_gateway_frontend_ip_configurations, application_gateway_rules, application_gateway_listeners_info,
+     application_gateway_frontend_ip_configurations, application_gateway_listeners_info, application_gateway_rules,
      application_gateway_rewrites, application_gateway_health_probes])
 
 
