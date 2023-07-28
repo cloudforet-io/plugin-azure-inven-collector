@@ -76,6 +76,7 @@ Azure의 API를 사용하고 리소스 접근을 위한 토큰 발급 시 필요
 4. [인증키 생성](#4-인증키-생성)
 5. [구독(Subscription) 확인하기](#5-구독Subscription-확인하기) 
 6. [서비스 계정 등록](#6-서비스-계정-등록)
+7. [사용자 지정 역할 추가](#7-사용자-지정-역할-추가-선택)
 
 <br>
 <br>
@@ -135,14 +136,15 @@ Azure의 API를 사용하고 리소스 접근을 위한 토큰 발급 시 필요
 
 [역할](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-definitions)은 Azure 리소스에 대한 접근 권한의 모임입니다.   
 Azure 플러그인이 리소스 정보를 수집하기 위해 적절한 권한을 가진 역할 설정이 필요합니다.
+> 사용자 지정 역할 생성을 통해 필요한 권한을 가진 역할을 생성할 수 있습니다.<br> 
+> [7번 과정](#7-사용자-역할-지정-추가-선택)에서 사용자 지정 역할을 생성하는 방법을 확인할 수 있습니다.
 
 컬렉터 플러그인은 읽기 권한 이외의 어떠한 권한도 필요하지 않습니다.  
 각 플러그인에서 필요한 권한 정보는 아래와 같습니다.
 
-| Plugin | URL |
-| --- | --- |
-| Microsoft Azure Cloud Service Collector | https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector#authentication-overview |
-| Microsoft Azure VM Collector | https://github.com/spaceone-dev/plugin-azure-vm-inven-collector#authentication-overview |
+| Plugin                                   | URL |
+|------------------------------------------| --- |
+| Microsoft Azure Cloud Service Collector  | https://github.com/cloudforet-io/plugin-azure-inven-collector#authentication-overview |
 
 플러그인이 리소스를 수집하기 위해 Azure 에서 권한을 부여하는 과정은 아래와 같습니다.
 
@@ -178,7 +180,10 @@ Azure 플러그인이 리소스 정보를 수집하기 위해 적절한 권한�
 
 <br>
 
-(2) 리소스 그룹에 역할 부여하는 과정입니다.  
+(2) 리소스 그룹에 역할 부여하는 과정입니다.
+구독에 속해 있는 특적 리소스 그룹의 자원만 수집하고 싶다면 해당 리소스 그룹에 역할을 부여해야 합니다.
+구독에 역할을 부여한 경우 이 과정은 생략할 수 있습니다.
+
 (2-1) [Azure Portal](https://portal.azure.com/#home) 로그인합니다.  
 (2-2) 검색창에 `리소스 그룹` 입력하여 서비스 목록에있는 [리소스 그룹]을 클릭합니다.  
 
@@ -275,3 +280,41 @@ Azure 구독 생성 가이드는 [Azure Documentation](https://docs.microsoft.co
 (1-1) [저장] 버튼을 클릭합니다.
 
 (2) 이후 클라우드포레의 **컬렉터 플러그인** 생성 방법은 **[[클라우드포레의 사용자 가이드]](https://spaceone.org/ko/docs/guides/asset-inventory/collector/)** 를 참고하십시오.
+
+
+## 7. 사용자 역할 지정 추가 (선택)
+
+(1) 구독 서비스로 이동합니다.
+
+(1-1) [액세서 제어(IAM)] 메뉴를 선택합니다.
+
+(1-2) [추가] 버튼을 클릭합니다.
+
+(1-3) [사용자 지정 역할 추가]을 클릭합니다.
+
+<img src="./GUIDE-img/create-custom-role(h2)-1.png" width="80%" height="80%">
+
+
+(2) 사용자 지정 역할 이름에 [spaceone_custom_role]을 입력합니다.
+
+(2-1) 기준 권한에서 [처음부터 새로 시작]을 클릭합니다.
+
+(2-2) 왼족 하단에 [다음] 버튼을 클릭합니다.
+
+<img src="./GUIDE-img/create-custom-role(h2)-2.png" width="80%" height="80%">
+
+(3) 탭 메뉴에서 [JSON]을 클릭합니다.
+
+(3-1) [편집] 버튼을 클릭합니다.
+
+<img src="./GUIDE-img/create-custom-role(h2)-3.png" width="80%" height="80%">
+
+(3-2) 코드블럭에서 [properties > permissions > actions]에 [문서에](https://github.com/cloudforet-io/plugin-azure-inven-collector#custom-roles-for-collecting-azure-cloud-resources) 적힌 권한들을 추가합니다.
+
+<img src="./GUIDE-img/create-custom-role(h2)-4.png" width="80%" height="80%">
+
+(3-3) [저장] 버튼을 클릭합니다.
+
+(3-4) [다음] 버튼을 클릭합니다.
+
+(4) 사용자 지정 역할을 생성 후 [3. 역할 부여](#3-역할-부여) 과정을 통해 역할을 부여합니다.

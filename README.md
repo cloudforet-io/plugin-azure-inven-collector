@@ -260,8 +260,6 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
                     "Microsoft.Network/virtualNetworks/read",
                     "Microsoft.Network/locations/supportedVirtualMachineSizes/read",
                     "Microsoft.Network/virtualNetworks/bastionHosts/default/action",
-                    "Microsoft.Network/virtualNetworks/dnsForwardingRulesets/read",
-                    "Microsoft.Network/virtualNetworks/dnsResolvers/read",
                     "Microsoft.Network/virtualNetworks/checkIpAddressAvailability/read",
                     "Microsoft.Network/virtualNetworks/privateDnsZoneLinks/read",
                     "Microsoft.Network/virtualNetworks/usages/read",
@@ -309,7 +307,9 @@ Some of cloud services require several additional IAM settings for collecting re
 - KeyVaults
 
 For collecting Azure ```KeyVaults``` resources, you need to assign a Key Vault access policy to SpaceONE collector App in Azure portal.
-For information on assigning access policy, see [Microsoft key vault access policy document](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).
+
+For information on assigning access policy, see [Microsoft key vault access policy document - legacy](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).<br>
+If your ```KeyVaults``` has Azure RBAC model see [Microsoft key vault access policy document](https://learn.microsoft.com/en-us/azure/role-based-access-control/overview?WT.mc_id=Portal-Microsoft_Azure_KeyVault)
 
 #### [Cosmos DB](https://learn.microsoft.com/en-us/python/api/azure-mgmt-cosmosdb/azure.mgmt.cosmosdb?view=azure-python)
 
@@ -413,8 +413,6 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.Network/virtualNetworks/read",
         "Microsoft.Network/locations/supportedVirtualMachineSizes/read",
         "Microsoft.Network/virtualNetworks/bastionHosts/default/action",
-        "Microsoft.Network/virtualNetworks/dnsForwardingRulesets/read",
-        "Microsoft.Network/virtualNetworks/dnsResolvers/read",
         "Microsoft.Network/virtualNetworks/checkIpAddressAvailability/read",
         "Microsoft.Network/virtualNetworks/privateDnsZoneLinks/read",
         "Microsoft.Network/virtualNetworks/usages/read",
