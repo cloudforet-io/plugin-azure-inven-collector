@@ -113,6 +113,8 @@ class AzureManager(BaseManager):
 
         # if cloud_svc_object is dictionary type
         for key, value in cloud_svc_dict.items():
+            if hasattr(value, '__dict__') or isinstance(value, dict):
+                cloud_svc_dict[key] = self.convert_nested_dictionary(value)
             if 'azure' in str(type(value)):
                 cloud_svc_dict[key] = self.convert_nested_dictionary(value)
             elif isinstance(value, list):
