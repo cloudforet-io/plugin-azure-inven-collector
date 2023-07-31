@@ -1,6 +1,6 @@
 import math
 from schematics import Model
-from schematics.types import ModelType, StringType, PolyModelType, DictType, BooleanType
+from schematics.types import ModelType, StringType, PolyModelType, DictType, BooleanType, BaseType
 from spaceone.inventory.libs.schema.metadata.dynamic_search import BaseDynamicSearch
 
 
@@ -400,3 +400,28 @@ class SearchField(BaseDynamicSearch):
             })
 
         return cls(return_dic)
+
+
+class MoreLayoutField(Model):
+    name = StringType(default='')
+    type = StringType(default="popup")
+    options = DictType(BaseType, serialize_when_none=False)
+
+
+class MoreFieldOptions(FieldViewOption):
+    sub_key = StringType(serialize_when_none=False)
+    layout = PolyModelType(MoreLayoutField, serialize_when_none=False)
+
+
+class MoreField(BaseDynamicField):
+    type = StringType(default="more")
+    options = PolyModelType(MoreFieldOptions, serialize_when_none=False)
+
+    @classmethod
+    def data_source(cls, name, key, **kwargs):
+        _data_source = {'key': key, 'name': name}
+
+        if 'options' in kwargs:
+            _data_source.update({'options': kwargs.get('options')})
+
+        return cls(_data_source)
