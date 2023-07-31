@@ -1,5 +1,5 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, FloatType
+from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, FloatType, DictType
 from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
@@ -26,12 +26,17 @@ class ApplicationGatewayAutoscaleConfiguration(Model):
     min_capacity = IntType(serialize_when_none=False)
 
 
+class Components1Jq1T4ISchemasManagedserviceidentityPropertiesUserassignedidentitiesAdditionalproperties(Model):
+    client_id = StringType(serialize_when_none=False)
+    principal_id = StringType(serialize_when_none=False)
+
+
 class ManagedServiceIdentity(Model):
     principal_id = StringType(serialize_when_none=False)
     tenant_id = StringType(serialize_when_none=False)
     type = StringType(choices=('None', 'SystemAssigned', 'SystemAssigned, UserAssigned', 'UserAssigned'),
                       serialize_when_none=False)
-    user_assigned_identities = StringType(serialize_when_none=False)
+    user_assigned_identities = DictType(ModelType(Components1Jq1T4ISchemasManagedserviceidentityPropertiesUserassignedidentitiesAdditionalproperties))
 
 
 class ApplicationGatewayBackendAddress(Model):

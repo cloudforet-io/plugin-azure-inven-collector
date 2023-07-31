@@ -1,7 +1,7 @@
 from schematics.types import ModelType, StringType, PolyModelType, FloatType, DateTimeType
 
 from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, \
-    ListDyField, SizeField, StateItemDyField
+    ListDyField, MoreField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout, SimpleTableDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
@@ -153,11 +153,19 @@ application_gateway_health_probes = SimpleTableDynamicLayout.set_fields('Health 
     TextDyField.data_source('Timeout(Seconds)', 'timeout')
 ])
 
+# TAB - Managed Identity
+application_gateway_managed_identity = ItemDynamicLayout.set_fields('Managed Identity', 'data.identity', fields=[
+    TextDyField.data_source('Type', 'type'),
+    TextDyField.data_source('Principal ID', 'principal_id'),
+    TextDyField.data_source('Tenant ID', 'tenant_id'),
+    MoreField.data_source('User Assigned Identities', 'user_assigned_identities')
+])
+
 application_gateway_meta = CloudServiceMeta.set_layouts(
     [application_gateway_info_meta, application_gateway_configuration,
      application_gateway_web_app_firewall_meta, application_gateway_backend_pools, application_gateway_http_settings,
      application_gateway_frontend_ip_configurations, application_gateway_listeners_info, application_gateway_rules,
-     application_gateway_rewrites, application_gateway_health_probes])
+     application_gateway_rewrites, application_gateway_health_probes, application_gateway_managed_identity])
 
 
 class NetworkResource(CloudServiceResource):
