@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.13-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.14-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
-> Latest stable version : 1.6.13
+> Latest stable version : 1.6.14
 
 Please contact us if you need any further information. 
 <admin@cloudforet.io>
@@ -345,16 +345,24 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 - Virtual Machines
 
     - Scope
-        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-compute/azure.mgmt.compute.v2022_08_01.operations.virtualmachinesoperations?view=azure-python
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-resource/azure.mgmt.resource.resources.resourcemanagementclient?view=azure-python#azure-mgmt-resource-resources-resourcemanagementclient-resource-groups
+          - resource_groups
+            - list() 
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-compute/azure.mgmt.compute.computemanagementclient?view=azure-python#azure-mgmt-compute-computemanagementclient-virtual-machines
           - virtual_machines
             - list_all()
-        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-virtual-networks
           - virtual_networks
             - list_all()
-        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/publicipaddresses/list
-        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/virtualnetworks
-        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networkinterfaces
-        - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/networksecuritygroups
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-public-ip-addresses
+          - public_ip_addresses
+            - list_all()
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-network-interfaces
+          - network_interfaces
+            - list_all()
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-network-security-groups
+          - network_security_groups
+            - list_all()
 		
     - Permissions
         ```
@@ -866,6 +874,18 @@ The default ASSET_URL in cloud_service_conf is
 ---
 
 ## Release Note
+
+
+
+| Versoin | Description                                                                                                                                                                                                                                                                                                                                                               | Service                | Release Date   |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|----------------|
+| 1.6.14  | - [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)                                                                                                                                                                                                                              | Application Gateways   | 2023.08.01     |
+| 1.6.13  | - [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)                                                                                                                                                                                                                                                   | Application Gateways   | 2023.07.13     |
+| 1.6.12  | - [Fix `Virtual Networks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/64)<br/>- [Fix `Disks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/60)<br>- [Fix error occurs when collecting `SQL server` and database](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/41) | Virtual Networks, Disks, SQL Servers, SQL Databases | 2023.07.05     |
+| 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)| CosmosDB | 2023.06.30     |
+
+### Ver 1.6.14
+* [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)
 
 ### Ver 1.6.13
 * [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)
