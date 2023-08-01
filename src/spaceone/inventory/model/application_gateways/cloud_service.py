@@ -158,7 +158,18 @@ application_gateway_managed_identity = ItemDynamicLayout.set_fields('Managed Ide
     TextDyField.data_source('Type', 'type'),
     TextDyField.data_source('Principal ID', 'principal_id'),
     TextDyField.data_source('Tenant ID', 'tenant_id'),
-    MoreField.data_source('User Assigned Identities', 'user_assigned_identities')
+    MoreField.data_source('User Assigned Identities', 'output_display', options={
+        'sub_key': 'user_assigned_identities',
+        'layout': {
+            'name': 'User Assigned Identities',
+            'type': 'popup',
+            'options': {
+                'layout': {
+                    'type': 'raw'
+                }
+            }
+        }
+    })
 ])
 
 application_gateway_meta = CloudServiceMeta.set_layouts(
