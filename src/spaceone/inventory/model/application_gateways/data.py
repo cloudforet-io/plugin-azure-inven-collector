@@ -37,6 +37,7 @@ class ManagedServiceIdentity(Model):
     type = StringType(choices=('None', 'SystemAssigned', 'SystemAssigned, UserAssigned', 'UserAssigned'),
                       serialize_when_none=False)
     user_assigned_identities = DictType(ModelType(Components1Jq1T4ISchemasManagedserviceidentityPropertiesUserassignedidentitiesAdditionalproperties))
+    output_display = StringType(default='show', serialize_when_none=False)
 
 
 class ApplicationGatewayBackendAddress(Model):
