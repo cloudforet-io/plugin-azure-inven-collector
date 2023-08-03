@@ -35,7 +35,7 @@ class SQLDatabasesConnector(AzureConnector):
                                                                   server_name=server_name, database_name=database_name)
 
     def get_database_auditing_settings(self, resource_group_name, server_name, database_name):
-        return self.sql_client.database_blob_auditing_policies.list_by_database(resource_group_name=resource_group_name,
+        return self.sql_client.database_blob_auditing_policies.get(resource_group_name=resource_group_name,
                                                                                 server_name=server_name,
                                                                                 database_name=database_name)
 
