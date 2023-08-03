@@ -187,7 +187,6 @@ class SQLDatabase(AzureCloudService):  # Main Class
     compute_tier = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     database_auditing_settings = ModelType(DatabaseBlobAuditingPolicy, serialize_when_none=False)
-    # database_auditing_settings = ListType(ModelType(DatabaseBlobAuditingPolicy, serialize_when_none=False))
 
 
     def reference(self):
