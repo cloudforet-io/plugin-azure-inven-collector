@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.14-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.15-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
-> Latest stable version : 1.6.14
+> Latest stable version : 1.6.15
 
 Please contact us if you need any further information. 
 <admin@cloudforet.io>
@@ -289,7 +289,26 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
                     "Microsoft.SignalRService/WebPubSub/read",
                     "Microsoft.SignalRService/WebPubSub/hubs/read",
                     "Microsoft.SignalRService/webPubSub/listKeys/action",
-                    "Microsoft.Insights/Metrics/Read"
+                    "Microsoft.Insights/Metrics/Read",
+                    "Microsoft.Sql/servers/read",
+                    "Microsoft.Sql/servers/administrators/read",
+                    "Microsoft.Sql/servers/databases/read",
+                    "Microsoft.Sql/servers/automaticTuning/read",
+                    "Microsoft.Sql/servers/databases/automaticTuning/read",
+                    "Microsoft.Sql/servers/databases/auditingSettings/read",
+                    "Microsoft.Sql/servers/auditingSettings/read",
+                    "Microsoft.Sql/servers/failoverGroups/read",
+                    "Microsoft.Sql/servers/encryptionProtector/read",
+                    "Microsoft.Sql/servers/elasticPools/read",
+                    "Microsoft.Sql/servers/elasticPools/databases/read",
+                    "Microsoft.Sql/servers/restorableDroppedDatabases/read",
+                    "Microsoft.Sql/servers/firewallRules/read",
+                    "Microsoft.Sql/servers/virtualNetworkRules/read",
+                    "Microsoft.Sql/servers/databases/syncGroups/read",
+                    "Microsoft.Sql/servers/syncAgents/read",
+                    "Microsoft.Sql/servers/databases/dataMaskingPolicies/rules/read",
+                    "Microsoft.Sql/servers/databases/replicationLinks/read",
+                    "Microsoft.Sql/servers/replicationLinks/read"
                 ],
                 "notActions": [],
                 "dataActions": [],
@@ -410,119 +429,44 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/virtual-networks/list-all
 
-    - Permissions
-      ```
-        "Microsoft.Network/dnsForwardingRulesets/virtualNetworkLinks/read",
-        "Microsoft.Network/loadBalancers/virtualMachines/read",
-        "Microsoft.Network/networkInterfaces/join/action",
-        "Microsoft.Network/privateDnsZones/read",
-        "Microsoft.Network/privateDnsZones/virtualNetworkLinks/read",
-        "Microsoft.Network/locations/virtualNetworkAvailableEndpointServices/read",
-        "Microsoft.Network/virtualNetworks/read",
-        "Microsoft.Network/locations/supportedVirtualMachineSizes/read",
-        "Microsoft.Network/virtualNetworks/bastionHosts/default/action",
-        "Microsoft.Network/virtualNetworks/checkIpAddressAvailability/read",
-        "Microsoft.Network/virtualNetworks/privateDnsZoneLinks/read",
-        "Microsoft.Network/virtualNetworks/usages/read",
-        "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/read",
-        "Microsoft.Network/virtualNetworks/remoteVirtualNetworkPeeringProxies/read",
-        "Microsoft.Network/virtualNetworks/subnets/read",
-        "Microsoft.Network/virtualNetworks/subnets/contextualServiceEndpointPolicies/read",
-        "Microsoft.Network/virtualNetworks/subnets/resourceNavigationLinks/read",
-        "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks/read",
-        "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks/details/read",
-        "Microsoft.Network/virtualNetworks/subnets/virtualMachines/read",
-        "Microsoft.Network/virtualNetworks/virtualMachines/read",
-        "Microsoft.Network/virtualNetworks/customViews/read",
-        "Microsoft.Network/virtualNetworks/providers/Microsoft.Insights/diagnosticSettings/read",
-        "Microsoft.Network/virtualNetworkGateways/read",
-        "microsoft.network/virtualNetworkGateways/natRules/read",
-        "Microsoft.Network/virtualNetworkGateways/providers/Microsoft.Insights/diagnosticSettings/read",
-        "microsoft.network/virtualnetworkgateways/connections/read",
-        "Microsoft.Network/connections/read",
-        "Microsoft.Network/virtualNetworkTaps/read",
-        "Microsoft.Network/virtualNetworkTaps/networkInterfaceTapConfigurationProxies/read",
-        "Microsoft.Network/virtualRouters/read",
-        "Microsoft.Network/virtualRouters/providers/Microsoft.Insights/metricDefinitions/read",
-        "Microsoft.Network/virtualRouters/peerings/read",
-        "Microsoft.Sql/operations/read",
-        "Microsoft.Sql/checkNameAvailability/action",
-        "Microsoft.Sql/servers/read",
-        "Microsoft.Sql/servers/outboundFirewallRules/read",
-        "Microsoft.Sql/servers/jobAgents/read",
-        "Microsoft.Sql/servers/databases/read",
-        "Microsoft.Sql/servers/jobAgents/targetGroups/read",
-        "Microsoft.Sql/servers/databases/geoBackupPolicies/read",
-        "Microsoft.Sql/servers/databases/azureAsyncOperation/read",
-        "Microsoft.Sql/servers/databases/extensions/read",
-        "Microsoft.Sql/servers/databases/extensions/importExtensionOperationResults/read",
-        "Microsoft.Sql/servers/databases/operationResults/read",
-        "Microsoft.Sql/servers/databases/operations/read",
-        "Microsoft.Sql/servers/databases/skus/read",
-        "Microsoft.Sql/servers/databases/usages/read",
-        "Microsoft.Sql/servers/databases/transparentDataEncryption/read",
-        "Microsoft.Sql/servers/databases/transparentDataEncryption/operationResults/read",
-        "Microsoft.Sql/servers/databases/ledgerDigestUploads/read",
-        "Microsoft.Sql/servers/databases/syncGroups/read",
-        "Microsoft.Sql/servers/databases/syncGroups/hubSchemas/read",
-        "Microsoft.Sql/servers/databases/syncGroups/logs/read",
-        "Microsoft.Sql/servers/databases/syncGroups/refreshHubSchemaOperationResults/read",
-        "Microsoft.Sql/servers/databases/syncGroups/syncMembers/read",
-        "Microsoft.Sql/servers/databases/syncGroups/syncMembers/refreshSchemaOperationResults/read",
-        "Microsoft.Sql/servers/databases/syncGroups/syncMembers/schemas/read",
-        "Microsoft.Sql/servers/databases/auditRecords/read",
-        "Microsoft.Sql/servers/databases/auditingSettings/read",
-        "Microsoft.Sql/servers/databases/providers/Microsoft.Insights/diagnosticSettings/read",
-        "Microsoft.Sql/servers/databases/replicationLinks/read",
-        "Microsoft.Sql/servers/databases/restorePoints/read",
-        "Microsoft.Sql/servers/databases/securityMetrics/read",
-        "Microsoft.Sql/servers/databases/serviceTierAdvisors/read",
-        "Microsoft.Sql/servers/databases/securityAlertPolicies/read",
-        "Microsoft.Sql/servers/databases/extendedAuditingSettings/read",
-        "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies/read",
-        "Microsoft.Sql/servers/elasticPools/read",
-        "Microsoft.Sql/servers/elasticPools/databases/read",
-        "Microsoft.Sql/servers/elasticPools/operations/read",
-        "Microsoft.Sql/servers/elasticPools/skus/read",
-        "Microsoft.Sql/servers/elasticPools/providers/Microsoft.Insights/diagnosticSettings/read",
-        "Microsoft.Sql/servers/elasticPools/elasticPoolActivity/read",
-        "Microsoft.Sql/servers/elasticPools/metrics/read",
-        "Microsoft.Sql/servers/elasticPools/metricDefinitions/read",
-        "Microsoft.Sql/servers/elasticPools/providers/Microsoft.Insights/metricDefinitions/read",
-        "Microsoft.Sql/servers/elasticPools/advisors/read",
-        "Microsoft.Sql/servers/elasticPools/elasticPoolDatabaseActivity/read",
-        "Microsoft.Sql/servers/failoverGroups/read",
-        "Microsoft.Sql/servers/privateEndpointConnections/read",
-        "Microsoft.Sql/servers/privateEndpointConnectionProxies/read",
-        "Microsoft.Sql/servers/privateLinkResources/read",
-        "Microsoft.Sql/servers/dnsAliases/read",
-        "Microsoft.Sql/servers/operationResults/read",
-        "Microsoft.Sql/servers/operations/read",
-        "Microsoft.Sql/servers/virtualNetworkRules/read",
-        "Microsoft.Sql/servers/syncAgents/read",
-        "Microsoft.Sql/servers/syncAgents/linkedDatabases/read",
-        "Microsoft.Sql/servers/disasterRecoveryConfiguration/read",
-        "Microsoft.Sql/servers/ipv6FirewallRules/read",
-        "Microsoft.Sql/servers/replicationLinks/read",
-        "Microsoft.Sql/servers/restorableDroppedDatabases/read",
-        "Microsoft.Sql/servers/auditingSettings/read",
-        "Microsoft.Sql/servers/automaticTuning/read",
-        "Microsoft.Sql/servers/firewallRules/read",
-        "Microsoft.Sql/servers/administrators/read",
-        "Microsoft.Sql/locations/databaseOperationResults/read",
-        "Microsoft.Sql/locations/elasticPoolOperationResults/read",
-        "Microsoft.Sql/locations/privateEndpointConnectionAzureAsyncOperation/read",
-        "Microsoft.Sql/locations/privateEndpointConnectionOperationResults/read",
-        "Microsoft.Sql/locations/instanceFailoverGroups/read",
-        "Microsoft.Sql/locations/longTermRetentionBackups/read",
-        "Microsoft.Sql/locations/longTermRetentionBackupOperationResults/read",
-        "Microsoft.Sql/locations/transparentDataEncryptionAzureAsyncOperation/read",
-        "Microsoft.Sql/locations/transparentDataEncryptionOperationResults/read",
-        "Microsoft.Sql/locations/timeZones/read",
-        "Microsoft.Sql/locations/auditingSettingsOperationResults/read",
-        "Microsoft.Sql/locations/firewallRulesAzureAsyncOperation/read",
-        "Microsoft.Sql/locations/serverAdministratorOperationResults/read"
-      ```	
+- Permissions
+  ```
+    "Microsoft.Network/dnsForwardingRulesets/virtualNetworkLinks/read",
+    "Microsoft.Network/virtualNetworks/listDnsResolvers/action",
+    "Microsoft.Network/virtualNetworks/listDnsForwardingRulesets/action"
+    "Microsoft.Network/loadBalancers/virtualMachines/read",
+    "Microsoft.Network/networkInterfaces/join/action",
+    "Microsoft.Network/privateDnsZones/read",
+    "Microsoft.Network/privateDnsZones/virtualNetworkLinks/read",
+    "Microsoft.Network/locations/virtualNetworkAvailableEndpointServices/read",
+    "Microsoft.Network/virtualNetworks/read",
+    "Microsoft.Network/locations/supportedVirtualMachineSizes/read",
+    "Microsoft.Network/virtualNetworks/bastionHosts/default/action",
+    "Microsoft.Network/virtualNetworks/checkIpAddressAvailability/read",
+    "Microsoft.Network/virtualNetworks/privateDnsZoneLinks/read",
+    "Microsoft.Network/virtualNetworks/usages/read",
+    "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/read",
+    "Microsoft.Network/virtualNetworks/remoteVirtualNetworkPeeringProxies/read",
+    "Microsoft.Network/virtualNetworks/subnets/read",
+    "Microsoft.Network/virtualNetworks/subnets/contextualServiceEndpointPolicies/read",
+    "Microsoft.Network/virtualNetworks/subnets/resourceNavigationLinks/read",
+    "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks/read",
+    "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks/details/read",
+    "Microsoft.Network/virtualNetworks/subnets/virtualMachines/read",
+    "Microsoft.Network/virtualNetworks/virtualMachines/read",
+    "Microsoft.Network/virtualNetworks/customViews/read",
+    "Microsoft.Network/virtualNetworks/providers/Microsoft.Insights/diagnosticSettings/read",
+    "Microsoft.Network/virtualNetworkGateways/read",
+    "microsoft.network/virtualNetworkGateways/natRules/read",
+    "Microsoft.Network/virtualNetworkGateways/providers/Microsoft.Insights/diagnosticSettings/read",
+    "microsoft.network/virtualnetworkgateways/connections/read",
+    "Microsoft.Network/connections/read",
+    "Microsoft.Network/virtualNetworkTaps/read",
+    "Microsoft.Network/virtualNetworkTaps/networkInterfaceTapConfigurationProxies/read",
+    "Microsoft.Network/virtualRouters/read",
+    "Microsoft.Network/virtualRouters/providers/Microsoft.Insights/metricDefinitions/read",
+    "Microsoft.Network/virtualRouters/peerings/read"
+  ```	
         
 
 #### [Disks](https://docs.microsoft.com/en-ca/rest/api/compute/disks/list)
@@ -550,11 +494,60 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 #### [SQL Servers](https://docs.microsoft.com/en-us/rest/api/sql/2021-02-01-preview/servers)
 - SQL Servers
     - Scope 
-        - https://docs.microsoft.com/en-us/rest/api/sql/2021-02-01-preview/servers
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.sqlmanagementclient?view=azure-python
+          - servers
+            - list()
+          - databases
+            - list_by_server()
+            - list_by_elastic_pool()
+          - server_azure_ad_administrators
+            - list_by_server()
+          - server_automatic_tuning
+            - get()
+          - server_blob_auditing_policies
+            - get()
+          - failover_groups
+            - list_by_server()
+          - list_encryption_protectors
+            - list_by_server()
+          - elastic_pools
+            - list_by_server()
+          - restorable_dropped_databases
+            - list_by_server()
+          - firewall_rules
+            - list_by_server()
+          - virtual_network_rules
+            - list_by_server()
+          - sync_groups
+            - list_by_server()
+          - sync_agents
+            - list_by_server()
+          - data_masking_policies
+            - list_by_database()
+          - replication_links
+            - list_by_database()
 
     - Permissions
     ```
-      "Microsoft.Sql/servers/*/read"
+    "Microsoft.Sql/servers/read",
+    "Microsoft.Sql/servers/administrators/read",
+    "Microsoft.Sql/servers/databases/read",
+    "Microsoft.Sql/servers/automaticTuning/read",
+    "Microsoft.Sql/servers/databases/automaticTuning/read",
+    "Microsoft.Sql/servers/databases/auditingSettings/read",
+    "Microsoft.Sql/servers/auditingSettings/read",
+    "Microsoft.Sql/servers/failoverGroups/read",
+    "Microsoft.Sql/servers/encryptionProtector/read",
+    "Microsoft.Sql/servers/elasticPools/read",
+    "Microsoft.Sql/servers/elasticPools/databases/read",
+    "Microsoft.Sql/servers/restorableDroppedDatabases/read",
+    "Microsoft.Sql/servers/firewallRules/read",
+    "Microsoft.Sql/servers/virtualNetworkRules/read",
+    "Microsoft.Sql/servers/databases/syncGroups/read",
+    "Microsoft.Sql/servers/syncAgents/read",
+    "Microsoft.Sql/servers/databases/dataMaskingPolicies/rules/read",
+    "Microsoft.Sql/servers/databases/replicationLinks/read",
+    "Microsoft.Sql/servers/replicationLinks/read"
     ```
 
 #### [SQL Databases](https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.operations.databasesoperations?view=azure-python)
@@ -572,12 +565,13 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         - replication_links
           - list_by_server()
         - database_blob_auditing_policies
-          - list_by_database()
+          - get()
   - Permissions
     ```
     "Microsoft.Sql/servers/read",
     "Microsoft.Sql/servers/syncAgents/read",
     "Microsoft.Sql/servers/replicationLinks/read",
+    "Microsoft.Sql/servers/databases/replicationLinks/read",
     "Microsoft.Sql/servers/databases/read",
     "Microsoft.Sql/servers/databases/auditingSettings/read",
     "Microsoft.Sql/servers/databases/syncGroups/read"
@@ -876,13 +870,13 @@ The default ASSET_URL in cloud_service_conf is
 ## Release Note
 
 
-
-| Versoin | Description                                                                                                                                                                                                                                                                                                                                                               | Service                | Release Date   |
-|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|----------------|
-| 1.6.14  | - [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)                                                                                                                                                                                                                              | Application Gateways   | 2023.08.01     |
-| 1.6.13  | - [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)                                                                                                                                                                                                                                                   | Application Gateways   | 2023.07.13     |
-| 1.6.12  | - [Fix `Virtual Networks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/64)<br/>- [Fix `Disks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/60)<br>- [Fix error occurs when collecting `SQL server` and database](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/41) | Virtual Networks, Disks, SQL Servers, SQL Databases | 2023.07.05     |
-| 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)| CosmosDB | 2023.06.30     |
+| Version | Description                                                                                                                                                                                                                                                                                                                                                               | Affected Service                                    | Release Date |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
+| 1.6.15  | - [Fix `SQL Databases` error 'mappingproxy' object does not support item assignment](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/77)                                                                                                                                                                                                             | SQL Databases                                       | 2023.08.04   | 
+| 1.6.14  | - [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)                                                                                                                                                                                                                              | Application Gateways                                | 2023.08.01   |
+| 1.6.13  | - [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)                                                                                                                                                                                                                                                   | Application Gateways                                | 2023.07.13   |
+| 1.6.12  | - [Fix `Virtual Networks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/64)<br/>- [Fix `Disks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/60)<br>- [Fix error occurs when collecting `SQL server` and database](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/41) | Virtual Networks, Disks, SQL Servers, SQL Databases | 2023.07.05   |
+| 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)                                                                                                                                                      | CosmosDB                                            | 2023.06.30   |
 
 ### Ver 1.6.14
 * [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)
