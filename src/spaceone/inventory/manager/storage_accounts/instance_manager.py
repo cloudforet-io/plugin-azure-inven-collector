@@ -1,6 +1,7 @@
 import datetime
-import time
 import logging
+import time
+
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.storage_accounts import StorageAccountsConnector
@@ -8,7 +9,6 @@ from spaceone.inventory.connector.monitor import MonitorConnector
 from spaceone.inventory.model.storage_accounts.cloud_service import *
 from spaceone.inventory.model.storage_accounts.cloud_service_type import CLOUD_SERVICE_TYPES
 from spaceone.inventory.model.storage_accounts.data import *
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -58,11 +58,11 @@ class StorageAccountsManager(AzureManager):
                     })
 
                 if storage_account_dict.get('name') is not None:
-                    container_item = self.list_blob_containers(storage_account_conn, resource_group, storage_account_dict['name'])
-                    storage_account_dict.update({
-                        'container_item': container_item,
-                        'container_count_display': len(container_item)
-                    })
+                    container_count = self.get_blob_containers_count(storage_account_conn, resource_group,
+                                                                     storage_account_dict['name'])
+
+                    storage_account_dict.update({'container_count_display': container_count})
+                    _LOGGER.debug(f'[collect_cloud_service] {storage_account_id} container count : {container_count}')
 
                 if storage_account_dict.get('routing_preference') is not None:
                     storage_account_dict.update({
@@ -93,9 +93,9 @@ class StorageAccountsManager(AzureManager):
                     'instance_type': storage_account_data.sku.tier
                 })
 
+
                 # Must set_region_code method for region collection
                 self.set_region_code(storage_account_data['location'])
-                # _LOGGER.debug(f'[STORAGE ACCOUNT INFO] {storage_account_resource.to_primitive()}')
                 storage_account_responses.append(StorageAccountResponse({'resource': storage_account_resource}))
 
             except Exception as e:
@@ -120,7 +120,8 @@ class StorageAccountsManager(AzureManager):
                 'virtual_networks': self.get_virtual_network_names(network_rule_dict['virtual_network_rules']),
                 'is_public_access_allowed': False
             })
-        if not network_rule_dict.get('virtual_network_rules'): # if virtual_network_rules are empty, this SA is public allowable
+        if not network_rule_dict.get(
+                'virtual_network_rules'):  # if virtual_network_rules are empty, this SA is public allowable
             network_rule_dict.update({
                 'is_public_access_allowed': True
             })
@@ -258,3 +259,9 @@ class StorageAccountsManager(AzureManager):
         time_now = datetime.datetime.utcnow() - datetime.timedelta(hours=1)
         time_now_hours_ago = time_now - datetime.timedelta(hours=hours)
         return "{}/{}".format(time_now_hours_ago, time_now)
+
+    @staticmethod
+    def get_blob_containers_count(storage_conn, rg_name, account_name):
+        blob_containers_obj = storage_conn.list_blob_containers(rg_name=rg_name, account_name=account_name)
+        return len(list(blob_containers_obj))
+
