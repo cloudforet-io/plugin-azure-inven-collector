@@ -2,7 +2,6 @@ import datetime
 import logging
 import time
 
-from pympler import asizeof
 from spaceone.inventory.libs.manager import AzureManager
 from spaceone.inventory.libs.schema.base import ReferenceModel
 from spaceone.inventory.connector.storage_accounts import StorageAccountsConnector
@@ -59,13 +58,10 @@ class StorageAccountsManager(AzureManager):
                     })
 
                 if storage_account_dict.get('name') is not None:
-                    # container_item = self.list_blob_containers(storage_account_conn, resource_group, storage_account_dict['name'])
                     container_count = self.get_blob_containers_count(storage_account_conn, resource_group,
                                                                      storage_account_dict['name'])
-                    storage_account_dict.update({
-                        # 'container_item': container_item,
-                        'container_count_display': container_count
-                    })
+
+                    storage_account_dict.update({'container_count_display': container_count})
                     _LOGGER.debug(f'[collect_cloud_service] {storage_account_id} container count : {container_count}')
 
                 if storage_account_dict.get('routing_preference') is not None:
@@ -97,7 +93,6 @@ class StorageAccountsManager(AzureManager):
                     'instance_type': storage_account_data.sku.tier
                 })
 
-                _LOGGER.debug(f'[collect_cloud_service] {storage_account_id} size : {asizeof.asizeof(storage_account_resource)} bytes')
 
                 # Must set_region_code method for region collection
                 self.set_region_code(storage_account_data['location'])
@@ -108,7 +103,6 @@ class StorageAccountsManager(AzureManager):
                 error_resource_response = self.generate_resource_error_response(e, 'Storage', 'StorageAccount', storage_account_id)
                 error_responses.append(error_resource_response)
 
-        _LOGGER.debug(f'[collect_cloud_service] storage_account_responses size : {asizeof.asizeof(storage_account_responses)} bytes')
         _LOGGER.debug(f'** Storage Account Finished {time.time() - start_time} Seconds **')
         return storage_account_responses, error_responses
 

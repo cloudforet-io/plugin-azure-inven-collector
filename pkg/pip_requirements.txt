@@ -17,4 +17,3 @@ azure-mgmt-rdbms
 azure-mgmt-cosmosdb
 azure-mgmt-containerinstance
 azure-mgmt-webpubsub
-pympler
