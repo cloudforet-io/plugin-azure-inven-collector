@@ -62,7 +62,6 @@ class StorageAccountsManager(AzureManager):
                                                                      storage_account_dict['name'])
 
                     storage_account_dict.update({'container_count_display': container_count})
-                    _LOGGER.debug(f'[collect_cloud_service] {storage_account_id} container count : {container_count}')
 
                 if storage_account_dict.get('routing_preference') is not None:
                     storage_account_dict.update({
