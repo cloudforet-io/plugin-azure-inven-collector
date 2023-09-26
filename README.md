@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.15-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.18-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/spaceone/plugin-azure-inven-collector)
-> Latest stable version : 1.6.15
+> Latest stable version : 1.6.18
 
 Please contact us if you need any further information. 
 <admin@cloudforet.io>
@@ -870,13 +870,14 @@ The default ASSET_URL in cloud_service_conf is
 ## Release Note
 
 
-| Version | Description                                                                                                                                                                                                                                                                                                                                                               | Affected Service                                    | Release Date |
-|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
-| 1.6.15  | - [Fix `SQL Databases` error 'mappingproxy' object does not support item assignment](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/77)                                                                                                                                                                                                             | SQL Databases                                       | 2023.08.04   | 
-| 1.6.14  | - [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)                                                                                                                                                                                                                              | Application Gateways                                | 2023.08.01   |
-| 1.6.13  | - [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)                                                                                                                                                                                                                                                   | Application Gateways                                | 2023.07.13   |
+| Version | Description                                                                                                                                                                                                                                                                                                                                                              | Affected Service                                    | Release Date |
+|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
+| 1.6.18  | - [Fix Data Size too big error when collecting `StorageAccounts`](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/57)                                                                                                                                                                                                                                | Storage Accounts                                    | 2023.09.26   |
+| 1.6.15  | - [Fix `SQL Databases` error 'mappingproxy' object does not support item assignment](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/77)                                                                                                                                                                                                            | SQL Databases                                       | 2023.08.04   | 
+| 1.6.14  | - [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)                                                                                                                                                                                                                             | Application Gateways                                | 2023.08.01   |
+| 1.6.13  | - [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)                                                                                                                                                                                                                                                  | Application Gateways                                | 2023.07.13   |
 | 1.6.12  | - [Fix `Virtual Networks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/64)<br/>- [Fix `Disks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/60)<br>- [Fix error occurs when collecting `SQL server` and database](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/41) | Virtual Networks, Disks, SQL Servers, SQL Databases | 2023.07.05   |
-| 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)                                                                                                                                                      | CosmosDB                                            | 2023.06.30   |
+| 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)                                                                                                                                                     | CosmosDB                                            | 2023.06.30   |
 
 ### Ver 1.6.14
 * [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)
