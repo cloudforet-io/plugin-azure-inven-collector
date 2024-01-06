@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM cloudforet/python-core:1
 
 ENV PYTHONUNBUFFERED 1
 ENV CLOUDONE_PORT 50051
