@@ -17,12 +17,11 @@ from azure.mgmt.containerinstance import ContainerInstanceManagementClient
 from azure.mgmt.webpubsub import WebPubSubManagementClient
 from spaceone.core.connector import BaseConnector
 
-DEFAULT_SCHEMA = 'azure_client_secret'
+DEFAULT_SCHEMA = "azure_client_secret"
 _LOGGER = logging.getLogger(__name__)
 
 
 class AzureConnector(BaseConnector):
-
     def __init__(self, *args, **kwargs):
         """
         kwargs
@@ -54,31 +53,55 @@ class AzureConnector(BaseConnector):
         self.web_pubsub_service_client = None
 
     def set_connect(self, secret_data):
-        subscription_id = secret_data['subscription_id']
+        subscription_id = secret_data["subscription_id"]
 
         os.environ["AZURE_SUBSCRIPTION_ID"] = subscription_id
-        os.environ["AZURE_TENANT_ID"] = secret_data['tenant_id']
-        os.environ["AZURE_CLIENT_ID"] = secret_data['client_id']
-        os.environ["AZURE_CLIENT_SECRET"] = secret_data['client_secret']
+        os.environ["AZURE_TENANT_ID"] = secret_data["tenant_id"]
+        os.environ["AZURE_CLIENT_ID"] = secret_data["client_id"]
+        os.environ["AZURE_CLIENT_SECRET"] = secret_data["client_secret"]
 
         credential = DefaultAzureCredential()
 
-        self.compute_client = ComputeManagementClient(credential=credential, subscription_id=subscription_id)
-        self.resource_client = ResourceManagementClient(credential=credential, subscription_id=subscription_id)
-        self.network_client = NetworkManagementClient(credential=credential, subscription_id=subscription_id)
-        self.subscription_client: SubscriptionClient = SubscriptionClient(credential=credential)
-        self.sql_client = SqlManagementClient(credential=credential, subscription_id=subscription_id)
-        self.monitor_client = MonitorManagementClient(credential=credential, subscription_id=subscription_id)
-        self.storage_client = StorageManagementClient(credential=credential, subscription_id=subscription_id)
-        self.key_vault_client = KeyVaultManagementClient(credential=credential, subscription_id=subscription_id)
-        self.mysql_client = MySQLManagementClient(credential=credential, subscription_id=subscription_id)
-        self.cosmosdb_client = CosmosDBManagementClient(credential=credential, subscription_id=subscription_id)
-        self.postgre_sql_client = PostgreSQLManagementClient(credential=credential, subscription_id=subscription_id)
-        self.container_instance_client = ContainerInstanceManagementClient(credential=credential,
-                                                                           subscription_id=subscription_id)
-        self.web_pubsub_service_client = WebPubSubManagementClient(credential=credential,
-                                                                   subscription_id=subscription_id)
+        self.compute_client = ComputeManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.resource_client = ResourceManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.network_client = NetworkManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.subscription_client: SubscriptionClient = SubscriptionClient(
+            credential=credential
+        )
+        self.sql_client = SqlManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.monitor_client = MonitorManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.storage_client = StorageManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.key_vault_client = KeyVaultManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.mysql_client = MySQLManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.cosmosdb_client = CosmosDBManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.postgre_sql_client = PostgreSQLManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.container_instance_client = ContainerInstanceManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
+        self.web_pubsub_service_client = WebPubSubManagementClient(
+            credential=credential, subscription_id=subscription_id
+        )
 
     def verify(self, **kwargs):
-        self.set_connect(kwargs['secret_data'])
+        self.set_connect(kwargs["secret_data"])
         return "ACTIVE"

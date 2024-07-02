@@ -1,0 +1,36 @@
+---
+metric_id: metric-azure-sql-servers-server-count
+name: Server Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.SQLServers.Server
+query_options:
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: account
+      name: Subscription ID
+    - key: data.resource_group
+      name: Resource Group
+    - key: data.state
+      name: Server State
+      default: true
+    - key: data.version
+      name: Version
+    - key: data.minimal_tls_version
+      name: Minimal TLS Version
+    - key: data.administrators.principal_type
+      name: Administrator Principal Type
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-sql-servers-server
+version: '1.0'

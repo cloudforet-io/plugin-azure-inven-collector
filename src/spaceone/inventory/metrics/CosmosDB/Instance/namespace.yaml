@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-cosmos-db-instance
+name: CosmosDB/Instance
+resource_type: inventory.CloudService:azure.CosmosDB.Instance
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-cosmos-db.svg
+version: '1.0'

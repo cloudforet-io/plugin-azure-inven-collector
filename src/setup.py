@@ -50,6 +50,11 @@ setup(
         "azure-mgmt-containerinstance",
         "azure-mgmt-webpubsub",
     ],
-    package_data={"spaceone": ["inventory/model/*/widget/*.yaml"]},
+    package_data={
+        "spaceone": [
+            "inventory/model/*/widget/*.yaml",
+            "inventory/metrics/**/**/*.yaml",
+        ]
+    },
     zip_safe=False,
 )

@@ -1,12 +1,21 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, DateTimeType, IntType, BooleanType
+from schematics.types import (
+    ModelType,
+    ListType,
+    StringType,
+    DateTimeType,
+    IntType,
+    BooleanType,
+)
 from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
 class Sku(Model):
-    name = StringType(choices=('Standard_LRS', 'Premium_LRS', 'StandardSSD_LRS', 'UltraSSD_LRS'),
-                      serialize_when_none=False)
-    tier = StringType(choices=('Premium', 'Standard'), serialize_when_none=False)
+    name = StringType(
+        choices=("Standard_LRS", "Premium_LRS", "StandardSSD_LRS", "UltraSSD_LRS"),
+        serialize_when_none=False,
+    )
+    tier = StringType(choices=("Premium", "Standard"), serialize_when_none=False)
 
 
 class ImageDiskReference(Model):
@@ -15,8 +24,10 @@ class ImageDiskReference(Model):
 
 
 class CreationData(Model):
-    creation_option = StringType(choices=('Attach', 'Copy', 'Empty', 'FromImage', 'Import', 'Restore', 'Upload'),
-                                 serialize_when_none=False)
+    creation_option = StringType(
+        choices=("Attach", "Copy", "Empty", "FromImage", "Import", "Restore", "Upload"),
+        serialize_when_none=False,
+    )
     image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
     gallery_image_reference = ModelType(ImageDiskReference, serialize_when_none=False)
     logical_sector_size = IntType(serialize_when_none=False)
@@ -47,15 +58,25 @@ class EncryptionSettingsCollection(Model):
 
 
 class Encryption(Model):
-    disk_encryption_set_id = StringType(default='', serialize_when_none=False)
-    type = StringType(choices=('EncryptionAtRestWithCustomerKey', 'EncryptionAtRestWithPlatformAndCustomerKeys',
-                               'EncryptionAtRestWithPlatformKey'),
-                      default='EncryptionAtRestWithPlatformKey', serialize_when_none=False)
+    disk_encryption_set_id = StringType(default="", serialize_when_none=False)
+    type = StringType(
+        choices=(
+            "EncryptionAtRestWithCustomerKey",
+            "EncryptionAtRestWithPlatformAndCustomerKeys",
+            "EncryptionAtRestWithPlatformKey",
+        ),
+        default="EncryptionAtRestWithPlatformKey",
+        serialize_when_none=False,
+    )
     type_display = StringType()
 
 
 class ShareInfoElement(Model):
     vm_uri = StringType(serialize_when_none=False)
+
+
+class SupportedCapabilities(Model):
+    architecture = StringType(serialize_when_none=False)
 
 
 class Snapshot(AzureCloudService):
@@ -69,23 +90,38 @@ class Snapshot(AzureCloudService):
     disk_m_bps_read_write = StringType(serialize_when_none=False)
     disk_size_bytes = IntType()
     disk_size_gb = IntType()
-    disk_state = StringType(choices=('ActiveSAS', 'ActiveUpload', 'Attached', 'ReadyToUpload',
-                                     'Reserved', 'Unattached'))
+    disk_state = StringType(
+        choices=(
+            "ActiveSAS",
+            "ActiveUpload",
+            "Attached",
+            "ReadyToUpload",
+            "Reserved",
+            "Unattached",
+        )
+    )
     encryption = ModelType(Encryption)
-    encryption_settings_collection = ModelType(EncryptionSettingsCollection, serialize_when_none=False)
+    encryption_settings_collection = ModelType(
+        EncryptionSettingsCollection, serialize_when_none=False
+    )
     hyper_v_generation = StringType(serialize_when_none=False)
     incremental = BooleanType()
-    incremental_display = StringType(default='Full', serialize_when_none=False)
-    network_access_policy = StringType(choices=('AllowAll', 'AllowPrivate', 'DenyAll'), serialize_when_none=False)
+    incremental_display = StringType(default="Full", serialize_when_none=False)
+    network_access_policy = StringType(
+        choices=("AllowAll", "AllowPrivate", "DenyAll"), serialize_when_none=False
+    )
     network_access_policy_display = StringType(serialize_when_none=False)
     os_type = StringType(serialize_when_none=False)
-    provisioning_state = StringType(choices=('Failed', 'Succeeded'), serialize_when_none=False)
+    provisioning_state = StringType(
+        choices=("Failed", "Succeeded"), serialize_when_none=False
+    )
     time_created = DateTimeType(serialize_when_none=False)
     unique_id = StringType()
     size = IntType()
     sku = ModelType(Sku)
     source_disk_name = StringType()
-    tier_display = StringType(default='')
+    supported_capabilities = ModelType(SupportedCapabilities, serialize_when_none=False)
+    tier_display = StringType(default="")
     type = StringType(serialize_when_none=False)
 
     def reference(self):

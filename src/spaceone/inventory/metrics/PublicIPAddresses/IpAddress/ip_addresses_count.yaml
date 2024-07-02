@@ -1,0 +1,39 @@
+---
+metric_id: metric-azure-pubipaddrs-ipaddrs-count
+name: IP Address Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.PublicIPAddresses.IPAddress
+query_options:
+  unwind:
+    path: data.zones
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+    - key: data.zones
+      name: Zone
+    - key: data.sku.name
+      name: Sku name
+    - key: data.sku.tier
+      name: Sku Tier
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: account
+      name: Subscription ID
+    - key: data.resource_group
+      name: Resource Group
+    - key: data.provisioning_state
+      name: Provisioning State
+    - key: data.associated_to
+      name: Associated To
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-pubipaddrs-ipaddrs
+version: '1.0'

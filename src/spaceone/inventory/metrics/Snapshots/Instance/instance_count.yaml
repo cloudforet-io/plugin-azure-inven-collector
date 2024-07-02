@@ -1,0 +1,47 @@
+---
+metric_id: metric-azure-snapshots-instance-count
+name: Instance Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.Snapshots.Instance
+query_options:
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+    - key: data.sku.name
+      name: Sku name
+    - key: data.sku.tier
+      name: Sku Tier
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: account
+      name: Subscription ID
+    - key: data.resource_group
+      name: Resource Group
+    - key: instance_type
+      name: Disk Type
+    - key: data.provisioning_state
+      name: Provisioning State
+    - key: data.os_type
+      name: OS Type
+    - key: data.disk_state
+      name: Disk State
+    - key: data.source_disk_name
+      name: Source Disk Name
+    - key: data.supports_hibernation
+      name: Supports Hibernation
+    - key: data.supported_capabilities.architecture
+      name: Architecture
+    - key: data.hyper_v_generation
+      name: Hyper-V Generation
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-snapshots-instance
+version: '1.0'

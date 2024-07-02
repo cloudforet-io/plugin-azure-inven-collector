@@ -1,7 +1,17 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, FloatType, DateTimeType, BooleanType, IntType
+from schematics.types import (
+    ModelType,
+    ListType,
+    StringType,
+    FloatType,
+    DateTimeType,
+    BooleanType,
+    IntType,
+)
 from spaceone.inventory.libs.schema.resource import AzureCloudService, AzureTags
 from spaceone.inventory.libs.schema.region import RegionResource
+
+from pydantic import BaseModel
 
 
 # Activity Log
@@ -14,7 +24,7 @@ class Azure(Model):
     ultra_ssd_enabled = BooleanType(default=False)
     write_accelerator_enabled = BooleanType(default=False)
     boot_diagnostics = BooleanType(default=True)
-    priority = StringType(choices=('Regular', 'Low', 'Spot'), default='Regular')
+    priority = StringType(choices=("Regular", "Low", "Spot"), default="Regular")
     tags = ListType(ModelType(AzureTags))
 
 
@@ -32,23 +42,34 @@ class ComputeTags(Model):
 class Compute(Model):
     keypair = StringType()
     az = StringType()
-    instance_state = StringType(choices=('STARTING', 'RUNNING', 'STOPPING', 'STOPPED', 'DEALLOCATING', 'DEALLOCATED'))
+    instance_state = StringType(
+        choices=(
+            "STARTING",
+            "RUNNING",
+            "STOPPING",
+            "STOPPED",
+            "DEALLOCATING",
+            "DEALLOCATED",
+        )
+    )
     instance_type = StringType()
     launched_at = DateTimeType()
-    instance_id = StringType(default='')
-    instance_name = StringType(default='')
+    instance_id = StringType(default="")
+    instance_name = StringType(default="")
     security_groups = ListType(ModelType(SecurityGroups))
     image = StringType()
-    account = StringType(default='')
+    account = StringType(default="")
     tags = ModelType(ComputeTags, default={})
 
 
 # Disk
 class DiskTags(Model):
     disk_name = StringType()
-    caching = StringType(choices=('None', 'ReadOnly', 'ReadWrite'))
-    storage_account_type = StringType(choices=('Standard_LRS', 'Premium_LRS', 'StandardSSD_LRS', 'UltraSSD_LRS'))
-    disk_encryption_set = StringType(choices=('PMK', 'CMK'), default='PMK')
+    caching = StringType(choices=("None", "ReadOnly", "ReadWrite"))
+    storage_account_type = StringType(
+        choices=("Standard_LRS", "Premium_LRS", "StandardSSD_LRS", "UltraSSD_LRS")
+    )
+    disk_encryption_set = StringType(choices=("PMK", "CMK"), default="PMK")
     iops = IntType()
     throughput_mbps = IntType()
     disk_id = StringType()
@@ -56,8 +77,8 @@ class DiskTags(Model):
 
 class Disk(Model):
     device_index = IntType()
-    device = StringType(default='')
-    disk_type = StringType(choices=('os_disk', 'data_disk'))
+    device = StringType(default="")
+    disk_type = StringType(choices=("os_disk", "data_disk"))
     size = FloatType()
     tags = ModelType(DiskTags, default={})
 
@@ -74,12 +95,12 @@ class LoadBalancerTags(Model):
 
 
 class LoadBalancer(Model):
-    type = StringType(choices=('application', 'network'))
+    type = StringType(choices=("application", "network"))
     endpoint = StringType()
     port = ListType(IntType())
     name = StringType()
     protocol = ListType(StringType())
-    scheme = StringType(choices=('internet-facing', 'internal'))
+    scheme = StringType(choices=("internet-facing", "internal"))
     tags = ModelType(LoadBalancerTags, default={})
 
 
@@ -105,9 +126,9 @@ class NIC(Model):
 # OS
 class OS(Model):
     os_distro = StringType()
-    os_arch = StringType(default='x86_64')
+    os_arch = StringType(default="x86_64")
     details = StringType()
-    os_type = StringType(choices=('LINUX', 'WINDOWS'))
+    os_type = StringType(choices=("LINUX", "WINDOWS"))
 
 
 # Resource Group
@@ -175,11 +196,11 @@ class VirtualMachine(AzureCloudService):  # Main Class
     subnet = ModelType(Subnet)
     vmss = ModelType(VMSS, serialize_when_none=False)
     activity_log = ModelType(ActivityLog, serialize_when_none=False)
-    primary_ip_address = StringType(default='')
+    primary_ip_address = StringType(default="")
     disks = ListType(ModelType(Disk))
     nics = ListType(ModelType(NIC))
     subscription = ModelType(Subscription)
-    resource_group = ModelType(ResourceGroup)
+    resource_group = StringType(serialize_when_none=False)
 
     def reference(self):
         return {

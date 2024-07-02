@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-vms-instance
+name: VirtualMachines/Instance
+resource_type: inventory.CloudService:azure.VirtualMachines.Instance
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-vm.svg
+version: '1.0'

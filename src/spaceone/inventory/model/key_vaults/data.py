@@ -1,5 +1,13 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType
+from schematics.types import (
+    ModelType,
+    ListType,
+    StringType,
+    IntType,
+    BooleanType,
+    DateTimeType,
+    DictType,
+)
 from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
@@ -36,10 +44,12 @@ class VirtualNetworkRule(Model):
 
 
 class NetworkRuleSet(Model):
-    bypass = StringType(choices=('AzureServices', 'None'), serialize_when_none=False)
-    default_action = StringType(choices=('Allow', 'Deny'), serialize_when_none=False)
+    bypass = StringType(choices=("AzureServices", "None"), serialize_when_none=False)
+    default_action = StringType(choices=("Allow", "Deny"), serialize_when_none=False)
     ip_rules = ListType(ModelType(IPRule), serialize_when_none=False)
-    virtual_network_rules = ListType(ModelType(VirtualNetworkRule), serialize_when_none=False)
+    virtual_network_rules = ListType(
+        ModelType(VirtualNetworkRule), serialize_when_none=False
+    )
 
 
 class PrivateEndpoint(Model):
@@ -49,7 +59,10 @@ class PrivateEndpoint(Model):
 class PrivateLinkServiceConnectionState(Model):
     actions_required = StringType(serialize_when_none=False)
     description = StringType(serialize_when_none=False)
-    status = StringType(choices=('Approved', 'Disconnected', 'Pending', 'Rejected'), serialize_when_none=False)
+    status = StringType(
+        choices=("Approved", "Disconnected", "Pending", "Rejected"),
+        serialize_when_none=False,
+    )
 
 
 class PrivateEndpointConnectionItem(Model):
@@ -57,13 +70,25 @@ class PrivateEndpointConnectionItem(Model):
     id = StringType(serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     private_endpoint = ModelType(PrivateEndpoint, serialize_when_none=False)
-    private_link_service_connection_state = ModelType(PrivateLinkServiceConnectionState, serialize_when_none=False)
-    provisioning_state = StringType(choices=('Creating', 'Deleting', 'Disconnected', 'Failed', 'Succeeded', 'Updating'), serialize_when_none=False)
+    private_link_service_connection_state = ModelType(
+        PrivateLinkServiceConnectionState, serialize_when_none=False
+    )
+    provisioning_state = StringType(
+        choices=(
+            "Creating",
+            "Deleting",
+            "Disconnected",
+            "Failed",
+            "Succeeded",
+            "Updating",
+        ),
+        serialize_when_none=False,
+    )
 
 
 class Sku(Model):
     family = StringType(serialize_when_none=False)
-    name = StringType(choices=('premium', 'standard'), serialize_when_none=False)
+    name = StringType(choices=("premium", "standard"), serialize_when_none=False)
 
 
 class SecretAttributes(Model):
@@ -72,9 +97,18 @@ class SecretAttributes(Model):
     exp = DateTimeType(serialize_when_none=False)
     nbf = DateTimeType(serialize_when_none=False)
     recoverable_days = IntType(serialize_when_none=False)
-    recovery_level = StringType(choices=('CustomizedRecoverable', 'CustomizedRecoverable+ProtectedSubscription',
-                                         'CustomizedRecoverable+Purgeable', 'Purgeable', 'Recoverable', 'Recoverable+ProtectedSubscription',
-                                         'Recoverable+Purgeable'), serialize_when_none=False)
+    recovery_level = StringType(
+        choices=(
+            "CustomizedRecoverable",
+            "CustomizedRecoverable+ProtectedSubscription",
+            "CustomizedRecoverable+Purgeable",
+            "Purgeable",
+            "Recoverable",
+            "Recoverable+ProtectedSubscription",
+            "Recoverable+Purgeable",
+        ),
+        serialize_when_none=False,
+    )
     updated = DateTimeType(serialize_when_none=False)
 
 
@@ -104,10 +138,18 @@ class CertificateAttributes(Model):
     exp = DateTimeType(serialize_when_none=False)
     nbf = DateTimeType(serialize_when_none=False)
     recoverable_days = IntType(serialize_when_none=False)
-    recovery_level = StringType(choices=('CustomizedRecoverable', 'CustomizedRecoverable+ProtectedSubscription',
-                                         'CustomizedRecoverable+Purgeable', 'Purgeable', 'Recoverable',
-                                         'Recoverable+ProtectedSubscription',
-                                         'Recoverable+Purgeable'), serialize_when_none=False)
+    recovery_level = StringType(
+        choices=(
+            "CustomizedRecoverable",
+            "CustomizedRecoverable+ProtectedSubscription",
+            "CustomizedRecoverable+Purgeable",
+            "Purgeable",
+            "Recoverable",
+            "Recoverable+ProtectedSubscription",
+            "Recoverable+Purgeable",
+        ),
+        serialize_when_none=False,
+    )
     updated = DateTimeType(serialize_when_none=False)
 
 
@@ -121,9 +163,11 @@ class CertificateItem(Model):
 
 class VaultProperties(Model):
     access_policies = ListType(ModelType(AccessPolicyEntry), serialize_when_none=False)
-    create_mode = StringType(choices=('default', 'recover'), serialize_when_none=False)
+    create_mode = StringType(choices=("default", "recover"), serialize_when_none=False)
     enable_purge_protection = BooleanType(default=False, serialize_when_none=False)
-    enable_purge_protection_str = StringType(serialize_when_none=False, default='Disabled')
+    enable_purge_protection_str = StringType(
+        serialize_when_none=False, default="Disabled"
+    )
     enable_rbac_authorization = BooleanType(serialize_when_none=False)
     enable_soft_delete = BooleanType(serialize_when_none=False)
     enabled_for_deployment = BooleanType(serialize_when_none=False)
@@ -131,8 +175,12 @@ class VaultProperties(Model):
     enabled_for_template_deployment = BooleanType(serialize_when_none=False)
     hsm_pool_resource_id = StringType(serialize_when_none=False)
     network_acls = ModelType(NetworkRuleSet, serialize_when_none=False)
-    private_endpoint_connections = ListType(ModelType(PrivateEndpointConnectionItem), serialize_when_none=False)
-    provisioning_state = StringType(choices=('RegisteringDns', 'Succeeded'), serialize_when_none=False)
+    private_endpoint_connections = ListType(
+        ModelType(PrivateEndpointConnectionItem), serialize_when_none=False
+    )
+    provisioning_state = StringType(
+        choices=("RegisteringDns", "Succeeded"), serialize_when_none=False
+    )
     sku = ModelType(Sku, serialize_when_none=False)
     soft_delete_retention_in_days = IntType(serialize_when_none=False)
     tenant_id = StringType(serialize_when_none=False)
@@ -145,10 +193,18 @@ class KeyAttributes(Model):
     exp = DateTimeType(serialize_when_none=False)
     nbf = DateTimeType(serialize_when_none=False)
     recoverable_days = IntType(serialize_when_none=False)
-    recovery_level = StringType(choices=('CustomizedRecoverable', 'CustomizedRecoverable+ProtectedSubscription',
-                                         'CustomizedRecoverable+Purgeable', 'Purgeable', 'Recoverable',
-                                         'Recoverable+ProtectedSubscription',
-                                         'Recoverable+Purgeable'), serialize_when_none=False)
+    recovery_level = StringType(
+        choices=(
+            "CustomizedRecoverable",
+            "CustomizedRecoverable+ProtectedSubscription",
+            "CustomizedRecoverable+Purgeable",
+            "Purgeable",
+            "Recoverable",
+            "Recoverable+ProtectedSubscription",
+            "Recoverable+Purgeable",
+        ),
+        serialize_when_none=False,
+    )
     updated = DateTimeType(serialize_when_none=False)
 
 
@@ -164,9 +220,19 @@ class KeyItem(Model):
     tags = ModelType(Tags, serialize_when_none=False)
 
 
+class SystemData(Model):
+    created_at = DateTimeType(serialize_when_none=False)
+    created_by = StringType(serialize_when_none=False)
+    created_by_type = StringType(serialize_when_none=False)
+    last_modified_at = DateTimeType(serialize_when_none=False)
+    last_modified_by = StringType(serialize_when_none=False)
+    last_modified_by_type = StringType(serialize_when_none=False)
+
+
 class KeyVault(AzureCloudService):  # Main class
     etag = StringType(serialize_when_none=False)
     id = StringType(serialize_when_none=False)
+    sku = ModelType(Sku, serialize_when_none=False)
     name = StringType(serialize_when_none=False)
     location = StringType(serialize_when_none=False)
     properties = ModelType(VaultProperties, serialize_when_none=False)
@@ -174,8 +240,15 @@ class KeyVault(AzureCloudService):  # Main class
     secrets = ListType(ModelType(SecretItem), serialize_when_none=False)
     certificates = ListType(ModelType(CertificateItem), serialize_when_none=False)
     key_count = IntType(serialize_when_none=False)
+    secret_count = IntType(serialize_when_none=False)
+    certificate_count = IntType(serialize_when_none=False)
+    total_credentials_count = IntType(serialize_when_none=False)
+    system_data = ModelType(SystemData, serialize_when_none=False)
     type = StringType(serialize_when_none=False)
     launched_at = DateTimeType(serialize_when_none=False)
+    keys_permissions_description_display = StringType(serialize_when_none=False)
+    secrets_permissions_description_display = StringType(serialize_when_none=False)
+    certificates_permissions_description_display = StringType(serialize_when_none=False)
 
     def reference(self):
         return {

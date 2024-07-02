@@ -4,7 +4,6 @@ from spaceone.inventory.connector.virtual_machines import VirtualMachinesConnect
 
 
 class VirtualMachineLoadBalancerManager(BaseManager):
-
     def __init__(self, params, azure_vm_connector=None, **kwargs):
         super().__init__(**kwargs)
         self.params = params
@@ -25,23 +24,23 @@ class VirtualMachineLoadBalancerManager(BaseManager):
         }
         """
         lb_data = []
-        match_load_balancers = self.get_load_balancers_from_nic(vm.network_profile.network_interfaces, load_balancers)
+        match_load_balancers = self.get_load_balancers_from_nic(
+            vm.network_profile.network_interfaces, load_balancers
+        )
 
         for match_load_balancer in match_load_balancers:
             ports, protocols = self.get_lb_port_protocol(match_load_balancer)
             load_balancer_data = {
-                'type': 'network',
-                'scheme': self.get_lb_scheme(match_load_balancer),
-                'endpoint': self.get_lb_endpoint(match_load_balancer, public_ip_addresses),
-                'port': ports,
-                'name': match_load_balancer.name,
-                'protocol': protocols,
-                'tags': {
-                    'lb_id': match_load_balancer.id
-                }
-
+                "type": "network",
+                "scheme": self.get_lb_scheme(match_load_balancer),
+                "endpoint": self.get_lb_endpoint(
+                    match_load_balancer, public_ip_addresses
+                ),
+                "port": ports,
+                "name": match_load_balancer.name,
+                "protocol": protocols,
+                "tags": {"lb_id": match_load_balancer.id},
             }
-            # pprint.pprint(load_balancer_data)
             lb_data.append(LoadBalancer(load_balancer_data, strict=False))
 
         return lb_data
@@ -55,18 +54,18 @@ class VirtualMachineLoadBalancerManager(BaseManager):
         if frontend_ip_configurations:
             frontend_ip_configurations = []
 
-        if self.get_lb_scheme(match_load_balancer) == 'internet-facing':
+        if self.get_lb_scheme(match_load_balancer) == "internet-facing":
             for ip in frontend_ip_configurations:
-                public_ip_address_name = ip.public_ip_address.id.split('/')[-1]
+                public_ip_address_name = ip.public_ip_address.id.split("/")[-1]
                 for pub_ip in public_ip_addresses:
                     if public_ip_address_name == pub_ip.name:
                         return pub_ip.ip_address
 
-        elif self.get_lb_scheme(match_load_balancer) == 'internal':
+        elif self.get_lb_scheme(match_load_balancer) == "internal":
             for ip in frontend_ip_configurations:
                 return ip.private_ip_address
 
-        return ''
+        return ""
 
     @staticmethod
     def get_load_balancers_from_nic(network_interfaces, load_balancers):
@@ -80,7 +79,7 @@ class VirtualMachineLoadBalancerManager(BaseManager):
 
         vm_nics = []
         for nic in network_interfaces:
-            vm_nics.append(nic.id.split('/')[-1])
+            vm_nics.append(nic.id.split("/")[-1])
 
         for vm_nic in vm_nics:
             for lb in load_balancers:
@@ -88,7 +87,7 @@ class VirtualMachineLoadBalancerManager(BaseManager):
                     for be in lb.backend_address_pools:
                         if be.backend_ip_configurations:
                             for ip_conf in be.backend_ip_configurations:
-                                nic_name = ip_conf.id.split('/')[-3]
+                                nic_name = ip_conf.id.split("/")[-3]
                                 if nic_name == vm_nic:
                                     match_load_balancers.append(lb)
 
@@ -99,9 +98,9 @@ class VirtualMachineLoadBalancerManager(BaseManager):
         frontend_ip_configurations = match_load_balancer.frontend_ip_configurations
         for fe_ip_conf in frontend_ip_configurations:
             if fe_ip_conf.public_ip_address:
-                return 'internet-facing'
+                return "internet-facing"
             else:
-                return 'internal'
+                return "internal"
 
     @staticmethod
     def get_lb_port_protocol(match_load_balancer):
@@ -114,4 +113,3 @@ class VirtualMachineLoadBalancerManager(BaseManager):
                 protocols.append(lbr.protocol.upper())
 
         return ports, protocols
-

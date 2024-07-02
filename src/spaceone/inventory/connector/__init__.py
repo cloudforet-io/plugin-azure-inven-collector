@@ -5,9 +5,13 @@ from spaceone.inventory.connector.vm_scale_sets import VmScaleSetsConnector
 from spaceone.inventory.connector.load_balancers import LoadBalancersConnector
 from spaceone.inventory.connector.monitor import MonitorConnector
 from spaceone.inventory.connector.virtual_networks import VirtualNetworksConnector
-from spaceone.inventory.connector.application_gateways import ApplicationGatewaysConnector
+from spaceone.inventory.connector.application_gateways import (
+    ApplicationGatewaysConnector,
+)
 from spaceone.inventory.connector.public_ip_addresses import PublicIPAddressesConnector
-from spaceone.inventory.connector.network_security_groups import NetworkSecurityGroupsConnector
+from spaceone.inventory.connector.network_security_groups import (
+    NetworkSecurityGroupsConnector,
+)
 from spaceone.inventory.connector.nat_gateways import NATGatewaysConnector
 from spaceone.inventory.connector.storage_accounts import StorageAccountsConnector
 from spaceone.inventory.connector.key_vaults import KeyVaultsConnector
@@ -19,3 +23,4 @@ from spaceone.inventory.connector.sql_servers import SQLServersConnector
 from spaceone.inventory.connector.sql_databases import SQLDatabasesConnector
 from spaceone.inventory.connector.container_instances import ContainerInstancesConnector
 from spaceone.inventory.connector.web_pubsub_service import WebPubSubServiceConnector
+from spaceone.inventory.connector.resources import ResourcesConnector

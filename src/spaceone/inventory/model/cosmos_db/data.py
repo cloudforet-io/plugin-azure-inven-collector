@@ -1,6 +1,14 @@
 from schematics import Model
-from schematics.types import ModelType, ListType, StringType, IntType, BooleanType, DateTimeType, UTCDateTimeType, \
-    FloatType
+from schematics.types import (
+    ModelType,
+    ListType,
+    StringType,
+    IntType,
+    BooleanType,
+    DateTimeType,
+    UTCDateTimeType,
+    FloatType,
+)
 from spaceone.inventory.libs.schema.resource import AzureCloudService
 
 
@@ -20,18 +28,30 @@ class ApiProperties(Model):
 class ManagedServiceIdentity(Model):
     principal_id = StringType(serialize_when_none=False)
     tenant_id = StringType(serialize_when_none=False)
-    type = StringType(choices=('None', 'SystemAssigned', 'SystemAssigned, UserAssigned', 'UserAssigned'), serialize_when_none=False)
+    type = StringType(
+        choices=(
+            "None",
+            "SystemAssigned",
+            "SystemAssigned, UserAssigned",
+            "UserAssigned",
+        ),
+        serialize_when_none=False,
+    )
     user_assigned_identities = StringType(serialize_when_none=False)
 
 
 class PeriodicModeProperties(Model):
     backup_interval_in_minutes = IntType(serialize_when_none=False)
     backup_retention_interval_in_hours = IntType(serialize_when_none=False)
-    backup_storage_redundancy = StringType(choices=('Geo', 'Local', 'Zone'), serialize_when_none=False)
+    backup_storage_redundancy = StringType(
+        choices=("Geo", "Local", "Zone"), serialize_when_none=False
+    )
 
 
 class PeriodicModeBackupPolicy(Model):
-    periodic_mode_properties = ModelType(PeriodicModeProperties, serialize_when_none=False)
+    periodic_mode_properties = ModelType(
+        PeriodicModeProperties, serialize_when_none=False
+    )
     type = StringType(serialize_when_none=False)
 
 
@@ -40,7 +60,16 @@ class Capability(Model):
 
 
 class ConsistencyPolicy(Model):
-    default_consistency_level = StringType(choices=('BoundedStaleness', 'ConsistentPrefix', 'Eventual', 'Session', 'Strong'), serialize_when_none=False)
+    default_consistency_level = StringType(
+        choices=(
+            "BoundedStaleness",
+            "ConsistentPrefix",
+            "Eventual",
+            "Session",
+            "Strong",
+        ),
+        serialize_when_none=False,
+    )
     max_interval_in_seconds = IntType(serialize_when_none=False)
     max_staleness_prefix = IntType(serialize_when_none=False)
 
@@ -88,7 +117,9 @@ class PrivateEndpointConnection(Model):
     name = StringType(serialize_when_none=False)
     group_id = StringType(serialize_when_none=False)
     private_endpoint = ModelType(PrivateEndpointProperty, serialize_when_none=False)
-    private_link_service_connection_state = ModelType(PrivateLinkServiceConnectionStateProperty, serialize_when_none=False)
+    private_link_service_connection_state = ModelType(
+        PrivateLinkServiceConnectionStateProperty, serialize_when_none=False
+    )
     provisioning_state = StringType(serialize_when_none=False)
     type = StringType(serialize_when_none=False)
 
@@ -103,7 +134,9 @@ class RestoreMode(Model):
 
 
 class RestoreParameters(Model):
-    databases_to_restore = ListType(ModelType(DatabaseRestoreResource), serialize_when_none=False)
+    databases_to_restore = ListType(
+        ModelType(DatabaseRestoreResource), serialize_when_none=False
+    )
     restore_mode = ModelType(RestoreMode, serialize_when_none=False)
     restore_source = StringType(serialize_when_none=False)
     restore_timestamp_in_utc = UTCDateTimeType(serialize_when_none=False)
@@ -117,10 +150,16 @@ class VirtualNetworkRule(Model):
 class SystemData(Model):
     created_at = DateTimeType(serialize_when_none=False)
     created_by = StringType(serialize_when_none=False)
-    created_by_type = StringType(choices=('Application', 'Key', 'ManagedIdentity', 'User'), serialize_when_none=False)
+    created_by_type = StringType(
+        choices=("Application", "Key", "ManagedIdentity", "User"),
+        serialize_when_none=False,
+    )
     last_modified_at = DateTimeType(serialize_when_none=False)
     last_modified_by = StringType(serialize_when_none=False)
-    last_modified_by_type = StringType(choices=('Application', 'Key', 'ManagedIdentity', 'User'), serialize_when_none=False)
+    last_modified_by_type = StringType(
+        choices=("Application", "Key", "ManagedIdentity", "User"),
+        serialize_when_none=False,
+    )
 
 
 class DatabaseAccountListKeysResult(Model):
@@ -143,8 +182,10 @@ class DatabaseAccountGetResults(AzureCloudService):  # Main Class
     id = StringType(serialize_when_none=False)
     identity = ModelType(ManagedServiceIdentity, serialize_when_none=False)
     location = StringType(serialize_when_none=False)
-    kind = StringType(choices=('GlobalDocumentDB', 'MongoDB', 'Parse'), serialize_when_none=False)
-    name = StringType(default='-', serialize_when_none=False)
+    kind = StringType(
+        choices=("GlobalDocumentDB", "MongoDB", "Parse"), serialize_when_none=False
+    )
+    name = StringType(default="-", serialize_when_none=False)
     api_properties = ModelType(ApiProperties, serialize_when_none=False)
     backup_policy = ModelType(PeriodicModeBackupPolicy, serialize_when_none=False)
     capabilities = ListType(ModelType(Capability), serialize_when_none=False)
@@ -153,7 +194,7 @@ class DatabaseAccountGetResults(AzureCloudService):  # Main Class
     consistency_policy = ModelType(ConsistencyPolicy, serialize_when_none=False)
     cors = ListType(ModelType(CorsPolicy), serialize_when_none=False)
     cors_display = ListType(StringType, serialize_when_none=False)
-    create_mode = StringType(choices=('Default', 'Restore'), serialize_when_none=False)
+    create_mode = StringType(choices=("Default", "Restore"), serialize_when_none=False)
     database_account_offer_type = StringType(serialize_when_none=False)
     default_identity = StringType(serialize_when_none=False)
     disable_key_based_metadata_write_access = BooleanType(serialize_when_none=False)
@@ -170,16 +211,27 @@ class DatabaseAccountGetResults(AzureCloudService):  # Main Class
     key_vault_key_uri = BooleanType(serialize_when_none=False)
     keys = ModelType(DatabaseAccountListKeysResult, serialize_when_none=False)
     locations = ListType(ModelType(Location), serialize_when_none=False)
-    network_acl_bypass = StringType(choices=('AzureServices', 'None'), serialize_when_none=False)
+    network_acl_bypass = StringType(
+        choices=("AzureServices", "None"), serialize_when_none=False
+    )
     network_acl_bypass_resource_ids = ListType(StringType, serialize_when_none=False)
-    private_endpoint_connections = ListType(ModelType(PrivateEndpointConnection), serialize_when_none=False)
+    private_endpoint_connections = ListType(
+        ModelType(PrivateEndpointConnection), serialize_when_none=False
+    )
     provisioning_state = StringType(serialize_when_none=False)
-    public_network_access = StringType(choices=('Disabled', 'Enabled'), serialize_when_none=False)
+    public_network_access = StringType(
+        choices=("Disabled", "Enabled"), serialize_when_none=False
+    )
     read_locations = ListType(ModelType(Location), serialize_when_none=False)
     restore_parameters = ModelType(RestoreParameters, serialize_when_none=False)
-    virtual_network_rules = ListType(ModelType(VirtualNetworkRule), serialize_when_none=False)
+    virtual_network_rules = ListType(
+        ModelType(VirtualNetworkRule), serialize_when_none=False
+    )
     virtual_network_display = ListType(StringType, serialize_when_none=False)
-    sql_databases = ListType(ModelType(SqlDatabaseGetResults), serialize_when_none=False)
+    sql_databases = ListType(
+        ModelType(SqlDatabaseGetResults), serialize_when_none=False
+    )
+    sql_databases_count_display = IntType(serialize_when_none=False)
     write_locations = ListType(ModelType(Location), serialize_when_none=False)
     system_data = ModelType(SystemData, serialize_when_none=False)
     instance_type = StringType(serialize_when_none=False)
