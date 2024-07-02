@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-snapshots-instance
+name: Snapshots/Instance
+resource_type: inventory.CloudService:azure.Snapshots.Instance
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-disk-snapshot.svg
+version: '1.0'

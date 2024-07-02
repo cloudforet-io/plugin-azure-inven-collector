@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-web-pub-sub-service-service
+name: WebPubSubService/Service
+resource_type: inventory.CloudService:azure.WebPubSubService.Service
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-web-pubsub-service.svg
+version: '1.0'

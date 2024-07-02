@@ -1,4 +1,4 @@
-FROM cloudforet/python-core:1
+FROM cloudforet/python-core:2
 
 ENV PYTHONUNBUFFERED 1
 ENV CLOUDONE_PORT 50051
@@ -20,4 +20,4 @@ RUN python3 setup.py install && \
 EXPOSE ${CLOUDONE_PORT}
 
 ENTRYPOINT ["spaceone"]
-CMD ["grpc", "spaceone.inventory"]
+CMD ["run", "grpc-server", "spaceone.inventory"]

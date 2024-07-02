@@ -1,0 +1,34 @@
+---
+metric_id: metric-azure-web-pub-sub-service-service
+name: Service Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.WebPubSubService.Service
+query_options:
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+    - key: data.sku.name
+      name: Sku name
+    - key: data.sku.tier
+      name: Sku Tier
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: account
+      name: Subscription ID
+    - key: data.resource_group
+      name: Resource Group
+    - key: data.provisioning_state
+      name: Provisioning State
+      default: true
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-web-pub-sub-service-service
+version: '1.0'

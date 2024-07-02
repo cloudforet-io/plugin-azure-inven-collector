@@ -1,0 +1,1 @@
+from spaceone.inventory.connector.resources.connector import ResourcesConnector
