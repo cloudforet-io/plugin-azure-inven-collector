@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.mysql_servers.connector import MySQLServersConnector

@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.public_ip_addresses.connector import PublicIPAddressesConnector

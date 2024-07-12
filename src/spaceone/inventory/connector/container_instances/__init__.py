@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.container_instances.connector import ContainerInstancesConnector

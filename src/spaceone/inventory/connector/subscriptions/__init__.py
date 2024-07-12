@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.subscriptions.connector import SubscriptionsConnector
