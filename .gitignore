@@ -12,4 +12,4 @@ local-conf.yml
 .venv/
 .venv.nosync/
 .DS_Store
-!src/spaceone/inventory/metrics/Disks/disk
+!src/plugin/metrics/Disks/Disk

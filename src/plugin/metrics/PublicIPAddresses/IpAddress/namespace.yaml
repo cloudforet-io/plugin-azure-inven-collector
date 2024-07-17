@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-pubipaddrs-ipaddrs
+name: PublicIPAddresses/IPAddresses
+resource_type: inventory.CloudService:azure.PublicIPAddresses.IPAddresses
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-public-ip-address.svg
+version: '1.0'
