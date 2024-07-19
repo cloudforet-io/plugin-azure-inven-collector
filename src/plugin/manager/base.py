@@ -4,7 +4,7 @@ import logging
 import datetime
 import time
 import re
-from typing import Union
+from typing import Union, List, Type
 
 from spaceone.core.manager import BaseManager
 from spaceone.core import utils
@@ -49,6 +49,13 @@ class AzureBaseManager(BaseManager):
             yield from cls.__subclasses__()
 
     @classmethod
+    def get_managers_by_cloud_service_group(cls, cloud_service_group: str):
+        sub_cls = cls.__subclasses__()
+        for manager in sub_cls:
+            if manager.__name__ == cloud_service_group:
+                return manager
+
+    @classmethod
     def collect_metrics(cls, cloud_service_group: str):
         if not os.path.exists(os.path.join(_METRIC_DIR, cloud_service_group)):
             os.mkdir(os.path.join(_METRIC_DIR, cloud_service_group))
@@ -80,14 +87,17 @@ class AzureBaseManager(BaseManager):
         try:
             yield from self.collect_cloud_service_type()
 
-            cloud_services, total_count = self.collect_cloud_service(
-                options, secret_data, schema
-            )
+            cloud_services, total_count = self.collect_cloud_service(options, secret_data, schema
+                                                                     )
             for cloud_service in cloud_services:
                 yield cloud_service
             success_count, error_count = total_count
 
-            yield from self.collect_region(secret_data)
+            subscriptions_manager = AzureBaseManager.get_managers_by_cloud_service_group("SubscriptionsManager")
+            location_info = subscriptions_manager().list_location_info(secret_data)
+
+            yield from self.collect_region(location_info)
+            # yield from self.collect_region(secret_data)
 
         except Exception as e:
             yield make_error_response(
@@ -175,6 +185,7 @@ class AzureBaseManager(BaseManager):
     def get_metadata_path(self):
         _cloud_service_group = self._camel_to_snake(self.cloud_service_group)
         _cloud_service_type = self._camel_to_snake(self.cloud_service_type)
+
         return os.path.join(_METADATA_DIR, _cloud_service_group, f"{_cloud_service_type}.yaml")
 
     def convert_nested_dictionary(self, cloud_svc_object: object) -> Union[object, dict]:
@@ -221,3 +232,16 @@ class AzureBaseManager(BaseManager):
     def _camel_to_snake(name):
         name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
+    @staticmethod
+    def get_resource_group_from_id(dict_id):
+        resource_group = dict_id.split("/")[4]
+        return resource_group
+
+    @staticmethod
+    def update_tenant_id_from_secret_data(
+            cloud_service_data: dict, secret_data: dict
+    ) -> dict:
+        if tenant_id := secret_data.get("tenant_id"):
+            cloud_service_data.update({"tenant_id": tenant_id})
+        return cloud_service_data

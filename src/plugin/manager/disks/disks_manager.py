@@ -16,7 +16,22 @@ class DisksManager(AzureBaseManager):
     cloud_service_type = "Disk"
     service_code = "/Microsoft.Compute/disks"
 
-    def create_cloud_service(self, options: dict, secret_data: dict, schema: str):
+    def create_cloud_service_type(self):
+        return make_cloud_service_type(
+            name=self.cloud_service_type,
+            group=self.cloud_service_group,
+            provider=self.provider,
+            service_code=self.service_code,
+            metadata_path=self.get_metadata_path(),
+            is_primary=True,
+            is_major=True,
+            labels=["Compute", "Storage"],
+            tags={
+                "spaceone:icon": f"{ICON_URL}/azure-disk.svg"
+            }
+        )
+
+    def create_cloud_service(self, options, secret_data, schema):
         cloud_services = []
         error_responses = []
 
@@ -29,7 +44,6 @@ class DisksManager(AzureBaseManager):
         disks = disks_conn.list_disks()
 
         for disk in disks:
-            disk_id = ""
 
             try:
                 disk_dict = self.convert_nested_dictionary(disk)
@@ -44,9 +58,7 @@ class DisksManager(AzureBaseManager):
                 # update disk_data dict
                 disk_dict.update(
                     {
-                        "resource_group": self.get_resource_group_from_id(
-                            disk_dict["id"]
-                        ),  # parse resource_group from ID
+                        "resource_group": self.get_resource_group_from_id(disk_dict["id"]),
                         "subscription_id": subscription_info["subscription_id"],
                         "subscription_name": subscription_info["display_name"],
                         "size": disk_dict["disk_size_bytes"],
@@ -87,22 +99,26 @@ class DisksManager(AzureBaseManager):
                 if disk_dict.get("bursting_enabled") is None:
                     disk_dict["bursting_enabled"] = False
 
-                disk_dict = self.update_tenant_id_from_secret_data(
+                disk_data = self.update_tenant_id_from_secret_data(
                     disk_dict, secret_data
                 )
 
                 cloud_services.append(
                     make_cloud_service(
-                        name=disk_dict["name"],
-                        account=secret_data["subscription_id"],
+                        name=disk_data["name"],
                         cloud_service_type=self.cloud_service_type,
                         cloud_service_group=self.cloud_service_group,
                         provider=self.provider,
-                        region_code=disk_dict["location"],
-                        data=disk_dict,
-                        reference=self.make_reference(disk_dict["id"])
+                        data=disk_data,
+                        account=secret_data["subscription_id"],
+                        instance_type=disk_data["sku"]["name"],
+                        instance_size=disk_data["disk_size_bytes"],
+                        region_code=disk_data["location"],
+                        reference=self.make_reference(disk_data.get("id")),
+                        data_format="dict"
                     )
                 )
+
             except Exception as e:
                 _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
                 error_responses.append(
@@ -117,26 +133,6 @@ class DisksManager(AzureBaseManager):
 
         return cloud_services, error_responses
 
-    def create_cloud_service_type(self):
-        return make_cloud_service_type(
-            name=self.cloud_service_type,
-            group=self.cloud_service_group,
-            provider=self.provider,
-            service_code=self.service_code,
-            metadata_path=self.get_metadata_path(),
-            is_primary=True,
-            is_major=True,
-            labels=["Compute", "Storage"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-disk.svg"
-            }
-        )
-
-    @staticmethod
-    def get_attached_vm_name_from_managed_by(managed_by):
-        attached_vm_name = managed_by.split("/")[8]
-        return attached_vm_name
-
     @staticmethod
     def get_disk_sku_name(sku_tier):
         if sku_tier == "Premium_LRS":
@@ -148,6 +144,17 @@ class DisksManager(AzureBaseManager):
         else:
             sku_name = "Ultra SSD"
         return sku_name
+
+    @staticmethod
+    def get_tier_display(disk_iops_read_write, disk_m_bps_read_write):
+        tier_display = (
+                str(disk_iops_read_write)
+                + " IOPS"
+                + ", "
+                + str(disk_m_bps_read_write)
+                + " Mbps"
+        )
+        return tier_display
 
     @staticmethod
     def get_network_access_policy(network_access_policy):
@@ -162,25 +169,6 @@ class DisksManager(AzureBaseManager):
         return network_access_policy_display
 
     @staticmethod
-    def get_tier_display(disk_iops_read_write, disk_m_bps_read_write):
-        tier_display = (
-                str(disk_iops_read_write)
-                + " IOPS"
-                + ", "
-                + str(disk_m_bps_read_write)
-                + " Mbps"
-        )
-        return tier_display
-
-    @staticmethod
-    def update_tenant_id_from_secret_data(
-            cloud_service_data: dict, secret_data: dict
-    ) -> dict:
-        if tenant_id := secret_data.get("tenant_id"):
-            cloud_service_data.update({"tenant_id": tenant_id})
-        return cloud_service_data
-
-    @staticmethod
-    def get_resource_group_from_id(dict_id):
-        resource_group = dict_id.split("/")[4]
-        return resource_group
+    def get_attached_vm_name_from_managed_by(managed_by):
+        attached_vm_name = managed_by.split("/")[8]
+        return attached_vm_name

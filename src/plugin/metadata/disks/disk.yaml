@@ -62,6 +62,9 @@ table:
     - Subscription ID: data.subscription_id
       is_optional: true
     - Zone: data.zones
+      type: list
+      options:
+        delimiter: ', '
       is_optional: true
     - Encryption Type: data.encryption.type
       is_optional: true

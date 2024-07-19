@@ -61,8 +61,6 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
     if resource_type == "inventory.Region":
         subscriptions_mgr = SubscriptionsManager()
         location_info = subscriptions_mgr.list_location_info(secret_data)
-        print("hererere")
-        print(location_info)
         yield from AzureBaseManager().collect_region(location_info)
     else:
         for manager in AzureBaseManager.list_managers_by_cloud_service_groups(cloud_service_groups):
