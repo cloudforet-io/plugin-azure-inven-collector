@@ -20,4 +20,4 @@ RUN python3 setup.py install && \
 EXPOSE ${CLOUDONE_PORT}
 
 ENTRYPOINT ["spaceone"]
-CMD ["run", "grpc-server", "spaceone.inventory"]
+CMD ["run", "plugin-server", "plugin"]
