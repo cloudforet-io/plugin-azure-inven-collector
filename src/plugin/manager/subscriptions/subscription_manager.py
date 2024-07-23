@@ -8,7 +8,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class SubscriptionsManager(AzureBaseManager):
-    cloud_service_group = "Subscriptions"
+    # cloud_service_group = "Subscriptions"
     # cloud_service_type = "Subscription"
     service_code = "/Microsoft.subscriptions"
 

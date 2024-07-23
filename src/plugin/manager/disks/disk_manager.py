@@ -1,6 +1,5 @@
 import logging
 
-from spaceone.core.utils import datetime_to_iso8601
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
@@ -66,8 +65,7 @@ class DisksManager(AzureBaseManager):
                             disk_dict["disk_iops_read_write"],
                             disk_dict["disk_m_bps_read_write"],
                         ),
-                        "azure_monitor": {"resource_id": disk_id},
-                        "time_created": datetime_to_iso8601(disk_dict["time_created"]),
+                        "azure_monitor": {"resource_id": disk_id}
                     }
                 )
 
@@ -103,6 +101,8 @@ class DisksManager(AzureBaseManager):
                     disk_dict, secret_data
                 )
 
+                self.set_region_code(disk_data["location"])
+
                 cloud_services.append(
                     make_cloud_service(
                         name=disk_data["name"],
@@ -128,7 +128,6 @@ class DisksManager(AzureBaseManager):
                         cloud_service_group=self.cloud_service_group,
                         cloud_service_type=self.cloud_service_type,
                     )
-
                 )
 
         return cloud_services, error_responses

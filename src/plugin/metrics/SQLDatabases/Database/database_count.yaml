@@ -1,0 +1,42 @@
+---
+metric_id: metric-azure-sql-databases-database-count
+name: Database Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.SQLDatabases.Database
+query_options:
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+    - key: data.sku.name
+      name: Sku Name
+    - key: data.sku.tier
+      name: Sku Tier
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.status
+      name: Status
+      default: true
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: account
+      name: Subscription ID
+    - key: data.resource_group
+      name: Resource Group
+    - key: data.server_name
+      name: Server Name
+    - key: data.compute_tier
+      name: Compute Tier
+    - key: data.default_secondary_location
+      name: Default Secondary Location
+    - key: data.read_scale
+      name: Read Scale
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-sql-databases-database
+version: '1.0'

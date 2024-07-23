@@ -4,7 +4,7 @@ import logging
 import datetime
 import time
 import re
-from typing import Union, List, Type
+from typing import Union
 
 from spaceone.core.manager import BaseManager
 from spaceone.core import utils
@@ -22,6 +22,8 @@ class AzureBaseManager(BaseManager):
     service = None
     cloud_service_group = None
     cloud_service_type = None
+    region_info = {}
+    collected_region_codes = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,14 +41,14 @@ class AzureBaseManager(BaseManager):
 
     @classmethod
     def list_managers_by_cloud_service_groups(cls, cloud_service_groups: list):
-        if cloud_service_groups in ["All"]:
-            yield from cls.__subclasses__()
+        if cloud_service_groups in ["All"] or not cloud_service_groups:
+            for manager in cls.__subclasses__():
+                if manager.cloud_service_group:
+                    yield manager
         elif cloud_service_groups:
             for manager in cls.__subclasses__():
                 if manager.cloud_service_group and manager.cloud_service_group in cloud_service_groups:
                     yield manager
-        else:
-            yield from cls.__subclasses__()
 
     @classmethod
     def get_managers_by_cloud_service_group(cls, cloud_service_group: str):
@@ -217,6 +219,13 @@ class AzureBaseManager(BaseManager):
 
         return cloud_svc_dict
 
+    def set_region_code(self, region):
+        if region not in self.region_info:
+            region = "global"
+
+        if region not in self.collected_region_codes:
+            self.collected_region_codes.append(region)
+
     @staticmethod
     def make_reference(resource_id: str, external_link_format: str = None) -> dict:
         if external_link_format:
@@ -245,3 +254,17 @@ class AzureBaseManager(BaseManager):
         if tenant_id := secret_data.get("tenant_id"):
             cloud_service_data.update({"tenant_id": tenant_id})
         return cloud_service_data
+
+    @staticmethod
+    def convert_dictionary(obj):
+        return vars(obj)
+
+    @staticmethod
+    def convert_tag_format(tags):
+        convert_tags = []
+
+        if tags:
+            for k, v in tags.items():
+                convert_tags.append({"key": k, "value": v})
+
+        return convert_tags

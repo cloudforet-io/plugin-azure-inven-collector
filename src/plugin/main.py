@@ -6,7 +6,7 @@ from spaceone.core.error import ERROR_REQUIRED_PARAMETER
 from spaceone.inventory.plugin.collector.lib.server import CollectorPluginServer
 
 from plugin.manager.base import AzureBaseManager
-from plugin.manager.subscriptions.subscriptions_manager import SubscriptionsManager
+from plugin.manager.subscriptions.subscription_manager import SubscriptionsManager
 
 app = CollectorPluginServer()
 
@@ -18,22 +18,7 @@ DEFAULT_RESOURCE_TYPES = ["inventory.CloudService", "inventory.CloudServiceType"
 
 @app.route('Collector.init')
 def collector_init(params: dict) -> dict:
-    metadata = {
-        "options_schema": {
-            "type": "object",
-            "properties": {
-                "cloud_service_groups": {
-                    "title": "Specific services",
-                    "type": "string",
-                    "items": {"type": "string"},
-                    "default": "All",
-                    "enum": ["All", "Disks"],
-                    "description": "Choose one of the service to collect data. If you choose 'All', it will collect all services."
-                }
-            }
-        }
-    }
-    return {"metadata": metadata}
+    return _create_init_metadata()
 
 
 @app.route('Collector.verify')
@@ -57,6 +42,7 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
 
     cloud_service_groups = _get_cloud_service_groups_from_options_and_task_options(options, task_options)
     resource_type = task_options.get("resource_type")
+    print("test", cloud_service_groups)
 
     if resource_type == "inventory.Region":
         subscriptions_mgr = SubscriptionsManager()
@@ -98,6 +84,31 @@ def job_get_tasks(params: dict) -> dict:
             })
 
     return {"tasks": tasks}
+
+
+def _create_init_metadata() -> dict:
+    enum = ["All"]
+    for manager in AzureBaseManager.__subclasses__():
+        if manager.cloud_service_group:
+            enum.append(manager.cloud_service_group)
+
+    return {
+        "metadata": {
+            "options_schema": {
+                "type": "object",
+                "properties": {
+                    "cloud_service_groups": {
+                        "title": "Specific services",
+                        "type": "string",
+                        "items": {"type": "string"},
+                        "default": "All",
+                        "enum": enum,
+                        "description": "Choose one of the service to collect data. If you choose 'All', it will collect all services."
+                    }
+                }
+            }
+        }
+    }
 
 
 def _get_cloud_service_groups_from_options_and_task_options(options: dict, task_options: dict) -> list:

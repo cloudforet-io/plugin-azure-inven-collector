@@ -1,1 +1,1 @@
-from .disks_manager import DisksManager
+from .disk_manager import DisksManager
