@@ -10,7 +10,7 @@ from plugin.manager.base import AzureBaseManager
 _LOGGER = logging.getLogger(__name__)
 
 
-class InstanceManager(AzureBaseManager):
+class VirtualNetworksManager(AzureBaseManager):
     cloud_service_group = "VirtualNetworks"
     cloud_service_type = "Instance"
     service_code = "/Microsoft.Network/virtualNetworks"

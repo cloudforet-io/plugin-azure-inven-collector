@@ -1,1 +1,1 @@
-from .server_manager import ServerManager
+from .server_manager import SQLServersManager

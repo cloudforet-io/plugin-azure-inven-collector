@@ -1,1 +1,1 @@
-from .ip_address_manager import IPAddressManager
+from .ip_address_manager import PublicIPAddressesManager

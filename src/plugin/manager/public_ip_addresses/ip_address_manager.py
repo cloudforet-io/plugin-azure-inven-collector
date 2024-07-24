@@ -10,7 +10,7 @@ from plugin.manager.base import AzureBaseManager
 _LOGGER = logging.getLogger(__name__)
 
 
-class IPAddressManager(AzureBaseManager):
+class PublicIPAddressesManager(AzureBaseManager):
     cloud_service_group = "PublicIPAddresses"
     cloud_service_type = "IPAddress"
     service_code = "/Microsoft.Network/publicIPAddresses"

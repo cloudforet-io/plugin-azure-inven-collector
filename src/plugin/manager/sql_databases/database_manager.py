@@ -11,7 +11,7 @@ from plugin.manager.base import AzureBaseManager
 _LOGGER = logging.getLogger(__name__)
 
 
-class DatabaseManager(AzureBaseManager):
+class SQLDatabasesManager(AzureBaseManager):
     cloud_service_group = "SQLDatabases"
     cloud_service_type = "Database"
     service_code = "/Microsoft.Sql/servers/databases"

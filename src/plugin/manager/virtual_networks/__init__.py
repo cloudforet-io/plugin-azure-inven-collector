@@ -1,1 +1,1 @@
-from .instance_manager import InstanceManager
+from .instance_manager import VirtualNetworksManager
