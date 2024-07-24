@@ -34,7 +34,7 @@ class VirtualNetworksManager(AzureBaseManager):
         cloud_services = []
         error_responses = []
 
-        virtual_networks_conn = VirtualNetworksConnector()
+        virtual_networks_conn = VirtualNetworksConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
         subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
