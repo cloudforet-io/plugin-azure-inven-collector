@@ -7,6 +7,7 @@ from azure.mgmt.resource import SubscriptionClient
 from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.sql import SqlManagementClient
 from azure.mgmt.monitor import MonitorManagementClient
+from azure.mgmt.containerinstance import ContainerInstanceManagementClient
 
 from spaceone.core.connector import BaseConnector
 
@@ -22,6 +23,7 @@ class AzureBaseConnector(BaseConnector):
         self.network_client = None
         self.sql_client = None
         self.monitor_client = None
+        self.container_instance_client = None
 
     def set_connect(self, secret_data: dict):
         subscription_id = secret_data['subscription_id']
@@ -38,6 +40,7 @@ class AzureBaseConnector(BaseConnector):
         self.network_client = NetworkManagementClient(credential=credential, subscription_id=subscription_id)
         self.sql_client = SqlManagementClient(credential=credential, subscription_id=subscription_id)
         self.monitor_client = MonitorManagementClient(credential=credential, subscription_id=subscription_id)
+        self.container_instance_client = ContainerInstanceManagementClient(credential=credential, subscription_id=subscription_id)
 
     def get_connector(self, cloud_service_group: str, cloud_service_type: str):
         pass

@@ -5,3 +5,4 @@ from .sql_servers import *
 from .virtual_networks import *
 from .application_gatways import *
 from .nat_gateways import *
+from .container_instances import *
