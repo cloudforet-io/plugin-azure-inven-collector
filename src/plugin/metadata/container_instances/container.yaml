@@ -1,19 +1,23 @@
 search:
   fields:
-    - Tier: data.tier
-    - Subscription Name: data.subscription_name
-    - Subscription ID: data.subscription_id
+    - Status: data.instance_view.state
     - Resource Group: data.resource_group
-    - Location: data.location
-    - Zone: data.zones
-    - Last updated at: data.last_updated
-    - Storage Account Type: data.sku.name
-    - Disk Size (Bytes): data.disk_size_bytes
-    - Disk Size (GB): data.disk_size_gb
-    - Disk IOPS: data.disk_iops_read_write
-    - OS Type: data.os_type
+    - OS type: data.os_type
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
     - Provisioning State: data.provisioning_state
-    - Time Created: data.time_created
+    - Restart Policy: data.restart_policy
+    - IP Address: data.ip_address.ip
+    - FQDN: data.ip_address.fqdn
+    - Location: data.location
+    - SKU: data.sku
+    - Container count: data.container_count_display
+    - vCPU: data.cpu_count_display
+    - Memory size(GB): data.memory_size_display
+    - GPU count: data.gpu_count_display
+    - Volume count: data.volume_count_display
+    - DNS name label: data.ip_address.dns_name_label
+    - DNS name label scope reuse: data.ip_address.auto_generated_domain_name_label_scope
 
 
 
@@ -22,136 +26,166 @@ table:
     key: data.id
     desc: false
   fields:
-    - Storage Account Type: data.sku.name
-    - Size: data.size
-      display_unit: GB
-      source_unit: BYTES
-      type: size
-    - Disk State: data.disk_state
+    - State: data.instance_view.state
       type: enum
       enums:
-        - ActiveSAS:
+        - Running:
           icon_image: ic_circle-filled
           icon_color: green.500
           type: state
-        - ActiveUpload:
+        - Succeeded:
           icon_image: ic_circle-filled
           icon_color: green.500
           type: state
-        - Attached:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Reserved:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - ReadyToUpload:
+        - Pending:
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Unattached:
+        - Stopped: red.500
           icon_image: ic_circle-filled
-          icon_color: blue.500
+          icon_color: red.500
           type: state
-    - Owner: data.managed_by
+        - Failed: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+    - Subscription Name: data.display_name
+    - Subscription ID: account
+      is_optional: true
     - Resource Group: data.resource_group
     - Location: data.location
-    - Subscription Name: data.subscription_name
-    - Subscription ID: data.subscription_id
+    - OS type: data.os_type
+    - Container count: data.container_count_display
+    - vCPU count: data.container_count_display
+    - Memory size(GB): data.memory_size_display
+    - Volume count: data.volume_count_display
+    - GPU count: data.gpu_count_display
+    - Provisioning State: data.provisioning_state
       is_optional: true
-    - Zone: data.zones
-      type: list
-      options:
-        delimiter: ', '
+    - Restart Policy: data.restart_policy
       is_optional: true
-    - Encryption Type: data.encryption.type
+    - IP Address: data.ip_address.ip
       is_optional: true
-    - Networking: data.network_access_policy_display
+    - IP Address Type: data.ip_address.type
       is_optional: true
-    - Max Shares: data.max_shares
+    - FQDN: data.ip_address.fqdn
       is_optional: true
-    - Time Created: data.time_created
+    - DNS name label: data.ip_address.dns_name_label
       is_optional: true
+    - DNS name label scope reuse: data.ip_address.auto_generated_domain_name_label_scope
+      is_optional: true
+
+
 
 
 
 tabs.0:
-  name: Disks
+  name: Container Instances
   type: item
   fields:
     - Name: name
-    - Storage Account Type: instance_type
-    - Size: data.size
-      display_unit: GB
-      source_unit: BYTES
-      type: size
-    - Disk State: data.disk_state
+    - State: data.instance_view.state
       type: enum
       enums:
-        - ActiveSAS:
+        - Running:
           icon_image: ic_circle-filled
           icon_color: green.500
           type: state
-        - ActiveUpload:
+        - Succeeded:
           icon_image: ic_circle-filled
           icon_color: green.500
           type: state
-        - Attached:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Reserved:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - ReadyToUpload:
+        - Pending:
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Unattached:
+        - Stopped: red.500
           icon_image: ic_circle-filled
-          icon_color: blue.500
+          icon_color: red.500
           type: state
-    - Attached VM: data.managed_by
-    - Location: data.location
-    - Resource Group: data.resource_group
+        - Failed: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
     - Resource ID: data.id
-    - Zones: data.zones
-    - Subscription ID: data.subscription_id
-    - Subscription Name: data.subscription_name
-    - Encryption Type: data.encryption.type
-    - Networking: data.network_access_policy_display
-    - Os Type: data.os_type
-    - Max Shares: data.max_shares
-    - VM Generation: data.hyper_v_generation
-    - VM architecture: data.supported_capabilities.architecture
-    - DateTimeDyField.data_sourceTime Created: data.time_created
-      source_type: iso8601
-      type: datetime
+    - Resource Group: data.resource_group
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Region: region_code
+    - SKU: data.sku
+    - OS type: data.os_type
+    - Container count: data.container_count_display
+    - vCPU count: data.container_count_display
+    - Memory size(GB): data.memory_size_display
+    - GPU count: data.gpu_count_display
+    - Volume count: data.volume_count_display
+    - IP Address: data.ip_address.ip
+    - IP Address Type: data.ip_address.type
+    - FQDN: data.ip_address.fqdn
+    - DNS name label: data.ip_address.dns_name_label
+    - DNS name label scope reuse: data.ip_address.auto_generated_domain_name_label_scope
+    - Ports: data.ip_address.ports.port
+      type: list
+      options:
+        delimiter: '<br>'
+
 
 
 
 tabs.1:
-  name: Configuration
-  items:
-    - name: Shared Disk
-      type: item
-      fields:
-        - Enable shared disk: data.enable_shared_disk_display
-        - Max shares: data.max_shares
-    - name: On-demand bursting
-      type: item
-      fields:
-        - Enable bursting: data.bursting_enabled
-        - Enable bursting time: data.bursting_enabled_time
-          source_type: iso8601
-          type: datetime
+  name: Container
+  type: table
+  root_path: data.containers
+  fields:
+    - Name: name
+    - State: instance_view.current_state.state
+      type: enum
+      enums:
+        - Running:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Waiting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Terminated: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+    - Previous state: instance_view.previous_state.state
+    - Restart count: instance_view.restart_count
+    - Volume count: volume_mount_count_display
+    - CPU cores: resources.requests.cpu
+    - Memory(GB): resources.requests.memory_in_gb
+    - Image: image
+    - Start time: instance_view.current_state.start_time
+      source_type: iso8601
+      type: datetime
+    - Finish time: instance_view.current_state.finish
+      source_type: iso8601
+      type: datetime
+    - GPU SKU: resources.requests.gpu.sku
+    - GPU count: resources.requests.gpu.count
+    - Ports: ports.port
+      type: list
+      options:
+        delimiter: '<br>'
+    - Commands: command
+      type: list
+      options:
+        delimiter: '<br>'
 
 
 
 tabs.2:
-  name: Networking
-  type: item
+  name: Volume
+  type: table
+  root_path: data.volumes
   fields:
-    - Network access: data.network_access_policy_display
+    - Name: name
+    - Volume type: volume_type
+    - Mount path: mount_path
+    - Git repository: git_repo.repository
+    - Container name: container_name
+

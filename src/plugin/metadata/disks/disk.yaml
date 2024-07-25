@@ -52,7 +52,7 @@ table:
           type: state
         - Unattached:
           icon_image: ic_circle-filled
-          icon_color: blue.500
+          icon_color: blue.400
           type: state
     - Owner: data.managed_by
     - Resource Group: data.resource_group
@@ -111,7 +111,7 @@ tabs.0:
           type: state
         - Unattached:
           icon_image: ic_circle-filled
-          icon_color: blue.500
+          icon_color: blue.400
           type: state
     - Attached VM: data.managed_by
     - Location: data.location
