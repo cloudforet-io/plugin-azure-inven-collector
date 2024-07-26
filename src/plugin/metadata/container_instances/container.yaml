@@ -41,15 +41,17 @@ table:
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Stopped: red.500
+        - Stopped:
+          text_color: red.500
           icon_image: ic_circle-filled
           icon_color: red.500
           type: state
-        - Failed: red.500
+        - Failed:
+          text_color: red.500
           icon_image: ic_circle-filled
           icon_color: red.500
           type: state
-    - Subscription Name: data.display_name
+    - Subscription Name: data.subscription_name
     - Subscription ID: account
       is_optional: true
     - Resource Group: data.resource_group
@@ -77,8 +79,6 @@ table:
 
 
 
-
-
 tabs.0:
   name: Container Instances
   type: item
@@ -99,11 +99,13 @@ tabs.0:
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Stopped: red.500
+        - Stopped:
+          text_color: red.500
           icon_image: ic_circle-filled
           icon_color: red.500
           type: state
-        - Failed: red.500
+        - Failed:
+          text_color: red.500
           icon_image: ic_circle-filled
           icon_color: red.500
           type: state
@@ -131,7 +133,6 @@ tabs.0:
 
 
 
-
 tabs.1:
   name: Container
   type: table
@@ -149,7 +150,8 @@ tabs.1:
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Terminated: red.500
+        - Terminated:
+          text_color: red.500
           icon_image: ic_circle-filled
           icon_color: red.500
           type: state

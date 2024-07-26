@@ -87,11 +87,6 @@ def job_get_tasks(params: dict) -> dict:
 
 
 def _create_init_metadata() -> dict:
-    enum = ["All"]
-    for manager in AzureBaseManager.__subclasses__():
-        if manager.cloud_service_group:
-            enum.append(manager.cloud_service_group)
-
     return {
         "metadata": {
             "options_schema": {
@@ -102,13 +97,22 @@ def _create_init_metadata() -> dict:
                         "type": "string",
                         "items": {"type": "string"},
                         "default": "All",
-                        "enum": enum,
+                        "enum": _get_cloud_service_group_enum(),
                         "description": "Choose one of the service to collect data. If you choose 'All', it will collect all services."
                     }
                 }
             }
         }
     }
+
+
+def _get_cloud_service_group_enum() -> list:
+    enum = ["All"]
+    for manager in AzureBaseManager.__subclasses__():
+        if manager.cloud_service_group:
+            enum.append(manager.cloud_service_group)
+
+    return enum
 
 
 def _get_cloud_service_groups_from_options_and_task_options(options: dict, task_options: dict) -> list:

@@ -1,7 +1,7 @@
 search:
   fields:
     - Subscription ID: data.subscription_id
-    - Subscription Name: data.display_name
+    - Subscription Name: data.subscription_name
     - Resource Group: data.resource_group
     - Location: data.location
     - Public IP Address: data.public_ip_address.ip_address
@@ -54,7 +54,7 @@ table:
     - Private IP Address: data.private_ip_address
     - Resource Group: data.resource_group
     - Location: data.location
-    - Subscription: data.display_name
+    - Subscription: data.subscription_name
     - Subscription ID: data.subscription_id
       is_optional: true
     - Capacity: data.sku.tier
@@ -142,7 +142,7 @@ tabs.0:
     - Resource ID: data.id
     - Resource Group: data.resource_group
     - Location: data.location
-    - Subscription: data.display_name
+    - Subscription: data.subscription_name
     - Subscription ID: data.subscription_id
     - Virtual Network: data.virtual_network
     - Subnet: data.subnet
@@ -240,12 +240,12 @@ tabs.4:
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Custom Probe: custom_probe
-        - Connection draining: connection_draining.enabled
-        - Request time-out: request_timeout
-        - Override backend path: path
-        - Override with new host name: pick_host_name_from_backend_address
-        - Host name: host_name
+    - Custom Probe: custom_probe
+    - Connection draining: connection_draining.enabled
+    - Request time-out: request_timeout
+    - Override backend path: path
+    - Override with new host name: pick_host_name_from_backend_address
+    - Host name: host_name
 
 
 
@@ -349,5 +349,3 @@ tabs.11:
       popup_name: User Assigned Identities
       popup_type: raw
       type: more
-
-

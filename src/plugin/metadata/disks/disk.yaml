@@ -15,8 +15,6 @@ search:
     - Provisioning State: data.provisioning_state
     - Time Created: data.time_created
 
-
-
 table:
   sort:
     key: data.id
@@ -63,7 +61,7 @@ table:
     - Zone: data.zones
       type: list
       options:
-        delimiter: ', '
+        delimiter: ", "
       is_optional: true
     - Encryption Type: data.encryption.type
       is_optional: true
@@ -73,8 +71,6 @@ table:
       is_optional: true
     - Time Created: data.time_created
       is_optional: true
-
-
 
 tabs.0:
   name: Disks
@@ -130,8 +126,6 @@ tabs.0:
       source_type: iso8601
       type: datetime
 
-
-
 tabs.1:
   name: Configuration
   items:
@@ -147,8 +141,6 @@ tabs.1:
         - Enable bursting time: data.bursting_enabled_time
           source_type: iso8601
           type: datetime
-
-
 
 tabs.2:
   name: Networking
