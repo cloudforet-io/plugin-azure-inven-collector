@@ -172,11 +172,11 @@ tabs.2:
         - Firewall Status Enabled: data.web_application_firewall_configuration.enabled
           type: enum
           enums:
-            - True:
+            - 'True':
               icon_image: ic_circle-filled
               icon_color: green.500
               type: state
-            - False:
+            - 'False':
               icon_image: ic_circle-filled
               icon_color: yellow.500
               type: state
@@ -184,11 +184,11 @@ tabs.2:
         - Inspect Request Body: data.web_application_firewall_configuration.request_body_check
           type: enum
           enums:
-            - True:
+            - 'True':
               icon_image: ic_circle-filled
               icon_color: green.500
               type: state
-            - False:
+            - 'False':
               icon_image: ic_circle-filled
               icon_color: yellow.500
               type: state

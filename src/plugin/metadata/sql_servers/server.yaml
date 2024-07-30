@@ -23,7 +23,7 @@ search:
     - Elastic Pool Resource Group: data.elastic_pools.resource_group_display
     - Per DB Settings: data.elastic_pools.per_db_settings_display
     - Pricing Tier: data.elastic_pools.pricing_tier_display
-    - Number of DBs: data.elastic_pools.number_of_databases
+    - '# of DBs': data.elastic_pools.number_of_databases
       data_type: integer
     - Elastic Pool Unit: data.elastic_pools.unit_display
     - Elastic Pool Server Name: data.elastic_pools.server_name_display
@@ -114,8 +114,8 @@ table:
       is_optional: true
     - Pricing Tier: data.elastic_pools.pricing_tier_display
       is_optional: true
-    - # of DBs: data.elastic_pools.number_of_databases
-      - is_optional: true
+    - '# of DBs': data.elastic_pools.number_of_databases
+      is_optional: true
     - Elastic Pool Unit: data.elastic_pools.unit_display
       is_optional: true
     - Elastic Pool Server Name: data.elastic_pools.server_name_display
@@ -334,7 +334,6 @@ tabs.4:
         - Subscription ID: subscription_id
         - Location: location
         - Server Name: server_name
-        - Elastic Pool:
         - Pricing Tier: pricing_tier_display
         - Earliest Restore Point: earliest_restore_date
     - name: Databases Configure
@@ -378,7 +377,7 @@ tabs.5:
     - Resource Group: resource_group_display
     - Per DB Settings: per_db_settings_display
     - Pricing Tier: pricing_tier_display
-    - # of DBs: number_of_databases
+    - '# of DBs': number_of_databases
     - Unit: unit_display
     - Status: state
       type: enum

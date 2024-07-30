@@ -1,5 +1,5 @@
 ---
-namespace_id: ns-azure-nat-gateways-instance
+namespace_id: ns-azure-nat-gateways-Instance
 name: NATGateways/Instance
 resource_type: inventory.CloudService:azure.NATGateways.Instance
 group: azure
