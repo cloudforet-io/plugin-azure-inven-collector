@@ -26,6 +26,8 @@ search:
     - Subnet Address Range: data.subnets.address_prefix
     - Virtual Network: data.subnets.virtual_network
 
+
+
 table:
   sort:
     key: data.id
@@ -119,6 +121,7 @@ tabs.2:
     - Source: source_address_prefix
     - Destination: destination_address_prefix
     - Action: access
+
 
 
 tabs.3:
