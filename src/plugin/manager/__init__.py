@@ -7,3 +7,5 @@ from .application_gatways import *
 from .nat_gateways import *
 from .container_instances import *
 from .network_security_groups import *
+from .storage_accounts import *
+from .snapshots import *

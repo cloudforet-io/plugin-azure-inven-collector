@@ -1,19 +1,19 @@
 search:
   fields:
-    - Tier: data.tier
+    - Subscription ID: account
     - Subscription Name: data.subscription_name
-    - Subscription ID: data.subscription_id
     - Resource Group: data.resource_group
     - Location: data.location
-    - Zone: data.zones
-    - Last updated at: data.last_updated
-    - Storage Account Type: data.sku.name
-    - Disk Size (Bytes): data.disk_size_bytes
-    - Disk Size (GB): data.disk_size_gb
-    - Disk IOPS: data.disk_iops_read_write
-    - OS Type: data.os_type
-    - Provisioning State: data.provisioning_state
-    - Time Created: data.time_created
+    - DNS servers: data.dhcp_options.dns_servers
+    - Resource GUID: data.resource_guid
+    - Address Space: data.address_space.address_prefixes
+    - Connected Device: data.connected_devices.device
+    - Connected Device Type: data.connected_devices.type
+    - Connected Subnet: data.connected_devices.name
+    - Subnet Name: data.subnets.name
+    - Subnet IP Prefixes: data.subnets.address_prefixes
+    - Subnet Delegated To: data.subnets.delegations.name
+    - Subnet Network Security Group: data.subnets.network_security_group.name
 
 
 
@@ -22,136 +22,194 @@ table:
     key: data.id
     desc: false
   fields:
-    - Storage Account Type: data.sku.name
-    - Size: data.size
-      display_unit: GB
-      source_unit: BYTES
-      type: size
-    - Disk State: data.disk_state
-      type: enum
-      enums:
-        - ActiveSAS:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - ActiveUpload:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Attached:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Reserved:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - ReadyToUpload:
-          icon_image: ic_circle-filled
-          icon_color: yellow.500
-          type: state
-        - Unattached:
-          icon_image: ic_circle-filled
-          icon_color: blue.500
-          type: state
-    - Owner: data.managed_by
     - Resource Group: data.resource_group
     - Location: data.location
     - Subscription Name: data.subscription_name
-    - Subscription ID: data.subscription_id
+    - Subscription ID: account
       is_optional: true
-    - Zone: data.zones
+    - DNS servers: data.dhcp_options.dns_servers
       type: list
       options:
         delimiter: ', '
       is_optional: true
-    - Encryption Type: data.encryption.type
+    - Resource GUID: data.resource_guid
       is_optional: true
-    - Networking: data.network_access_policy_display
+    - Address Space: data.address_space.address_prefixes
+      type: list
+      options:
+        delimiter: ', '
       is_optional: true
-    - Max Shares: data.max_shares
+    - Connected Device: data.connected_devices.device
       is_optional: true
-    - Time Created: data.time_created
+    - Connected Device Type: data.connected_devices.type
+      is_optional: true
+    - Connected Subnet: data.connected_devices.name
+      is_optional: true
+    - Subnet Name: data.subnets.name
+      is_optional: true
+    - Subnet IP Prefixes: data.subnets.address_prefixes
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Subnet Delegated To: data.subnets.delegations.name
+      is_optional: true
+    - Subnet Network Security Group: data.subnets.network_security_group.name
+      is_optional: true
+    - Firewall Name: data.azure_firewall.name
+      is_optional: true
+    - Firewall IP Address: data.azure_firewall.ip_configurations.private_ip_address
+      is_optional: true
+    - Firewall Subnet: data.azure_firewall.subnet
+      is_optional: true
+    - Peering Name: data.virtual_network_peerings.name
+      is_optional: true
+    - Peer: data.virtual_network_peerings.remote_virtual_network.id
+      is_optional: true
+    - Peer Gateway Transit: data.virtual_network_peerings.allow_gateway_transit
+      is_optional: true
+    - Service Endpoint: data.service_endpoints.service
+      is_optional: true
+    - Service Endpoint Subnet: data.service_endpoints.subnet
+      is_optional: true
+    - Service Endpoint Locations: data.service_endpoints.locations
+      is_optional: true
+    - Private Endpoint: data.private_endpoints.name
+      is_optional: true
+    - Private Endpoint Subnet: data.private_endpoints.subnet
       is_optional: true
 
 
 
 tabs.0:
-  name: Disks
+  name: Virtual Network
   type: item
   fields:
     - Name: name
-    - Storage Account Type: instance_type
-    - Size: data.size
-      display_unit: GB
-      source_unit: BYTES
-      type: size
-    - Disk State: data.disk_state
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - DNS Servers: data.dhcp_options.dns_servers
+      type: list
+      options:
+        delimiter: ', '
+    - DDoS Protection Standard: data.enable_ddos_protection
       type: enum
       enums:
-        - ActiveSAS:
+        - 'True':
           icon_image: ic_circle-filled
           icon_color: green.500
           type: state
-        - ActiveUpload:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Attached:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Reserved:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - ReadyToUpload:
+        - 'False':
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Unattached:
-          icon_image: ic_circle-filled
-          icon_color: blue.500
-          type: state
-    - Attached VM: data.managed_by
-    - Location: data.location
-    - Resource Group: data.resource_group
-    - Resource ID: data.id
-    - Zones: data.zones
-    - Subscription ID: data.subscription_id
-    - Subscription Name: data.subscription_name
-    - Encryption Type: data.encryption.type
-    - Networking: data.network_access_policy_display
-    - Os Type: data.os_type
-    - Max Shares: data.max_shares
-    - VM Generation: data.hyper_v_generation
-    - VM architecture: data.supported_capabilities.architecture
-    - DateTimeDyField.data_sourceTime Created: data.time_created
-      source_type: iso8601
-      type: datetime
+    - Resource GUID: data.resource_guid
+    - Address Space: data.address_space.address_prefixes
 
 
 
 tabs.1:
-  name: Configuration
-  items:
-    - name: Shared Disk
-      type: item
-      fields:
-        - Enable shared disk: data.enable_shared_disk_display
-        - Max shares: data.max_shares
-    - name: On-demand bursting
-      type: item
-      fields:
-        - Enable bursting: data.bursting_enabled
-        - Enable bursting time: data.bursting_enabled_time
-          source_type: iso8601
-          type: datetime
+  name: Connected Devices
+  type: simple-table
+  root_path: data.connected_devices
+  fields:
+    - Device: device
+    - Type: type
+    - Subnet: name
 
 
 
 tabs.2:
-  name: Networking
-  type: item
+  name: Subnets
+  type: simple-table
+  root_path: data.subnets
   fields:
-    - Network access: data.network_access_policy_display
+    - Name: name
+    - IP Address Prefix: address_prefix
+    - IP Address Prefixes: address_prefixes
+      type: list
+      options:
+        delimiter: ', '
+    - Delegated To: delegations.name
+    - Security Group: network_security_group.name
+
+
+
+tabs.3:
+  name: Firewall
+  type: simple-table
+  root_path: data.azure_firewall
+  fields:
+    - Name: name
+    - IP Address: ip_configurations.private_ip_address
+    - Subnet: subnet
+
+
+
+tabs.4:
+  name: Peerings
+  type: simple-table
+  root_path: data.virtual_network_peerings
+  fields:
+    - Name: name
+    - Peering Status: peering_state
+      type: enum
+      enums:
+        - Connected:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disconnected:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Initiated:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Peer: remote_virtual_network.id
+    - Gateway Transit: allow_gateway_transit
+
+
+
+tabs.5:
+  name: Service Endpoints
+  type: simple-table
+  root_path: data.service_endpoints
+  fields:
+    - Service: service
+    - Subnet: subnet
+    - Status: provisioning_state
+      type: enum
+      enums:
+        - Succeeded:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Failed:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Deleting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Locations: locations
+
+
+
+tabs.6:
+  name: Private Endpoints
+  type: simple-table
+  root_path: data.private_endpoints
+  fields:
+    - Name: name
+    - Subnet: subnet
+    - Resource Group: resource_group

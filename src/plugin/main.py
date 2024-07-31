@@ -42,7 +42,6 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
 
     cloud_service_groups = _get_cloud_service_groups_from_options_and_task_options(options, task_options)
     resource_type = task_options.get("resource_type")
-    print("test", cloud_service_groups)
 
     if resource_type == "inventory.Region":
         subscriptions_mgr = SubscriptionsManager()
