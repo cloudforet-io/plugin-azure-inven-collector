@@ -19,11 +19,13 @@ search:
       source_type: iso8601
       type: datetime
     - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
+    - '# of DBs': data.number_of_databases
+      data_type: integer
     - Elastic Pool Name: data.elastic_pools.name
     - Elastic Pool Resource Group: data.elastic_pools.resource_group_display
     - Per DB Settings: data.elastic_pools.per_db_settings_display
     - Pricing Tier: data.elastic_pools.pricing_tier_display
-    - '# of DBs': data.elastic_pools.number_of_databases
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
       data_type: integer
     - Elastic Pool Unit: data.elastic_pools.unit_display
     - Elastic Pool Server Name: data.elastic_pools.server_name_display
@@ -106,6 +108,8 @@ table:
       is_optional: true
     - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
       is_optional: true
+    - '# of DBs': data.number_of_databases
+      is_optional: true
     - Elastic Pool Name: data.elastic_pools.name
       is_optional: true
     - Elastic Pool Resource Group: data.elastic_pools.resource_group_display
@@ -114,7 +118,7 @@ table:
       is_optional: true
     - Pricing Tier: data.elastic_pools.pricing_tier_display
       is_optional: true
-    - '# of DBs': data.elastic_pools.number_of_databases
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
       is_optional: true
     - Elastic Pool Unit: data.elastic_pools.unit_display
       is_optional: true
