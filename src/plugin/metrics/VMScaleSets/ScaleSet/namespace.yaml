@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-vm-scale-sets-scale-set
+name: VMScaleSets/ScaleSet
+resource_type: inventory.CloudService:azure.VMScaleSets.ScaleSet
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-vm-scale-set.svg
+version: '1.0'
