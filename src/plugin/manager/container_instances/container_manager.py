@@ -41,6 +41,7 @@ class ContainerInstancesManage(AzureBaseManager):
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         container_instances = container_instances_conn.list_container_groups()
+
         for container_instance in container_instances:
 
             try:

@@ -16,16 +16,15 @@ search:
       data_type: integer
     - Backup Database: data.databases.name
     - Backup Earliest PITR Restore Point (UTC): data.databases.earliest_restore_date
-      source_type: iso8601
       type: datetime
     - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
-    - '# of DBs': data.number_of_databases
+    - '# of SQL DBs': number_of_databases_display
       data_type: integer
     - Elastic Pool Name: data.elastic_pools.name
     - Elastic Pool Resource Group: data.elastic_pools.resource_group_display
     - Per DB Settings: data.elastic_pools.per_db_settings_display
     - Pricing Tier: data.elastic_pools.pricing_tier_display
-    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases_display
       data_type: integer
     - Elastic Pool Unit: data.elastic_pools.unit_display
     - Elastic Pool Server Name: data.elastic_pools.server_name_display
@@ -33,14 +32,11 @@ search:
     - Elastic Pool Maximum Storage Size: data.elastic_pools.max_size_gb
     - Deleted Database: data.deleted_databases.database_name
     - Deletion Time (UTC): data.deleted_databases.deletion_date
-      source_type: iso8601
       type: datetime
     - Deleted Databases Creation Time (UTC): data.deleted_databases.creation_date
-      source_type: iso8601
       type: datetime
     - Deleted Databases Edition Time (UTC): data.deleted_databases.edition
-      source_type: iso8601
-      type: datetimecv
+      type: datetime
     - Audit Log Destination: data.server_auditing_settings.storage_endpoint
     - Audit Storage Account ID: data.server_auditing_settings.storage_account_subscription_id
     - Minimum TLS Version: data.minimal_tls_version
@@ -108,7 +104,7 @@ table:
       is_optional: true
     - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
       is_optional: true
-    - '# of DBs': data.number_of_databases
+    - '# of SQL DBs': data.number_of_databases_display
       is_optional: true
     - Elastic Pool Name: data.elastic_pools.name
       is_optional: true
@@ -118,7 +114,7 @@ table:
       is_optional: true
     - Pricing Tier: data.elastic_pools.pricing_tier_display
       is_optional: true
-    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases_display
       is_optional: true
     - Elastic Pool Unit: data.elastic_pools.unit_display
       is_optional: true
@@ -381,7 +377,7 @@ tabs.5:
     - Resource Group: resource_group_display
     - Per DB Settings: per_db_settings_display
     - Pricing Tier: pricing_tier_display
-    - '# of DBs': number_of_databases
+    - '# of SQL DBs': number_of_databases_display
     - Unit: unit_display
     - Status: state
       type: enum

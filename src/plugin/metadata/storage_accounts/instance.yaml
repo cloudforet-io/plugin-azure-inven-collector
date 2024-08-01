@@ -1,8 +1,11 @@
 search:
   fields:
     - Container count: data.container_count_display
+      data_type: integer
     - Blob count: data.blob_count_display
+      data_type: integer
     - Blob total size(Bytes): data.blob_size_display
+      data_type: integer
     - Subscription ID: account
     - Subscription Name: data.subscription_name
     - Resource Group: data.resource_group
@@ -33,6 +36,7 @@ search:
     - Internet Endpoints: data.routing_preference.publish_internet_endpoints
     - Container Name: data.container_item.name
     - Container Last Modified: data.container_item.last_modified_time
+      data_type: datetime
     - Container Public Access Level: data.container_item.public_access
     - Container Lease State: data.container_item.lease_state
     - Primary Location: data.primary_location

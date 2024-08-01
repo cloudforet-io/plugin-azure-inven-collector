@@ -6,6 +6,7 @@ search:
     - Location: data.location
     - Virtual Machines: data.virtual_machines_display
     - Inbound Rule Priority: data.inbound_security_rules.priority
+      data_type: integer
     - Inbound Rule Name: data.inbound_security_rules.name
     - Inbound Rule Port: data.inbound_security_rules.destination_port_range
     - Inbound Rule Protocol: data.inbound_security_rules.protocol
@@ -13,6 +14,7 @@ search:
     - Inbound Rule Destination: data.inbound_security_rules.destination_address_prefix
     - Inbound Rule Action: data.inbound_security_rules.access
     - Outbound Rule Priority: data.outbound_security_rules.priority
+      data_type: integer
     - Outbound Rule Name: data.outbound_security_rules.name
     - Outbound Rule Port: data.outbound_security_rules.destination_port_range
     - Outbound Rule Protocol: data.outbound_security_rules.protocol

@@ -44,7 +44,9 @@ class SQLDatabasesManager(AzureBaseManager):
 
         # get resource_group_name and server_name from sql_server for sql_databases list
         sql_servers = sql_databases_conn.list_servers()
+
         for sql_server in sql_servers:
+
             try:
                 sql_server_dict = self.convert_nested_dictionary(sql_server)
 
@@ -162,7 +164,7 @@ class SQLDatabasesManager(AzureBaseManager):
                             instance_size=float(sql_database_dict["max_size_gb"]),
                             region_code=sql_database_dict["location"],
                             reference=self.make_reference(sql_database_dict.get("id")),
-                            # launched_at=datetime_to_iso8601(sql_database_dict["creation_date"]),
+                            # launched_at=sql_database_dict["creation_date"],
                             tags=sql_database_dict.get("tags", {}),
                             data_format="dict"
                         )

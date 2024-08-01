@@ -43,6 +43,7 @@ class NATGatewaysManager(AzureBaseManager):
         nat_gateways = nat_gateways_conn.list_all_nat_gateways()
 
         for nat_gateway in nat_gateways:
+
             try:
                 nat_gateway_dict = self.convert_nested_dictionary(nat_gateway)
                 nat_gateway_id = nat_gateway_dict["id"]

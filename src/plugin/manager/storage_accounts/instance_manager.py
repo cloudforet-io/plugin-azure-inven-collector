@@ -44,7 +44,9 @@ class StorageAccountsManager(AzureBaseManager):
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         storage_accounts = storage_accounts_conn.list_storage_accounts()
+
         for storage_account in storage_accounts:
+
             try:
                 storage_account_dict = self.convert_nested_dictionary(storage_account)
                 kind = storage_account_dict.get("kind")

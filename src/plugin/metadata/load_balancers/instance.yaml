@@ -1,0 +1,282 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Load Balancer Type: instance_type
+    - SKU: instance_type
+    - Health Probe: data.probes_display
+    - Load Balancing Rule: data.load_balancing_rules_display
+    - NAT Rules: data.inbound_nat_rules_display
+    - Private IP Address: data.private_ip_address_display
+    - Frontend Name: data.frontend_ip_configurations.name
+    - Frontend IP Address: data.frontend_ip_configurations.private_ip_address
+    - Frontend IP Version: data.frontend_ip_configurations.private_ip_address_version
+    - Frontend IP Used By: data.frontend_ip_configurations_used_by_display
+    - Backend Pool Name: data.backend_address_pools.name
+    - Backend Pool ID: data.backend_address_pools.id
+    - Health Probe Name: data.probes.name
+    - Health Probes Protocol: data.probes.protocol
+    - Health Probes Port: data.probes.port
+      data_type: integer
+    - Health Probes Interval: data.probes.interval_in_seconds
+      data_type: integer
+    - Health Probes Unhealthy Threshold: data.probes.number_of_probes
+    - LB Rule Name: data.load_balancing_rules.name
+    - LB Rule Frontend IP Address: data.load_balancing_rules.frontend_ip_configuration_display
+    - LB Rule Protocol: data.load_balancing_rules.protocol
+    - LB Rule Frontend Port: data.load_balancing_rules.frontend_port
+      data_type: integer
+    - LB Rule Backend Port: data.load_balancing_rules.backend_port
+      data_type: integer
+    - LB Rule Backend Pool: data.load_balancing_rules.backend_address_pool_display
+    - LB Rule Session Persistence: data.load_balancing_rules.load_distribution_display
+    - LB Rule Idle Timeout (minutes): data.load_balancing_rules.idle_timeout_in_minutes
+      data_type: integer
+    - LB Rule Floating IP: data.load_balancing_rules.enable_floating_ip
+    - LB Rule TCP Reset: data.load_balancing_rules.enable_tcp_reset
+    - Inbound NAT Rules Name: data.inbound_nat_rules.name
+    - Inbound NAT Rule Protocol: data.inbound_nat_rules.protocol
+    - Inbound NAT Rule Idle timeout (minutes): data.inbound_nat_rules.idle_timeout_in_minutes
+      data_type: integer
+    - Inbound NAT Rule TCP Reset: data.load_balancing_rules.enable_tcp_reset
+    - Inbound NAT Rule Port: data.inbound_nat_rules.frontend_port
+      data_type: integer
+    - Inbound NAT Rule Target Virtual Machine: data.inbound_nat_rules.target_virtual_machine
+    - Inbound NAT Rule Network IP Configuration: data.inbound_nat_rules.frontend_ip_configuration_display
+    - Inbound NAT Rule Port mapping: data.inbound_nat_rules.port_mapping_display
+    - Inbound NAT Rule Floating IP: data.inbound_nat_rules.enable_floating_ip
+    - Inbound NAT Rule Target Port: data.inbound_nat_rules.backend_port
+      data_type: integer
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+      is_optional: true
+    - SKU: instance_type
+      is_optional: true
+    - Health Probe: data.probes_display
+      type: list
+      options:
+        delimiter: '<br>'
+      is_optional: true
+    - Load Balancing Rule: data.load_balancing_rules_display
+      type: list
+      options:
+        delimiter: '<br>'
+      is_optional: true
+    - NAT Rules: data.inbound_nat_rules_display
+      type: list
+      options:
+        delimiter: '<br>'
+      is_optional: true
+    - Private IP Address: data.private_ip_address_display
+      type: list
+      options:
+        delimiter: '<br>'
+      is_optional: true
+    - Frontend Name: data.frontend_ip_configurations.name
+      is_optional: true
+    - Frontend IP Address: data.frontend_ip_configurations.private_ip_address
+      is_optional: true
+    - Frontend IP Version: data.frontend_ip_configurations.private_ip_address_version
+      is_optional: true
+    - Frontend IP Used By: data.frontend_ip_configurations_used_by_display
+      type: list
+      options:
+        delimiter: '<br>'
+      is_optional: true
+    - Backend Pool Name: data.backend_address_pools.name
+      is_optional: true
+    - Backend Pool ID: data.backend_address_pools.id
+      is_optional: true
+    - Health Probe Name: data.probes.name
+      is_optional: true
+    - Health Probes Protocol: data.probes.protocol
+      is_optional: true
+    - Health Probes Port: data.probes.port
+      is_optional: true
+    - Health Probes Interval: data.probes.interval_in_seconds
+      is_optional: true
+    - Health Probes Unhealthy Threshold: data.probes.number_of_probes
+      is_optional: true
+    - LB Rule Name: data.load_balancing_rules.name
+      is_optional: true
+    - LB Rule Frontend IP Address: data.load_balancing_rules.frontend_ip_configuration_display
+      is_optional: true
+    - LB Rule Protocol: data.load_balancing_rules.protocol
+      is_optional: true
+    - LB Rule Frontend Port: data.load_balancing_rules.frontend_port
+      is_optional: true
+    - LB Rule Backend Port: data.load_balancing_rules.backend_port
+      is_optional: true
+    - LB Rule Backend Pool: data.load_balancing_rules.backend_address_pool_display
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - LB Rule Session Persistence: data.load_balancing_rules.load_distribution_display
+      is_optional: true
+    - LB Rule Idle Timeout (minutes): data.load_balancing_rules.idle_timeout_in_minutes
+      is_optional: true
+    - LB Rule Floating IP: data.load_balancing_rules.enable_floating_ip
+      is_optional: true
+    - LB Rule TCP Reset: data.load_balancing_rules.enable_tcp_reset
+      is_optional: true
+    - Inbound NAT Rules Name: data.inbound_nat_rules.name
+      is_optional: true
+    - Inbound NAT Rule Protocol: data.inbound_nat_rules.protocol
+      is_optional: true
+    - Inbound NAT Rule Idle timeout (minutes): data.inbound_nat_rules.idle_timeout_in_minutes
+      is_optional: true
+    - Inbound NAT Rule TCP Reset: data.inbound_nat_rules.enable_tcp_reset
+      is_optional: true
+    - Inbound NAT Rule Port: data.inbound_nat_rules.frontend_port
+      is_optional: true
+    - Inbound NAT Rule Target Virtual Machine: data.inbound_nat_rules.target_virtual_machine
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Inbound NAT Rule Network IP Configuration: data.inbound_nat_rules.frontend_ip_configuration_display
+      is_optional: true
+    - Inbound NAT Rule Port mapping: data.inbound_nat_rules.port_mapping_display
+      is_optional: true
+    - Inbound NAT Rule Floating IP: data.inbound_nat_rules.enable_floating_ip
+      is_optional: true
+    - Inbound NAT Rule Target Port: data.inbound_nat_rules.backend_port
+      is_optional: true
+
+
+
+tabs.0:
+  name: LoadBalancers
+  type: item
+  fields:
+    - Name: name
+    - Resource Group: data.resource_group
+    - Resource ID: data.id
+    - Location: data.location
+    - Subscription: account
+    - SKU: type
+    - Backend pools: data.backend_address_pools_count_display
+    - Health Probe: data.probes_display
+      type: list
+      options:
+        delimiter: '<br>'
+    - Load Balancing Rule: data.load_balancing_rules_display
+      type: list
+      options:
+        delimiter: '<br>'
+    - NAT Rules: data.inbound_nat_rules_display
+      type: list
+      options:
+        delimiter: '<br>'
+    - Private IP Address: data.private_ip_address_display
+      type: list
+      options:
+        delimiter: '<br>'
+
+
+
+tabs.1:
+  name: Frontend IP Configurations
+  items:
+    - name: Frontend IP Configurations
+      type: simple-table
+      root_path: data.frontend_ip_configurations
+      fields:
+        - Name: name
+        - IP Address: private_ip_address
+        - IP Version: private_ip_address_version
+    - name: Used By
+      type: item
+      fields:
+        - Used By: data.frontend_ip_configurations_used_by_display
+          type: list
+          options:
+            delimiter: '<br>'
+
+
+
+tabs.2:
+  name: Backend Pools
+  items:
+    - name: Backend Pools
+      type: simple-table
+      root_path: data.backend_address_pools
+      fields:
+        - Name: name
+        - ID: id
+    - name: Backend Pools VM information
+      type: simple-table
+      root_path: data.network_interfaces
+      fields:
+        - Backend Pool: load_balancer_backend_address_pools_name_display
+        - VM Name: virtual_machine_name_display
+        - Network Interface: name
+        - Private IP Address: private_ip_display
+          type: list
+          options:
+            delimiter: '<br>'
+
+
+
+tabs.3:
+  name: Health Probes
+  type: table
+  root_path: data.probes
+  fields:
+    - Name: name
+    - Protocol: protocol
+    - Port: port
+    - Interval: interval_in_seconds
+    - Unhealthy Threshold: number_of_probes
+
+
+
+tabs.4:
+  name: Load Balancing Rules
+  type: table
+  root_path: data.load_balancing_rules
+  fields:
+    - Name: name
+    - Frontend IP Address: frontend_ip_configuration_display
+    - Protocol: protocol
+    - Frontend Port: frontend_port
+    - Backend Port: backend_port
+    - Backend Pool: backend_address_pool_display
+    - Session Persistence: load_distribution_display
+    - Idle Timeout (minutes): idle_timeout_in_minutes
+    - Floating IP: enable_floating_ip
+    - TCP Reset: enable_tcp_reset
+
+
+
+tabs.5:
+  name: Inbound NAT Rules
+  type: table
+  root_path: data.inbound_nat_rules
+  fields:
+    - Name: name
+    - Protocol: protocol
+    - Idle timeout (minutes): idle_timeout_in_minutes
+    - TCP Reset: enable_tcp_reset
+    - Port: frontend_port
+    - Target Virtual Machine: target_virtual_machine
+      type: list
+      options:
+        delimiter: ', '
+    - Network IP Configuration: frontend_ip_configuration_display
+    - Port mapping: port_mapping_display
+    - Floating IP: enable_floating_ip
+    - Target Port: backend_port

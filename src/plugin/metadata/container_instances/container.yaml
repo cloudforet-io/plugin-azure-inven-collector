@@ -12,10 +12,15 @@ search:
     - Location: data.location
     - SKU: data.sku
     - Container count: data.container_count_display
+      data_type: integer
     - vCPU: data.cpu_count_display
+      data_type: integer
     - Memory size(GB): data.memory_size_display
+      data_type: float
     - GPU count: data.gpu_count_display
+      data_type: integer
     - Volume count: data.volume_count_display
+      data_type: integer
     - DNS name label: data.ip_address.dns_name_label
     - DNS name label scope reuse: data.ip_address.auto_generated_domain_name_label_scope
 

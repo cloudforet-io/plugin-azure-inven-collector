@@ -41,7 +41,9 @@ class VMScaleSetsManager(AzureBaseManager):
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         vm_scale_sets = vm_scale_sets_conn.list_vm_scale_sets()
+
         for vm_scale_set in vm_scale_sets:
+
             try:
                 vm_scale_set_dict = self.convert_nested_dictionary(vm_scale_set)
                 vm_scale_set_id = vm_scale_set_dict["id"]

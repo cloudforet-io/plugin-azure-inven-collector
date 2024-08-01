@@ -15,6 +15,7 @@ search:
     - Automatic Repairs: data.automatic_repairs_policy.enabled
     - Upgrade Policy: data.upgrade_policy.mode
     - Fault Domains (count): data.platform_fault_domain_count
+      data_type: integer
 
 
 

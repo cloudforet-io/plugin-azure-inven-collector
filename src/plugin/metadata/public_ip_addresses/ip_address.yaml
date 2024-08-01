@@ -11,6 +11,7 @@ search:
     - IP Address Assignment: data.public_ip_allocation_method
     - Idle Timeout(Minutes): data.idle_timeout_in_minutes
     - DNS Name Label(Optional): data.dns_settings.domain_name_label
+      data_type: integer
     - Associated To: data.associated_to
 
 

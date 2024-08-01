@@ -10,3 +10,5 @@ from .network_security_groups import *
 from .storage_accounts import *
 from .snapshots import *
 from .vm_scale_sets import *
+from .load_balancers import *
+from .cosmos_db import *

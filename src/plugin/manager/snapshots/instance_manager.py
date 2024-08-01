@@ -41,7 +41,9 @@ class SnapshotsManager(AzureBaseManager):
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         snapshots = snapshots_conn.list_snapshots()
+
         for snapshot in snapshots:
+
             try:
                 snapshot_dict = self.convert_nested_dictionary(snapshot)
                 snapshot_id = snapshot_dict["id"]

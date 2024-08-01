@@ -29,7 +29,6 @@ search:
     - Event Hub: data.diagnostic_settings_resource.event_hub_name
     - Log Analytics Workspace: data.diagnostic_settings_resource.workspace_id
     - Creation Date: data.creation_date
-      source_type: iso8601
       type: datetime
 
 

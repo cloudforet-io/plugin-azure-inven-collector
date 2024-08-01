@@ -1,0 +1,183 @@
+search:
+  fields:
+    - Service State: data.provisioning_state
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Hub count: data.web_pubsub_hub_count_display
+    - SKU: data.sku.tier
+    - Unit: data.sku.capacity
+    - Version: data.version
+    - Host name: data.host_name
+    - Host name prefix: data.host_name_prefix
+    - Public IP: data.external_ip
+    - Public access: data.public_network_access
+    - Public port: data.public_port
+    - Server port: data.server_port
+    - TLS: data.tls.client_cert_enabled
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Service State: data.provisioning_state
+      type: enum
+      enums:
+        - Running:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Succeeded:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Creating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Deleting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Moving:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Failed:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Canceled:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Unknown:
+          text_color: gray.400
+          type: state
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Hub count: data.web_pubsub_hub_count_display
+    - SKU: data.sku.tier
+    - Unit: data.sku.capacity
+    - Version: data.version
+    - Host name: data.host_name
+    - Host name prefix: data.host_name_prefix
+    - Public IP: data.external_ip
+    - Public access: data.public_network_access
+    - Public port: data.public_port
+    - Server port: data.server_port
+    - TLS: data.tls.client_cert_enabled
+
+
+
+tabs.0:
+  name: Web PubSub Service
+  type: item
+  fields:
+    - Name: name
+    - Service State: data.provisioning_state
+      type: enum
+      enums:
+        - Running:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Succeeded:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Creating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Deleting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Moving:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Failed:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Canceled:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Unknown:
+          text_color: gray.400
+          type: state
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Region: data.location
+    - Hub count: data.web_pubsub_hub_count_display
+    - SKU: data.sku.tier
+    - Unit: data.sku.capacity
+    - Version: data.version
+    - Host name: data.host_name
+    - Host name prefix: data.host_name_prefix
+    - Public IP: data.external_ip
+    - Public access: data.public_network_access
+    - Public port: data.public_port
+    - Server port: data.server_port
+    - Disable add auth: data.disable_aad_auth
+    - Disable local auth: data.disable_local_auth
+    - TLS: data.tls.client_cert_enabled
+
+
+
+tabs.1:
+  name: Keys
+  type: item
+  fields:
+    - Host name: data.host_name
+    - Access Key: data.disable_local_auth
+    - Primary Key: data.web_pubsub_key.primary_key
+    - Primary Connection string: data.web_pubsub_key.primary_connection_string
+    - Secondary Key: data.web_pubsub_key.secondary_key
+    - Secondary Connection string: data.web_pubsub_key.secondary_connection_string
+
+
+
+tabs.2:
+  name: Hubs
+  type: table
+  root_path: data.web_pubsub_hubs
+  fields:
+    - Hub name: name
+    - Anonymous Connect: properties.anonymous_connect_policy
+      type: enum
+      enums:
+
+
+

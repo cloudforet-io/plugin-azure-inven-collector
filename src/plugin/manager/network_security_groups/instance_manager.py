@@ -48,6 +48,7 @@ class NetworkSecurityGroupsManager(AzureBaseManager):
         ]
 
         for network_security_group in network_security_groups:
+
             try:
                 network_security_group_dict = self.convert_nested_dictionary(network_security_group)
                 network_security_group_id = network_security_group_dict["id"]

@@ -8,10 +8,12 @@ search:
     - Snapshot Type: data.incremental_display
     - Disk Size (Bytes): data.disk_size_bytes
     - Disk Size (GB): instance_size
+      data_type: float
     - Encryption: data.encryption.type_display
     - Network Access Policy: data.network_access_policy
     - Provisioning State: data.provisioning_state
     - Launched: data.time_created
+      data_type: datetime
 
 
 

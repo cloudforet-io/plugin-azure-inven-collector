@@ -9,11 +9,15 @@ search:
     - Last updated at: data.last_updated
     - Storage Account Type: data.sku.name
     - Disk Size (Bytes): data.disk_size_bytes
+      data_type: integer
     - Disk Size (GB): data.disk_size_gb
+      data_type: integer
     - Disk IOPS: data.disk_iops_read_write
+      data_type: integer
     - OS Type: data.os_type
     - Provisioning State: data.provisioning_state
     - Time Created: data.time_created
+      data_type: datetime
 
 table:
   sort:

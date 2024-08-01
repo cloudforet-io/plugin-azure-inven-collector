@@ -93,7 +93,7 @@ class SQLServersManager(AzureBaseManager):
                     server_admin_name=sql_server_dict.get("administrator_login"),
                 )
 
-                number_of_databases = len(databases_list)
+                number_of_databases_display = len(databases_list)
 
                 elastic_pools_list = self.list_elastic_pools(
                     sql_servers_conn, resource_group_name, name
@@ -114,7 +114,7 @@ class SQLServersManager(AzureBaseManager):
                         "server_auditing_settings": server_auditing_settings_dict,
                         "failover_groups": failover_group_list,
                         "server_automatic_tuning": server_automatic_tuning_dict,
-                        "number_of_databases": number_of_databases,
+                        "number_of_databases": number_of_databases_display,
                         "databases": databases_list,
                         "elastic_pools": elastic_pools_list,
                         "deleted_databases": deleted_databases_list,
@@ -196,7 +196,7 @@ class SQLServersManager(AzureBaseManager):
                         "per_db_settings_display": self.get_per_db_settings(
                             elastic_pool_dict["per_database_settings"]
                         ),
-                        "number_of_databases": len(elastic_pool_dict["databases"]),
+                        "number_of_databases_display": len(elastic_pool_dict["databases"]),
                         "unit_display": elastic_pool_dict["sku"]["tier"],
                         "server_name_display": elastic_pool_dict["id"].split("/")[8],
                         "resource_group_display": elastic_pool_dict["id"].split("/")[4],
