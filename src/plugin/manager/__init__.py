@@ -12,3 +12,4 @@ from .snapshots import *
 from .vm_scale_sets import *
 from .load_balancers import *
 from .cosmos_db import *
+from .postgre_sql_servers import *
