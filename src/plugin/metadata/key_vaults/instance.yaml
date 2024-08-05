@@ -1,0 +1,203 @@
+search:
+  fields:
+    - Type: instance_type
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Public IP Address: data.public_ip_addresses.name
+    - Vault URI: data.properties.vault_uri
+    - SKU (Pricing Tier): data.sku.name
+    - Directory ID: data.properties.tenant_id
+    - Soft-delete: data.properties.enable_soft_delete
+    - Purge Protection: data.properties.enable_purge_protection
+    - Key Name: data.keys.name
+    - Key Type: data.keys.type
+    - Key Location: data.keys.location
+    - Key Status: data.keys.attributes.enabled
+    - Key Expiration Date: data.keys.attributes.expires
+    - Key Creation Date: data.keys.attributes.created
+    - Key URI: data.keys.key_uri
+    - Enable for Azure VM Deployment: data.properties.enabled_for_deployment
+    - Enable for Disk Encryption: data.properties.enabled_for_disk_encryption
+    - Enable for Template Deployment: data.properties.enabled_for_template_deployment
+    - Enable RBAC Authorization: data.properties.enable_rbac_authorization
+    - Private Endpoint Connection Name: data.properties.private_endpoint_connections.name
+    - Private Endpoint Connection State: data.properties.private_endpoint_connections.private_link_service_connection_state.status
+    - Private Endpoint ID: data.properties.private_endpoint_connections.private_endpoint.id
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Type: instance_type
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - Public IP Address: data.public_ip_addresses.name
+      is_optional: true
+    - Vault URI: data.properties.vault_uri
+      is_optional: true
+    - SKU (Pricing Tier): data.sku.name
+      is_optional: true
+    - Directory ID: data.properties.tenant_id
+      is_optional: true
+    - Soft-delete: data.properties.enable_soft_delete
+      is_optional: true
+    - Purge Protection: data.properties.enable_purge_protection
+      is_optional: true
+    - Key Name: data.keys.name
+      is_optional: true
+    - Key Type: data.keys.type
+      is_optional: true
+    - Key Location: data.keys.location
+      is_optional: true
+    - Key Status: data.keys.attributes.enabled
+      is_optional: true
+    - Key Expiration Date: data.keys.attributes.expires
+      source_type: iso8601
+      type: datetime
+      is_optional: true
+    - Key Creation Date: data.keys.attributes.created
+      source_type: iso8601
+      type: datetime
+      is_optional: true
+    - Key URI: data.keys.key_uri
+      is_optional: true
+    - Enable for Azure VM Deployment: data.properties.enabled_for_deployment
+      is_optional: true
+    - Enable for Disk Encryption: data.properties.enabled_for_disk_encryption
+      is_optional: true
+    - Enable for Template Deployment: data.properties.enabled_for_template_deployment
+      is_optional: true
+    - Enable RBAC Authorization: data.properties.enable_rbac_authorization
+      is_optional: true
+    - Private Connection Name: data.properties.private_endpoint_connections.name
+      is_optional: true
+    - Private Connection State: data.properties.private_endpoint_connections.private_link_service_connection_state.status
+      is_optional: true
+    - Private Endpoint ID: data.properties.private_endpoint_connections.private_endpoint.id
+      is_optional: true
+
+
+
+tabs.0:
+  name: Key Vault
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Vault URI: data.properties.vault_uri
+    - Sku (Pricing Tier): instance_type
+    - Directory ID: data.properties.tenant_id
+    - Soft-delete: data.properties.enable_soft_delete
+    - Purge Protection: data.properties.enable_purge_protection_str
+    - Total Credentials Count: data.total_credentials_count
+    - Keys Count: data.key_count
+    - Secrets Count: data.secret_count
+    - Certificates Count: data.certificate_count
+
+
+
+tabs.1:
+  name: Permissions description
+  type: item
+  fields:
+    - Keys: data.keys_permissions_description_display
+    - Secrets: data.secrets_permissions_description_display
+    - Certificates: data.certificates_permissions_description_display
+
+
+
+tabs.2:
+  name: Keys
+  type: query-search-table
+  root_path: data.keys
+  fields:
+    - Name: name
+    - Type: instance_type
+    - Location: location
+    - Status: attributes.enabled
+    - Expiration Date: attributes.expires
+      source_type: iso8601
+      type: datetime
+    - Creation Date: attributes.created
+      source_type: iso8601
+      type: datetime
+    - Key URI: key_uri
+
+
+
+tabs.3:
+  name: Secrets
+  type: query-search-table
+  root_path: data.secrets
+  fields:
+    - ID: _id
+    - Type: _content_type
+    - Status: _attributes.enabled
+    - Updated Date: _attributes.updated
+      source_type: iso8601
+      type: datetime
+    - Creation Date: _attributes.created
+      source_type: iso8601
+      type: datetime
+    - Recoverable Days: _attributes.recoverable_days
+
+
+
+tabs.4:
+  name: Certificates
+  type: query-search-table
+  root_path: data.certificates
+  fields:
+    - ID: _id
+    - Status: _attributes.enabled
+    - Updated Date: _attributes.updated
+      source_type: iso8601
+      type: datetime
+    - Creation Date: _attributes.created
+      source_type: iso8601
+      type: datetime
+    - Recoverable Days: _attributes.recoverable_days
+
+
+
+tabs.5:
+  name: Access Policies
+  type: item
+  fields:
+    - Enable for Azure VM Deployment: data.properties.enabled_for_deployment
+    - Enable for Disk Encryption: data.properties.enabled_for_disk_encryption
+    - Enable for Template Deployment: data.properties.enabled_for_template_deployment
+    - Enable RBAC Authorization: data.properties.enable_rbac_authorization
+
+
+
+tabs.6:
+  name: Private Endpoint Connections
+  type: query-search-table
+  root_path: data.properties.private_endpoint_connections
+  fields:
+    - Connection Name: name
+    - Connection State: private_link_service_connection_state.status
+    - Provisioning State: provisioning_state
+      type: enum
+      enums:
+        - Succeeded:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - RegisteringDns:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+    - Private Endpoint: private_endpoint.id

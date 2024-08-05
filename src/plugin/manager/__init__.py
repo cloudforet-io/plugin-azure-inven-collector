@@ -14,3 +14,4 @@ from .load_balancers import *
 from .cosmos_db import *
 from .postgre_sql_servers import *
 from .web_pub_sub_service import *
+from .key_vaults import *
