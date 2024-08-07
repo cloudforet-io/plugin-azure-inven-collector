@@ -225,7 +225,7 @@ class LoadBalancersManager(AzureBaseManager):
                         provider=self.provider,
                         data=load_balancer_dict,
                         account=load_balancer_dict["subscription_id"],
-                        instance_type=load_balancer_dict["sku"]["tier"],
+                        instance_type=load_balancer_dict["sku"]["name"],
                         region_code=load_balancer_dict["location"],
                         reference=self.make_reference(load_balancer_dict.get("id")),
                         tags=load_balancer_dict.get("tags", {}),

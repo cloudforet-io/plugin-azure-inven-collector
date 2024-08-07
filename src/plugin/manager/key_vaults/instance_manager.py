@@ -131,7 +131,7 @@ class KeyVaultsManager(AzureBaseManager):
                             {
                                 "enable_purge_protection_str": "Disabled"
                                 if key_vault_dict["properties"]["enable_purge_protection"]
-                                   is False
+                                is False
                                 else "Enabled"
                             }
                         )

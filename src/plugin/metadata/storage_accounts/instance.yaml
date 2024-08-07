@@ -78,8 +78,14 @@ table:
     - Virtual Network: data.network_acls.virtual_networks
       is_optional: true
     - Firewall Address Range: data.network_acls.firewall_address_range
+      type: list
+      options:
+        delimiter: ', '
       is_optional: true
     - Resource Instances: data.network_acls.resource_access_rules_display
+      type: list
+      options:
+        delimiter: ', '
       is_optional: true
     - Exceptions: data.network_acls.bypass
       is_optional: true

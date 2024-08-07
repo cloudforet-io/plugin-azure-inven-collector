@@ -63,7 +63,7 @@ class CosmosDBManager(AzureBaseManager):
                             cosmos_db_account_dict["id"]
                         ),
                         "subscription_id": subscription_info["subscription_id"],
-                        "subscription_name": subscription_info["subscription_name"],
+                        "subscription_name": subscription_info["display_name"],
                         "azure_monitor": {"resource_id": cosmos_db_account_id},
                     }
                 )
@@ -142,6 +142,7 @@ class CosmosDBManager(AzureBaseManager):
                         provider=self.provider,
                         data=cosmos_db_account_dict,
                         account=secret_data["subscription_id"],
+                        instance_type=cosmos_db_account_dict["database_account_offer_type"],
                         region_code=cosmos_db_account_dict["location"],
                         reference=self.make_reference(cosmos_db_account_dict.get("id")),
                         # launched_at=cosmos_db_account_dict.system_data.created_at,

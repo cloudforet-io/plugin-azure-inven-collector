@@ -1,0 +1,29 @@
+---
+metric_id: metric-azure-mysql-servers-server-count
+name: Server Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.MySQLServers.Server
+query_options:
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+    - key: account
+      name: Subscription ID
+    - key: data.resource_group
+      name: Resource Group
+    - key: data.provisioning_state
+      name: Provisioning State
+      default: true
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-mysql-servers-server
+version: '1.0'

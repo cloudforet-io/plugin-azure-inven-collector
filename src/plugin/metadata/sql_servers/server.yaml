@@ -316,14 +316,17 @@ tabs.4:
             - Disabled:
               icon_image: ic_circle-filled
               icon_color: gray.400
+              text_color: gray.400
               type: state
             - Paused:
               icon_image: ic_circle-filled
               icon_color: gray.400
+              text_color: gray.400
               type: state
             - Shutdown:
               icon_image: ic_circle-filled
               icon_color: gray.400
+              text_color: gray.400
               type: state
             - EmergencyMode:
               text_color: red.500

@@ -69,6 +69,8 @@ table:
           icon_color: red.500
           type: state
         - Unknown:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
           text_color: gray.400
           type: state
     - Subscription Name: data.subscription_name
@@ -136,6 +138,8 @@ tabs.0:
           icon_color: red.500
           type: state
         - Unknown:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
           text_color: gray.400
           type: state
     - Resource ID: data.id
