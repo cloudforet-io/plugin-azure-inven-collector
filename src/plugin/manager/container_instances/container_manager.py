@@ -83,6 +83,12 @@ class ContainerInstancesManage(AzureBaseManager):
                     container_instance_dict["volume_count_display"] = len(
                         container_instance_dict["volumes"]
                     )
+                else:
+                    for container in container_instance_dict["containers"]:
+                        container["volume_mount_count_display"] = 0
+
+                    container_instance_dict["volume_count_display"] = 0
+
 
                 container_instance_dict = self.update_tenant_id_from_secret_data(
                     container_instance_dict, secret_data

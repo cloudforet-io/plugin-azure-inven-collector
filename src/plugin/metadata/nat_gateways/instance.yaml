@@ -25,7 +25,7 @@ table:
     - Subscription Name: data.subscription_name
     - Subscription ID: account
     - Subnets (count): data.subnets_count
-    - Public IP Addresses (count): data.public_ip_prefixes_count
+    - Public IP Addresses (count): data.public_ip_addresses_count
     - Public IP Prefixes (count): data.public_ip_prefixes_count
     - Public IP Name (optional): data.public_ip_addresses.name
       is_optional: true

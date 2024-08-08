@@ -93,6 +93,8 @@ class DisksManager(AzureBaseManager):
                 max_shares = disk_dict.get("max_shares")
                 if max_shares is not None and max_shares > 0:
                     disk_dict.update({"enable_shared_disk_display": True})
+                else:
+                    disk_dict.update({"enable_shared_disk_display": False})
 
                 if disk_dict.get("bursting_enabled") is None:
                     disk_dict["bursting_enabled"] = False

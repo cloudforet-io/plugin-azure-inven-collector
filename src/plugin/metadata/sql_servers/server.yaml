@@ -18,13 +18,13 @@ search:
     - Backup Earliest PITR Restore Point (UTC): data.databases.earliest_restore_date
       type: datetime
     - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
-    - '# of SQL DBs': number_of_databases_display
+    - '# of SQL DBs': number_of_databases
       data_type: integer
     - Elastic Pool Name: data.elastic_pools.name
     - Elastic Pool Resource Group: data.elastic_pools.resource_group_display
     - Per DB Settings: data.elastic_pools.per_db_settings_display
     - Pricing Tier: data.elastic_pools.pricing_tier_display
-    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases_display
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
       data_type: integer
     - Elastic Pool Unit: data.elastic_pools.unit_display
     - Elastic Pool Server Name: data.elastic_pools.server_name_display
@@ -104,7 +104,7 @@ table:
       is_optional: true
     - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
       is_optional: true
-    - '# of SQL DBs': data.number_of_databases_display
+    - '# of SQL DBs': data.number_of_databases
       is_optional: true
     - Elastic Pool Name: data.elastic_pools.name
       is_optional: true
@@ -114,7 +114,7 @@ table:
       is_optional: true
     - Pricing Tier: data.elastic_pools.pricing_tier_display
       is_optional: true
-    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases_display
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
       is_optional: true
     - Elastic Pool Unit: data.elastic_pools.unit_display
       is_optional: true
@@ -380,7 +380,7 @@ tabs.5:
     - Resource Group: resource_group_display
     - Per DB Settings: per_db_settings_display
     - Pricing Tier: pricing_tier_display
-    - '# of SQL DBs': number_of_databases_display
+    - '# of SQL DBs': number_of_databases
     - Unit: unit_display
     - Status: state
       type: enum
@@ -427,6 +427,22 @@ tabs.6:
 
 
 tabs.7:
+  name: Deleted Databases
+  type: table
+  root_path: data.deleted_databases
+  fields:
+    - Database: database_name
+    - Deletion Time (UTC): deletion_date
+      source_type: iso8601
+      type: datetime
+    - Creation Time (UTC): creation_date
+      source_type: iso8601
+      type: datetime
+    - Edition Time (UTC): edition
+
+
+
+tabs.8:
   name: Firewalls and Network
   items:
     - name: Network
@@ -488,7 +504,7 @@ tabs.7:
 
 
 
-tabs.8:
+tabs.9:
   name: Private Endpoint Connections
   type: table
   root_path: data.private_endpoint_connections
@@ -500,7 +516,7 @@ tabs.8:
 
 
 
-tabs.9:
+tabs.10:
   name: Transparent Data Encryption
   type: table
   root_path: data.encryption_protectors
@@ -512,7 +528,7 @@ tabs.9:
 
 
 
-tabs.10:
+tabs.11:
   name: Tuning Options
   type: table
   root_path: data.server_automatic_tuning.options

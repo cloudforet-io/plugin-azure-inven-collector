@@ -96,6 +96,44 @@ class NATGatewaysManager(AzureBaseManager):
 
                     nat_gateway_dict["public_ip_addresses"] = pip_list
 
+                else:
+                    nat_gateway_dict.update(
+                        {
+                            "public_ip_addresses_count": 0
+                        }
+                    )
+
+                if nat_gateway_dict.get("public_ip_prefixes") is not None:
+                    nat_gateway_dict.update(
+                        {
+                            "public_ip_prefixes_count": len(
+                                nat_gateway_dict["public_ip_addresses"]
+                            )
+                        }
+                    )
+
+                    # Get Public IP Address Dictionary
+                    if not nat_gateway_dict["public_ip_prefixes"]:
+                        break
+
+                    pip_list = []
+
+                    for pip in nat_gateway_dict["public_ip_prefixes"]:
+                        public_ip_prefixes_id = pip["id"]
+                        pip_dict = self.get_public_ip_prefixes_dict(
+                            nat_gateways_conn, public_ip_prefixes_id
+                        )
+                        pip_list.append(pip_dict)
+
+                    nat_gateway_dict["public_ip_prefixes"] = pip_list
+
+                else:
+                    nat_gateway_dict.update(
+                        {
+                            "public_ip_prefixes_count": 0
+                        }
+                    )
+
                 if nat_gateway_dict.get("subnets") is not None:
                     nat_gateway_dict.update(
                         {
@@ -103,6 +141,12 @@ class NATGatewaysManager(AzureBaseManager):
                                 nat_gateways_conn, nat_gateway_dict["subnets"]
                             ),
                             "subnets_count": len(nat_gateway_dict["subnets"]),
+                        }
+                    )
+                else:
+                    nat_gateway_dict.update(
+                        {
+                            "subnets_count": 0
                         }
                     )
 
