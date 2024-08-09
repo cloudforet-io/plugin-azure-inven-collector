@@ -75,19 +75,25 @@ table:
           type: state
     - Subscription Name: data.subscription_name
     - Subscription ID: account
+      is_optional: true
     - Resource Group: data.resource_group
     - Location: data.location
     - Hub count: data.web_pubsub_hub_count_display
     - SKU: data.sku.tier
     - Unit: data.sku.capacity
     - Version: data.version
+      is_optional: true
     - Host name: data.host_name
     - Host name prefix: data.host_name_prefix
+      is_optional: true
     - Public IP: data.external_ip
     - Public access: data.public_network_access
     - Public port: data.public_port
+      is_optional: true
     - Server port: data.server_port
+      is_optional: true
     - TLS: data.tls.client_cert_enabled
+      is_optional: true
 
 
 
@@ -198,7 +204,7 @@ tabs.2:
 
 tabs.3:
   name: Public access
-  type: table
+  type: item
   fields:
     - Public network access: data.public_network_access
       type: enum
@@ -288,9 +294,9 @@ tabs.5:
         - Default action: data.network_ac_ls.default_action
           type: enum
           enums:
-            - Enabled: indigo.500
+            - Allow: indigo.500
               type: badge
-            - Disabled: coral.600
+            - Deny: coral.600
               type: badge
     - name: Public network
       type: item

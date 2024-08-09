@@ -71,6 +71,7 @@ tabs.1:
 tabs.2:
   name: System data
   type: item
+  root_path: data.system_data
   fields:
     - Created at: created_at
       source_type: iso8601
