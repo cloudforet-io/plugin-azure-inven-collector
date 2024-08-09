@@ -52,7 +52,7 @@ table:
     - Container count: data.container_count_display
     - Blob count: data.blob_count_display
     - Blob total size: data.blob_size_display
-      display_unit: GB
+      display_unit: MB
       source_unit: BYTES
       type: size
     - Resource Group: data.resource_group
@@ -148,7 +148,7 @@ tabs.0:
     - Container count: data.container_count_display
     - Blob count: data.blob_count_display
     - Blob total size: data.blob_size_display
-      display_unit: GB
+      display_unit: MB
       source_unit: BYTES
       type: size
 
