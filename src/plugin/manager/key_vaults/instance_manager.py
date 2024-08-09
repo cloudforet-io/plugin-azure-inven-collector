@@ -1,4 +1,6 @@
 import logging
+import datetime
+from typing import Union
 
 import azure.core.exceptions
 
@@ -77,6 +79,14 @@ class KeyVaultsManager(AzureBaseManager):
                         key_vaults_conn, resource_group_name, vault_name
                     )
 
+                    for key in keys:
+                        key["attributes"].update(
+                            {
+                                "created": self.timestamp_to_iso8601(key["attributes"]["created"]),
+                                "updated": self.timestamp_to_iso8601(key["attributes"]["updated"]),
+                            }
+                        )
+
                     secrets, secrets_permissions_display = self.list_secrets(
                         key_vaults_conn, subscription_id, vault_uri
                     )
@@ -123,18 +133,21 @@ class KeyVaultsManager(AzureBaseManager):
                         )
 
                     # Change purge protection to user-friendly word
+                    key_vault_dict["properties"].update(
+                        {
+                            "enable_purge_protection_str": "Disabled"
+                        }
+                    )
                     if (
                             key_vault_dict.get("properties", {}).get("enable_purge_protection")
                             is not None
                     ):
-                        key_vault_dict["properties"].update(
-                            {
-                                "enable_purge_protection_str": "Disabled"
-                                if key_vault_dict["properties"]["enable_purge_protection"]
-                                is False
-                                else "Enabled"
-                            }
-                        )
+                        if key_vault_dict["properties"]["enable_purge_protection"]:
+                            key_vault_dict["properties"].update(
+                                {
+                                    "enable_purge_protection_str": "Enabled"
+                                }
+                            )
                     if sku := key_vault_dict.get("properties", {}).get("sku"):
                         key_vault_dict["sku"] = sku
 
@@ -230,3 +243,11 @@ class KeyVaultsManager(AzureBaseManager):
         for private_endpoint in private_endpoint_connections:
             private_endpoint.update({"name": private_endpoint["id"].split("/")[10]})
         return private_endpoint_connections
+
+    @staticmethod
+    def timestamp_to_iso8601(timestamp: int) -> Union[str, None]:
+        if isinstance(timestamp, int):
+            dt = datetime.datetime.utcfromtimestamp(timestamp)
+            return f"{dt.isoformat(timespec='milliseconds')}Z"
+
+        return None
