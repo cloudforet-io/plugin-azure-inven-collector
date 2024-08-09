@@ -192,9 +192,6 @@ tabs.4:
         - Image Reference: data.virtual_machine_profile.storage_profile.image_reference_display
         - Storage Account Type: data.virtual_machine_profile.storage_profile.os_disk.managed_disk.storage_account_type
         - Size: data.virtual_machine_profile.storage_profile.os_disk.disk_size_gb
-          display_unit: GB
-          source_unit: BYTES
-          type: size
         - Host Caching: data.virtual_machine_profile.storage_profile.os_disk.caching
     - name: Data Disks
       type: simple-table
@@ -203,9 +200,6 @@ tabs.4:
         - Name: name
         - Storage Type: managed_disk.storage_type
         - Size: disk_size_gb
-          display_unit: GB
-          source_unit: BYTES
-          type: size
         - Max IOPS: disk_iops_read_write
         - MAX Throughput(MBps): disk_m_bps_read_write
         - Encryption: disk_encryption_set.id
