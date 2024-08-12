@@ -162,73 +162,128 @@ tabs.0:
 
 tabs.1:
   name: Connection Security
-  type: item
-  fields:
-    - Public Network Access: data.public_network_access
-      type: enum
-      enums:
-        - Enabled:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Disabled:
-          icon_image: ic_circle-filled
-          icon_color: yellow.500
-          type: state
-    - SSL Enforcement: data.ssl_enforcement
-      type: enum
-      enums:
-        - Enabled:
-          icon_image: ic_circle-filled
-          icon_color: green.500
-          type: state
-        - Disabled:
-          icon_image: ic_circle-filled
-          icon_color: yellow.500
-          type: state
-    - TLS Setting: data.minimal_tls_version
-
+  items:
+    - name: Connection Security
+      type: item
+      fields:
+        - Public Network Access: data.public_network_access
+          type: enum
+          enums:
+            - Enabled:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Disabled:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+        - SSL Enforcement: data.ssl_enforcement
+          type: enum
+          enums:
+            - Enabled:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Disabled:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+        - TLS Setting: data.minimal_tls_version
+    - name: Firewall Rules
+      type: simple-table
+      root_path: data.firewall_rules
+      fields:
+        - Firewall Rule Name: name
+        - Start IP: start_ip_address
+        - End IP: end_ip_address
+    - name: VNET Rules
+      type: simple-table
+      root_path: data.virtual_network_rules
+      fields:
+        - Rule Name: name
+        - Virtual Network: virtual_network_name_display
+        - Subnet: subnet_name
+        - Endpoint Status: state
+          type: enum
+          enums:
+            - Ready:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - InProgress:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Deleting:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Initializing:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Unknown:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
 
 
 tabs.2:
-  name: Firewall Rules
+  name: Replicas
   type: simple-table
-  root_path: data.firewall_rules
+  root_path: data.replicas
   fields:
-    - Firewall Rule Name: name
-    - Start IP: start_ip_address
-    - End IP: end_ip_address
-
-
-
-tabs.3:
-  name: VNET Rules
-  type: simple-table
-  root_path: data.virtual_network_rules
-  fields:
-    - Rule Name: name
-    - Virtual Network: virtual_network_name_display
-    - Subnet: subnet_name
-    - Endpoint Status: state
+    - Name: name
+    - Location: location
+    - Status: user_visible_state
       type: enum
       enums:
         - Ready:
           icon_image: ic_circle-filled
           icon_color: green.500
           type: state
-        - InProgress:
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+
+
+
+tabs.3:
+  name: Active Directory Admin
+  type: simple-table
+  root_path: data.server_administrators
+  fields:
+    - Name: name
+    - Login: login
+    - SID: sid
+    - Tenant ID: tenant_id
+
+
+
+tabs.4:
+  name: Pricing Tier
+  type: item
+  fields:
+    - Compute Generation: data.sku.name
+    - vCore: data.sku.capacity
+    - Storage Auto Grow: data.storage_profile.storage_autogrow
+      type: enum
+      enums:
+        - Enabled:
           icon_image: ic_circle-filled
           icon_color: green.500
           type: state
-        - Deleting:
+        - Disabled:
           icon_image: ic_circle-filled
           icon_color: yellow.500
           type: state
-        - Initializing:
-          icon_image: ic_circle-filled
-          icon_color: yellow.500
-          type: state
-        - Unknown:
-          icon_image: ic_circle-filled
-          icon_color: yellow.500
-          type: state
+    - Backup Retention Period (Days): data.storage_profile.backup_retention_days
