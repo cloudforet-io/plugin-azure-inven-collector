@@ -200,6 +200,9 @@ tabs.4:
         - Name: name
         - Storage Type: managed_disk.storage_type
         - Size: disk_size_gb
+          display_unit: GB
+          source_unit: GB
+          type: size
         - Max IOPS: disk_iops_read_write
         - MAX Throughput(MBps): disk_m_bps_read_write
         - Encryption: disk_encryption_set.id
