@@ -19,6 +19,8 @@ search:
     - Time Created: data.time_created
       data_type: datetime
 
+
+
 table:
   sort:
     key: data.id
@@ -76,6 +78,8 @@ table:
     - Time Created: data.time_created
       is_optional: true
 
+
+
 tabs.0:
   name: Disks
   type: item
@@ -130,6 +134,8 @@ tabs.0:
       source_type: iso8601
       type: datetime
 
+
+
 tabs.1:
   name: Configuration
   items:
@@ -145,6 +151,8 @@ tabs.1:
         - Enable bursting time: data.bursting_enabled_time
           source_type: iso8601
           type: datetime
+
+
 
 tabs.2:
   name: Networking

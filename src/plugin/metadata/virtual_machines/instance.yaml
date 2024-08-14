@@ -426,7 +426,7 @@ tabs.3:
     - Protocol: protocol
       type: enum
       enums:
-        - ALL: primary
+        - ALL: violet.600
           type: badge
         - TCP: indigo.500
           type: badge
