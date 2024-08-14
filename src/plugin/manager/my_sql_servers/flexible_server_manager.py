@@ -89,7 +89,7 @@ class MySQLFlexibleServersManager(AzureBaseManager):
                         provider=self.provider,
                         data=mysql_flexible_server_dict,
                         account=secret_data["subscription_id"],
-                        instance_type=mysql_flexible_server_dict["sku"]["tier"],
+                        instance_type="Azure DB for MySQL Flexible Server",
                         region_code=mysql_flexible_server_dict["location"],
                         reference=self.make_reference(mysql_flexible_server_dict.get("id")),
                         tags=mysql_flexible_server_dict.get("tags", {}),

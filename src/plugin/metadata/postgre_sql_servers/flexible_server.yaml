@@ -1,22 +1,22 @@
 search:
   fields:
-    - Type: instance_type
     - Subscription ID: account
     - Subscription Name: data.subscription_name
     - Resource Group: data.resource_group
     - Location: data.location
+    - Server Name: data.fully_qualified_domain_name
     - Server Admin Login Name: data.administrator_login
-    - MySQL Version: data.version
+    - PostgreSQL Version: data.version
     - Zone: data.availability_zone
     - High Availability Mode: data.high_availability.mode
     - High Availability State: data.high_availability.state
     - Performance Configuration (Tier): instance_type
     - Performance Configuration (Name): data.sku.name
+    - Public Network Access: data.network.public_network_access
     - Firewall Rule Name: data.firewall_rules.name
     - Firewall Rule Start IP: data.firewall_rules.start_ip_address
     - Firewall Rule End IP: data.firewall_rules.end_ip_address
-    - Allow Access To Azure Services: data.allow_azure_services_access
-    - Storage: data.storage.storage_size_gb
+    - Storage Size: data.storage.storage_size_gb
       data_type: integer
     - Backup Retention Period (Days): data.backup.backup_retention_days
 
@@ -61,23 +61,27 @@ table:
           icon_color: gray.400
           text_color: gray.400
           type: state
-    - High Availability Mode: data.high_availability.mode
-    - High Availability State: data.high_availability.state
-      is_optional: true
     - Resource Group: data.resource_group
+      is_optional: true
     - Location: data.location
+      is_optional: true
     - Subscription Name: data.subscription_name
+      is_optional: true
     - Subscription ID: account
+      is_optional: true
+    - Server Name: data.fully_qualified_domain_name
       is_optional: true
     - Server Admin Login Name: data.administrator_login
       is_optional: true
-    - MySQL Version: data.version
+    - PostgreSQL Version: data.version
       is_optional: true
     - Zone: data.availability_zone
       is_optional: true
-    - Performance Configuration (Tier): data.sku.tier
+    - Performance Configuration (Tier): instance_type
       is_optional: true
     - Performance Configuration (Name): data.sku.name
+      is_optional: true
+    - Public Network Access: data.network.public_network_access
       is_optional: true
     - Firewall Rule Name: data.firewall_rules.name
       is_optional: true
@@ -85,9 +89,11 @@ table:
       is_optional: true
     - Firewall Rule End IP: data.firewall_rules.end_ip_address
       is_optional: true
-    - Allow Access To Azure Services: data.allow_azure_services_access
+    - Compute Generation: data.sku.name
       is_optional: true
-    - Storage: data.storage.storage_size_gb
+    - Compute Tier: data.sku.tier
+      is_optional: true
+    - Storage Size: data.storage.storage_size_gb
       display_unit: GB
       source_unit: GB
       type: size
@@ -98,7 +104,7 @@ table:
 
 
 tabs.0:
-  name: MySQL Server
+  name: PostgreSQL Servers
   type: item
   fields:
     - Name: name
@@ -144,12 +150,12 @@ tabs.0:
     - Server Admin Login Name: data.administrator_login
     - Performance Configuration (Tier): data.sku.tier
     - Performance Configuration (Name): data.sku.name
-    - Storage: data.storage.storage_size_gb
+    - Storage Size: data.storage.storage_size_gb
       display_unit: GB
       source_unit: GB
       type: size
       is_optional: true
-    - MySQL Version: data.version
+    - PostgreSQL Version: data.version
     - Zone: data.availability_zone
 
 
@@ -169,17 +175,6 @@ tabs.1:
           display_unit: GB
           source_unit: GB
           type: size
-        - Storage Auto-growth: data.storage.auto_grow
-          type: enum
-          enums:
-            - Enabled:
-              icon_image: ic_circle-filled
-              icon_color: green.500
-              type: state
-            - Disabled:
-              icon_image: ic_circle-filled
-              icon_color: yellow.500
-              type: state
     - name: High Availability
       type: item
       fields:
@@ -224,26 +219,3 @@ tabs.1:
               icon_image: ic_circle-filled
               icon_color: yellow.500
               type: state
-
-
-
-tabs.2:
-  name: Networking
-  items:
-    - name: Public Network Access
-      type: items
-      fields:
-        - Public Network Access: data.network.public_network_access
-          type: enum
-          enums:
-            - Enabled: indigo.500
-              type: badge
-            - Disabled: coral.600
-              type: badge
-    - name: Firewall Rules
-      type: table
-      root_path: data.firewall_rules
-      fields:
-        - Firewall rule Name: name
-        - Start IP: start_ip_address
-        - End IP: end_ip_address

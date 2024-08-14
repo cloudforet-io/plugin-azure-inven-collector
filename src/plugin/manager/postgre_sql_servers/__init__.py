@@ -1,1 +1,2 @@
 from .server_manager import PostgreSQLServersManager
+from .flexible_server_manager import PostgreSQLFlexibleServersManager

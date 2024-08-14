@@ -12,6 +12,7 @@ from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.storage import StorageManagementClient
 from azure.mgmt.cosmosdb import CosmosDBManagementClient
 from azure.mgmt.rdbms.postgresql import PostgreSQLManagementClient
+from azure.mgmt.rdbms.postgresql_flexibleservers import PostgreSQLManagementClient as PostgreSQLFlexibleManagementClient
 from azure.mgmt.webpubsub import WebPubSubManagementClient
 from azure.mgmt.keyvault import KeyVaultManagementClient
 from azure.mgmt.rdbms.mysql import MySQLManagementClient
@@ -37,6 +38,7 @@ class AzureBaseConnector(BaseConnector):
         self.storage_client = None
         self.cosmosdb_client = None
         self.postgre_sql_client = None
+        self.postgre_sql_flexible_client = None
         self.web_pubsub_service_client = None
         self.key_vault_client = None
         self.mysql_client = None
@@ -63,6 +65,7 @@ class AzureBaseConnector(BaseConnector):
         self.storage_client = StorageManagementClient(credential=credential, subscription_id=subscription_id)
         self.cosmosdb_client = CosmosDBManagementClient(credential=credential, subscription_id=subscription_id)
         self.postgre_sql_client = PostgreSQLManagementClient(credential=credential, subscription_id=subscription_id)
+        self.postgre_sql_flexible_client = PostgreSQLFlexibleManagementClient(credential=credential, subscription_id=subscription_id)
         self.web_pubsub_service_client = WebPubSubManagementClient(credential=credential, subscription_id=subscription_id)
         self.key_vault_client = KeyVaultManagementClient(credential=credential, subscription_id=subscription_id)
         self.mysql_client = MySQLManagementClient(credential=credential, subscription_id=subscription_id)

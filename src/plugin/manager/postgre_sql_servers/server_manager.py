@@ -97,7 +97,7 @@ class PostgreSQLServersManager(AzureBaseManager):
                         data=postgre_sql_server_dict,
                         account=secret_data["subscription_id"],
                         instance_type=postgre_sql_server_dict["sku"]["tier"],
-                        instance_size=float(postgre_sql_server_dict["max_size_gb"]),
+                        instance_size=float(postgre_sql_server_dict["storage_profile"]["max_size_gb"]),
                         region_code=postgre_sql_server_dict["location"],
                         reference=self.make_reference(postgre_sql_server_dict.get("id")),
                         tags=postgre_sql_server_dict.get("tags", {}),
