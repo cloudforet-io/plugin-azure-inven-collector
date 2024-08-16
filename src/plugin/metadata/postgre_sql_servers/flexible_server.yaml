@@ -6,7 +6,7 @@ search:
     - Location: data.location
     - Server Name: data.fully_qualified_domain_name
     - Server Admin Login Name: data.administrator_login
-    - PostgreSQL Version: data.version
+    - PostgreSQL Version: data.version_display
     - Zone: data.availability_zone
     - High Availability Mode: data.high_availability.mode
     - High Availability State: data.high_availability.state
@@ -73,7 +73,7 @@ table:
       is_optional: true
     - Server Admin Login Name: data.administrator_login
       is_optional: true
-    - PostgreSQL Version: data.version
+    - PostgreSQL Version: data.version_display
       is_optional: true
     - Zone: data.availability_zone
       is_optional: true
@@ -155,7 +155,7 @@ tabs.0:
       source_unit: GB
       type: size
       is_optional: true
-    - PostgreSQL Version: data.version
+    - PostgreSQL Version: data.version_display
     - Zone: data.availability_zone
 
 

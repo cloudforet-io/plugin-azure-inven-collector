@@ -62,6 +62,10 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
                         "subscription_id": subscription_info["subscription_id"],
                         "subscription_name": subscription_info["display_name"],
                         "azure_monitor": {"resource_id": postgre_sql_flexible_server_id},
+                        "version_display": self.get_version_display(
+                            postgre_sql_flexible_server_dict.get("version"),
+                            postgre_sql_flexible_server_dict.get("minor_version"),
+                        )
                     }
                 )
 
@@ -120,5 +124,8 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
 
         return firewall_rules
 
-
+    @staticmethod
+    def get_version_display(version, minor_version):
+        version_display = f"{version}.{minor_version}"
+        return version_display
 
