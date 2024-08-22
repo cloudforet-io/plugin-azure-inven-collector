@@ -159,15 +159,16 @@ class VirtualMachinesManager(AzureBaseManager):
                         cloud_service_type=self.cloud_service_type,
                         cloud_service_group=self.cloud_service_group,
                         provider=self.provider,
-                        data=vm_resource,
+                        data=vm_resource["data"],
                         account=subscription_data["subscription_id"],
                         instance_type=vm_resource["data"]["compute"]["instance_type"],
+                        ip_addresses=vm_resource["ip_addresses"],
                         region_code=vm_resource["region_code"],
                         reference=self.make_reference(
                             vm_resource["data"]["compute"]["instance_id"],
                             f"https://portal.azure.com/#@.onmicrosoft.com/resource/subscriptions/{subscription_data['subscription_id']}/resourceGroups/{resource_group_name}/providers/Microsoft.Compute/virtualMachines/{vm_resource['data']['compute']['instance_name']}/overview"
                         ),
-                        tags=vm.tags,
+                        tags=vm_resource["tags"],
                         data_format="dict"
                     )
                 )
