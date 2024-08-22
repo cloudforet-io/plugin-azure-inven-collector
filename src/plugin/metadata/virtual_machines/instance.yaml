@@ -1,45 +1,45 @@
 search:
   fields:
     - Subscription ID: account
-    - Subscription Name: data.subscription.subscription_name
-    - Resource Group: data.resource_group.resource_group_name
-    - IP Address: ip_addresses
-    - Instance ID: data.compute.instance_id
-    - Instance State: data.compute.instance_state
-    - Instance Type: data.compute.instance_type
-    - Key Pair: data.compute.keypair
-    - Image: data.compute.image
-    - Availability Zone: data.compute.az
-    - OS Type: data.os.os_type
-    - OS Architecture: data.os.os_arch
-    - MAC Address: data.nics.mac_address
-    - Public IP Address: data.nics.public_ip_address
-    - Public DNS: data.nics.tags.public_dns
-    - VNet ID: data.vnet.vnet_id
-    - VNet Name: data.vnet.vnet_name
-    - Subnet ID: data.subnet.subnet_id
-    - Subnet Name: data.subnet.subnet_name
-    - ELB Name: data.load_balancer.name
-    - ELB DNS: data.load_balancer.endpoint
-    - Auto Scaling Group: data.auto_scaling_group.name
-    - Core: data.hardware.core
+    - Subscription Name: data.data.subscription_name
+    - Resource Group: data.data.resource_group.resource_group_name
+    - IP Address: data.ip_addresses
+    - Instance ID: data.data.compute.instance_id
+    - Instance State: data.data.compute.instance_state
+    - Instance Type: data.data.compute.instance_type
+    - Key Pair: data.data.compute.keypair
+    - Image: data.data.compute.image
+    - Availability Zone: data.data.compute.az
+    - OS Type: data.data.os.os_type
+    - OS Architecture: data.data.os.os_arch
+    - MAC Address: data.data.nics.mac_address
+    - Public IP Address: data.data.nics.public_ip_address
+    - Public DNS: data.data.nics.tags.public_dns
+    - VNet ID: data.data.vnet.vnet_id
+    - VNet Name: data.data.vnet.vnet_name
+    - Subnet ID: data.data.subnet.subnet_id
+    - Subnet Name: data.data.subnet.subnet_name
+    - ELB Name: data.data.load_balancer.name
+    - ELB DNS: data.data.load_balancer.endpoint
+    - Auto Scaling Group: data.data.auto_scaling_group.name
+    - Core: data.data.hardware.core
       data_type: integer
-    - Memory: data.hardware.memory
+    - Memory: data.data.hardware.memory
       data_type: float
     - Management State: state
     - Cloud Service Group: cloud_service_group
     - Cloud Service Type: cloud_service_type
     - Service Account: collection_info.service_accounts
-    - Launched: data.launched_at
+    - Launched: data.data.compute.launched_at
 
 
 
 table:
   sort:
-    key: data.id
+    key: data.activity_log.resource_uri
     desc: false
   fields:
-    - Instance State: data.compute.instance_state
+    - Instance State: data.data.compute.instance_state
       type: enum
       enums:
         - RUNNING:
@@ -104,142 +104,142 @@ table:
           type: state
     - Cloud Service ID: cloud_service_id
       is_optional: true
-    - Instance Type: data.compute.instance_type
-    - Core: data.hardware.core
-    - Memory: data.hardware.memory
-    - Instance ID: data.compute.instance_id
+    - Instance Type: data.data.compute.instance_type
+    - Core: data.data.hardware.core
+    - Memory: data.data.hardware.memory
+    - Instance ID: data.data.compute.instance_id
       is_optional: true
-    - Key Pair: data.compute.keypair
+    - Key Pair: data.data.compute.keypair
       is_optional: true
-    - Image: data.compute.image
+    - Image: data.data.compute.image
       is_optional: true
-    - Availability Zone: data.compute.az
-    - OS Type: data.os.os_type
+    - Availability Zone: data.data.compute.az
+    - OS Type: data.data.os.os_type
       is_optional: true
-    - OS: data.os.os_distro
-    - OS Architecture: data.os.os_arch
+    - OS: data.data.os.os_distro
+    - OS Architecture: data.data.os.os_arch
       is_optional: true
-    - Primary IP: data.primary_ip_address
-    - Public DNS: data.nics
+    - Primary IP: data.data.primary_ip_address
+    - Public DNS: data.data.nics
       type: list
       options:
         sub_key: tags.public_dns
       is_optional: true
-    - Public IP: data.nics
+    - Public IP: data.data.nics
       type: list
       options:
         sub_key: public_ip_address
       is_optional: true
-    - All IP: ip_addresses
+    - All IP: data.ip_addresses
       is_optional: true
-    - MAC Address: data.nics.mac_address
+    - MAC Address: data.data.nics.mac_address
       is_optional: true
-    - CIDR: data.vnet.cidr
+    - CIDR: data.data.vnet.cidr
       is_optional: true
-    - VNet ID: data.vnet.vnet_id
+    - VNet ID: data.data.vnet.vnet_id
       is_optional: true
-    - VNet Name: data.vnet.vnet_name
+    - VNet Name: data.data.vnet.vnet_name
       is_optional: true
-    - Subnet ID: data.subnet.subnet_id
+    - Subnet ID: data.data.subnet.subnet_id
       is_optional: true
-    - Subnet Name: data.subnet.subnet_name
+    - Subnet Name: data.data.subnet.subnet_name
       is_optional: true
-    - Load Balancer Name: data.load_balancer.name
+    - Load Balancer Name: data.data.load_balancer.name
       is_optional: true
-    - Load Balancer DNS: data.load_balancer.endpoint
+    - Load Balancer DNS: data.data.load_balancer.endpoint
       is_optional: true
-    - Ultra SSD Enabled: data.azure.ultra_ssd_enabled
+    - Ultra SSD Enabled: data.data.azure.ultra_ssd_enabled
       is_optional: true
-    - Write Accelerator Enabled: data.azure.write_accelerator_enabled
+    - Write Accelerator Enabled: data.data.azure.write_accelerator_enabled
       is_optional: true
-    - Boot Diagnostics: data.azure.boot_diagnostics
+    - Boot Diagnostics: data.data.azure.boot_diagnostics
       is_optional: true
-    - Priority: data.azure.priority
+    - Priority: data.data.azure.priority
       is_optional: true
-    - Auto Scaling Group: data.auto_scaling_group.name
+    - Auto Scaling Group: data.data.auto_scaling_group.name
       is_optional: true
-    - CPU Utilization: data.monitoring.cpu.utilization.avg
+    - CPU Utilization: data.data.monitoring.cpu.utilization.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Memory Usage: data.monitoring.memory.usage.avg
+    - Memory Usage: data.data.monitoring.memory.usage.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Disk Read IOPS: data.monitoring.disk.read_iops.avg
+    - Disk Read IOPS: data.data.monitoring.disk.read_iops.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Disk Write IOPS: data.monitoring.disk.write_iops.avg
+    - Disk Write IOPS: data.data.monitoring.disk.write_iops.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Disk Read Throughput: data.monitoring.disk.read_throughput.avg
+    - Disk Read Throughput: data.data.monitoring.disk.read_throughput.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Disk Write Throughput: data.monitoring.disk.write_throughput.avg
+    - Disk Write Throughput: data.data.monitoring.disk.write_throughput.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Network Received PPS: data.monitoring.network.received_pps.avg
+    - Network Received PPS: data.data.monitoring.network.received_pps.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Network Send PPS: data.monitoring.network.sent_pps.avg
+    - Network Send PPS: data.data.monitoring.network.sent_pps.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Network Received Throughput: data.monitoring.network.received_throughput.avg
+    - Network Received Throughput: data.data.monitoring.network.received_throughput.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - Network Sent Throughput: data.monitoring.network.sent_throughput.avg
+    - Network Sent Throughput: data.data.monitoring.network.sent_throughput.avg
       default: 0
       is_optional: true
       field_description: (Daily Average)
-    - CPU Utilization: data.monitoring.cpu.utilization.max
+    - CPU Utilization: data.data.monitoring.cpu.utilization.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Memory Usage: data.monitoring.memory.usage.max
+    - Memory Usage: data.data.monitoring.memory.usage.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Disk Read IOPS: data.monitoring.disk.read_iops.max
+    - Disk Read IOPS: data.data.monitoring.disk.read_iops.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Disk Write IOPS: data.monitoring.disk.write_iops.max
+    - Disk Write IOPS: data.data.monitoring.disk.write_iops.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Disk Read Throughput: data.monitoring.disk.read_throughput.max
+    - Disk Read Throughput: data.data.monitoring.disk.read_throughput.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Disk Write Throughput: data.monitoring.disk.write_throughput.max
+    - Disk Write Throughput: data.data.monitoring.disk.write_throughput.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Network Received PPS: data.monitoring.network.received_pps.max
+    - Network Received PPS: data.data.monitoring.network.received_pps.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Network Send PPS: data.monitoring.network.sent_pps.max
+    - Network Send PPS: data.data.monitoring.network.sent_pps.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Network Received Throughput: data.monitoring.network.received_throughput.max
+    - Network Received Throughput: data.data.monitoring.network.received_throughput.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
-    - Network Sent Throughput: data.monitoring.network.sent_throughput.max
+    - Network Sent Throughput: data.data.monitoring.network.sent_throughput.max
       default: 0
       is_optional: true
       field_description: (Daily Max)
     - Subscription ID: account
-    - Launched: launched_at
+    - Launched: data.data.compute.launched_at
       is_optional: true
 
 
@@ -250,9 +250,9 @@ tabs.0:
     - name: Virtual Machine
       type: item
       fields:
-        - Resource ID: data.compute.instance_id
-        - VM ID: data.compute.tags.vm_id
-        - VM State: data.compute.instance_state
+        - Resource ID: data.data.compute.instance_id
+        - VM ID: data.data.compute.tags.vm_id
+        - VM State: data.data.compute.instance_state
           type: enum
           enums:
             - RUNNING:
@@ -285,9 +285,9 @@ tabs.0:
               icon_color: gray.400
               text_color: gray.400
               type: state
-        - Instance Type: data.compute.instance_type
-        - Image: data.compute.image
-        - Azure Priority: data.azure.priority
+        - Instance Type: data.data.compute.instance_type
+        - Image: data.data.compute.image
+        - Azure Priority: data.data.azure.priority
           type: enum
           enums:
             - Regular: indigo.500
@@ -297,66 +297,66 @@ tabs.0:
             - Spot: peacock.600
               type: badge
         - Region: region_code
-        - Availability Zone: data.compute.az
-        - Key Pair: data.compute.keypair
-        - Ultra SSD Enabled: data.azure.ultra_ssd_enabled
+        - Availability Zone: data.data.compute.az
+        - Key Pair: data.data.compute.keypair
+        - Ultra SSD Enabled: data.data.azure.ultra_ssd_enabled
           type: enum
           enums:
             - 'true': indigo.500
               type: badge
             - 'false': coral.600
               type: badge
-        - Write Accelerator Enabled: data.azure.write_accelerator_enabled
+        - Write Accelerator Enabled: data.data.azure.write_accelerator_enabled
           type: enum
           enums:
             - 'true': indigo.500
               type: badge
             - 'false': coral.600
               type: badge
-        - Boot Diagnostics: data.azure.boot_diagnostics
+        - Boot Diagnostics: data.data.azure.boot_diagnostics
           type: enum
           enums:
             - 'true': indigo.500
               type: badge
             - 'false': coral.600
               type: badge
-        - Public IP: data.nics
+        - Public IP: data.data.nics
           type: list
           options:
             sub_key: public_ip_address
             delimiter: '<br>'
-        - Security Groups: data.compute.security_groups
+        - Security Groups: data.data.compute.security_groups
           type: list
           options:
             sub_key: display
             delimiter: '<br>'
-        - Launched At: data.compute.launched_at
+        - Launched At: data.data.compute.launched_at
     - name: Virtual Network
       type: item
       fields:
-        - VNet ID: data.vnet.vnet_id
-        - VNet Name: data.vnet.vnet_name
-        - Subnet ID: data.subnet.subnet_id
-        - Subnet Name: data.subnet.subnet_name
+        - VNet ID: data.data.vnet.vnet_id
+        - VNet Name: data.data.vnet.vnet_name
+        - Subnet ID: data.data.subnet.subnet_id
+        - Subnet Name: data.data.subnet.subnet_name
     - name: Operating System
       type: item
       fields:
-        - OS Type: data.os.os_type
+        - OS Type: data.data.os.os_type
           translation_id: PAGE_SCHEMA.OS_TYPE
-        - OS Distribution: data.os.os_distro
+        - OS Distribution: data.data.os.os_distro
           translation_id: PAGE_SCHEMA.OS_DISTRO
-        - OS Architecture: data.os.os_arch
+        - OS Architecture: data.data.os.os_arch
           translation_id: PAGE_SCHEMA.OS_ARCH
-        - OS Version Details: data.os.details
+        - OS Version Details: data.data.os.details
           translation_id: PAGE_SCHEMA.OS_DETAILS
-        - OS License: data.os.os_license
+        - OS License: data.data.os.os_license
           translation_id: PAGE_SCHEMA.OS_LICENSE
     - name: Hardware
       type: item
       fields:
-        - Core: data.hardware.core
+        - Core: data.data.hardware.core
           translation_id: PAGE_SCHEMA.CPU_CORE
-        - Memory: data.hardware.memory
+        - Memory: data.data.hardware.memory
           translation_id: PAGE_SCHEMA.MEMORY
 
 
@@ -364,7 +364,7 @@ tabs.0:
 tabs.1:
   name: Disk
   type: table
-  root_path: data.disks
+  root_path: data.data.disks
   fields:
     - Index: device_index
     - Name: tags.disk_name
@@ -381,7 +381,7 @@ tabs.1:
 tabs.2:
   name: NIC
   type: table
-  root_path: data.nics
+  root_path: data.data.nics
   fields:
     - Index: device_index
     - Name: tags.name
@@ -413,7 +413,7 @@ tabs.2:
 tabs.3:
   name: Network Security Groups
   type: table
-  root_path: data.security_group
+  root_path: data.data.security_group
   fields:
     - Direction: direction
       type: enum
@@ -451,7 +451,7 @@ tabs.3:
 tabs.4:
   name: Load Balancer
   type: table
-  root_path: data.load_balancer
+  root_path: data.data.load_balancer
   fields:
     - Name: name
     - Endpoint: endpoint
