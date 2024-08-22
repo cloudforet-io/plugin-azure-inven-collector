@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.network_security_groups.connector import NetworkSecurityGroupsConnector

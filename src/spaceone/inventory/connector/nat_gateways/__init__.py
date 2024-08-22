@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.nat_gateways.connector import NATGatewaysConnector

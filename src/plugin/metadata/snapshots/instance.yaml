@@ -1,0 +1,91 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Storage Account Type: instance_type
+    - Snapshot Type: data.incremental_display
+    - Disk Size (Bytes): data.disk_size_bytes
+    - Disk Size (GB): instance_size
+      data_type: float
+    - Encryption: data.encryption.type_display
+    - Network Access Policy: data.network_access_policy
+    - Provisioning State: data.provisioning_state
+    - Launched: data.time_created
+      data_type: datetime
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Source disk: data.source_disk_name
+    - Snapshot type: data.incremental_display
+    - Source disk size: data.disk_size_bytes
+      display_unit: GB
+      source_unit: BYTES
+      type: size
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Launched: data.time_created
+      source_type: iso8601
+      type: datetime
+    - Subscription ID: account
+    - Encryption Type: data.encryption.type_display
+    - Network Access Policy: data.network_access_policy_display
+
+
+
+tabs.0:
+  name: Snapshots
+  type: item
+  fields:
+    - Name: name
+    - Storage Type: instance_type
+    - Size: data.size
+      display_unit: GB
+      source_unit: BYTES
+      type: size
+    - Source Disk: data.source_disk_name
+    - Location: data.location
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Snapshot state: data.disk_state
+      type: enum
+      enums:
+        - ActiveSAS:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - ActiveUpload:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Attached:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Reserved:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - ReadyToUpload:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Unattached:
+          icon_image: ic_circle-filled
+          icon_color: blue.400
+          type: state
+    - Snapshot Type: data.incremental_display
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Encryption Type: data.encryption.type_display
+    - Network Access Policy: data.network_access_policy_display
+    - Created Time: launched_at
+      source_type: iso8601
+      type: datetime

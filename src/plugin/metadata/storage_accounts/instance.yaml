@@ -1,0 +1,229 @@
+search:
+  fields:
+    - Container count: data.container_count_display
+      data_type: integer
+    - Blob count: data.blob_count_display
+      data_type: integer
+    - Blob total size(Bytes): data.blob_size_display
+      data_type: integer
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - SKU: data.sku.name
+    - Type: data.type
+    - State of Primary: data.status_of_primary
+    - Performance Tier: instance_type
+    - Access Tier: data.access_tier
+    - Replication: data.sku.name
+    - Kind of Account: data.kind
+    - Provisioning State: data.provisioning_state
+    - Is Public: data.allow_blob_public_access
+    - Virtual Network: data.network_acls.virtual_networks
+    - Firewall Address Range: data.network_acls.firewall_address_range
+    - Resource Instances: data.network_acls.resource_access_rules_display
+    - Exceptions: data.network_acls.bypass
+    - Routing Preference: data.routing_preference_display
+    - Publish Microsoft Endpoints: data.routing_preference.publish_microsoft_endpoints
+    - Publish Internet Endpoints: data.routing_preference.publish_internet_endpoints
+    - Blob: data.primary_endpoints.blob
+    - Queue: data.primary_endpoints.queue
+    - Table: data.primary_endpoints.table
+    - File: data.primary_endpoints.file
+    - Web: data.primary_endpoints.web
+    - DFS: data.primary_endpoints.dfs
+    - Microsoft Endpoints: data.routing_preference.publish_microsoft_endpoints
+    - Internet Endpoints: data.routing_preference.publish_internet_endpoints
+    - Container Name: data.container_item.name
+    - Container Last Modified: data.container_item.last_modified_time
+      data_type: datetime
+    - Container Public Access Level: data.container_item.public_access
+    - Container Lease State: data.container_item.lease_state
+    - Primary Location: data.primary_location
+    - Secondary Location: data.secondary_location
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Container count: data.container_count_display
+    - Blob count: data.blob_count_display
+    - Blob total size: data.blob_size_display
+      display_unit: MB
+      source_unit: BYTES
+      type: size
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - SKU: data.sku.name
+    - Type: data.type
+    - State of Primary: data.status_of_primary
+      is_optional: true
+    - Performance Tier: instance_type
+      is_optional: true
+    - Access Tier: data.access_tier
+      is_optional: true
+    - Replication: data.sku.name
+      is_optional: true
+    - Kind of Account: data.kind
+      is_optional: true
+    - Provisioning State: data.provisioning_state
+      is_optional: true
+    - Is Public: data.allow_blob_public_access
+      is_optional: true
+    - Virtual Network: data.network_acls.virtual_networks
+      is_optional: true
+    - Firewall Address Range: data.network_acls.firewall_address_range
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Resource Instances: data.network_acls.resource_access_rules_display
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Exceptions: data.network_acls.bypass
+      is_optional: true
+    - Routing Preference: data.routing_preference_display
+      is_optional: true
+    - Publish Microsoft Endpoints: data.routing_preference.publish_microsoft_endpoints
+      is_optional: true
+    - Publish Internet Endpoints: data.routing_preference.publish_internet_endpoints
+      is_optional: true
+    - Blob: data.primary_endpoints.blob
+      is_optional: true
+    - Queue: data.primary_endpoints.queue
+      is_optional: true
+    - Table: data.primary_endpoints.table
+      is_optional: true
+    - File: data.primary_endpoints.file
+      is_optional: true
+    - Web: data.primary_endpoints.web
+      is_optional: true
+    - DFS: data.primary_endpoints.dfs
+      is_optional: true
+    - Microsoft Endpoints: data.routing_preference.publish_microsoft_endpoints
+      is_optional: true
+    - Internet Endpoints: data.routing_preference.publish_internet_endpoints
+      is_optional: true
+    - Container Name: data.container_item.name
+      is_optional: true
+    - Container Last Modified: data.container_item.last_modified_time
+      is_optional: true
+    - Container Public Access Level: data.container_item.public_access
+      is_optional: true
+    - Container Lease State: data.container_item.lease_state
+      is_optional: true
+    - Primary Location: data.primary_location
+      is_optional: true
+    - Secondary Location: data.secondary_location
+      is_optional: true
+
+
+
+tabs.0:
+  name: Storage Account
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - State of Primary: data.status_of_primary
+    - Performance Tier: instance_type
+    - Access Tier: data.access_tier
+    - Replication: data.sku.name
+    - Account Kind: data.kind
+    - Provisioning State: data.provisioning_state
+    - Creation Time: data.creation_time
+      source_type: iso8601
+      type: datetime
+    - Container count: data.container_count_display
+    - Blob count: data.blob_count_display
+    - Blob total size: data.blob_size_display
+      display_unit: MB
+      source_unit: BYTES
+      type: size
+
+
+
+tabs.1:
+  name: Networking
+  type: item
+  fields:
+    - Is Public: data.network_rule_set.is_public_access_allowed
+    - Virtual Network: data.network_rule_set.virtual_networks
+    - Firewall Address Range: data.network_rule_set.firewall_address_range
+      type: list
+      options:
+        delimiter: ', '
+    - Resource Instances: data.network_rule_set.resource_access_rules_display
+      type: list
+      options:
+        delimiter: ', '
+    - Exceptions: data.network_rule_set.bypass
+    - Routing Preference: data.routing_preference_display
+    - Publish Microsoft Endpoints: data.routing_preference.publish_microsoft_endpoints
+    - Publish Internet Endpoints: data.routing_preference.publish_internet_endpoints
+
+
+
+tabs.2:
+  name: Primary Endpoints
+  type: item
+  fields:
+    - Blob: data.primary_endpoints.blob
+    - Queue: data.primary_endpoints.queue
+    - Table: data.primary_endpoints.table
+    - File: data.primary_endpoints.file
+    - Web: data.primary_endpoints.web
+    - DFS: data.primary_endpoints.dfs
+    - Microsoft Endpoints: data.routing_preference.publish_microsoft_endpoints
+    - Internet Endpoints: data.routing_preference.publish_internet_endpoints
+
+
+
+tabs.3:
+  name: Encryption
+  type: item
+  fields:
+    - Key Source: data.encryption.key_source
+    - Key Vault URI: data.encryption.key_vault_properties.key_vault_uri
+
+
+
+tabs.4:
+  name: Geo-Replication
+  type: table
+  fields:
+    - Primary Location: 'data.primary_location'
+    - Status of Primary: data.status_of_primary
+      type: enum
+      enums:
+        - available:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - unavailable:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Secondary Location: data.secondary_location
+    - Status of Secondary: data.status_of_secondary
+      type: enum
+      enums:
+        - available:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - unavailable:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state

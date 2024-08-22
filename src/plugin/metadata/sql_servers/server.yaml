@@ -1,0 +1,538 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Server Admin: data.administrator_login
+    - Active Directory Admin: data.azure_ad_admin_name
+    - Server Name: data.fully_qualified_domain_name
+    - Failover Group ID: data.failover_groups.id
+    - Failover Group Name: data.failover_groups.name
+    - Failover Groups Primary Server: data.failover_groups.primary_server
+    - Failover Groups Secondary Server: data.failover_groups.secondary_server
+    - Read/Write Failover Policy: data.failover_groups.failover_policy_display
+    - Grace Period (minutes): data.failover_groups.grace_period_display
+      data_type: integer
+    - Backup Database: data.databases.name
+    - Backup Earliest PITR Restore Point (UTC): data.databases.earliest_restore_date
+      type: datetime
+    - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
+    - '# of SQL DBs': number_of_databases
+      data_type: integer
+    - Elastic Pool Name: data.elastic_pools.name
+    - Elastic Pool Resource Group: data.elastic_pools.resource_group_display
+    - Per DB Settings: data.elastic_pools.per_db_settings_display
+    - Pricing Tier: data.elastic_pools.pricing_tier_display
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
+      data_type: integer
+    - Elastic Pool Unit: data.elastic_pools.unit_display
+    - Elastic Pool Server Name: data.elastic_pools.server_name_display
+    - Elastic Pool Resource Configuration: data.elastic_pools.pricing_tier_display
+    - Elastic Pool Maximum Storage Size: data.elastic_pools.max_size_gb
+    - Deleted Database: data.deleted_databases.database_name
+    - Deletion Time (UTC): data.deleted_databases.deletion_date
+      type: datetime
+    - Deleted Databases Creation Time (UTC): data.deleted_databases.creation_date
+      type: datetime
+    - Deleted Databases Edition Time (UTC): data.deleted_databases.edition
+      type: datetime
+    - Audit Log Destination: data.server_auditing_settings.storage_endpoint
+    - Audit Storage Account ID: data.server_auditing_settings.storage_account_subscription_id
+    - Minimum TLS Version: data.minimal_tls_version
+    - Connection Policy: data.server_auditing_settings.name
+    - Allow Azure Services and Resources to Access this server: data.server_auditing_settings.is_azure_monitor_target_enabled
+    - Firewall Rule Name: data.firewall_rules.name
+    - Firewall Start IP: data.firewall_rules.start_ip_address
+    - Firewall End IP: data.firewall_rules.end_ip_address
+    - Private Endpoint Connection ID: data.private_endpoint_connections.connection_id
+    - Private Endpoint State: data.private_endpoint_connections.status
+    - Private Endpoint Name: data.private_endpoint_connections.private_endpoint_name
+    - Request / Response Message: data.private_endpoint_connections.description
+    - Transparent Data Encryption: data.encryption_protectors.kind
+    - Encryption Key: data.encryption_protectors.server_key_name
+    - Encryption Key Type: data.encryption_protectors.server_key_type
+    - Encryption URI: data.encryption_protectors.uri
+    - Tuning Type: data.server_automatic_tuning.options.tuning_type
+    - Tuning Desired State: data.server_automatic_tuning.options.desired_state
+    - Tuning Current State: data.server_automatic_tuning.options.actual_state
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Status: data.state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+      is_optional: true
+    - Server Admin: data.administrator_login
+      is_optional: true
+    - Active Directory Admin: data.azure_ad_admin_name
+      is_optional: true
+    - Server Name: data.fully_qualified_domain_name
+      is_optional: true
+    - Failover Group ID: data.failover_groups.id
+      is_optional: true
+    - Failover Group Name: data.failover_groups.name
+      is_optional: true
+    - Failover Groups Primary Server: data.failover_groups.primary_server
+      is_optional: true
+    - Failover Groups Secondary Server: data.failover_groups.secondary_server
+      is_optional: true
+    - Read/Write Failover Policy: data.failover_groups.failover_policy_display
+      is_optional: true
+    - Grace Period (minutes): data.failover_groups.grace_period_display
+      is_optional: true
+    - Backup Database: data.databases.name
+      is_optional: true
+    - Backup Earliest PITR Restore Point (UTC): data.databases.earliest_restore_date
+      is_optional: true
+    - Backup Available LTR backups: data.databases.long_term_retention_backup_resource_id
+      is_optional: true
+    - '# of SQL DBs': data.number_of_databases
+      is_optional: true
+    - Elastic Pool Name: data.elastic_pools.name
+      is_optional: true
+    - Elastic Pool Resource Group: data.elastic_pools.resource_group_display
+      is_optional: true
+    - Per DB Settings: data.elastic_pools.per_db_settings_display
+      is_optional: true
+    - Pricing Tier: data.elastic_pools.pricing_tier_display
+      is_optional: true
+    - 'Elastic Pool # of DBs': data.elastic_pools.number_of_databases
+      is_optional: true
+    - Elastic Pool Unit: data.elastic_pools.unit_display
+      is_optional: true
+    - Elastic Pool Server Name: data.elastic_pools.server_name_display
+      is_optional: true
+    - Elastic Pool Resource Configuration: data.elastic_pools.pricing_tier_display
+      is_optional: true
+    - Elastic Pool Maximum Storage Size: data.elastic_pools.max_size_gb
+      is_optional: true
+    - Deleted Database: data.deleted_databases.database_name
+      is_optional: true
+    - Deletion Time (UTC): data.deleted_databases.deletion_date
+      is_optional: true
+    - Deleted Databases Creation Time (UTC): data.deleted_databases.creation_date
+      is_optional: true
+    - Deleted Databases Edition Time (UTC): data.deleted_databases.edition
+      is_optional: true
+    - Audit Log Destination: data.server_auditing_settings.storage_endpoint
+      is_optional: true
+    - Audit Storage Account ID: data.server_auditing_settings.storage_account_subscription_id
+      is_optional: true
+    - Minimum TLS Version: data.minimal_tls_version
+      is_optional: true
+    - Connection Policy: data.server_auditing_settings.name
+      is_optional: true
+    - Allow Azure Services and Resources to Access this server: data.server_auditing_settings.is_azure_monitor_target_enabled
+      is_optional: true
+    - Firewall Rule Name: data.firewall_rules.name
+      is_optional: true
+    - Firewall Start IP: data.firewall_rules.start_ip_address
+      is_optional: true
+    - Firewall End IP: data.firewall_rules.end_ip_address
+      is_optional: true
+    - Private Endpoint Connection ID: data.private_endpoint_connections.connection_id
+      is_optional: true
+    - Private Endpoint State: data.private_endpoint_connections.status
+      is_optional: true
+    - Private Endpoint Name: data.private_endpoint_connections.private_endpoint_name
+      is_optional: true
+    - Request / Response Message: data.private_endpoint_connections.description
+      is_optional: true
+    - Transparent Data Encryption: data.encryption_protectors.kind
+      is_optional: true
+    - Encryption Key: data.encryption_protectors.server_key_name
+      is_optional: true
+    - Encryption Key Type: data.encryption_protectors.server_key_type
+      is_optional: true
+    - Encryption URI: data.encryption_protectors.uri
+      is_optional: true
+    - Tuning Type: data.server_automatic_tuning.options.tuning_type
+      is_optional: true
+    - Tuning Desired State: data.server_automatic_tuning.options.desired_state
+      is_optional: true
+    - Tuning Current State: data.server_automatic_tuning.options.actual_state
+      is_optional: true
+
+
+
+tabs.0:
+  name: SQL Servers
+  type: item
+  fields:
+    - Name: name
+    - Resource Group: data.resource_group
+    - Resource ID: data.id
+    - Status: data.state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Server Admin: data.administrator_login
+    - Active Directory Admin: data.azure_ad_admin_name
+    - Server Name: data.fully_qualified_domain_name
+
+
+
+tabs.1:
+  name: Failover Groups
+  type: table
+  root_path: data.failover_groups
+  fields:
+    - ID: id
+    - Name: name
+    - Primary Server: primary_server
+    - Secondary Server: secondary_server
+    - Read/Write Failover Policy: failover_policy_display
+    - Grace Period (minutes): grace_period_display
+
+
+
+tabs.2:
+  name: Backups
+  type: table
+  root_path: data.databases
+  fields:
+    - Database: name
+    - Earliest PITR Restore Point (UTC): earliest_restore_date
+    - Available LTR backups: long_term_retention_backup_resource_id
+
+
+
+tabs.3:
+  name: Active Directory Admin
+  type: item
+  fields:
+    - Active Directory Admin: data.azure_ad_admin_name
+
+
+
+tabs.4:
+  name: SQL Databases
+  items:
+    - name: Databases
+      type: table
+      root_path: data.databases
+      fields:
+        - Database: name
+        - Resource ID: id
+        - Status: status
+          type: enum
+          enums:
+            - Online:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Creating:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Copying:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - OnlineChangingDwPerformanceTiers:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Restoring:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Resuming:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Scaling:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Standby:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - AutoClosed:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Inaccessible:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Offline:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - OfflineChangingDwPerformanceTiers:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - OfflineSecondary:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Pausing:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Recovering:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - RecoveryPending:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Suspect:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Disabled:
+              icon_image: ic_circle-filled
+              icon_color: gray.400
+              text_color: gray.400
+              type: state
+            - Paused:
+              icon_image: ic_circle-filled
+              icon_color: gray.400
+              text_color: gray.400
+              type: state
+            - Shutdown:
+              icon_image: ic_circle-filled
+              icon_color: gray.400
+              text_color: gray.400
+              type: state
+            - EmergencyMode:
+              text_color: red.500
+              icon_image: ic_circle-filled
+              icon_color: red.500
+              type: state
+        - Resource Group: resource_group
+        - Subscription ID: subscription_id
+        - Location: location
+        - Server Name: server_name
+        - Pricing Tier: pricing_tier_display
+        - Earliest Restore Point: earliest_restore_date
+    - name: Databases Configure
+      type: table
+      root_path: data.databases
+      fields:
+        - Service Tier: service_tier_display
+        - Compute Tier: compute_tier
+        - Compute Hardware: sku.family
+        - License Type: license_type
+        - vCores: sku.capacity
+        - Data Max Size: max_size_gb
+        - Zone Redundant: zone_redundant
+        - Sync Groups: sync_group_display
+          type: list
+          options:
+            delimiter: ', '
+        - Sync Agents: sync_agent_display
+          type: list
+          options:
+            delimiter: ', '
+        - Collation: collation
+        - Creation Date: creation_date
+          source_type: iso8601
+          type: datetime
+    - name: Tags
+      type: table
+      root_path: data.tags
+      fields:
+        - Key: key
+        - Value: value
+
+
+
+tabs.5:
+  name: Elastic Pools
+  type: table
+  root_path: data.elastic_pools
+  fields:
+    - Name: name
+    - Resource Group: resource_group_display
+    - Per DB Settings: per_db_settings_display
+    - Pricing Tier: pricing_tier_display
+    - '# of SQL DBs': number_of_databases
+    - Unit: unit_display
+    - Status: state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Creating:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Server Name: server_name_display
+    - Resource Configuration: pricing_tier_display
+    - Maximum Storage Size: max_size_gb
+    - Tags: tags
+      type: list
+      options:
+        delimiter: ', '
+
+
+tabs.6:
+  name: Auditing
+  type: item
+  fields:
+    - Enable SQL Auditing: data.server_auditing_settings.state
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Audit Log Destination: data.server_auditing_settings.storage_endpoint
+    - Storage Account ID: data.server_auditing_settings.storage_account_subscription_id
+
+
+
+tabs.7:
+  name: Deleted Databases
+  type: table
+  root_path: data.deleted_databases
+  fields:
+    - Database: database_name
+    - Deletion Time (UTC): deletion_date
+      source_type: iso8601
+      type: datetime
+    - Creation Time (UTC): creation_date
+      source_type: iso8601
+      type: datetime
+    - Edition Time (UTC): edition
+
+
+
+tabs.8:
+  name: Firewalls and Network
+  items:
+    - name: Network
+      type: item
+      fields:
+        - Public Network Access: data.public_network_access
+          type: enum
+          enums:
+            - Enabled:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Disabled:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+        - Minimum TLS Version: data.minimal_tls_version
+        - Connection Policy: data.server_auditing_settings.name
+        - Allow Azure Services and Resources to Access this server: data.server_auditing_settings.is_azure_monitor_target_enabled
+    - name: Firewall Rules
+      type: table
+      root_path: data.firewall_rules
+      fields:
+        - Rule Name: name
+        - Start IP: start_ip_address
+        - End IP: end_ip_address
+    - name: Virtual Network Rules
+      type: table
+      root_path: data.virtual_network_rules
+      fields:
+        - Rule Name: name
+        - Virtual Network: virtual_network_name_display
+        - Subnet ID: virtual_network_subnet_id
+        - Resource Group: resource_group
+        - Subscription: subscription_id
+        - State: state
+          type: enum
+          enums:
+            - Ready:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - InProgress:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Initializing:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Deleting:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Unknown:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+
+
+
+tabs.9:
+  name: Private Endpoint Connections
+  type: table
+  root_path: data.private_endpoint_connections
+  fields:
+    - Connection ID: connection_id
+    - State: status
+    - Private Endpoint Name: private_endpoint_name
+    - Request / Response Message: description
+
+
+
+tabs.10:
+  name: Transparent Data Encryption
+  type: table
+  root_path: data.encryption_protectors
+  fields:
+    - Transparent Data Encryption: kind
+    - Key: server_key_name
+    - Key Type: server_key_type
+    - Uri: uri
+
+
+
+tabs.11:
+  name: Tuning Options
+  type: table
+  root_path: data.server_automatic_tuning.options
+  fields:
+    - Tuning Type: tuning_type
+    - Desired State: desired_state
+    - Current State: actual_state

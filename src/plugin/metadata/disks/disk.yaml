@@ -1,0 +1,161 @@
+search:
+  fields:
+    - Tier: data.tier
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Zone: data.zones
+    - Last updated at: data.last_updated
+    - Storage Account Type: data.sku.name
+    - Disk Size (Bytes): data.disk_size_bytes
+      data_type: integer
+    - Disk Size (GB): data.disk_size_gb
+      data_type: integer
+    - Disk IOPS: data.disk_iops_read_write
+      data_type: integer
+    - OS Type: data.os_type
+    - Provisioning State: data.provisioning_state
+    - Time Created: data.time_created
+      data_type: datetime
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Storage Account Type: data.sku.name
+    - Size: data.size
+      display_unit: GB
+      source_unit: BYTES
+      type: size
+    - Disk State: data.disk_state
+      type: enum
+      enums:
+        - ActiveSAS:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - ActiveUpload:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Attached:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Reserved:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - ReadyToUpload:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Unattached:
+          icon_image: ic_circle-filled
+          icon_color: blue.400
+          type: state
+    - Owner: data.managed_by
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+      is_optional: true
+    - Zone: data.zones
+      type: list
+      options:
+        delimiter: ", "
+      is_optional: true
+    - Encryption Type: data.encryption.type
+      is_optional: true
+    - Networking: data.network_access_policy_display
+      is_optional: true
+    - Max Shares: data.max_shares
+      is_optional: true
+    - Time Created: data.time_created
+      is_optional: true
+
+
+
+tabs.0:
+  name: Disks
+  type: item
+  fields:
+    - Name: name
+    - Storage Account Type: instance_type
+    - Size: data.size
+      display_unit: GB
+      source_unit: BYTES
+      type: size
+    - Disk State: data.disk_state
+      type: enum
+      enums:
+        - ActiveSAS:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - ActiveUpload:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Attached:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Reserved:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - ReadyToUpload:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Unattached:
+          icon_image: ic_circle-filled
+          icon_color: blue.400
+          type: state
+    - Attached VM: data.managed_by
+    - Location: data.location
+    - Resource Group: data.resource_group
+    - Resource ID: data.id
+    - Zones: data.zones
+    - Subscription ID: data.subscription_id
+    - Subscription Name: data.subscription_name
+    - Encryption Type: data.encryption.type
+    - Networking: data.network_access_policy_display
+    - Os Type: data.os_type
+    - Max Shares: data.max_shares
+    - VM Generation: data.hyper_v_generation
+    - VM architecture: data.supported_capabilities.architecture
+    - DateTimeDyField.data_sourceTime Created: data.time_created
+      source_type: iso8601
+      type: datetime
+
+
+
+tabs.1:
+  name: Configuration
+  items:
+    - name: Shared Disk
+      type: item
+      fields:
+        - Enable shared disk: data.enable_shared_disk_display
+        - Max shares: data.max_shares
+    - name: On-demand bursting
+      type: item
+      fields:
+        - Enable bursting: data.bursting_enabled
+        - Enable bursting time: data.bursting_enabled_time
+          source_type: iso8601
+          type: datetime
+
+
+
+tabs.2:
+  name: Networking
+  type: item
+  fields:
+    - Network access: data.network_access_policy_display

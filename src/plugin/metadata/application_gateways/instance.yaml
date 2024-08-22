@@ -1,0 +1,351 @@
+search:
+  fields:
+    - Subscription ID: data.subscription_id
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Public IP Address: data.public_ip_address.ip_address
+    - Private IP Address: data.private_ip_address
+    - Capacity: data.sku.tier
+    - Minimum Instance Count: data.autoscale_configuration.min_capacity
+      data_type: integer
+    - Maximum Instance Count: data.autoscale_configuration.max_capacity
+      data_type: integer
+    - Enable HTTP2: data.enable_http2
+      data_type: integer
+    - Firewall Mode: data.web_application_firewall_configuration.firewall_mode
+    - Firewall Rule Set Type: data.web_application_firewall_configuration.rule_set_type
+    - Firewall Rule Set Version: data.web_application_firewall_configuration.rule_set_version
+    - Backend Address Pool Name: data.backend_address_pools.name
+    - Backend Address Rule Associated: data.backend_address_pools.associated_rules
+    - HTTP Backend Name: data.backend_http_settings_collection.name
+    - HTTP Backend Port: data.backend_http_settings_collection.port
+    - HTTP Backend Protocol: data.backend_http_settings_collection.protocol
+    - SSL Profile Name: data.ssl_profiles.name
+    - SSL Client Certificates: data.ssl_profiles.trusted_client_certificates.id
+    - SSL Policy Type: data.ssl_profiles.ssl_policy.policy_type
+    - Frontend IP Type: data.frontend_ip_configurations.ip_type
+    - Frontend IP Configuration Name: data.frontend_ip_configurations.name
+    - Frontend IP Address: data.frontend_ip_configurations.ip_address
+    - Frontend Associated Listeners: data.frontend_ip_configurations.associated_listeners
+    - HTTP Listener Name: data.http_listeners.name
+    - HTTP Listener Protocol: data.http_listeners.protocol
+    - HTTP Listener Port: data.http_listeners.port
+    - HTTP Listener Associated Rule: data.http_listeners.associated_rules
+    - HTTP Listener Host name: data.http_listeners.host_name
+    - Request Routing Rule Name: data.request_routing_rules.name
+    - Request Routing Rule Type: data.request_routing_rules.rule_type
+    - Request Routing Rule Listener: data.request_routing_rules.http_listener_name
+    - Health Probes Name: data.probes.name
+    - Health Probes Protocol: data.probes.protocol
+    - Health Probes Host: data.probes.host
+    - Health Probes Path: data.probes.path
+    - Health Probes Timeout(Seconds): data.probes.timeout
+      data_type: integer
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Public IP Address: data.public_ip_address.ip_address
+    - Private IP Address: data.private_ip_address
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: data.subscription_id
+      is_optional: true
+    - Capacity: data.sku.tier
+      is_optional: true
+    - Minimum Instance Count: data.autoscale_configuration.min_capacity
+      is_optional: true
+    - Maximum Instance Count: data.autoscale_configuration.max_capacity
+      is_optional: true
+    - Enable HTTP2: data.enable_http2
+      is_optional: true
+    - Firewall Mode: data.web_application_firewall_configuration.firewall_mode
+      is_optional: true
+    - Firewall Max Request Body Size(KB): data.web_application_firewall_configuration.max_request_body_size_in_kb
+      is_optional: true
+    - Firewall File Upload Limit(MB): data.web_application_firewall_configuration.file_upload_limit_in_mb
+      is_optional: true
+    - Firewall Rule Set Type: data.web_application_firewall_configuration.rule_set_type
+      is_optional: true
+    - Firewall Rule Set Version: data.web_application_firewall_configuration.rule_set_version
+      is_optional: true
+    - Backend Address Pool Name: data.backend_address_pools.name
+      is_optional: true
+    - Backend Address Rule Associated: data.backend_address_pools.associated_rules
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - HTTP Backend Name: data.backend_http_settings_collection.name
+      is_optional: true
+    - HTTP Backend Port: data.backend_http_settings_collection.port
+      is_optional: true
+    - HTTP Backend Protocol: data.backend_http_settings_collection.protocol
+      is_optional: true
+    - SSL Profile Name: data.ssl_profiles.name
+      is_optional: true
+    - SSL Client Certificates: data.ssl_profiles.trusted_client_certificates.id
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - SSL Policy Type: data.ssl_profiles.ssl_policy.policy_type
+      is_optional: true
+    - Frontend IP Type: data.frontend_ip_configurations.ip_type
+      is_optional: true
+    - Frontend IP Configuration Name: data.frontend_ip_configurations.name
+      is_optional: true
+    - Frontend IP Address: data.frontend_ip_configurations.ip_address
+      is_optional: true
+    - Frontend Associated Listeners: data.frontend_ip_configurations.associated_listeners
+      is_optional: true
+    - HTTP Listener Name: data.http_listeners.name
+      is_optional: true
+    - HTTP Listener Protocol: data.http_listeners.protocol
+      is_optional: true
+    - HTTP Listener Port: data.http_listeners.port
+      is_optional: true
+    - HTTP Listener Associated Rule: data.http_listeners.associated_rules
+      is_optional: true
+    - HTTP Listener Host name: data.http_listeners.host_name
+      is_optional: true
+    - Request Routing Rule Name: data.request_routing_rules.name
+      is_optional: true
+    - Request Routing Rule Type: data.request_routing_rules.rule_type
+      is_optional: true
+    - Request Routing Rule Listener: data.request_routing_rules.http_listener_name
+      is_optional: true
+    - Health Probes Name: data.probes.name
+      is_optional: true
+    - Health Probes Protocol: data.probes.protocol
+      is_optional: true
+    - Health Probes Host: data.probes.host
+      is_optional: true
+    - Health Probes Path: data.probes.path
+      is_optional: true
+    - Health Probes Timeout(Seconds): data.probes.timeout
+      is_optional: true
+
+
+
+tabs.0:
+  name: Application Gateway
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Virtual Network: data.virtual_network
+    - Subnet: data.subnet
+    - Frontend public IP Address: data.public_ip_address.ip_address
+    - Frontend private IP Address: data.private_ip_address
+    - Tier: data.sku.tier
+
+
+
+tabs.1:
+  name: Configuration
+  type: item
+  fields:
+    - Capacity: data.sku.tier
+    - Minimum Instance Count: data.autoscale_configuration.min_capacity
+    - Maximum Instance Count: data.autoscale_configuration.max_capacity
+    - Enable HTTP2: data.enable_http2
+
+
+
+tabs.2:
+  name: Subnets
+  items:
+    - name: Web Application Firewall
+      type: item
+      fields:
+        - Firewall Status Enabled: data.web_application_firewall_configuration.enabled
+          type: enum
+          enums:
+            - 'True':
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - 'False':
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+        - Firewall Mode: data.web_application_firewall_configuration.firewall_mode
+        - Inspect Request Body: data.web_application_firewall_configuration.request_body_check
+          type: enum
+          enums:
+            - 'True':
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - 'False':
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+        - Max Request Body Size(KB): data.web_application_firewall_configuration.max_request_body_size_in_kb
+        - File Upload Limit(MB): data.web_application_firewall_configuration.file_upload_limit_in_mb
+        - Rule Set Type: data.web_application_firewall_configuration.rule_set_type
+        - Rule Set Version: data.web_application_firewall_configuration.rule_set_version
+    - name: Exclusions
+      type: simple-table
+      root_path: data.web_application_firewall_configuration.exclusions
+      fields:
+        - Field: match_variable
+        - Operator: selector_match_operator
+        - Selector: selector
+
+
+
+tabs.3:
+  name: Backend Pools
+  type: simple-table
+  root_path: data.backend_address_pools
+  fields:
+    - Name: name
+    - Rule Associated: associated_rules
+      type: list
+      options:
+        delimiter: ', '
+    - Targets: backend_addresses_display
+      type: list
+      options:
+        delimiter: ', '
+
+tabs.4:
+  name: Backend HTTP Settings
+  type : simple-table
+  root_path: data.backend_http_settings_collection
+  fields:
+    - Name: name
+    - Port: port
+    - Protocol: protocol
+    - Cookie Based Affinity: cookie_based_affinity
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Custom Probe: custom_probe
+    - Connection draining: connection_draining.enabled
+    - Request time-out: request_timeout
+    - Override backend path: path
+    - Override with new host name: pick_host_name_from_backend_address
+    - Host name: host_name
+
+
+
+tabs.5:
+  name: SSL Settings
+  type: simple-table
+  root_path: data.ssl_profiles
+  fields:
+    - Name: name
+    - Client Certificates: trusted_client_certificates.id
+    - SSL Policy Type: ssl_policy.policy_type
+      is_optional: true
+
+
+
+tabs.6:
+  name: Frontend IP Configurations
+  type: simple-table
+  root_path: data.frontend_ip_configurations
+  fields:
+    - Type: ip_type
+    - Name: name
+    - IP Address: ip_address
+    - Associated Listeners: associated_listener
+      type: list
+      options:
+        delimiter: ', '
+
+
+
+tabs.7:
+  name: Listeners
+  items:
+    - name: Listeners
+      type: simple-table
+      root_path: data.http_listeners
+      fields:
+        - Name: name
+        - Protocol: protocol
+        - Port: port
+        - Associated Rule: associated_rules
+        - Host name: host_name
+    - name: Custom Error Configurations
+      type: simple-table
+      root_path: data.custom_error_configurations
+      fields:
+        - Listener Name: listener_name
+        - Status Code: status_code
+        - Custom Error Page URL: custom_error_page_url
+
+
+
+tabs.8:
+  name: Rules
+  type: simple-table
+  root_path: data.request_routing_rules
+  fields:
+    - Name: name
+    - Type: rule_type
+    - Listener: http_listener_name
+    - Priority: priority
+
+
+
+tabs.9:
+  name: Rewrites
+  type: simple-table
+  root_path: data.rewrite_rule_sets
+  fields:
+    - Rewrite Sets: name
+    - Rules Applied: rules_applied
+    - Rewrite Rule Configuration: rewrite_rules_display
+      type: list
+      options:
+        delimiter: ', '
+
+
+
+tabs.10:
+  name: Health Probes
+  type: simple-table
+  root_path: data.probes
+  fields:
+    - Name: name
+    - Protocol: protocol
+    - Host: host
+    - Path: path
+    - Timeout(Seconds): timeout
+
+
+
+tabs.11:
+  name: Managed Identity
+  type: item
+  fields:
+    - Type: data.identity.type
+    - Principal ID: data.identity.principal_id
+    - Tenant ID: data.identity.tenant_id
+    - User Assigned Identities: data.identity.output_display
+      popup_key: data.identity.user_assigned_identities
+      popup_name: User Assigned Identities
+      popup_type: raw
+      type: more

@@ -21,9 +21,9 @@ with open("VERSION", "r") as f:
     f.close()
 
 setup(
-    name="plugin-azure-cloud-services",
+    name="plugin-azure-inven-v2-collector-migration-test",
     version=VERSION,
-    description="MS Azure cloud service inventory collector",
+    description="MS Azure cloud service inventory v2 collector",
     long_description="",
     url="https://cloudforet.io/",
     author="Cloudforet Admin",
@@ -32,28 +32,13 @@ setup(
     packages=find_packages(),
     install_requires=[
         "spaceone-api",
-        "schematics",
-        "adal",
-        "msrestazure",
         "azure-identity",
         "azure-mgmt-resource",
-        "azure-mgmt-compute",
-        "azure-mgmt-network",
-        "azure-mgmt-sql",
-        "azure-mgmt-monitor",
-        "azure-mgmt-storage",
-        "azure-mgmt-keyvault",
-        "azure-keyvault-certificates",
-        "azure-keyvault-secrets",
-        "azure-mgmt-rdbms",
-        "azure-mgmt-cosmosdb",
-        "azure-mgmt-containerinstance",
-        "azure-mgmt-webpubsub",
     ],
     package_data={
-        "spaceone": [
-            "inventory/model/*/widget/*.yaml",
-            "inventory/metrics/**/**/*.yaml",
+        "plugin": [
+            "metadata/*/*.yaml",
+            "metrics/**/**/*.yaml",
         ]
     },
     zip_safe=False,

@@ -1,0 +1,221 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Server Name: data.fully_qualified_domain_name
+    - Server Admin Login Name: data.administrator_login
+    - PostgreSQL Version: data.version_display
+    - Zone: data.availability_zone
+    - High Availability Mode: data.high_availability.mode
+    - High Availability State: data.high_availability.state
+    - Performance Configuration (Tier): instance_type
+    - Performance Configuration (Name): data.sku.name
+    - Public Network Access: data.network.public_network_access
+    - Firewall Rule Name: data.firewall_rules.name
+    - Firewall Rule Start IP: data.firewall_rules.start_ip_address
+    - Firewall Rule End IP: data.firewall_rules.end_ip_address
+    - Storage Size: data.storage.storage_size_gb
+      data_type: integer
+    - Backup Retention Period (Days): data.backup.backup_retention_days
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Type: instance_type
+    - Status: data.state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Starting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Stopping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Stopped:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+    - Resource Group: data.resource_group
+      is_optional: true
+    - Location: data.location
+      is_optional: true
+    - Subscription Name: data.subscription_name
+      is_optional: true
+    - Subscription ID: account
+      is_optional: true
+    - Server Name: data.fully_qualified_domain_name
+      is_optional: true
+    - Server Admin Login Name: data.administrator_login
+      is_optional: true
+    - PostgreSQL Version: data.version_display
+      is_optional: true
+    - Zone: data.availability_zone
+      is_optional: true
+    - Performance Configuration (Tier): instance_type
+      is_optional: true
+    - Performance Configuration (Name): data.sku.name
+      is_optional: true
+    - Public Network Access: data.network.public_network_access
+      is_optional: true
+    - Firewall Rule Name: data.firewall_rules.name
+      is_optional: true
+    - Firewall Rule Start IP: data.firewall_rules.start_ip_address
+      is_optional: true
+    - Firewall Rule End IP: data.firewall_rules.end_ip_address
+      is_optional: true
+    - Compute Generation: data.sku.name
+      is_optional: true
+    - Compute Tier: data.sku.tier
+      is_optional: true
+    - Storage Size: data.storage.storage_size_gb
+      display_unit: GB
+      source_unit: GB
+      type: size
+      is_optional: true
+    - Backup Retention Period (Days): data.backup.backup_retention_days
+      is_optional: true
+
+
+
+tabs.0:
+  name: PostgreSQL Servers
+  type: item
+  fields:
+    - Name: name
+    - Server Name: data.fully_qualified_domain_name
+    - Type: instance_type
+    - Status: data.state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Starting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Stopping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Stopped:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Server Admin Login Name: data.administrator_login
+    - Performance Configuration (Tier): data.sku.tier
+    - Performance Configuration (Name): data.sku.name
+    - Storage Size: data.storage.storage_size_gb
+      display_unit: GB
+      source_unit: GB
+      type: size
+      is_optional: true
+    - PostgreSQL Version: data.version_display
+    - Zone: data.availability_zone
+
+
+
+tabs.1:
+  name: Compute & Storage
+  items:
+    - name: Compute
+      type: item
+      fields:
+        - Compute Tier: data.sku.tier
+        - Compute Size: data.sku.name
+    - name: Storage
+      type: item
+      fields:
+        - Storage Size: data.storage.storage_size_gb
+          display_unit: GB
+          source_unit: GB
+          type: size
+    - name: High Availability
+      type: item
+      fields:
+        - High Availability State: data.high_availability.state
+          type: enum
+          enums:
+            - Healthy:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - CreatingStandby:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - RemovingStandby:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - FailOver:
+              text_color: red.500
+              icon_image: ic_circle-filled
+              icon_color: red.500
+              type: state
+            - NotEnabled:
+              icon_image: ic_circle-filled
+              icon_color: gray.400
+              text_color: gray.400
+              type: state
+        - High Availability Mode: data.high_availability.mode
+    - name: Backup
+      type: item
+      fields:
+        - Backup Retention Period (Days): data.backup.backup_retention_days
+        - Geo Redundant Backup: data.backup.geo_redundant_backup
+          type: enum
+          enums:
+            - Enabled:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Disabled:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state

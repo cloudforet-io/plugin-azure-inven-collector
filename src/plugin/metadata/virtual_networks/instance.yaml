@@ -1,0 +1,215 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - DNS servers: data.dhcp_options.dns_servers
+    - Resource GUID: data.resource_guid
+    - Address Space: data.address_space.address_prefixes
+    - Connected Device: data.connected_devices.device
+    - Connected Device Type: data.connected_devices.type
+    - Connected Subnet: data.connected_devices.name
+    - Subnet Name: data.subnets.name
+    - Subnet IP Prefixes: data.subnets.address_prefixes
+    - Subnet Delegated To: data.subnets.delegations.name
+    - Subnet Network Security Group: data.subnets.network_security_group.name
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+      is_optional: true
+    - DNS servers: data.dhcp_options.dns_servers
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Resource GUID: data.resource_guid
+      is_optional: true
+    - Address Space: data.address_space.address_prefixes
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Connected Device: data.connected_devices.device
+      is_optional: true
+    - Connected Device Type: data.connected_devices.type
+      is_optional: true
+    - Connected Subnet: data.connected_devices.name
+      is_optional: true
+    - Subnet Name: data.subnets.name
+      is_optional: true
+    - Subnet IP Prefixes: data.subnets.address_prefixes
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Subnet Delegated To: data.subnets.delegations.name
+      is_optional: true
+    - Subnet Network Security Group: data.subnets.network_security_group.name
+      is_optional: true
+    - Firewall Name: data.azure_firewall.name
+      is_optional: true
+    - Firewall IP Address: data.azure_firewall.ip_configurations.private_ip_address
+      is_optional: true
+    - Firewall Subnet: data.azure_firewall.subnet
+      is_optional: true
+    - Peering Name: data.virtual_network_peerings.name
+      is_optional: true
+    - Peer: data.virtual_network_peerings.remote_virtual_network.id
+      is_optional: true
+    - Peer Gateway Transit: data.virtual_network_peerings.allow_gateway_transit
+      is_optional: true
+    - Service Endpoint: data.service_endpoints.service
+      is_optional: true
+    - Service Endpoint Subnet: data.service_endpoints.subnet
+      is_optional: true
+    - Service Endpoint Locations: data.service_endpoints.locations
+      is_optional: true
+    - Private Endpoint: data.private_endpoints.name
+      is_optional: true
+    - Private Endpoint Subnet: data.private_endpoints.subnet
+      is_optional: true
+
+
+
+tabs.0:
+  name: Virtual Network
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - DNS Servers: data.dhcp_options.dns_servers
+      type: list
+      options:
+        delimiter: ', '
+    - DDoS Protection Standard: data.enable_ddos_protection
+      type: enum
+      enums:
+        - 'True':
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - 'False':
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Resource GUID: data.resource_guid
+    - Address Space: data.address_space.address_prefixes
+
+
+
+tabs.1:
+  name: Connected Devices
+  type: simple-table
+  root_path: data.connected_devices
+  fields:
+    - Device: device
+    - Type: type
+    - Subnet: name
+
+
+
+tabs.2:
+  name: Subnets
+  type: simple-table
+  root_path: data.subnets
+  fields:
+    - Name: name
+    - IP Address Prefix: address_prefix
+    - IP Address Prefixes: address_prefixes
+      type: list
+      options:
+        delimiter: ', '
+    - Delegated To: delegations.name
+    - Security Group: network_security_group.name
+
+
+
+tabs.3:
+  name: Firewall
+  type: simple-table
+  root_path: data.azure_firewall
+  fields:
+    - Name: name
+    - IP Address: ip_configurations.private_ip_address
+    - Subnet: subnet
+
+
+
+tabs.4:
+  name: Peerings
+  type: simple-table
+  root_path: data.virtual_network_peerings
+  fields:
+    - Name: name
+    - Peering Status: peering_state
+      type: enum
+      enums:
+        - Connected:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disconnected:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Initiated:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Peer: remote_virtual_network.id
+    - Gateway Transit: allow_gateway_transit
+
+
+
+tabs.5:
+  name: Service Endpoints
+  type: simple-table
+  root_path: data.service_endpoints
+  fields:
+    - Service: service
+    - Subnet: subnet
+    - Status: provisioning_state
+      type: enum
+      enums:
+        - Succeeded:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Failed:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Deleting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Locations: locations
+
+
+
+tabs.6:
+  name: Private Endpoints
+  type: simple-table
+  root_path: data.private_endpoints
+  fields:
+    - Name: name
+    - Subnet: subnet
+    - Resource Group: resource_group

@@ -1,0 +1,148 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Virtual Machines: data.virtual_machines_display
+    - Inbound Rule Priority: data.inbound_security_rules.priority
+      data_type: integer
+    - Inbound Rule Name: data.inbound_security_rules.name
+    - Inbound Rule Port: data.inbound_security_rules.destination_port_range
+    - Inbound Rule Protocol: data.inbound_security_rules.protocol
+    - Inbound Rule Source: data.inbound_security_rules.source_address_prefix
+    - Inbound Rule Destination: data.inbound_security_rules.destination_address_prefix
+    - Inbound Rule Action: data.inbound_security_rules.access
+    - Outbound Rule Priority: data.outbound_security_rules.priority
+      data_type: integer
+    - Outbound Rule Name: data.outbound_security_rules.name
+    - Outbound Rule Port: data.outbound_security_rules.destination_port_range
+    - Outbound Rule Protocol: data.outbound_security_rules.protocol
+    - Outbound Rule Source: data.outbound_security_rules.source_address_prefix
+    - Outbound Rule Destination: data.outbound_security_rules.destination_address_prefix
+    - Outbound Rule Action: data.outbound_security_rules.access
+    - Network Interface Name: data.network_interfaces.name
+    - Network Interface Public IP Address: data.network_interfaces.public_ip_address
+    - Network Interface Private IP Address: data.network_interfaces.private_ip_address
+    - Subnet Name: data.subnets.name
+    - Subnet Address Range: data.subnets.address_prefix
+    - Virtual Network: data.subnets.virtual_network
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Virtual Machines: data.virtual_machines_display
+    - Inbound Rule Priority: data.inbound_security_rules.priority
+      is_optional: true
+    - Inbound Rule Name: data.inbound_security_rules.name
+      is_optional: true
+    - Inbound Rule Port: data.inbound_security_rules.destination_port_range
+      is_optional: true
+    - Inbound Rule Protocol: data.inbound_security_rules.protocol
+      is_optional: true
+    - Inbound Rule Source: data.inbound_security_rules.source_address_prefix
+      is_optional: true
+    - Inbound Rule Destination: data.inbound_security_rules.destination_address_prefix
+      is_optional: true
+    - Inbound Rule Action: data.inbound_security_rules.access
+      is_optional: true
+    - Outbound Rule Priority: data.outbound_security_rules.priority
+      is_optional: true
+    - Outbound Rule Name: data.outbound_security_rules.name
+      is_optional: true
+    - Outbound Rule Port: data.outbound_security_rules.destination_port_range
+      is_optional: true
+    - Outbound Rule Protocol: data.outbound_security_rules.protocol
+      is_optional: true
+    - Outbound Rule Source: data.outbound_security_rules.source_address_prefix
+      is_optional: true
+    - Outbound Rule Destination: data.outbound_security_rules.destination_address_prefix
+      is_optional: true
+    - Outbound Rule Action: data.outbound_security_rules.access
+      is_optional: true
+    - Network Interface Name: data.network_interfaces.name
+      is_optional: true
+    - Network Interface Public IP Address: data.network_interfaces.public_ip_address
+      is_optional: true
+    - Network Interface Private IP Address: data.network_interfaces.private_ip_address
+      is_optional: true
+    - Subnet Name: data.subnets.name
+      is_optional: true
+    - Subnet Address Range: data.subnets.address_prefix
+      is_optional: true
+    - Virtual Network: data.subnets.virtual_network
+      is_optional: true
+
+
+
+tabs.0:
+  name: Network Security Group
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+
+
+
+tabs.1:
+  name: Inbound Security Rules
+  type: table
+  root_path: data.inbound_security_rules
+  fields:
+    - Priority: priority
+    - Name: name
+    - Port: destination_port_range
+    - Protocol: protocol
+    - Source: source_address_prefix
+    - Destination: destination_address_prefix
+    - Action: access
+
+
+
+tabs.2:
+  name: Outbound Security Rules
+  type: table
+  root_path: data.outbound_security_rules
+  fields:
+    - Priority: priority
+    - Name: name
+    - Port: destination_port_range
+    - Protocol: protocol
+    - Source: source_address_prefix
+    - Destination: destination_address_prefix
+    - Action: access
+
+
+
+tabs.3:
+  name: Network Interfaces
+  type: table
+  root_path: data.network_interfaces
+  fields:
+    - Name: name
+    - Public IP Address: public_ip_address
+    - Private IP Address: private_ip_address
+    - Virtual Machine: virtual_machine_display
+
+
+
+tabs.4:
+  name: Subnets
+  type: table
+  root_path: data.subnets
+  fields:
+    - Name: name
+    - Address Range: address_prefix
+    - Virtual Network: virtual_network

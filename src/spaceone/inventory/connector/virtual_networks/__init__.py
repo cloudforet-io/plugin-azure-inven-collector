@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.virtual_networks.connector import VirtualNetworksConnector

@@ -1,0 +1,333 @@
+search:
+  fields:
+    - Service State: data.provisioning_state
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Hub count: data.web_pubsub_hub_count_display
+      data_type: integer
+    - SKU: data.sku.tier
+    - Unit: data.sku.capacity
+      data_type: integer
+    - Version: data.version
+      data_type: float
+    - Host name: data.host_name
+    - Host name prefix: data.host_name_prefix
+    - Public IP: data.external_ip
+    - Public access: data.public_network_access
+    - Public port: data.public_port
+    - Server port: data.server_port
+    - TLS: data.tls.client_cert_enabled
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Service State: data.provisioning_state
+      type: enum
+      enums:
+        - Running:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Succeeded:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Creating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Deleting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Moving:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Failed:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Canceled:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Unknown:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+      is_optional: true
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Hub count: data.web_pubsub_hub_count_display
+    - SKU: data.sku.tier
+    - Unit: data.sku.capacity
+    - Version: data.version
+      is_optional: true
+    - Host name: data.host_name
+    - Host name prefix: data.host_name_prefix
+      is_optional: true
+    - Public IP: data.external_ip
+    - Public access: data.public_network_access
+    - Public port: data.public_port
+      is_optional: true
+    - Server port: data.server_port
+      is_optional: true
+    - TLS: data.tls.client_cert_enabled
+      is_optional: true
+
+
+
+tabs.0:
+  name: Web PubSub Service
+  type: item
+  fields:
+    - Name: name
+    - Service State: data.provisioning_state
+      type: enum
+      enums:
+        - Running:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Succeeded:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Creating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Deleting:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Moving:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Updating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Failed:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Canceled:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - Unknown:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Region: data.location
+    - Hub count: data.web_pubsub_hub_count_display
+    - SKU: data.sku.tier
+    - Unit: data.sku.capacity
+    - Version: data.version
+    - Host name: data.host_name
+    - Host name prefix: data.host_name_prefix
+    - Public IP: data.external_ip
+    - Public access: data.public_network_access
+    - Public port: data.public_port
+    - Server port: data.server_port
+    - Disable add auth: data.disable_aad_auth
+    - Disable local auth: data.disable_local_auth
+    - TLS: data.tls.client_cert_enabled
+
+
+
+tabs.1:
+  name: Keys
+  type: item
+  fields:
+    - Host name: data.host_name
+    - Access Key: data.disable_local_auth
+    - Primary Key: data.web_pubsub_key.primary_key
+    - Primary Connection string: data.web_pubsub_key.primary_connection_string
+    - Secondary Key: data.web_pubsub_key.secondary_key
+    - Secondary Connection string: data.web_pubsub_key.secondary_connection_string
+
+
+
+tabs.2:
+  name: Hubs
+  type: table
+  root_path: data.web_pubsub_hubs
+  fields:
+    - Hub name: name
+    - Anonymous Connect: properties.anonymous_connect_policy
+      type: enum
+      enums:
+        - allow: indigo.500
+          type: badge
+        - deny: coral.600
+          type: badge
+    - Event Handlers: properties.event_handlers.url_template
+      type: list
+      options:
+        delimiter: '<br>'
+
+
+
+tabs.3:
+  name: Public access
+  type: item
+  fields:
+    - Public network access: data.public_network_access
+      type: enum
+      enums:
+        - Enabled: indigo.500
+          type: badge
+        - Disabled: coral.600
+          type: badge
+
+
+
+tabs.4:
+  name: Private access
+  items:
+    - name: Private endpoint connections
+      type: table
+      root_path: data.private_endpoint_connections
+      fields:
+        - Connection name: name
+        - Connection state: private_link_service_connection_state.status
+          type: enum
+          enums:
+            - Approved:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Pending:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Disconnected:
+              text_color: red.500
+              icon_image: ic_circle-filled
+              icon_color: red.500
+              type: state
+            - Rejected:
+              text_color: red.500
+              icon_image: ic_circle-filled
+              icon_color: red.500
+              type: state
+        - Private Endpoint: private_endpoint.private_endpoint_name_display
+        - Description: private_link_service_connection_state.status
+        - Group ids: group_ids
+          type: list
+          options:
+            delimiter: '<br>'
+        - Provisioning state: provisioning_state
+    - name: Shared private endpoints
+      type: table
+      root_path: data.shared_private_link_resources
+      fields:
+        - Name: name
+        - Private link resource ID: private_link_resource_id
+        - Group ID: group_id
+        - Connection state: status
+          type: enum
+          enums:
+            - Approved:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Pending:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Disconnected:
+              text_color: red.500
+              icon_image: ic_circle-filled
+              icon_color: red.500
+              type: state
+            - Rejected:
+              text_color: red.500
+              icon_image: ic_circle-filled
+              icon_color: red.500
+              type: state
+        - Description: request_message
+        - Provisioning state: provisioning_state
+
+
+
+tabs.5:
+  name: Access control rules
+  items:
+    - name: Default action
+      type: item
+      fields:
+        - Default action: data.network_ac_ls.default_action
+          type: enum
+          enums:
+            - Allow: indigo.500
+              type: badge
+            - Deny: coral.600
+              type: badge
+    - name: Public network
+      type: item
+      fields:
+        - Allow: data.network_ac_ls.public_network.allow
+          type: list
+          options:
+            delimiter: ', '
+    - name: Private endpoint connections
+      type: table
+      root_path: data.network_ac_ls.private_endpoints
+      fields:
+        - Connection name: name
+        - Allow: allow
+          type: list
+          options:
+            delimiter: ', '
+
+
+
+tabs.6:
+  name: System data
+  type: item
+  fields:
+    - Created at: data.system_data.created_at
+      source_type: iso8601
+      type: datetime
+    - Created by: data.system_data.created_by
+    - Created by type: data.system_data.created_by_type
+    - Last modified at: data.system_data.last_modified_at
+      source_type: iso8601
+      type: datetime
+    - Last modified by: data.system_data.last_modified_by
+    - Last modified by type: data.system_data.last_modified_by_type

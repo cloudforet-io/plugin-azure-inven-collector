@@ -1,0 +1,289 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Server Name: data.fully_qualified_domain_name
+    - Admin Username: data.administrator_login
+    - PostgreSQL Version: data.version
+    - Performance Configuration Tier: instance_type
+    - Performance Configuration Name: data.sku.name
+    - Performance Configuration Capacity: data.sku.capacity
+      data_type: integer
+    - SSL Enforce Status: data.ssl_enforcement
+    - SSL Enforcement: data.ssl_enforcement
+    - Public Network Access: data.public_network_access
+    - TLS Setting: data.minimal_tls_version
+    - Firewall Rule Name: data.firewall_rules.name
+    - Firewall Rule Start IP: data.firewall_rules.start_ip_address
+    - Firewall Rule End IP: data.firewall_rules.end_ip_address
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Type: instance_type
+    - Status: data.user_visible_state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Resource Group: data.resource_group
+      is_optional: true
+    - Location: data.location
+      is_optional: true
+    - Subscription Name: data.subscription_name
+      is_optional: true
+    - Subscription ID: account
+      is_optional: true
+    - Server Name: data.fully_qualified_domain_name
+      is_optional: true
+    - Admin Username: data.administrator_login
+      is_optional: true
+    - PostgreSQL Version: data.version
+      is_optional: true
+    - Performance Configuration Tier: instance_type
+      is_optional: true
+    - Performance Configuration Name: data.sku.name
+      is_optional: true
+    - Performance Configuration Capacity: data.sku.capacity
+      is_optional: true
+    - SSL Enforce Status: data.ssl_enforcement
+      is_optional: true
+    - Public Network Access: data.public_network_access
+      is_optional: true
+    - SSL Enforcement: data.ssl_enforcement
+      is_optional: true
+    - TLS Setting: data.minimal_tls_version
+      is_optional: true
+    - Firewall Rule Name: data.firewall_rules.name
+      is_optional: true
+    - Start IP: data.firewall_rules.start_ip_address
+      is_optional: true
+    - End IP: data.firewall_rules.end_ip_address
+      is_optional: true
+    - Virtual Network Rule Name: data.virtual_network_rules.name
+      is_optional: true
+    - Virtual Network: data.virtual_network_rules.virtual_network_name_display
+      is_optional: true
+    - Subnet: data.virtual_network_rules.subnet_name
+      is_optional: true
+    - Replicas Name: data.replicas.name
+      is_optional: true
+    - Replicas Location: data.replicas.location
+      is_optional: true
+    - Replicas Master Server Name: data.replicas.master_server_name
+      is_optional: true
+    - Active Directory Name: data.server_administrators.name
+      is_optional: true
+    - Login: data.server_administrators.login
+      is_optional: true
+    - SID: data.server_administrators.sid
+      is_optional: true
+    - Tenant ID: data.server_administrators.tenant_id
+      is_optional: true
+    - Compute Generation: data.sku.name
+      is_optional: true
+    - Compute Tier: instance_type
+      is_optional: true
+    - vCore: data.sku.capacity
+      is_optional: true
+    - Backup Retention Period (Days): data.storage_profile.backup_retention_days
+      is_optional: true
+
+
+
+tabs.0:
+  name: PostgreSQL Servers
+  type: item
+  fields:
+    - Name: name
+    - Resource Group: data.resource_group
+    - Resource ID: data.id
+    - Status: data.user_visible_state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Server Name: data.fully_qualified_domain_name
+    - Admin Username: data.administrator_login
+    - PostgreSQL Version: data.version
+    - Performance Configuration Tier: data.sku.tier
+    - Performance Configuration Name: data.sku.name
+    - Performance Configuration Capacity: data.sku.capacity
+    - SSL Enforce Status: data.ssl_enforcement
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+
+
+
+tabs.1:
+  name: Connection Security
+  items:
+    - name: Connection Security
+      type: item
+      fields:
+        - Public Network Access: data.public_network_access
+          type: enum
+          enums:
+            - Enabled:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Disabled:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+        - SSL Enforcement: data.ssl_enforcement
+          type: enum
+          enums:
+            - Enabled:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Disabled:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+        - TLS Setting: data.minimal_tls_version
+    - name: Firewall Rules
+      type: simple-table
+      root_path: data.firewall_rules
+      fields:
+        - Firewall Rule Name: name
+        - Start IP: start_ip_address
+        - End IP: end_ip_address
+    - name: VNET Rules
+      type: simple-table
+      root_path: data.virtual_network_rules
+      fields:
+        - Rule Name: name
+        - Virtual Network: virtual_network_name_display
+        - Subnet: subnet_name
+        - Endpoint Status: state
+          type: enum
+          enums:
+            - Ready:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - InProgress:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - Deleting:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Initializing:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - Unknown:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+
+
+tabs.2:
+  name: Replicas
+  type: simple-table
+  root_path: data.replicas
+  fields:
+    - Name: name
+    - Location: location
+    - Status: user_visible_state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+
+
+
+tabs.3:
+  name: Active Directory Admin
+  type: simple-table
+  root_path: data.server_administrators
+  fields:
+    - Name: name
+    - Login: login
+    - SID: sid
+    - Tenant ID: tenant_id
+
+
+
+tabs.4:
+  name: Pricing Tier
+  type: item
+  fields:
+    - Compute Generation: data.sku.name
+    - vCore: data.sku.capacity
+    - Storage Auto Grow: data.storage_profile.storage_autogrow
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Backup Retention Period (Days): data.storage_profile.backup_retention_days

@@ -1,0 +1,404 @@
+search:
+  fields:
+    - Database ID: data.database_id
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Tier: instance_type
+    - Server Name: data.managed_by
+    - Status: data.status
+    - Replication Partner Server: data.replication_link.partner_server
+    - Pricing Tier: data.pricing_tier_display
+    - Elastic Pool: data.elastic_pool_id
+    - Earliest Restore Point: data.earliest_restore_date
+    - Collation: data.collation
+    - Server Admin Login: data.administrator_login
+    - Service Tier: data.service_tier_display
+    - Compute Tier: data.compute_tier
+    - Compute Hardware: data.sku.family
+    - Licence Type: data.license_type
+    - vCores: data.current_sku.capacity
+      data_type: integer
+    - Data max size: instance_size
+      data_type: integer
+    - Zone Redundant: data.zone_redundant
+    - Sync Groups: data.sync_group_display
+    - Sync Agents: data.sync_agent_display
+    - Diagnostic Setting Name: data.diagnostic_settings_resource.name
+    - Diagnostic Setting Storage Account: data.diagnostic_settings_resource.storage_account_id
+    - Event Hub: data.diagnostic_settings_resource.event_hub_name
+    - Log Analytics Workspace: data.diagnostic_settings_resource.workspace_id
+    - Creation Date: data.creation_date
+      type: datetime
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Status: data.status
+      type: enum
+      enums:
+        - Online:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Creating:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Copying:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - OnlineChangingDwPerformanceTiers:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Restoring:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Resuming:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Scaling:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Standby:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - AutoClosed:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Offline:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - OfflineChangingDwPerformanceTiers:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - OfflineSecondary:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Pausing:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Recovering:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - RecoveryPending:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Suspect:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - Paused:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - Shutdown:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - EmergencyMode:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+    - Replication Partner Server: data.replication_link.partner_server
+    - Server: data.server_name
+    - Pricing Tier: data.pricing_tier_display
+    - Location: data.location
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Elastic Pool: data.elastic_pool_id
+      is_optional: true
+    - Earliest Restore Point: data.earliest_restore_date
+      source_type: iso8601
+      type: datetime
+      is_optional: true
+    - Collation: data.collation
+      is_optional: true
+    - Creation Date: data.creation_date
+      source_type: iso8601
+      type: datetime
+      is_optional: true
+    - Server Admin Login: data.administrator_login
+      is_optional: true
+    - Service Tier: data.service_tier_display
+      is_optional: true
+    - Compute Tier: data.compute_tier
+      is_optional: true
+    - Compute Hardware: data.sku.family
+      is_optional: true
+    - Licence Type: data.license_type
+      is_optional: true
+    - vCores: data.current_sku.capacity
+      is_optional: true
+    - Data max size: instance_size
+      is_optional: true
+    - Zone Redundant: data.zone_redundant
+      is_optional: true
+    - Sync Groups: data.sync_group_display
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Sync Agents: data.sync_agent_display
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Diagnostic Setting Name: data.diagnostic_settings_resource.name
+      is_optional: true
+    - Diagnostic Setting Storage Account: data.diagnostic_settings_resource.storage_account_id
+      is_optional: true
+    - Event Hub: data.diagnostic_settings_resource.event_hub_name
+      is_optional: true
+    - Log Analytics Workspace: data.diagnostic_settings_resource.workspace_id
+      is_optional: true
+
+
+
+tabs.0:
+  name: SQL Databases
+  type: item
+  fields:
+    - Name: name
+    - Status: data.status
+      type: enum
+      enums:
+        - Online:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Creating:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Copying:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - OnlineChangingDwPerformanceTiers:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Restoring:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Resuming:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Scaling:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Standby:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - AutoClosed:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Offline:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - OfflineChangingDwPerformanceTiers:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - OfflineSecondary:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Pausing:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Recovering:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - RecoveryPending:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Suspect:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - Paused:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - Shutdown:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - EmergencyMode:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription ID: account
+    - Server Name: data.server_name
+    - Elastic Pool: data.elastic_pool_id
+    - Pricing Tier: data.pricing_tier_display
+    - Earliest Restore Point: data.earliest_restore_date
+      source_type: iso8601
+      type: datetime
+    - Collation: data.collation
+    - Creation Date: data.creation_date
+      source_type: iso8601
+      type: datetime
+    - Server Admin Login: data.administrator_login
+
+
+
+tabs.1:
+  name: Configure
+  type: item
+  fields:
+    - Service Tier: data.service_tier_display
+    - Compute Tier: data.compute_tier
+    - Compute Hardware: data.sku.family
+    - Licence Type: data.license_type
+    - vCores: data.current_sku.capacity
+    - Data max size: instance_size
+    - Zone Redundant: data.zone_redundant
+    - Sync Groups: data.sync_group_display
+      type: list
+      options:
+        delimiter: ', '
+    - Sync Agents: data.sync_agent_display
+      type: list
+      options:
+        delimiter: ', '
+    - Collation: data.collation
+    - Creation Date: data.creation_date
+      source_type: iso8601
+      type: datetime
+
+
+
+tabs.2:
+  name: Backups
+  type: table
+  root_path: data
+  fields:
+    - Database: name
+    - Earliest PITR Restore Point (UTC): earliest_restore_date
+    - Available LTR backups: long_term_retention_backup_resource_id
+
+
+
+tabs.3:
+  name: Replication
+  type: table
+  root_path: data.replication_link
+  fields:
+    - Name: name
+    - linkType: link_type
+    - Region: partner_location
+    - Replica state: replica_state
+
+
+
+tabs.4:
+  name: Sync to other databases
+  items:
+    - name: Sync Group
+      type: table
+      root_path: data.sync_group
+      fields:
+        - Name: name
+        - Status: sync_state
+        - Use private link: use_private_link_connection
+        - Automatic Sync: automatic_sync
+        - Conflict Resolution: conflict_resolution_policy
+        - Interval: interval
+    - name: Sync Agent
+      type: table
+      root_path: data.sync_agent
+      fields:
+        - Name: name
+        - Status: state
+        - version: version
+
+
+
+tabs.5:
+  name: Auditing
+  type: item
+  fields:
+    - Enable SQL Auditing: data.database_auditing_settings.state
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Audit Log Destination: data.database_auditing_settings.storage_endpoint
+    - Storage Account ID: data.database_auditing_settings.storage_account_subscription_id
+    - Retention days: data.database_auditing_settings.retention_days
+    - Secondary Storage access key used: data.database_auditing_settings.is_storage_secondary_key_in_use
+    - Storage Authentication Type: data.database_auditing_settings.storage_account_access_key
+
+
+
+tabs.6:
+  name: Diagnostic Settings
+  type: simple-table
+  root_path: data.diagnostic_settings_resource
+  fields:
+    - Name: name
+    - Storage Account: storage_account_id
+    - Event Hub: event_hub_name
+    - Log Analytics Workspace: workspace_id

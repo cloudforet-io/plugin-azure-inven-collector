@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.web_pubsub_service.connector import WebPubSubServiceConnector

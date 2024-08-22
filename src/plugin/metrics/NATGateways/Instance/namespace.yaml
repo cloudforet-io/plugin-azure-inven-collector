@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-nat-gateways-Instance
+name: NATGateways/Instance
+resource_type: inventory.CloudService:azure.NATGateways.Instance
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-nat.svg
+version: '1.0'

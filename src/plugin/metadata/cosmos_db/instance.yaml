@@ -1,0 +1,254 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Backup Policy: data.backup_policy.type
+    - Read Locations: data.read_locations.location_name
+    - Write Locations: data.write_locations.location_name
+    - Document Endpoint: data.document_endpoint
+    - Capacity Mode: data.capability_display
+    - Enable Automatic Failover: data.enable_automatic_failover
+    - Enable Free Tier: data.enable_free_tier
+    - Enable Analytical Storage: data.enable_analytical_storage
+    - CORS: data.cors_display
+    - Default Consistency: data.consistency_policy.default_consistency_level
+    - Backup Interval (Minutes): data.backup_policy.periodic_mode_properties.backup_interval_in_minutes
+      data_type: integer
+    - Backup Retention (Hours): data.backup_policy.periodic_mode_properties.backup_retention_interval_in_hours
+    - Backup storage redundancy: data.backup_policy.periodic_mode_properties.additional_properties.backupStorageRedundancy
+    - Enable Public Network Access: data.public_network_access
+    - Virtual Networks: data.virtual_network_display
+    - Private Endpoint Connection Name: data.private_endpoint_connections.name
+    - Private Endpoint State: data.private_endpoint_connections.private_link_service_connection_state.status
+    - Private Endpoint Name: data.private_endpoint_connections.name
+    - Private Endpoint: data.private_endpoint_connections.name
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Resource ID: data.id
+    - Subscription ID: data.subscription_id
+    - Backup Policy: data.backup_policy.type
+      is_optional: true
+    - Read Locations: data.read_locations.location_name
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Write Locations: data.write_locations.location_name
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Document Endpoint: data.document_endpoint
+      is_optional: true
+    - Capacity Mode: data.capability_display
+      is_optional: true
+    - Enable Automatic Failover: data.enable_automatic_failover
+      is_optional: true
+    - Enable Free Tier: data.enable_free_tier
+      is_optional: true
+    - Enable Analytical Storage: data.enable_analytical_storage
+      is_optional: true
+    - Backup Policy: data.backup_policy.type
+      is_optional: true
+    - CORS: data.cors_display
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Default Consistency: data.consistency_policy.default_consistency_level
+      is_optional: true
+    - Backup Interval (Minutes): data.backup_policy.periodic_mode_properties.backup_interval_in_minutes
+      is_optional: true
+    - Backup Retention (Hours): data.backup_policy.periodic_mode_properties.backup_retention_interval_in_hours
+      is_optional: true
+    - Backup storage redundancy: data.backup_policy.periodic_mode_properties.additional_properties.backupStorageRedundancy
+      is_optional: true
+    - Enable Public Network Access: data.public_network_access
+      is_optional: true
+    - Virtual Networks: data.virtual_network_display
+      type: list
+      options:
+        delimiter: ', '
+      is_optional: true
+    - Connection Name: data.private_endpoint_connections.name
+      is_optional: true
+    - Connection State: data.private_endpoint_connections.private_link_service_connection_state.status
+      is_optional: true
+    - Private Endpoint: data.private_endpoint_connections.private_endpoint.name
+      is_optional: true
+    - Description: data.private_endpoint_connections.private_link_service_connection_state.description
+      is_optional: true
+    - Private Endpoint Connection Name: data.cors.name
+      is_optional: true
+    - Private Endpoint State: data.cors.private_link_service_connection_state.status
+      is_optional: true
+    - Private Endpoint: data.cors.private_endpoint.name
+      is_optional: true
+    - COR Private Link Description: data.cors.private_link_service_connection_state.description
+      is_optional: true
+
+
+
+tabs.0:
+  name: Cosmos DB
+  type: item
+  fields:
+    - Name: data.name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Backup Policy: data.backup_policy.type
+    - Read Locations: data.read_locations.location_name
+      type: list
+      options:
+        delimiter: ', '
+    - Write Locations: data.write_locations.location_name
+      type: list
+      options:
+        delimiter: ', '
+    - URI: data.document_endpoint
+    - Public Network Access: data.public_network_access
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Capacity Mode: data.capability_display
+
+
+
+tabs.1:
+  name: Features
+  type: item
+  fields:
+    - Enable Automatic Failover: data.enable_automatic_failover
+      type: enum
+      enums:
+        - 'True':
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - 'False':
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Enable Free Tier: data.enable_free_tier
+      type: enum
+      enums:
+        - 'True':
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - 'False':
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Enable Analytical Storage: data.enable_analytical_storage
+      type: enum
+      enums:
+        - 'True':
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - 'False':
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Backup Policy: data.backup_policy.type
+    - CORS: data.cors_display
+      type: list
+      options:
+        delimiter: ', '
+
+
+
+tabs.2:
+  name: Default Consistency
+  type: item
+  fields:
+    - Default Consistency: data.consistency_policy.default_consistency_level
+
+
+
+tabs.3:
+  name: Backup & Restore
+  type: item
+  fields:
+    - Backup Interval (Minutes): data.backup_policy.periodic_mode_properties.backup_interval_in_minutes
+    - Backup Retention (Hours): data.backup_policy.periodic_mode_properties.backup_retention_interval_in_hours
+    - Backup storage redundancy: data.backup_policy.periodic_mode_properties.additional_properties.backupStorageRedundancy
+
+
+
+tabs.4:
+  name: Firewall and Virtual Networks
+  type: item
+  fields:
+    - Enable Public Network Access: data.public_network_access
+    - Virtual Networks: data.virtual_network_display
+      type: list
+      options:
+        delimiter: ', '
+
+
+
+tabs.5:
+  name: Private Endpoint Connections
+  type: table
+  root_path: data.private_endpoint_connections
+  fields:
+    - Connection Name: name
+    - Connection State: private_link_service_connection_state.status
+    - Private Endpoint: private_endpoint.name
+    - Description: private_link_service_connection_state.description
+
+
+
+tabs.6:
+  name: Cors
+  type: table
+  root_path: data.cors
+  fields:
+    - Connection Name: private_endpoint_connections.name
+    - Connection State: private_endpoint_connections.private_link_service_connection_state.status
+    - Private Endpoint: private_endpoint_connections.private_endpoint.name
+    - Description: private_endpoint_connections.private_link_service_connection_state.description
+
+
+
+tabs.7:
+  name: Keys
+  type: item
+  fields:
+    - Primary Readonly Master Key: data.keys.primary_readonly_master_key
+    - Secondary Readonly Master Key: data.keys.secondary_readonly_master_key
+    - Primary Master Key: data.keys.primary_master_key
+    - Primary Master Key: data.keys.secondary_master_key
+
+
+
+tabs.8:
+  name: Database
+  type: simple-table
+  root_path: data.sql_databases
+  fields:
+    - Database: name
+    - ID: id

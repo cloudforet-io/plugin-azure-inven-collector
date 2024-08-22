@@ -1,0 +1,85 @@
+search:
+  fields:
+    - Anonymous Connect: data.properties.anonymous_connect_policy
+    - Event Handlers count: data.web_pubsub_hub_evnet_handler_count_display
+      data_type: integer
+    - Web SubSub Service: data.web_pubsub_svc_name
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Location: data.location
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Anonymous Connect: data.properties.anonymous_connect_policy
+      type: enum
+      enums:
+        - allow: indigo.500
+          type: badge
+        - deny: coral.600
+          type: badge
+    - Event Handlers count: data.web_pubsub_hub_evnet_handler_count_display
+    - Web SubSub Service: data.web_pubsub_svc_name
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Location: data.location
+
+
+
+tabs.0:
+  name: Web PubSub Hub
+  type: item
+  fields:
+    - Hub name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Region: data.location
+    - Anonymous Connect: data.properties.anonymous_connect_policy
+      type: enum
+      enums:
+        - allow: indigo.500
+          type: badge
+        - deny: coral.600
+          type: badge
+    - EventHandler count: data.web_pubsub_hub_evnet_handler_count_display
+
+
+
+tabs.1:
+  name: Event Handlers
+  type: table
+  root_path: data.properties.event_handlers
+  fields:
+    - Url template: url_template
+    - User events: user_event_pattern
+    - System events: system_events
+      type: list
+      options:
+        delimiter: ', '
+    - Authentication: auth.type
+
+
+
+tabs.2:
+  name: System data
+  type: item
+  root_path: data.system_data
+  fields:
+    - Created at: created_at
+      source_type: iso8601
+      type: datetime
+    - Created by: created_by
+    - Created by type: created_by_type
+    - Last modified at: last_modified_at
+      source_type: iso8601
+      type: datetime
+    - Last modified by: last_modified_by
+    - Last modified by type: last_modified_by_type

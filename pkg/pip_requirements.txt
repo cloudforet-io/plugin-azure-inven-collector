@@ -1,4 +1,4 @@
-schematics
+spaceone-api
 azure-identity
 azure-mgmt-resource
 azure-mgmt-compute

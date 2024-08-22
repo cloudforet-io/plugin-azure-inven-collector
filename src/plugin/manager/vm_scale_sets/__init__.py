@@ -1,0 +1,1 @@
+from .scale_set_manager import VMScaleSetsManager

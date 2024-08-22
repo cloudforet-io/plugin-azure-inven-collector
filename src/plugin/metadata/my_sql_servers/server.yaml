@@ -1,0 +1,192 @@
+search:
+  fields:
+    - Type: instance_type
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Server Admin Login Name: data.administrator_login
+    - MySQL Version: data.version
+    - Performance Configuration (Tier): instance_type
+    - Performance Configuration (Name): data.sku.name
+    - SSL Enforce Status: data.ssl_enforcement
+    - Firewall Rule Name: data.firewall_rules.name
+    - Firewall Rule Start IP: data.firewall_rules.start_ip_address
+    - Firewall Rule End IP: data.firewall_rules.end_ip_address
+    - Allow Access To Azure Services: data.allow_azure_services_access
+    - Enforce SSL Connection: data.ssl_enforcement
+    - Minimum TLS Version: data.minimal_tls_version
+    - Compute Generation: data.sku.family
+    - vCore: data.sku.capacity
+      data_type: integer
+    - Storage: data.storage_profile.storage_gb
+      data_type: integer
+    - Backup Retention Period: data.storage_profile.backup_retention_days
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Type: instance_type
+    - Status: data.user_visible_state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+      is_optional: true
+    - Server Admin Login Name: data.administrator_login
+      is_optional: true
+    - MySQL Version: data.version
+      is_optional: true
+    - Performance Configuration (Tier): instance_type
+      is_optional: true
+    - Performance Configuration (Name): data.sku.name
+      is_optional: true
+    - SSL Enforce Status: data.ssl_enforcement
+      is_optional: true
+    - Firewall Rule Name: data.firewall_rules.name
+      is_optional: true
+    - Firewall Rule Start IP: data.firewall_rules.start_ip_address
+      is_optional: true
+    - Firewall Rule End IP: data.firewall_rules.end_ip_address
+      is_optional: true
+    - Allow Access To Azure Services: data.allow_azure_services_access
+      is_optional: true
+    - Enforce SSL Connection: data.ssl_enforcement
+      is_optional: true
+    - Minimum TLS Version: data.minimal_tls_version
+      is_optional: true
+    - Compute Generation: data.sku.family
+      is_optional: true
+    - vCore: data.sku.capacity
+      is_optional: true
+    - Storage: data.storage_profile.storage_gb
+      is_optional: true
+    - Backup Retention Period: data.storage_profile.backup_retention_days
+      is_optional: true
+
+
+
+tabs.0:
+  name: MySQL Server
+  type: item
+  fields:
+    - Name: name
+    - Server Name: data.fully_qualified_domain_name
+    - Type: instance_type
+    - Status: data.user_visible_state
+      type: enum
+      enums:
+        - Ready:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Dropping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+        - Inaccessible:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Server Admin Login Name: data.administrator_login
+    - MySQL Version: data.version
+    - Performance Configuration (Tier): data.sku.tier
+    - Performance Configuration (Name): data.sku.name
+    - SSL Enforce Status: data.ssl_enforcement
+
+
+
+tabs.1:
+  name: Connection Security
+  items:
+    - name: Firewall Rules
+      type: table
+      root_path: data.firewall_rules
+      fields:
+        - Firewall Rule Name: name
+        - Start IP: start_ip_address
+        - End IP: end_ip_address
+    - name: MySQL Server
+      type: item
+      fields:
+        - Allow Access To Azure Services: data.allow_azure_services_access
+        - Enforce SSL Connection: data.ssl_enforcement
+        - Minimum TLS Version: data.minimal_tls_version
+
+
+
+tabs.2:
+  name: MySQL Parameters
+  type: table
+  fields:
+    - Allow Access To Azure Services: data.allow_azure_services_access
+    - Enforce SSL Connection: data.ssl_enforcement
+    - Minimum TLS Version: data.minimal_tls_version
+
+
+
+tabs.3:
+  name: Pricing Tier
+  type: item
+  fields:
+    - Tier: data.sku.tier
+    - Compute Generation: data.sku.family
+    - vCore: data.sku.capacity
+    - Storage: data.storage_profile.storage_gb
+    - Storage Auto-Growth: data.storage_profile.storage_autogrow
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Geo Redundant Backup: data.storage_profile.geo_redundant_backup
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Backup Retention Period: data.storage_profile.backup_retention_days

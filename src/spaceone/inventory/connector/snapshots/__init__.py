@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.snapshots.connector import SnapshotsConnector

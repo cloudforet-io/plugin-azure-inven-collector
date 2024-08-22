@@ -1,0 +1,115 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Public IP Name: data.public_ip_addresses.name
+    - Public IP Address: data.public_ip_addresses.ip_address
+    - Public DNS Name: data.public_ip_addresses.dns_settings.domain_name_label
+    - Public IP Prefix Name: data.public_ip_prefixes.name
+    - Public IP Prefix: data.public_ip_prefixes.ip_prefix
+    - Subnet Name: data.subnets.name
+    - Subnet Addresses: data.subnets.address_prefixes
+    - Virtual Network: data.subnets.virtual_network
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - Subnets (count): data.subnets_count
+    - Public IP Addresses (count): data.public_ip_addresses_count
+    - Public IP Prefixes (count): data.public_ip_prefixes_count
+    - Public IP Name (optional): data.public_ip_addresses.name
+      is_optional: true
+    - Public IP Address (optional): data.public_ip_addresses.ip_address
+      is_optional: true
+    - Public DNS Name (optional): data.public_ip_addresses.dns_settings.domain_name_label
+      is_optional: true
+    - Public IP Prefix Name (optional): data.public_ip_prefixes.name
+      is_optional: true
+    - Public IP Prefix (optional): data.public_ip_prefixes.ip_prefix
+      is_optional: true
+    - Subnet Name (optional): data.subnets.name
+      is_optional: true
+    - Subnet Addresses (optional): data.subnets.address_prefixes
+      is_optional: true
+    - Virtual Network (optional): data.subnets.virtual_network
+      is_optional: true
+
+
+
+tabs.0:
+  name: NAT Gateway
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Subnets: data.subnets_count
+    - Public IP Addresses: data.public_ip_addresses_count
+    - Public IP Prefixes: data.public_ip_prefixes_count
+    - Idle Timeout (minutes): data.idle_timeout_in_minutes
+
+
+
+tabs.1:
+  name: Outbound IP
+  items:
+    - name: Public IP Addresses
+      type: simple-table
+      root_path: data.public_ip_addresses
+      fields:
+        - Name: name
+        - IP Address: ip_address
+        - DNS Name: dns_settings.domain_name_label
+    - name: Public IP Prefixes
+      type: simple-table
+      root_path: data.public_ip_prefixes
+      fields:
+        - Name: name
+        - IP Prefix: ip_prefix
+
+
+
+tabs.2:
+  name: Subnets
+  type: simple-table
+  root_path: data.subnets
+  fields:
+    - Subnet Name: name
+    - Subnet Address: address_prefix
+    - Subnet Addresses: address_prefixes
+    - Virtual Network: virtual_network
+    - Private Endpoint Network Policies: private_endpoint_network_policies
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Private Link Service Network Policies: private_link_service_network_policies
+      type: enum
+      enums:
+        - Enabled:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - Disabled:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state

@@ -1,0 +1,479 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group.resource_group_name
+    - IP Address: data.ip_addresses
+    - Instance ID: data.compute.instance_id
+    - Instance State: data.compute.instance_state
+    - Instance Type: data.compute.instance_type
+    - Key Pair: data.compute.keypair
+    - Image: data.compute.image
+    - Availability Zone: data.compute.az
+    - OS Type: data.os.os_type
+    - OS Architecture: data.os.os_arch
+    - MAC Address: data.nics.mac_address
+    - Public IP Address: data.nics.public_ip_address
+    - Public DNS: data.nics.tags.public_dns
+    - VNet ID: data.vnet.vnet_id
+    - VNet Name: data.vnet.vnet_name
+    - Subnet ID: data.subnet.subnet_id
+    - Subnet Name: data.subnet.subnet_name
+    - ELB Name: data.load_balancer.name
+    - ELB DNS: data.load_balancer.endpoint
+    - Auto Scaling Group: data.auto_scaling_group.name
+    - Core: data.hardware.core
+      data_type: integer
+    - Memory: data.hardware.memory
+      data_type: float
+    - Management State: state
+    - Cloud Service Group: cloud_service_group
+    - Cloud Service Type: cloud_service_type
+    - Service Account: collection_info.service_accounts
+    - Launched: data.launched_at
+
+
+
+table:
+  sort:
+    key: data.activity_log.resource_uri
+    desc: false
+  fields:
+    - Instance State: data.compute.instance_state
+      type: enum
+      enums:
+        - RUNNING:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - PENDING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - REBOOTING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - SHUTTING-DOWN:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - STOPPING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - STARTING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - PROVISIONING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - STAGING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - DEALLOCATING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - REPAIRING:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - STOPPED:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - DEALLOCATED:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - SUSPENDED:
+          text_color: red.500
+          icon_image: ic_circle-filled
+          icon_color: red.500
+          type: state
+        - TERMINATED:
+          icon_image: ic_circle-filled
+          icon_color: gray.400
+          text_color: gray.400
+          type: state
+    - Cloud Service ID: cloud_service_id
+      is_optional: true
+    - Instance Type: data.compute.instance_type
+    - Core: data.hardware.core
+    - Memory: data.hardware.memory
+    - Instance ID: data.compute.instance_id
+      is_optional: true
+    - Key Pair: data.compute.keypair
+      is_optional: true
+    - Image: data.compute.image
+      is_optional: true
+    - Availability Zone: data.compute.az
+    - OS Type: data.os.os_type
+      is_optional: true
+    - OS: data.os.os_distro
+    - OS Architecture: data.os.os_arch
+      is_optional: true
+    - Primary IP: data.primary_ip_address
+    - Public DNS: data.nics
+      type: list
+      options:
+        sub_key: tags.name
+      is_optional: true
+    - Public IP: data.nics
+      type: list
+      options:
+        sub_key: public_ip_address
+      is_optional: true
+    - All IP: ip_addresses
+      is_optional: true
+    - MAC Address: data.nics.mac_address
+      is_optional: true
+    - CIDR: data.vnet.cidr
+      is_optional: true
+    - VNet ID: data.vnet.vnet_id
+      is_optional: true
+    - VNet Name: data.vnet.vnet_name
+      is_optional: true
+    - Subnet ID: data.subnet.subnet_id
+      is_optional: true
+    - Subnet Name: data.subnet.subnet_name
+      is_optional: true
+    - Load Balancer Name: data.load_balancer.name
+      is_optional: true
+    - Load Balancer DNS: data.load_balancer.endpoint
+      is_optional: true
+    - Ultra SSD Enabled: data.azure.ultra_ssd_enabled
+      is_optional: true
+    - Write Accelerator Enabled: data.azure.write_accelerator_enabled
+      is_optional: true
+    - Boot Diagnostics: data.azure.boot_diagnostics
+      is_optional: true
+    - Priority: data.azure.priority
+      is_optional: true
+    - Auto Scaling Group: data.auto_scaling_group.name
+      is_optional: true
+    - CPU Utilization: data.monitoring.cpu.utilization.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Memory Usage: data.monitoring.memory.usage.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Disk Read IOPS: data.monitoring.disk.read_iops.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Disk Write IOPS: data.monitoring.disk.write_iops.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Disk Read Throughput: data.monitoring.disk.read_throughput.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Disk Write Throughput: data.monitoring.disk.write_throughput.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Network Received PPS: data.monitoring.network.received_pps.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Network Send PPS: data.monitoring.network.sent_pps.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Network Received Throughput: data.monitoring.network.received_throughput.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - Network Sent Throughput: data.monitoring.network.sent_throughput.avg
+      default: 0
+      is_optional: true
+      field_description: (Daily Average)
+    - CPU Utilization: data.monitoring.cpu.utilization.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Memory Usage: data.monitoring.memory.usage.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Disk Read IOPS: data.monitoring.disk.read_iops.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Disk Write IOPS: data.monitoring.disk.write_iops.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Disk Read Throughput: data.monitoring.disk.read_throughput.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Disk Write Throughput: data.monitoring.disk.write_throughput.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Network Received PPS: data.monitoring.network.received_pps.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Network Send PPS: data.monitoring.network.sent_pps.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Network Received Throughput: data.monitoring.network.received_throughput.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Network Sent Throughput: data.monitoring.network.sent_throughput.max
+      default: 0
+      is_optional: true
+      field_description: (Daily Max)
+    - Subscription ID: account
+    - Launched: launched_at
+      is_optional: true
+
+
+
+tabs.0:
+  name: Azure VM
+  items:
+    - name: Virtual Machine
+      type: item
+      fields:
+        - Resource ID: data.compute.instance_id
+        - VM ID: data.compute.tags.vm_id
+        - VM State: data.compute.instance_state
+          type: enum
+          enums:
+            - RUNNING:
+              icon_image: ic_circle-filled
+              icon_color: green.500
+              type: state
+            - STARTING:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - DEALLOCATING:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - STOPPING:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - DEALLOCATING:
+              icon_image: ic_circle-filled
+              icon_color: yellow.500
+              type: state
+            - STOPPED:
+              text_color: red.500
+              icon_image: ic_circle-filled
+              icon_color: red.500
+              type: state
+            - DEALLOCATED:
+              icon_image: ic_circle-filled
+              icon_color: gray.400
+              text_color: gray.400
+              type: state
+        - Instance Type: data.compute.instance_type
+        - Image: data.compute.image
+        - Azure Priority: data.azure.priority
+          type: enum
+          enums:
+            - Regular: indigo.500
+              type: badge
+            - Low: coral.600
+              type: badge
+            - Spot: peacock.600
+              type: badge
+        - Region: region_code
+        - Availability Zone: data.compute.az
+        - Key Pair: data.compute.keypair
+        - Ultra SSD Enabled: data.azure.ultra_ssd_enabled
+          type: enum
+          enums:
+            - 'true': indigo.500
+              type: badge
+            - 'false': coral.600
+              type: badge
+        - Write Accelerator Enabled: data.azure.write_accelerator_enabled
+          type: enum
+          enums:
+            - 'true': indigo.500
+              type: badge
+            - 'false': coral.600
+              type: badge
+        - Boot Diagnostics: data.azure.boot_diagnostics
+          type: enum
+          enums:
+            - 'true': indigo.500
+              type: badge
+            - 'false': coral.600
+              type: badge
+        - Public IP: data.nics
+          type: list
+          options:
+            sub_key: public_ip_address
+            delimiter: '<br>'
+        - Security Groups: data.compute.security_groups
+          type: list
+          options:
+            sub_key: display
+            delimiter: '<br>'
+        - Launched At: data.compute.launched_at
+    - name: Virtual Network
+      type: item
+      fields:
+        - VNet ID: data.vnet.vnet_id
+        - VNet Name: data.vnet.vnet_name
+        - Subnet ID: data.subnet.subnet_id
+        - Subnet Name: data.subnet.subnet_name
+    - name: Operating System
+      type: item
+      fields:
+        - OS Type: data.os.os_type
+          translation_id: PAGE_SCHEMA.OS_TYPE
+        - OS Distribution: data.os.os_distro
+          translation_id: PAGE_SCHEMA.OS_DISTRO
+        - OS Architecture: data.os.os_arch
+          translation_id: PAGE_SCHEMA.OS_ARCH
+        - OS Version Details: data.os.details
+          translation_id: PAGE_SCHEMA.OS_DETAILS
+        - OS License: data.os.os_license
+          translation_id: PAGE_SCHEMA.OS_LICENSE
+    - name: Hardware
+      type: item
+      fields:
+        - Core: data.hardware.core
+          translation_id: PAGE_SCHEMA.CPU_CORE
+        - Memory: data.hardware.memory
+          translation_id: PAGE_SCHEMA.MEMORY
+
+
+
+tabs.1:
+  name: Disk
+  type: table
+  root_path: data.disks
+  fields:
+    - Index: device_index
+    - Name: tags.disk_name
+    - Size: size
+    - Disk ID: tags.disk_id
+    - Storage Account Type: tags.storage_Account_type
+    - IOPS: tags.iops
+    - Throughput (mbps): tags.throughput_mbps
+    - Encryption Set: tags.disk_encryption_set
+    - Caching: tags.caching
+
+
+
+tabs.2:
+  name: NIC
+  type: table
+  root_path: data.nics
+  fields:
+    - Index: device_index
+    - Name: tags.name
+    - IP Addresses: ip_addresses
+      type: list
+      options:
+        delimiter: '<br>'
+    - Public IP: public_ip_address
+    - MAC Address: mac_address
+    - CIDR: cidr
+    - etag: tags.etag
+    - Enable Accelerated Networking: tags.enable_accelerated_networking
+      type: enum
+      enums:
+        - 'true': indigo.500
+          type: badge
+        - 'false': coral.600
+          type: badge
+    - Enable IP Forwarding: tags.enable_ip_forwarding
+      type: enum
+      enums:
+      - 'true': indigo.500
+        type: badge
+      - 'false': coral.600
+        type: badge
+
+
+
+tabs.3:
+  name: Network Security Groups
+  type: table
+  root_path: data.security_group
+  fields:
+    - Direction: direction
+      type: enum
+      enums:
+        - inbound: indigo.500
+          type: badge
+        - outbound: coral.600
+          type: badge
+    - Name: security_group_name
+    - Protocol: protocol
+      type: enum
+      enums:
+        - ALL: violet.600
+          type: badge
+        - TCP: indigo.500
+          type: badge
+        - UDP: coral.600
+          type: badge
+        - ICMP: peacock.500
+          type: badge
+    - Port Range: port
+    - Remote: remote
+    - Priority: priority
+    - Action: action
+      type: enum
+      enums:
+        - allow: indigo.500
+          type: badge
+        - deny: coral.600
+          type: badge
+    - Description: description
+
+
+
+tabs.4:
+  name: Load Balancer
+  type: table
+  root_path: data.load_balancer
+  fields:
+    - Name: name
+    - Endpoint: endpoint
+    - Type: type
+      type: enum
+      enums:
+        - network: indigo.500
+          type: badge
+        - application: coral.600
+          type: badge
+    - Protocol: protocol
+      type: list
+      options:
+        delimiter: '<br>'
+    - Port: port
+      type: list
+      options:
+        delimiter: '<br>'
+    - Scheme: scheme
+      type: enum
+      enums:
+        - internet-facing: indigo.500
+          type: badge
+        - internal: coral.600
+          type: badge

@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.sql_servers.connector import SQLServersConnector

@@ -1,1 +1,0 @@
-from spaceone.inventory.connector.key_vaults.connector import KeyVaultsConnector

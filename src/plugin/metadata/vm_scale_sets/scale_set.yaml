@@ -1,0 +1,223 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Default: data.virtual_machine_scale_set_power_state.profiles.capacity.default
+    - Max: data.virtual_machine_scale_set_power_state.profiles.capacity.maximum
+    - Min: data.virtual_machine_scale_set_power_state.profiles.capacity.minimum
+    - Azure Spot Eviction Policy: data.virtual_machine_profile.eviction_policy
+    - Azure Spot Max Price: data.virtual_machine_profile.billing_profile.max_price
+    - Termination Notification: data.virtual_machine_profile.terminate_notification_display
+    - OverProvisioning: data.overprovision
+    - Proximity Placement Group: data.proximity_placement_group_display
+    - Automatic Repairs: data.automatic_repairs_policy.enabled
+    - Upgrade Policy: data.upgrade_policy.mode
+    - Fault Domains (count): data.platform_fault_domain_count
+      data_type: integer
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Instance Count: data.instance_count
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Default: data.virtual_machine_scale_set_power_state.profiles.capacity.default
+    - Max: data.virtual_machine_scale_set_power_state.profiles.capacity.maximum
+    - Min: data.virtual_machine_scale_set_power_state.profiles.capacity.minimum
+    - Azure Spot Eviction Policy: data.virtual_machine_profile.eviction_policy
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+      is_optional: true
+    - Virtual network/subnet: data.virtual_machine_profile.network_profile.primary_vnet
+      is_optional: true
+    - Host group: data.host_group.id
+      is_optional: true
+    - Ephemeral OS Disk: data.virtual_machine_profile.storage_profile.os_disk.diff_disk_settings.option.local
+      is_optional: true
+    - Azure Spot Eviction Policy: data.virtual_machine_profile.eviction_policy
+      is_optional: true
+    - Azure Spot Max Price: data.virtual_machine_profile.billing_profile.max_price
+      is_optional: true
+    - Termination Notification: data.virtual_machine_profile.terminate_notification_display
+      is_optional: true
+    - OverProvisioning: data.overprovision
+      is_optional: true
+    - Proximity Placement Group: data.proximity_placement_group_display
+      is_optional: true
+    - Automatic Repairs: data.automatic_repairs_policy.enabled
+      is_optional: true
+    - Upgrade Policy: data.upgrade_policy.mode
+      is_optional: true
+    - Fault Domains (count): data.platform_fault_domain_count
+      is_optional: true
+
+
+
+tabs.0:
+  name: VmScaleSets
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Instances: data.instance_count
+    - Operating System: data.virtual_machine_profile.os_profile.operating_system
+    - Size: instance_type
+    - Virtual network/subnet: data.virtual_machine_profile.network_profile.primary_vnet
+    - Host group: data.host_group.id
+    - Ephemeral OS Disk: data.virtual_machine_profile.storage_profile.os_disk.diff_disk_settings.option.local
+    - Azure Spot Eviction Policy: data.virtual_machine_profile.eviction_policy
+    - Azure Spot Max Price: data.virtual_machine_profile.billing_profile.max_price
+    - Termination Notification: data.terminate_notification_display
+    - OverProvisioning: data.overprovision
+    - Proximity Placement Group: data.proximity_placement_group_display
+    - Automatic Repairs: data.automatic_repairs_policy.enabled
+    - Upgrade Policy: data.upgrade_policy.mode
+    - Fault Domains: data.platform_fault_domain_count
+
+
+
+tabs.1:
+  name: Instances
+  type: table
+  root_path: data.vm_instances
+  fields:
+    - Name: name
+    - Computer Name: os_profile.computer_name
+    - Location: location
+    - Status: vm_instance_status_profile.statuses.code
+      type: enum
+      enums:
+        - PowerState/running:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - PowerState/starting:
+          icon_image: ic_circle-filled
+          icon_color: green.500
+          type: state
+        - PowerState/deallocated:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - PowerState/deallocating:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - PowerState/stopped:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - PowerState/stopping:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+        - PowerState/unknown:
+          icon_image: ic_circle-filled
+          icon_color: yellow.500
+          type: state
+    - Provisioning State: provisioning_state
+    - Protection From Scale-in: protection_policy.protect_from_scale_in
+    - Protection From Scale-set Actions: protection_policy.protect_from_scale_set_actions
+    - Latest Model: latest_model_applied
+    - Virtual Network: primary_vnet
+
+
+
+tabs.2:
+  name: Networking
+  items:
+    - name: Networking
+      type: item
+      fields:
+        - Virtual Networks: data.virtual_machine_profile.network_profile.primary_vnet
+    - name: Network Configuration
+      type: simple-table
+      root_path: data.virtual_machine_profile.network_profile.network_interface_configurations
+      fields:
+        - Name: name
+        - Network interface: enable_accelerated_networking_display
+        - Accelerated Networking: enable_accelerated_networking_display
+        - Primary: primary
+    - name: IP Configurations
+      type: simple-table
+      root_path: data.virtual_machine_profile.network_profile.network_interface_configurations.ip_configurations
+      fields:
+        - Public Ip Address Configuration: public_ip_address_configuration
+        - Private IP Address Version: private_ip_address_version
+
+
+
+tabs.3:
+  name: Scaling
+  items:
+    - name: Scaling
+      type: item
+      fields:
+        - Instance Count: data.instance_count
+        - Scale-in Policy: data.scale_in_policy.rules
+          type: list
+          options:
+            delimiter: "<br>"
+    - name: Autoscale Settings
+      type: simple-table
+      root_path: data.virtual_machine_scale_set_power_state
+      fields:
+        - Name: name
+        - Profiles: profiles_display
+          type: list
+          options:
+            delimiter: "<br>"
+        - Default: profiles.capacity.default
+        - Max: profiles.capacity.maximum
+        - Min: profiles.capacity.minimum
+
+
+
+tabs.4:
+  name: Disks
+  items:
+    - name: OS Disk
+      type: item
+      fields:
+        - Image Reference: data.virtual_machine_profile.storage_profile.image_reference_display
+        - Storage Account Type: data.virtual_machine_profile.storage_profile.os_disk.managed_disk.storage_account_type
+        - Size: data.virtual_machine_profile.storage_profile.os_disk.disk_size_gb
+        - Host Caching: data.virtual_machine_profile.storage_profile.os_disk.caching
+    - name: Data Disks
+      type: simple-table
+      root_path: data.virtual_machine_profile.storage_profile.data_disks
+      fields:
+        - Name: name
+        - Storage Type: managed_disk.storage_type
+        - Size: disk_size_gb
+          display_unit: GB
+          source_unit: GB
+          type: size
+        - Max IOPS: disk_iops_read_write
+        - MAX Throughput(MBps): disk_m_bps_read_write
+        - Encryption: disk_encryption_set.id
+        - Host Caching: caching
+        - LUN: lun
+
+
+
+tabs.5:
+  name: Operating System
+  type: item
+  fields:
+    - Computer Name Prefix: data.virtual_machine_profile.os_profile.computer_name_prefix
+    - Administrator Username: data.virtual_machine_profile.os_profile.admin_username
+    - Operating System: data.virtual_machine_profile.os_profile.operating_system
+    - VM Agent: data.virtual_machine_profile.os_profile.linux_configuration.provision_vm_agent
+    - Automatic OS Upgrades: data.upgrade_policy.automatic_os_upgrade_policy.enable_automatic_os_upgrade
+    - Custom Data: data.virtual_machine_profile.os_profile.custom_data

@@ -1,0 +1,72 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - SKU: instance_type
+    - Tier: data.sku.tier
+    - IP Address: data.ip_address
+    - DNS Name: data.dns_settings.fqdn
+    - IP Address Assignment: data.public_ip_allocation_method
+    - Idle Timeout(Minutes): data.idle_timeout_in_minutes
+    - DNS Name Label(Optional): data.dns_settings.domain_name_label
+      data_type: integer
+    - Associated To: data.associated_to
+
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription Name: data.subscription_name
+    - Associated To: data.associated_to
+    - Subscription ID: account
+      is_optional: true
+    - SKU: instance_type
+      is_optional: true
+    - Tier: data.sku.tier
+      is_optional: true
+    - IP Address: data.ip_address
+      is_optional: true
+    - DNS Name: data.dns_settings.fqdn
+      is_optional: true
+    - IP Address Assignment: data.public_ip_allocation_method
+      is_optional: true
+    - Idle Timeout(Minutes): data.idle_timeout_in_minutes
+      is_optional: true
+    - DNS Name Label(Optional): data.dns_settings.domain_name_label
+      is_optional: true
+
+
+
+tabs.0:
+  name: Public IP Address
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - SKU: instance_type
+    - Tier: data.sku.tier
+    - IP Address: data.ip_address
+    - DNS Name: data.dns_settings.fqdn
+    - Associated To: data.associated_to
+
+
+
+tabs.1:
+  name: Configuration
+  type: item
+  fields:
+    - IP Address Assignment: data.public_ip_allocation_method
+    - Idle Timeout(Minutes): data.idle_timeout_in_minutes
+    - DNS Name Label(Optional): data.dns_settings.domain_name_label
+
