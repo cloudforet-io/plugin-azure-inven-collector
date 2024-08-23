@@ -1,4 +1,4 @@
-FROM cloudforet/python-core:2
+FROM cloudforet/python-core:2.0.90
 
 ENV PYTHONUNBUFFERED 1
 ENV CLOUDONE_PORT 50051
@@ -9,7 +9,8 @@ ENV SRC_DIR /tmp/src
 COPY pkg/*.txt ${PKG_DIR}/
 RUN pip install --upgrade pip && \
     pip install --upgrade -r ${PKG_DIR}/pip_requirements.txt && \
-    pip install --upgrade spaceone-api spaceone-inventory
+    pip install --upgrade spaceone-api && \
+    pip install --upgrade --pre spaceone-inventory
 
 COPY src ${SRC_DIR}
 
