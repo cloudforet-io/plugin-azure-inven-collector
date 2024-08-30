@@ -5,7 +5,7 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-1.6.21-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-2.0.0-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
@@ -18,7 +18,7 @@ get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/cloudforet/plugin-azure-inven-collector)
-> Latest stable version : 1.6.21
+> Latest stable version : 2.0.0
 
 Please contact us if you need any further information. 
 <admin@cloudforet.io>
@@ -26,27 +26,29 @@ Please contact us if you need any further information.
 
 ## Contents
 
-| Cloud Service Type | Cloud Service                                       |
-|--------------------|-----------------------------------------------------|
-| Instance           | [Application Gateways](#application-gateways)       |
-| Container          | [Container Instances](#container-instances)         |
-| Instance           | [CosmosDB](#cosmos-db)                              |
-| Disk               | [Disks](#disks)                                     |
-| Instance           | [KeyVaults](#key-vaults)                            |
-| Instance           | [Load Balancers](#load-balancers)                   |
-| Server             | [MySQL Servers](#mysql-servers)                     |
-| Instance           | [NAT Gateways](#nat-gateways)                       |
-| Instance           | [Network Security Groups](#network-security-groups) |
-| Server             | [PostgreSQL Servers](#postgresql-servers)           |
-| IPAddress          | [Public IP Addresses](#public-ip-addresses)         |
-| Instance           | [Snapshots](#snapshots)                             |
-| Server             | [SQL Servers](#sql-servers)                         |
-| Database           | [SQL Databases](#sql-databases)                     |
-| Storage            | [Storage Accounts](#storage-accounts)               |
-| Instance           | [Virtual Machines](#virtual-machines)               |
-| Instance           | [Virtual Networks](#virtual-networks)               |
-| ScaleSet           | [VM ScaleSets](#virtual-machine-scale-sets)         |
-| Service            | [Web PubSub Service](#web-pubsub-service)           |
+| Cloud Service Type | Cloud Service                                               |
+|--------------------|-------------------------------------------------------------|
+| Instance           | [Application Gateways](#application-gateways)               |
+| Container          | [Container Instances](#container-instances)                 |
+| Instance           | [CosmosDB](#cosmos-db)                                      |
+| Disk               | [Disks](#disks)                                             |
+| Instance           | [KeyVaults](#key-vaults)                                    |
+| Instance           | [Load Balancers](#load-balancers)                           |
+| Server             | [MySQL Servers](#mysql-servers---deprecated)                |
+| Flexible Server    | [MySQL Flexible Servers](#mysql-flexible-servers)           |
+| Instance           | [NAT Gateways](#nat-gateways)                               |
+| Instance           | [Network Security Groups](#network-security-groups)         |
+| Server             | [PostgreSQL Servers](#postgresql-servers---deprecated)      |
+| Flexible Server    | [PostgreSQL Flexible Servers](#postgresql-flexible-servers) |
+| IPAddress          | [Public IP Addresses](#public-ip-addresses)                 |
+| Instance           | [Snapshots](#snapshots)                                     |
+| Server             | [SQL Servers](#sql-servers)                                 |
+| Database           | [SQL Databases](#sql-databases)                             |
+| Storage            | [Storage Accounts](#storage-accounts)                       |
+| Instance           | [Virtual Machines](#virtual-machines)                       |
+| Instance           | [Virtual Networks](#virtual-networks)                       |
+| ScaleSet           | [VM ScaleSets](#virtual-machine-scale-sets)                 |
+| Service            | [Web PubSub Service](#web-pubsub-service)                   |
     
 ---
 ## SETTING
@@ -80,27 +82,29 @@ https://*.vault.azure.net
 
 The following is a list of services being collected and service code information.
 
-| No. | Service name            | Service Code                         |
-|-----|-------------------------|--------------------------------------|
-| 1   | Application Gateways    | Microsoft.Network/applicationGateways |
-| 2   | Cosmos DB               | Microsoft.DocumentDB/databaseAccounts |
-| 3   | Disks                   | Microsoft.Compute/disks              |
-| 4   | Key Vaults              | Microsoft.KeyVault/vaults            |
-| 5   | Load Balancers          | Microsoft.Network/loadBalancers      |
-| 6   | MySQL Servers           | Microsoft.DBforMySQL/servers         |
-| 7   | SQL Servers             | Microsoft.Sql/servers                |
-| 8   | SQL Databases           | Microsoft.Sql/servers/databases      |
-| 9   | NAT Gateways            | Microsoft.Network/natGateways        |
-| 10  | Network Security Groups | Microsoft.Network/networkSecurityGroups |
-| 11  | PostgreSQL Servers      | Microsoft.DBforPostgreSQL/servers    |
-| 12  | Public IP Addresses     | Microsoft.Network/publicIPAddresses  |
-| 13  | Snapshots               | Microsoft.Compute/snapshots          |
-| 14  | Storage Accounts        | Microsoft.Storage/storageAccounts    |
-| 15  | Virtual Machines        | Microsoft.Compute/virtualMachines    |
-| 16  | Virtual Networks        | Microsoft.Network/virtualNetworks    |
-| 17  | VM ScaleSets            | Microsoft.Compute/virtualMachineScaleSets |
-| 18  | Container Instances     | Microsoft.ContainerInstance/containerGroups |
-| 19  | Web PubSub Service      | Microsoft.SignalRService/WebPubSub |
+| No. | Service name                | Service Code                                |
+|-----|-----------------------------|---------------------------------------------|
+| 1   | Application Gateways        | Microsoft.Network/applicationGateways       |
+| 2   | Cosmos DB                   | Microsoft.DocumentDB/databaseAccounts       |
+| 3   | Disks                       | Microsoft.Compute/disks                     |
+| 4   | Key Vaults                  | Microsoft.KeyVault/vaults                   |
+| 5   | Load Balancers              | Microsoft.Network/loadBalancers             |
+| 6   | MySQL Servers               | Microsoft.DBforMySQL/servers                |
+| 7   | MySQL Flexible Servers      | Microsoft.DBforMySQL/flexibleServers        |
+| 8   | SQL Servers                 | Microsoft.Sql/servers                       |
+| 9   | SQL Databases               | Microsoft.Sql/servers/databases             |
+| 10  | NAT Gateways                | Microsoft.Network/natGateways               |
+| 11  | Network Security Groups     | Microsoft.Network/networkSecurityGroups     |
+| 12  | PostgreSQL Servers          | Microsoft.DBforPostgreSQL/servers           |
+| 13  | PostgreSQL Flexible Servers | Microsoft.DBforPostgreSQL/flexibleServers   |
+| 14  | Public IP Addresses         | Microsoft.Network/publicIPAddresses         |
+| 15  | Snapshots                   | Microsoft.Compute/snapshots                 |
+| 16  | Storage Accounts            | Microsoft.Storage/storageAccounts           |
+| 17  | Virtual Machines            | Microsoft.Compute/virtualMachines           |
+| 18  | Virtual Networks            | Microsoft.Network/virtualNetworks           |
+| 19  | VM ScaleSets                | Microsoft.Compute/virtualMachineScaleSets   |
+| 20  | Container Instances         | Microsoft.ContainerInstance/containerGroups |
+| 21  | Web PubSub Service          | Microsoft.SignalRService/WebPubSub          |
 ---
 
 ## Authentication Overview
@@ -698,7 +702,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
       ```
 
 
-#### [MySQL Servers]()
+#### ~~[MySQL Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql.mysqlmanagementclient?view=azure-python)~~ - Deprecated
 - MySQL Servers
     - Scope 
         - https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list
@@ -724,10 +728,27 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.DBforMySQL/servers/virtualNetworkRules/read"
         ```
     
-    - SpaceONE Inventory Collector only supports ``Single Servers`` type. 
+    - ~~SpaceONE Inventory Collector only supports ``Single Servers`` type.~~ 
+    - [``Azure Database for MySQL Single Servers``  is on the retirement path.](https://learn.microsoft.com/ko-kr/azure/mysql/migrate/whats-happening-to-mysql-single-server)
 
 
-#### [PostgreSQL Servers](https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list)
+#### [MySQL Flexible Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql_flexibleservers.mysqlmanagementclient?view=azure-python)
+- MySQL Flexible Servers
+    - Scope
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql_flexibleservers.operations.serversoperations?view=azure-python
+          - servers
+            - list()
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql_flexibleservers.operations.firewallrulesoperations?view=azure-python
+          - firewall_rules
+            - list_by_server()
+    - Permissions
+        ```
+        "Microsoft.DBforMySQL/flexibleServers/read",
+        "Microsoft.DBforMySQL/flexibleServers/firewallRules/read"
+        ```
+
+
+#### ~~[PostgreSQL Servers](https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list)~~ - Deprecated
 - PostgreSQL Servers
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list
@@ -748,6 +769,26 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.DBforPostgreSQL/servers/securityAlertPolicies/read",
         "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules/read"
       ```
+      
+    - ~~SpaceONE Inventory Collector only supports ``Single Servers`` type.~~ 
+    - [``Azure Database for PostgreSQL Single Servers`` is on the retirement path.](https://learn.microsoft.com/ko-kr/azure/postgresql/single-server/whats-happening-to-postgresql-single-server)
+      
+
+#### [PostgreSQL Flexible Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.postgresql_flexibleservers.postgresqlmanagementclient?view=azure-python)
+- PostgreSQL Servers
+    - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.postgresql_flexibleservers.operations.serversoperations?view=azure-python
+      - servers
+        - list()
+    - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.postgresql_flexibleservers.operations.firewallrulesoperations?view=azure-python
+      - firewall_rules
+        - list_by_server()
+    - Permissions
+      ```
+        "Microsoft.DBforPostgreSQL/flexibleServers/read",
+        "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules/read"
+      ```
+      
+
 #### [Container Instances](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerinstance/azure.mgmt.containerinstance.containerinstancemanagementclient?view=azure-python)
 - Container Instances
     - Scope
@@ -870,14 +911,16 @@ The default ASSET_URL in cloud_service_conf is
 ## Release Note
 
 
-| Version | Description                                                                                                                                                                                                                                                                                                                                                              | Affected Service                                    | Release Date |
-|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
+| Version | Description                                                                                                                                                                                                                                                                                                                                                               | Affected Service                                    | Release Date |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
+| 2.0.0   | - [Migration to spaceone framework 2.0](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/91)                                                                                                                                                                                                                                                          | All Services                                        | 2024.08.22   |
+| 1.7.0   | - Add metric data query for all services                                                                                                                                                                                                                                                                                                                                  | All Services                                        | 2024.07.02   |
 | 1.6.18  | - [Fix Data Size too big error when collecting `StorageAccounts`](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/57)                                                                                                                                                                                                                                | Storage Accounts                                    | 2023.09.26   |
-| 1.6.15  | - [Fix `SQL Databases` error 'mappingproxy' object does not support item assignment](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/77)                                                                                                                                                                                                            | SQL Databases                                       | 2023.08.04   | 
-| 1.6.14  | - [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)                                                                                                                                                                                                                             | Application Gateways                                | 2023.08.01   |
-| 1.6.13  | - [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)                                                                                                                                                                                                                                                  | Application Gateways                                | 2023.07.13   |
+| 1.6.15  | - [Fix `SQL Databases` error 'mappingproxy' object does not support item assignment](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/77)                                                                                                                                                                                                             | SQL Databases                                       | 2023.08.04   | 
+| 1.6.14  | - [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)                                                                                                                                                                                                                              | Application Gateways                                | 2023.08.01   |
+| 1.6.13  | - [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)                                                                                                                                                                                                                                                   | Application Gateways                                | 2023.07.13   |
 | 1.6.12  | - [Fix `Virtual Networks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/64)<br/>- [Fix `Disks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/60)<br>- [Fix error occurs when collecting `SQL server` and database](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/41) | Virtual Networks, Disks, SQL Servers, SQL Databases | 2023.07.05   |
-| 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)                                                                                                                                                     | CosmosDB                                            | 2023.06.30   |
+| 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)                                                                                                                                                      | CosmosDB                                            | 2023.06.30   |
 
 ### Ver 1.6.14
 * [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)
