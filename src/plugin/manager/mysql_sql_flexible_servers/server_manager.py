@@ -3,7 +3,7 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.my_sql_servers.mysql_flexible_servers_connector import MySQLFlexibleServersConnector
+from plugin.connector.mysql_sql_flexible_servers.mysql_flexible_servers_connector import MySQLFlexibleServersConnector
 from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
 from plugin.manager.base import AzureBaseManager
 
@@ -11,8 +11,8 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class MySQLFlexibleServersManager(AzureBaseManager):
-    cloud_service_group = "MySQLServers"
-    cloud_service_type = "FlexibleServer"
+    cloud_service_group = "MySQLFlexibleServers"
+    cloud_service_type = "Server"
     service_code = "/Microsoft.DBforMySQL/flexibleServers"
 
     def create_cloud_service_type(self):

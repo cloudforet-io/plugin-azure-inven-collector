@@ -13,7 +13,10 @@ from .vm_scale_sets import *
 from .load_balancers import *
 from .cosmos_db import *
 from .postgre_sql_servers import *
+from .postgre_sql_flexible_servers import *
 from .web_pub_sub_service import *
 from .key_vaults import *
 from .my_sql_servers import *
+from .mysql_sql_flexible_servers import *
 from .virtual_machines import *
+

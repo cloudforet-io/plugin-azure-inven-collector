@@ -1,2 +1,1 @@
 from .server_manager import MySQLServersManager
-from .flexible_server_manager import MySQLFlexibleServersManager

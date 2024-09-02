@@ -35,11 +35,11 @@ Please contact us if you need any further information.
 | Instance           | [KeyVaults](#key-vaults)                                    |
 | Instance           | [Load Balancers](#load-balancers)                           |
 | Server             | [MySQL Servers](#mysql-servers---deprecated)                |
-| Flexible Server    | [MySQL Flexible Servers](#mysql-flexible-servers)           |
+| Server             | [MySQL Flexible Servers](#mysql-flexible-servers)           |
 | Instance           | [NAT Gateways](#nat-gateways)                               |
 | Instance           | [Network Security Groups](#network-security-groups)         |
 | Server             | [PostgreSQL Servers](#postgresql-servers---deprecated)      |
-| Flexible Server    | [PostgreSQL Flexible Servers](#postgresql-flexible-servers) |
+| Server             | [PostgreSQL Flexible Servers](#postgresql-flexible-servers) |
 | IPAddress          | [Public IP Addresses](#public-ip-addresses)                 |
 | Instance           | [Snapshots](#snapshots)                                     |
 | Server             | [SQL Servers](#sql-servers)                                 |
@@ -702,7 +702,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
       ```
 
 
-#### ~~[MySQL Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql.mysqlmanagementclient?view=azure-python)~~ - Deprecated
+#### ~~[MySQL Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql.mysqlmanagementclient?view=azure-python)~~ (Deprecated)
 - MySQL Servers
     - Scope 
         - https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list
@@ -748,7 +748,7 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         ```
 
 
-#### ~~[PostgreSQL Servers](https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list)~~ - Deprecated
+#### ~~[PostgreSQL Servers](https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list)~~ (Deprecated)
 - PostgreSQL Servers
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list
