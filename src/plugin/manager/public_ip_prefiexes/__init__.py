@@ -1,1 +1,1 @@
-from .ip_address_manager import PublicIPPrefixesManager
+from .ip_prefix_manager import PublicIPPrefixesManager
