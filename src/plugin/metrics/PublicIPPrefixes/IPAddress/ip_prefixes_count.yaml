@@ -2,7 +2,7 @@
 metric_id: metric-azure-pubipprefixes-ipprefix-count
 name: IP Address Count
 metric_type: GAUGE
-resource_type: inventory.CloudService:azure.PublicIPPrefixes.IPPrefix
+resource_type: inventory.CloudService:azure.PublicIPPrefixes.IPPrefixes
 query_options:
   group_by:
     - key: region_code
@@ -27,9 +27,11 @@ query_options:
       name: Provisioning State
     - key: data.public_ip_address_version
       name: Public IP Address Version
+    - key: data.available_ip_address_count
+      name: Available IP Address Count
   fields:
     value:
       operator: count
 unit: Count
-namespace_id: ns-azure-pubipprefixes-ipprefixes
+namespace_id: ns-azure-pubipprefixes-ipprefix
 version: '1.0'
