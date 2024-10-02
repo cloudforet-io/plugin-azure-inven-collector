@@ -1,0 +1,43 @@
+search:
+  fields:
+    - Subscription ID: account
+    - Subscription Name: data.subscription_name
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - SKU: data.sku.name
+    - Tier: data.sku.tier
+    - IP Prefix: data.ip_prefix
+    - Public IP Version: data.public_ip_address_version
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Available IPs: data.available_ip_address_count_display
+    - Resource Group: data.resource_group
+    - Subscription Name: data.subscription_name
+    - Subscription ID: account
+    - SKU: data.sku.name
+    - SKU Tier: data.sku.tier
+
+
+
+tabs.0:
+  name: Public IP Prefix
+  type: item
+  fields:
+    - Name: name
+    - Resource ID: data.id
+    - Subscription: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - SKU: data.sku.name
+    - SKU Tier: data.sku.tier
+    - IP Prefix: data.ip_prefix
+    - Provisioning State: data.provisioning_state
+    - Public IP Version: data.public_ip_address_version
+    - Available IPs: data.available_ip_address_count_display
+    - Prefix Length: data.prefix_length
+
