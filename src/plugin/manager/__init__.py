@@ -1,7 +1,8 @@
-from .disks import *
-from .public_ip_addresses import *
-from .sql_databases import *
-from .sql_servers import *
+from .disks import DisksManager
+from .public_ip_addresses import PublicIPAddressesManager
+from .public_ip_prefiexes import PublicIPPrefixesManager
+from .sql_databases import SQLDatabasesManager
+from .sql_servers import SQLServersManager
 from .virtual_networks import *
 from .application_gatways import *
 from .nat_gateways import *
@@ -19,4 +20,3 @@ from .key_vaults import *
 from .my_sql_servers import *
 from .mysql_sql_flexible_servers import *
 from .virtual_machines import *
-
