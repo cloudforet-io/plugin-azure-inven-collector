@@ -1,13 +1,13 @@
-import os
 import abc
-import logging
 import datetime
-import time
+import logging
+import os
 import re
+import time
 from typing import Union
 
-from spaceone.core.manager import BaseManager
 from spaceone.core import utils
+from spaceone.core.manager import BaseManager
 from spaceone.inventory.plugin.collector.lib import *
 
 _LOGGER = logging.getLogger("spaceone")
@@ -47,7 +47,10 @@ class AzureBaseManager(BaseManager):
                     yield manager
         elif cloud_service_groups:
             for manager in cls.__subclasses__():
-                if manager.cloud_service_group and manager.cloud_service_group in cloud_service_groups:
+                if (
+                    manager.cloud_service_group
+                    and manager.cloud_service_group in cloud_service_groups
+                ):
                     yield manager
 
     @classmethod
@@ -62,21 +65,23 @@ class AzureBaseManager(BaseManager):
         if not os.path.exists(os.path.join(_METRIC_DIR, cloud_service_group)):
             os.mkdir(os.path.join(_METRIC_DIR, cloud_service_group))
         for dirname in os.listdir(os.path.join(_METRIC_DIR, cloud_service_group)):
-            for filename in os.listdir(os.path.join(_METRIC_DIR, cloud_service_group, dirname)):
+            for filename in os.listdir(
+                os.path.join(_METRIC_DIR, cloud_service_group, dirname)
+            ):
                 if filename.endswith(".yaml"):
-                    file_path = os.path.join(_METRIC_DIR, cloud_service_group, dirname, filename)
+                    file_path = os.path.join(
+                        _METRIC_DIR, cloud_service_group, dirname, filename
+                    )
                     info = utils.load_yaml_from_file(file_path)
                     if filename == "namespace.yaml":
                         yield make_response(
                             namespace=info,
                             resource_type="inventory.Namespace",
-                            match_keys=[]
+                            match_keys=[],
                         )
                     else:
                         yield make_response(
-                            metric=info,
-                            resource_type="inventory.Metric",
-                            match_keys=[]
+                            metric=info, resource_type="inventory.Metric", match_keys=[]
                         )
 
     def collect_resources(self, options: dict, secret_data: dict, schema: str):
@@ -89,17 +94,21 @@ class AzureBaseManager(BaseManager):
         try:
             yield from self.collect_cloud_service_type()
 
-            cloud_services, total_count = self.collect_cloud_service(options, secret_data, schema
-                                                                     )
+            cloud_services, total_count = self.collect_cloud_service(
+                options, secret_data, schema
+            )
             for cloud_service in cloud_services:
                 yield cloud_service
             success_count, error_count = total_count
 
-            subscriptions_manager = AzureBaseManager.get_managers_by_cloud_service_group("SubscriptionsManager")
+            subscriptions_manager = (
+                AzureBaseManager.get_managers_by_cloud_service_group(
+                    "SubscriptionsManager"
+                )
+            )
             location_info = subscriptions_manager().list_location_info(secret_data)
 
             yield from self.collect_region(location_info)
-            # yield from self.collect_region(secret_data)
 
         except Exception as e:
             yield make_error_response(
@@ -166,7 +175,7 @@ class AzureBaseManager(BaseManager):
                             "provider",
                             "cloud_service_type",
                             "cloud_service_group",
-                            "account"
+                            "account",
                         ]
                     ],
                 )
@@ -188,18 +197,22 @@ class AzureBaseManager(BaseManager):
         _cloud_service_group = self._camel_to_snake(self.cloud_service_group)
         _cloud_service_type = self._camel_to_snake(self.cloud_service_type)
 
-        return os.path.join(_METADATA_DIR, _cloud_service_group, f"{_cloud_service_type}.yaml")
+        return os.path.join(
+            _METADATA_DIR, _cloud_service_group, f"{_cloud_service_type}.yaml"
+        )
 
-    def convert_nested_dictionary(self, cloud_svc_object: object) -> Union[object, dict]:
+    def convert_nested_dictionary(
+        self, cloud_svc_object: object
+    ) -> Union[object, dict]:
         cloud_svc_dict = {}
         if hasattr(
-                cloud_svc_object, "__dict__"
+            cloud_svc_object, "__dict__"
         ):  # if cloud_svc_object is not a dictionary type but has dict method
             cloud_svc_dict = cloud_svc_object.__dict__
         elif isinstance(cloud_svc_object, dict):
             cloud_svc_dict = cloud_svc_object
         elif not isinstance(
-                cloud_svc_object, list
+            cloud_svc_object, list
         ):  # if cloud_svc_object is one of type like int, float, char, ...
             return cloud_svc_object
 
@@ -232,15 +245,12 @@ class AzureBaseManager(BaseManager):
             external_link = external_link_format.format(resource_id=resource_id)
         else:
             external_link = f"https://portal.azure.com/#@.onmicrosoft.com/resource{resource_id}/overview"
-        return {
-            "resource_id": resource_id,
-            "external_link": external_link
-        }
+        return {"resource_id": resource_id, "external_link": external_link}
 
     @staticmethod
     def _camel_to_snake(name):
-        name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+        name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+        return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
     @staticmethod
     def get_resource_group_from_id(dict_id):
@@ -249,7 +259,7 @@ class AzureBaseManager(BaseManager):
 
     @staticmethod
     def update_tenant_id_from_secret_data(
-            cloud_service_data: dict, secret_data: dict
+        cloud_service_data: dict, secret_data: dict
     ) -> dict:
         if tenant_id := secret_data.get("tenant_id"):
             cloud_service_data.update({"tenant_id": tenant_id})

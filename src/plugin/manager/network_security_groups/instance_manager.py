@@ -3,9 +3,12 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.sql_databases.sql_databases_connector import SqlDatabasesConnector
-from plugin.connector.network_security_groups.network_security_groups_connector import NetworkSecurityGroupsConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.network_security_groups.network_security_groups_connector import (
+    NetworkSecurityGroupsConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
 _LOGGER = logging.getLogger(__name__)
@@ -26,22 +29,26 @@ class NetworkSecurityGroupsManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Networking"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-network-security-groups.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-network-security-groups.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
         cloud_services = []
         error_responses = []
 
-        network_security_groups_conn = NetworkSecurityGroupsConnector(secret_data=secret_data)
+        network_security_groups_conn = NetworkSecurityGroupsConnector(
+            secret_data=secret_data
+        )
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
-        network_security_groups = network_security_groups_conn.list_all_network_security_groups()
+        network_security_groups = (
+            network_security_groups_conn.list_all_network_security_groups()
+        )
         network_interfaces = [
             self.convert_nested_dictionary(ni)
             for ni in network_security_groups_conn.list_all_network_interfaces()
@@ -50,7 +57,9 @@ class NetworkSecurityGroupsManager(AzureBaseManager):
         for network_security_group in network_security_groups:
 
             try:
-                network_security_group_dict = self.convert_nested_dictionary(network_security_group)
+                network_security_group_dict = self.convert_nested_dictionary(
+                    network_security_group
+                )
                 network_security_group_id = network_security_group_dict["id"]
                 inbound_rules = []
                 outbound_rules = []
@@ -67,8 +76,8 @@ class NetworkSecurityGroupsManager(AzureBaseManager):
 
                 # update default security rules
                 if (
-                        network_security_group_dict.get("default_security_rules")
-                        is not None
+                    network_security_group_dict.get("default_security_rules")
+                    is not None
                 ):
                     inbound, outbound = self.split_security_rules(
                         network_security_group_dict, "default_security_rules"
@@ -158,13 +167,17 @@ class NetworkSecurityGroupsManager(AzureBaseManager):
                         data=network_security_group_dict,
                         account=secret_data["subscription_id"],
                         region_code=network_security_group_dict["location"],
-                        reference=self.make_reference(network_security_group_dict.get("id")),
-                        data_format="dict"
+                        reference=self.make_reference(
+                            network_security_group_dict.get("id")
+                        ),
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -177,7 +190,7 @@ class NetworkSecurityGroupsManager(AzureBaseManager):
         return cloud_services, error_responses
 
     def get_network_interfaces(
-            self, network_security_group_conn, network_interfaces_list
+        self, network_security_group_conn, network_interfaces_list
     ):
         network_interfaces_new_list = []
         virtual_machines_display_list = []
@@ -284,14 +297,19 @@ class NetworkSecurityGroupsManager(AzureBaseManager):
         return virtual_network
 
     @staticmethod
-    def get_virtual_machine_name(network_interfaces: list, network_security_group_id: str):
+    def get_virtual_machine_name(
+        network_interfaces: list, network_security_group_id: str
+    ):
         virtual_machine_name = None
         for network_interface_info in network_interfaces:
-            if _network_security_group := network_interface_info.get("network_security_group"):
-                if (
-                        _network_security_group["id"].split("/")[-1]
-                        == network_security_group_id.split("/")[-1]
+            if _network_security_group := network_interface_info.get(
+                "network_security_group"
+            ):
+                if _network_security_group["id"].split("/")[
+                    -1
+                ] == network_security_group_id.split("/")[-1] and (
+                    _virtual_machine := network_interface_info.get("virtual_machine")
                 ):
-                    virtual_machine_name = network_interface_info["virtual_machine"]["id"].split("/")[-1]
+                    virtual_machine_name = _virtual_machine["id"].split("/")[-1]
                     return virtual_machine_name
         return virtual_machine_name
