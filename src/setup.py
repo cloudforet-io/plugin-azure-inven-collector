@@ -21,9 +21,9 @@ with open("VERSION", "r") as f:
     f.close()
 
 setup(
-    name="plugin-azure-inven-v2-collector-migration-test",
+    name="plugin-azure-inven-collector",
     version=VERSION,
-    description="MS Azure cloud service inventory v2 collector",
+    description="MS Azure cloud service inventory collector",
     long_description="",
     url="https://cloudforet.io/",
     author="Cloudforet Admin",
