@@ -221,6 +221,8 @@ class VMScaleSetsManager(AzureBaseManager):
                     }
                 )
 
+                vm_scale_set_dict.pop("autoscale_settings")
+
                 self.set_region_code(vm_scale_set_dict["location"])
 
                 cloud_services.append(
