@@ -221,6 +221,8 @@ class VMScaleSetsManager(AzureBaseManager):
                     }
                 )
 
+                vm_scale_set_dict.pop("autoscale_settings")
+
                 self.set_region_code(vm_scale_set_dict["location"])
 
                 cloud_services.append(
@@ -376,7 +378,7 @@ class VMScaleSetsManager(AzureBaseManager):
                     ),  # profiles_list
                     "enabled": autoscale_setting.enabled,
                     "name": autoscale_setting.name,
-                    "notifications": autoscale_setting.notifications,
+                    "notifications": [self.convert_nested_dictionary(notification) for notification in autoscale_setting.notifications],
                     "target_resource_uri": autoscale_setting.target_resource_uri,
                     "tags": autoscale_setting.tags,
                 }

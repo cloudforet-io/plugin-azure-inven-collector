@@ -107,7 +107,7 @@ class NATGatewaysManager(AzureBaseManager):
                     nat_gateway_dict.update(
                         {
                             "public_ip_prefixes_count": len(
-                                nat_gateway_dict["public_ip_addresses"]
+                                nat_gateway_dict["public_ip_prefixes"]
                             )
                         }
                     )
