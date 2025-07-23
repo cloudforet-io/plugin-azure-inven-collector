@@ -10,13 +10,13 @@ query_options:
       reference:
         resource_type: inventory.Region
         reference_key: region_code
-    - key: data.subscription.tenant_id
+    - key: data.tenant_id
       name: Tenant ID
     - key: data.subscription_name
       name: Subscription Name
     - key: account
       name: Subscription ID
-    - key: data.resource_group.resource_group_name
+    - key: data.resource_group
       name: Resource Group
     - key: instance_type
       name: Instance Type
