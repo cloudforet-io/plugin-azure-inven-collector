@@ -5,13 +5,13 @@ metric_type: GAUGE
 resource_type: inventory.CloudService:azure.VirtualMachines.Instance
 query_options:
   group_by:
-    - key: data.subscription.tenant_id
+    - key: data.tenant_id
       name: Tenant ID
     - key: data.subscription_name
       name: Subscription Name
     - key: account
       name: Subscription ID
-    - key: data.resource_group.resource_group_name
+    - key: data.resource_group
       name: Resource Group
     - key: instance_type
       name: Instance Type
@@ -27,4 +27,4 @@ query_options:
       operator: sum
 unit: Core
 namespace_id: ns-azure-vms-instance
-version: '1.0'
+version: '1.1'
