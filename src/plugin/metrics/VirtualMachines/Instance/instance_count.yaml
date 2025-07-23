@@ -31,4 +31,4 @@ query_options:
       operator: count
 unit: Count
 namespace_id: ns-azure-vms-instance
-version: '1.0'
+version: '1.1'
