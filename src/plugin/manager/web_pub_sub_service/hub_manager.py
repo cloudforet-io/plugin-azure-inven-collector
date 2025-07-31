@@ -3,11 +3,9 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.web_pub_sub_service.web_pubsub_service_connector import WebPubSubServiceConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class WebPubSubHubManager(AzureBaseManager):
@@ -25,9 +23,7 @@ class WebPubSubHubManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Application Integration"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-web-pubsub-service.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-web-pubsub-service.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):

@@ -1,17 +1,18 @@
-import logging
 import datetime
+import logging
 from typing import Union
 
 import azure.core.exceptions
-
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
 from plugin.connector.key_vaults.key_vaults_connector import KeyVaultsConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class KeyVaultsManager(AzureBaseManager):
@@ -29,9 +30,7 @@ class KeyVaultsManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Security"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-key-vault.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-key-vault.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -41,7 +40,9 @@ class KeyVaultsManager(AzureBaseManager):
         key_vaults_conn = KeyVaultsConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         key_vaults_obj_list = key_vaults_conn.list_all_key_vaults()
@@ -82,8 +83,12 @@ class KeyVaultsManager(AzureBaseManager):
                     for key in keys:
                         key["attributes"].update(
                             {
-                                "created": self.timestamp_to_iso8601(key["attributes"]["created"]),
-                                "updated": self.timestamp_to_iso8601(key["attributes"]["updated"]),
+                                "created": self.timestamp_to_iso8601(
+                                    key["attributes"]["created"]
+                                ),
+                                "updated": self.timestamp_to_iso8601(
+                                    key["attributes"]["updated"]
+                                ),
                             }
                         )
 
@@ -107,8 +112,8 @@ class KeyVaultsManager(AzureBaseManager):
                             "secret_count": len(secrets),
                             "certificate_count": len(certificates),
                             "total_credentials_count": len(keys)
-                                                       + len(secrets)
-                                                       + len(certificates),
+                            + len(secrets)
+                            + len(certificates),
                             "keys_permissions_description_display": "Microsoft.KeyVault/vaults/read",
                             "secrets_permissions_description_display": secrets_permissions_display,
                             "certificates_permissions_description_display": certificates_permissions_display,
@@ -117,10 +122,10 @@ class KeyVaultsManager(AzureBaseManager):
 
                     # Get name of private connection from ID
                     if (
-                            key_vault_dict.get("properties", {}).get(
-                                "private_endpoint_connections"
-                            )
-                            is not None
+                        key_vault_dict.get("properties", {}).get(
+                            "private_endpoint_connections"
+                        )
+                        is not None
                     ):
                         key_vault_dict["properties"].update(
                             {
@@ -134,19 +139,17 @@ class KeyVaultsManager(AzureBaseManager):
 
                     # Change purge protection to user-friendly word
                     key_vault_dict["properties"].update(
-                        {
-                            "enable_purge_protection_str": "Disabled"
-                        }
+                        {"enable_purge_protection_str": "Disabled"}
                     )
                     if (
-                            key_vault_dict.get("properties", {}).get("enable_purge_protection")
-                            is not None
+                        key_vault_dict.get("properties", {}).get(
+                            "enable_purge_protection"
+                        )
+                        is not None
                     ):
                         if key_vault_dict["properties"]["enable_purge_protection"]:
                             key_vault_dict["properties"].update(
-                                {
-                                    "enable_purge_protection_str": "Enabled"
-                                }
+                                {"enable_purge_protection_str": "Enabled"}
                             )
                     if sku := key_vault_dict.get("properties", {}).get("sku"):
                         key_vault_dict["sku"] = sku
@@ -165,12 +168,14 @@ class KeyVaultsManager(AzureBaseManager):
                             region_code=key_vault_dict["location"],
                             reference=self.make_reference(key_vault_dict.get("id")),
                             tags=key_vault_dict.get("tags", {}),
-                            data_format="dict"
+                            data_format="dict",
                         )
                     )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,

@@ -1,9 +1,10 @@
 import logging
 
-from plugin.connector.base import AzureBaseConnector
-from azure.keyvault.secrets import SecretClient
-from azure.keyvault.certificates import CertificateClient
 from azure.identity import DefaultAzureCredential
+from azure.keyvault.certificates import CertificateClient
+from azure.keyvault.secrets import SecretClient
+
+from plugin.connector.base import AzureBaseConnector
 
 _LOGGER = logging.getLogger("spaceone")
 

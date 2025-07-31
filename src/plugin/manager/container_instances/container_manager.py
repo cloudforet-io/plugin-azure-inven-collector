@@ -3,11 +3,15 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.container_instances.container_instances_connector import ContainerInstancesConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.container_instances.container_instances_connector import (
+    ContainerInstancesConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class ContainerInstancesManage(AzureBaseManager):
@@ -25,9 +29,7 @@ class ContainerInstancesManage(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Container"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-container-instances.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-container-instances.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +39,9 @@ class ContainerInstancesManage(AzureBaseManager):
         container_instances_conn = ContainerInstancesConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         container_instances = container_instances_conn.list_container_groups()
@@ -45,17 +49,23 @@ class ContainerInstancesManage(AzureBaseManager):
         for container_instance in container_instances:
 
             try:
-                container_instance_dict = self.convert_nested_dictionary(container_instance)
+                container_instance_dict = self.convert_nested_dictionary(
+                    container_instance
+                )
                 container_instance_id = container_instance_dict["id"]
 
-                resource_group_name = self.get_resource_group_from_id(container_instance_id)
+                resource_group_name = self.get_resource_group_from_id(
+                    container_instance_id
+                )
                 container_group_name = container_instance_dict["name"]
 
                 container_instance = container_instances_conn.get_container_groups(
                     resource_group_name=resource_group_name,
                     container_group_name=container_group_name,
                 )
-                container_instance_dict = self.convert_nested_dictionary(container_instance)
+                container_instance_dict = self.convert_nested_dictionary(
+                    container_instance
+                )
 
                 # Update data info in Container Instance's Raw Data
                 _cpu_count_display = 0
@@ -89,7 +99,6 @@ class ContainerInstancesManage(AzureBaseManager):
 
                     container_instance_dict["volume_count_display"] = 0
 
-
                 container_instance_dict = self.update_tenant_id_from_secret_data(
                     container_instance_dict, secret_data
                 )
@@ -122,13 +131,17 @@ class ContainerInstancesManage(AzureBaseManager):
                         data=container_instance_dict,
                         account=container_instance_dict["subscription_id"],
                         region_code=container_instance_dict["location"],
-                        reference=self.make_reference(container_instance_dict.get("id")),
-                        data_format="dict"
+                        reference=self.make_reference(
+                            container_instance_dict.get("id")
+                        ),
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -171,9 +184,9 @@ class ContainerInstancesManage(AzureBaseManager):
     def _get_gpu_count_display(container):
         _gpu_count = 0
         if (
-                _gpu_info := container.get("resources", {})
-                        .get("requests", {})
-                        .get("gpu", {})
+            _gpu_info := container.get("resources", {})
+            .get("requests", {})
+            .get("gpu", {})
         ):
             _gpu_count = _gpu_info.get("count", 0)
         return _gpu_count

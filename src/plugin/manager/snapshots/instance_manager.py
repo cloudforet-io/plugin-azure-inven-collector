@@ -4,10 +4,12 @@ from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
 from plugin.connector.snapshots.snapshots_connector import SnapshotsConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class SnapshotsManager(AzureBaseManager):
@@ -25,9 +27,7 @@ class SnapshotsManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Compute", "Storage"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-disk-snapshot.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-disk-snapshot.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +37,9 @@ class SnapshotsManager(AzureBaseManager):
         snapshots_conn = SnapshotsConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         snapshots = snapshots_conn.list_snapshots()
@@ -140,12 +142,14 @@ class SnapshotsManager(AzureBaseManager):
                         region_code=snapshot_dict["location"],
                         reference=self.make_reference(snapshot_dict.get("id")),
                         tags=snapshot_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,

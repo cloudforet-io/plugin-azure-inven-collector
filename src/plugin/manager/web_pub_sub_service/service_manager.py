@@ -3,12 +3,16 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.web_pub_sub_service.web_pubsub_service_connector import WebPubSubServiceConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
+from plugin.connector.web_pub_sub_service.web_pubsub_service_connector import (
+    WebPubSubServiceConnector,
+)
 from plugin.manager.base import AzureBaseManager
 from plugin.manager.web_pub_sub_service.hub_manager import WebPubSubHubManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class WebPubSubServiceManager(AzureBaseManager):
@@ -26,9 +30,7 @@ class WebPubSubServiceManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Application Integration"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-web-pubsub-service.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-web-pubsub-service.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -38,7 +40,9 @@ class WebPubSubServiceManager(AzureBaseManager):
         web_pubsub_service_conn = WebPubSubServiceConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         web_pubsub_services = web_pubsub_service_conn.list_by_subscription()
@@ -59,7 +63,7 @@ class WebPubSubServiceManager(AzureBaseManager):
 
                 # Make private endpoint name
                 if private_endpoints := web_pubsub_service_dict.get(
-                        "private_endpoint_connections", []
+                    "private_endpoint_connections", []
                 ):
                     for private_endpoint in private_endpoints:
                         private_endpoint["private_endpoint"][
@@ -80,7 +84,7 @@ class WebPubSubServiceManager(AzureBaseManager):
                     web_pubsub_hubs_dict,
                     subscription_info,
                     web_pubsub_service_dict["location"],
-                    secret_data["tenant_id"]
+                    secret_data["tenant_id"],
                 )
 
                 cloud_services.extend(_hub_responses)
@@ -116,14 +120,18 @@ class WebPubSubServiceManager(AzureBaseManager):
                         data=web_pubsub_service_dict,
                         account=web_pubsub_service_dict["subscription_id"],
                         region_code=web_pubsub_service_dict["location"],
-                        reference=self.make_reference(web_pubsub_service_dict.get("id")),
+                        reference=self.make_reference(
+                            web_pubsub_service_dict.get("id")
+                        ),
                         tags=web_pubsub_service_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -136,7 +144,7 @@ class WebPubSubServiceManager(AzureBaseManager):
         return cloud_services, error_responses
 
     def _collect_web_pubsub_hub(
-            self, web_pubsub_hubs_dict, subscription_info, location, tenant_id
+        self, web_pubsub_hubs_dict, subscription_info, location, tenant_id
     ):
         cloud_services = []
         error_responses = []
@@ -179,12 +187,14 @@ class WebPubSubServiceManager(AzureBaseManager):
                         region_code=web_pubsub_hub_dict["location"],
                         reference=self.make_reference(web_pubsub_hub_dict.get("id")),
                         tags=web_pubsub_hub_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,

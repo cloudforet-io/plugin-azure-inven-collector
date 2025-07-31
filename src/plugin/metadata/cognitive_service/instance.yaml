@@ -1,0 +1,40 @@
+search:
+  fields:
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - kind: data.kind
+    - Custom Domain Name: data.custom_sub_domain_name
+    - Pricing Tier: data.sku.name
+    - Status: data.properties.provisioning_state
+    - Created Date: data.properties.date_created
+      data_type: datetime
+
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Kind: data.kind
+    - Location: data.location
+    - Custom Domain Name: data.custom_sub_domain_name
+    - Pricing Tier: data.sku.name
+    - Status: data.properties.provisioning_state
+    - Created Date: data.properties.date_created
+
+
+tabs.0:
+  name: Cognitive Services
+  type: item
+  fields:
+    - Name: name
+    - API Kind: data.kind
+    - Pricing Tier: data.sku.name
+    - Endpoint: data.properties.endpoint
+    - Location: data.location
+    - Resource Group: data.resource_group
+    - Resource ID: data.id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id

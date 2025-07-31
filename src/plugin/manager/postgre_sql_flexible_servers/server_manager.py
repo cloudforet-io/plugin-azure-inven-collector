@@ -3,11 +3,15 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.postgre_sql_flexible_servers.postgresql_flexible_servers_connector import PostgreSQLFlexibleServersConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.postgre_sql_flexible_servers.postgresql_flexible_servers_connector import (
+    PostgreSQLFlexibleServersConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class PostgreSQLFlexibleServersManager(AzureBaseManager):
@@ -25,22 +29,26 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Database"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-sql-postgresql-server.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-sql-postgresql-server.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
         cloud_services = []
         error_responses = []
 
-        postgre_sql_flexible_servers_conn = PostgreSQLFlexibleServersConnector(secret_data=secret_data)
+        postgre_sql_flexible_servers_conn = PostgreSQLFlexibleServersConnector(
+            secret_data=secret_data
+        )
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
-        postgre_sql_flexible_servers = postgre_sql_flexible_servers_conn.list_flexible_servers()
+        postgre_sql_flexible_servers = (
+            postgre_sql_flexible_servers_conn.list_flexible_servers()
+        )
 
         for postgre_sql_flexible_server in postgre_sql_flexible_servers:
 
@@ -50,8 +58,10 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
                 )
                 postgre_sql_flexible_server_id = postgre_sql_flexible_server_dict["id"]
 
-                postgre_sql_flexible_server_dict = self.update_tenant_id_from_secret_data(
-                    postgre_sql_flexible_server_dict, secret_data
+                postgre_sql_flexible_server_dict = (
+                    self.update_tenant_id_from_secret_data(
+                        postgre_sql_flexible_server_dict, secret_data
+                    )
                 )
 
                 postgre_sql_flexible_server_dict.update(
@@ -61,11 +71,13 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
                         ),
                         "subscription_id": subscription_info["subscription_id"],
                         "subscription_name": subscription_info["display_name"],
-                        "azure_monitor": {"resource_id": postgre_sql_flexible_server_id},
+                        "azure_monitor": {
+                            "resource_id": postgre_sql_flexible_server_id
+                        },
                         "version_display": self.get_version_display(
                             postgre_sql_flexible_server_dict.get("version"),
                             postgre_sql_flexible_server_dict.get("minor_version"),
-                        )
+                        ),
                     }
                 )
 
@@ -75,7 +87,9 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
                     postgre_sql_flexible_server_dict.update(
                         {
                             "firewall_rules": self.list_firewall_rules_by_server(
-                                postgre_sql_flexible_servers_conn, resource_group, server_name
+                                postgre_sql_flexible_servers_conn,
+                                resource_group,
+                                server_name,
                             ),
                         }
                     )
@@ -91,16 +105,24 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
                         data=postgre_sql_flexible_server_dict,
                         account=secret_data["subscription_id"],
                         instance_type="Azure DB for PostgreSQL Flexible Server",
-                        instance_size=float(postgre_sql_flexible_server_dict["storage"]["storage_size_gb"]),
+                        instance_size=float(
+                            postgre_sql_flexible_server_dict["storage"][
+                                "storage_size_gb"
+                            ]
+                        ),
                         region_code=postgre_sql_flexible_server_dict["location"],
-                        reference=self.make_reference(postgre_sql_flexible_server_dict.get("id")),
+                        reference=self.make_reference(
+                            postgre_sql_flexible_server_dict.get("id")
+                        ),
                         tags=postgre_sql_flexible_server_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -128,4 +150,3 @@ class PostgreSQLFlexibleServersManager(AzureBaseManager):
     def get_version_display(version, minor_version):
         version_display = f"{version}.{minor_version}"
         return version_display
-

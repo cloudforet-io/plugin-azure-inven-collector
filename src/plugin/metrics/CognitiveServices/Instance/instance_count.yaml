@@ -1,0 +1,31 @@
+---
+metric_id: metric-azure-cognitive-services-instance-count
+name: Instance Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.CognitiveServices.Instance
+query_options:
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+    - key: account
+      name: Subscription ID
+    - key: data.resource_group
+      name: Resource Group
+    - key: data.properties.provisioning_state
+      name: Status
+      default: true
+    - key: data.kind
+      name: Kind
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-cognitive-services-instance
+version: '1.0'

@@ -6,13 +6,12 @@ from plugin.conf.cloud_service_conf import ICON_URL
 from plugin.connector.public_ip_prefixes.public_ip_prefixes_connector import (
     PublicIPPrefixesConnector,
 )
-
 from plugin.connector.subscriptions.subscriptions_connector import (
     SubscriptionsConnector,
 )
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class PublicIPPrefixesManager(AzureBaseManager):

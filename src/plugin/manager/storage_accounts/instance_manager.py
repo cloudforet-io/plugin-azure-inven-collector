@@ -4,12 +4,16 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.storage_accounts.storage_accounts_connector import StorageAccountsConnector
 from plugin.connector.monitor.monitor_connector import MonitorConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.storage_accounts.storage_accounts_connector import (
+    StorageAccountsConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class StorageAccountsManager(AzureBaseManager):
@@ -27,9 +31,7 @@ class StorageAccountsManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Storage"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-service-accounts.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-service-accounts.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -40,7 +42,9 @@ class StorageAccountsManager(AzureBaseManager):
         monitor_conn = MonitorConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         storage_accounts = storage_accounts_conn.list_storage_accounts()
@@ -114,12 +118,14 @@ class StorageAccountsManager(AzureBaseManager):
                         region_code=storage_account_dict["location"],
                         reference=self.make_reference(storage_account_dict.get("id")),
                         tags=storage_account_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,

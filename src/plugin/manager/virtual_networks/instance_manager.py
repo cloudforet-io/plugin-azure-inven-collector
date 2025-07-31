@@ -3,11 +3,15 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.virtual_networks.virtual_networks_connector import VirtualNetworksConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
+from plugin.connector.virtual_networks.virtual_networks_connector import (
+    VirtualNetworksConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class VirtualNetworksManager(AzureBaseManager):
@@ -25,9 +29,7 @@ class VirtualNetworksManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Networking"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-virtual-networks.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-virtual-networks.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +39,9 @@ class VirtualNetworksManager(AzureBaseManager):
         virtual_networks_conn = VirtualNetworksConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         virtual_networks = virtual_networks_conn.list_all_virtual_networks()
@@ -100,12 +104,14 @@ class VirtualNetworksManager(AzureBaseManager):
                         region_code=virtual_network_dict["location"],
                         reference=self.make_reference(virtual_network_dict.get("id")),
                         tags=virtual_network_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -123,7 +129,7 @@ class VirtualNetworksManager(AzureBaseManager):
             if subnet.get("connected_devices_list"):
                 for device in subnet["connected_devices_list"]:
                     if (
-                            device["type"] == "azureFirewalls"
+                        device["type"] == "azureFirewalls"
                     ):  # The subnet which has 'AzureFirewall' is typed as 'azureFirewalls'
                         firewall_obj = vnet_conn.list_all_firewalls(
                             resource_group_name
@@ -133,7 +139,7 @@ class VirtualNetworksManager(AzureBaseManager):
                             for ip_configuration in firewall_dict["ip_configurations"]:
                                 if ip_configuration.get("subnet") is not None:
                                     if (
-                                            subnet["id"] in ip_configuration["subnet"]["id"]
+                                        subnet["id"] in ip_configuration["subnet"]["id"]
                                     ):  # If subnet id matches the firewall's subnet id
                                         firewall_dict["subnet"] = subnet["id"].split(
                                             "/"

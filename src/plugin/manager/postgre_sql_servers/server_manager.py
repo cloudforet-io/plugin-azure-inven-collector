@@ -3,11 +3,15 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.postgre_sql_servers.postgresql_servers_connector import PostgreSQLServersConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.postgre_sql_servers.postgresql_servers_connector import (
+    PostgreSQLServersConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class PostgreSQLServersManager(AzureBaseManager):
@@ -25,9 +29,7 @@ class PostgreSQLServersManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Database"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-sql-postgresql-server.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-sql-postgresql-server.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +39,9 @@ class PostgreSQLServersManager(AzureBaseManager):
         postgre_sql_servers_conn = PostgreSQLServersConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         postgre_sql_servers = postgre_sql_servers_conn.list_servers()
@@ -97,16 +101,22 @@ class PostgreSQLServersManager(AzureBaseManager):
                         data=postgre_sql_server_dict,
                         account=secret_data["subscription_id"],
                         instance_type=postgre_sql_server_dict["sku"]["tier"],
-                        instance_size=float(postgre_sql_server_dict["storage_profile"]["max_size_gb"]),
+                        instance_size=float(
+                            postgre_sql_server_dict["storage_profile"]["max_size_gb"]
+                        ),
                         region_code=postgre_sql_server_dict["location"],
-                        reference=self.make_reference(postgre_sql_server_dict.get("id")),
+                        reference=self.make_reference(
+                            postgre_sql_server_dict.get("id")
+                        ),
                         tags=postgre_sql_server_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -216,4 +226,3 @@ class PostgreSQLServersManager(AzureBaseManager):
     def get_replica_master_server_name(master_server_id):
         master_server_name = master_server_id.split("/")[8]
         return master_server_name
-

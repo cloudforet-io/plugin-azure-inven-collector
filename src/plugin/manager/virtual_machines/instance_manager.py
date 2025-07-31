@@ -3,8 +3,13 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.virtual_machines.virtual_machines_connector import VirtualMachinesConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
+from plugin.connector.virtual_machines.virtual_machines_connector import (
+    VirtualMachinesConnector,
+)
+from plugin.manager.base import AzureBaseManager
 from plugin.manager.virtual_machines import (
     VirtualMachineDiskManager,
     VirtualMachineLoadBalancerManager,
@@ -13,9 +18,8 @@ from plugin.manager.virtual_machines import (
     VirtualMachineVmManager,
     VirtualMachineVNetManager,
 )
-from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class VirtualMachinesManager(AzureBaseManager):
@@ -33,9 +37,7 @@ class VirtualMachinesManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Compute", "Server"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-vm.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-vm.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -53,7 +55,9 @@ class VirtualMachinesManager(AzureBaseManager):
         nic_manager = VirtualMachineNICManager()
         vnet_manager = VirtualMachineVNetManager()
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
         subscription_data = {
             "subscription_id": secret_data["subscription_id"],
@@ -166,15 +170,17 @@ class VirtualMachinesManager(AzureBaseManager):
                         region_code=vm_resource["region_code"],
                         reference=self.make_reference(
                             vm_resource["data"]["compute"]["instance_id"],
-                            f"https://portal.azure.com/#@.onmicrosoft.com/resource/subscriptions/{subscription_data['subscription_id']}/resourceGroups/{resource_group_name}/providers/Microsoft.Compute/virtualMachines/{vm_resource['data']['compute']['instance_name']}/overview"
+                            f"https://portal.azure.com/#@.onmicrosoft.com/resource/subscriptions/{subscription_data['subscription_id']}/resourceGroups/{resource_group_name}/providers/Microsoft.Compute/virtualMachines/{vm_resource['data']['compute']['instance_name']}/overview",
                         ),
                         tags=vm_resource["tags"],
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
