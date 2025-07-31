@@ -11,7 +11,7 @@ from plugin.connector.subscriptions.subscriptions_connector import (
 )
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class NetworkSecurityGroupsManager(AzureBaseManager):

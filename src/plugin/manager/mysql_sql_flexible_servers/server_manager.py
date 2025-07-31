@@ -3,11 +3,15 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.mysql_sql_flexible_servers.mysql_flexible_servers_connector import MySQLFlexibleServersConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.mysql_sql_flexible_servers.mysql_flexible_servers_connector import (
+    MySQLFlexibleServersConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class MySQLFlexibleServersManager(AzureBaseManager):
@@ -25,27 +29,33 @@ class MySQLFlexibleServersManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Database"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-mysql-servers.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-mysql-servers.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
         cloud_services = []
         error_responses = []
 
-        mysql_flexible_servers_conn = MySQLFlexibleServersConnector(secret_data=secret_data)
+        mysql_flexible_servers_conn = MySQLFlexibleServersConnector(
+            secret_data=secret_data
+        )
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
-        mysql_flexible_servers_obj_list = mysql_flexible_servers_conn.list_flexible_servers()
+        mysql_flexible_servers_obj_list = (
+            mysql_flexible_servers_conn.list_flexible_servers()
+        )
 
         for mysql_flexible_server in mysql_flexible_servers_obj_list:
 
             try:
-                mysql_flexible_server_dict = self.convert_nested_dictionary(mysql_flexible_server)
+                mysql_flexible_server_dict = self.convert_nested_dictionary(
+                    mysql_flexible_server
+                )
                 mysql_flexible_server_id = mysql_flexible_server_dict["id"]
 
                 mysql_flexible_server_dict.update(
@@ -60,7 +70,9 @@ class MySQLFlexibleServersManager(AzureBaseManager):
                 )
 
                 if mysql_flexible_server_dict.get("name") is not None:
-                    resource_group = mysql_flexible_server_dict.get("resource_group", "")
+                    resource_group = mysql_flexible_server_dict.get(
+                        "resource_group", ""
+                    )
                     server_name = mysql_flexible_server_dict.get("name")
                     mysql_flexible_server_dict.update(
                         {
@@ -91,14 +103,18 @@ class MySQLFlexibleServersManager(AzureBaseManager):
                         account=secret_data["subscription_id"],
                         instance_type="Azure DB for MySQL Flexible Server",
                         region_code=mysql_flexible_server_dict["location"],
-                        reference=self.make_reference(mysql_flexible_server_dict.get("id")),
+                        reference=self.make_reference(
+                            mysql_flexible_server_dict.get("id")
+                        ),
                         tags=mysql_flexible_server_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -111,7 +127,7 @@ class MySQLFlexibleServersManager(AzureBaseManager):
         return cloud_services, error_responses
 
     def get_firewall_rules_by_server(
-            self, mysql_flexible_servers_conn, resource_group, server_name
+        self, mysql_flexible_servers_conn, resource_group, server_name
     ):
         firewall_rules = []
         firewall_rule_obj = mysql_flexible_servers_conn.list_firewall_rules_by_server(

@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-cosgnitive-services-instance
+name: CognitiveServices/Instance
+resource_type: inventory.CloudService:azure.CognitiveServices.Instance
+group: azure
+category: ASSET
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-cognitive-service.svg
+version: '1.0'

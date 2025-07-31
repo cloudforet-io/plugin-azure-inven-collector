@@ -3,11 +3,15 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.my_sql_servers.mysql_servers_connector import MySQLServersConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.my_sql_servers.mysql_servers_connector import (
+    MySQLServersConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class MySQLServersManager(AzureBaseManager):
@@ -25,9 +29,7 @@ class MySQLServersManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Database"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-mysql-servers.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-mysql-servers.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +39,9 @@ class MySQLServersManager(AzureBaseManager):
         mysql_servers_conn = MySQLServersConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         mysql_servers_obj_list = mysql_servers_conn.list_servers()
@@ -104,12 +108,14 @@ class MySQLServersManager(AzureBaseManager):
                         region_code=mysql_server_dict["location"],
                         reference=self.make_reference(mysql_server_dict.get("id")),
                         tags=mysql_server_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -122,7 +128,7 @@ class MySQLServersManager(AzureBaseManager):
         return cloud_services, error_responses
 
     def get_firewall_rules_by_server(
-            self, mysql_servers_conn, resource_group, server_name
+        self, mysql_servers_conn, resource_group, server_name
     ):
         firewall_rules = []
         firewall_rules_obj = mysql_servers_conn.list_firewall_rules_by_server(

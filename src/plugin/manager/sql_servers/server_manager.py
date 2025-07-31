@@ -3,12 +3,14 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.sql_servers.sql_servers_connector import SqlServersConnector
 from plugin.connector.monitor.monitor_connector import MonitorConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.sql_servers.sql_servers_connector import SqlServersConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class SQLServersManager(AzureBaseManager):
@@ -26,9 +28,7 @@ class SQLServersManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Database"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-sql-servers.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-sql-servers.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -39,7 +39,9 @@ class SQLServersManager(AzureBaseManager):
         monitor_conn = MonitorConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         sql_servers = sql_servers_conn.list_servers()
@@ -155,12 +157,14 @@ class SQLServersManager(AzureBaseManager):
                         region_code=sql_server_dict["location"],
                         reference=self.make_reference(sql_server_dict.get("id")),
                         tags=sql_server_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -196,7 +200,9 @@ class SQLServersManager(AzureBaseManager):
                         "per_db_settings_display": self.get_per_db_settings(
                             elastic_pool_dict["per_database_settings"]
                         ),
-                        "number_of_databases_display": len(elastic_pool_dict["databases"]),
+                        "number_of_databases_display": len(
+                            elastic_pool_dict["databases"]
+                        ),
                         "unit_display": elastic_pool_dict["sku"]["tier"],
                         "server_name_display": elastic_pool_dict["id"].split("/")[8],
                         "resource_group_display": elastic_pool_dict["id"].split("/")[4],
@@ -209,7 +215,7 @@ class SQLServersManager(AzureBaseManager):
         return elastic_pools_list
 
     def get_databases_by_elastic_pools(
-            self, sql_servers_conn, elastic_pool_name, rg_name, server_name
+        self, sql_servers_conn, elastic_pool_name, rg_name, server_name
     ):
         databases_obj = sql_servers_conn.list_databases_by_elastic_pool(
             elastic_pool_name, rg_name, server_name
@@ -259,7 +265,7 @@ class SQLServersManager(AzureBaseManager):
             )
 
             if (
-                    virtual_network_rule_dict.get("id") is not None
+                virtual_network_rule_dict.get("id") is not None
             ):  # Get Virtual Network's name
                 virtual_network_rule_dict.update(
                     {
@@ -360,7 +366,7 @@ class SQLServersManager(AzureBaseManager):
                 )
 
             if (
-                    failover_dict.get("partner_servers") is not None
+                failover_dict.get("partner_servers") is not None
             ):  # Get Secondary Server's name
                 failover_dict.update(
                     {
@@ -387,7 +393,7 @@ class SQLServersManager(AzureBaseManager):
         return failover_groups_list
 
     def list_data_masking_rules(
-            self, sql_servers_conn, rg_name, server_name, database_name
+        self, sql_servers_conn, rg_name, server_name, database_name
     ):
         data_masking_rules_list = []
         data_masking_rule_obj = sql_servers_conn.list_data_masking_rules_by_database(
@@ -401,12 +407,12 @@ class SQLServersManager(AzureBaseManager):
         return data_masking_rules_list
 
     def list_databases(
-            self,
-            sql_servers_conn,
-            sql_monitor_conn,
-            resource_group_name,
-            server_name,
-            server_admin_name,
+        self,
+        sql_servers_conn,
+        sql_monitor_conn,
+        resource_group_name,
+        server_name,
+        server_admin_name,
     ):
         databases_list = []
         databases = sql_servers_conn.list_databases_by_server(
@@ -417,7 +423,7 @@ class SQLServersManager(AzureBaseManager):
             database_dict = self.convert_nested_dictionary(database)
             if database_dict.get("sku"):
                 if (
-                        database_dict.get("name") != "master"
+                    database_dict.get("name") != "master"
                 ):  # No pricing tier for system database
                     database_dict.update(
                         {
@@ -447,7 +453,7 @@ class SQLServersManager(AzureBaseManager):
                 database_dict.update(
                     {
                         "max_size_gb": database_dict["max_size_bytes"]
-                                       / 1073741824  # 2의 30승
+                        / 1073741824  # 2의 30승
                     }
                 )
 
@@ -556,7 +562,7 @@ class SQLServersManager(AzureBaseManager):
         return diagnostic_settings_list
 
     def list_replication_link(
-            self, sql_servers_conn, rg_name, server_name, database_name
+        self, sql_servers_conn, rg_name, server_name, database_name
     ):
         replication_link_list = []
         replication_link_obj = sql_servers_conn.list_replication_link(
@@ -570,7 +576,7 @@ class SQLServersManager(AzureBaseManager):
         return replication_link_list
 
     def get_sync_group_by_databases(
-            self, sql_servers_conn, resource_group_name, server_name, database_name
+        self, sql_servers_conn, resource_group_name, server_name, database_name
     ):
         sync_group_obj = sql_servers_conn.list_sync_groups_by_databases(
             resource_group=resource_group_name,
@@ -669,5 +675,3 @@ class SQLServersManager(AzureBaseManager):
             sync_group_display_list.append(sync_display)
 
         return sync_group_display_list
-
-

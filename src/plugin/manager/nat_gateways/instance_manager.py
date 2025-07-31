@@ -4,10 +4,12 @@ from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
 from plugin.connector.nat_gateways.nat_gateways_connector import NATGatewaysConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class NATGatewaysManager(AzureBaseManager):
@@ -25,9 +27,7 @@ class NATGatewaysManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Networking"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-nat.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-nat.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +37,9 @@ class NATGatewaysManager(AzureBaseManager):
         nat_gateways_conn = NATGatewaysConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         nat_gateways = nat_gateways_conn.list_all_nat_gateways()
@@ -97,11 +99,7 @@ class NATGatewaysManager(AzureBaseManager):
                     nat_gateway_dict["public_ip_addresses"] = pip_list
 
                 else:
-                    nat_gateway_dict.update(
-                        {
-                            "public_ip_addresses_count": 0
-                        }
-                    )
+                    nat_gateway_dict.update({"public_ip_addresses_count": 0})
 
                 if nat_gateway_dict.get("public_ip_prefixes") is not None:
                     nat_gateway_dict.update(
@@ -128,11 +126,7 @@ class NATGatewaysManager(AzureBaseManager):
                     nat_gateway_dict["public_ip_prefixes"] = pip_list
 
                 else:
-                    nat_gateway_dict.update(
-                        {
-                            "public_ip_prefixes_count": 0
-                        }
-                    )
+                    nat_gateway_dict.update({"public_ip_prefixes_count": 0})
 
                 if nat_gateway_dict.get("subnets") is not None:
                     nat_gateway_dict.update(
@@ -144,11 +138,7 @@ class NATGatewaysManager(AzureBaseManager):
                         }
                     )
                 else:
-                    nat_gateway_dict.update(
-                        {
-                            "subnets_count": 0
-                        }
-                    )
+                    nat_gateway_dict.update({"subnets_count": 0})
 
                 self.set_region_code(nat_gateway_dict["location"])
 
@@ -163,12 +153,14 @@ class NATGatewaysManager(AzureBaseManager):
                         instance_type=nat_gateway_dict["sku"]["name"],
                         region_code=nat_gateway_dict["location"],
                         reference=self.make_reference(nat_gateway_dict.get("id")),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -218,4 +210,3 @@ class NATGatewaysManager(AzureBaseManager):
             subnet_list.append(subnet_dict)
 
         return subnet_list
-

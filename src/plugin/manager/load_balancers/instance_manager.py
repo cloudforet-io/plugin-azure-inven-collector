@@ -3,11 +3,15 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
-from plugin.connector.load_balancers.load_balancers_connector import LoadBalancersConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.load_balancers.load_balancers_connector import (
+    LoadBalancersConnector,
+)
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class LoadBalancersManager(AzureBaseManager):
@@ -25,9 +29,7 @@ class LoadBalancersManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Networking"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-loadbalancers.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-loadbalancers.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +39,9 @@ class LoadBalancersManager(AzureBaseManager):
         load_balancers_conn = LoadBalancersConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         load_balancers = load_balancers_conn.list_load_balancers()
@@ -81,12 +85,12 @@ class LoadBalancersManager(AzureBaseManager):
 
                     for fic in load_balancer_dict["frontend_ip_configurations"]:
                         if fic.get(
-                                "subnet"
+                            "subnet"
                         ):  # If the 'public' type, Skip this part because there isn't subnet information for them.
-                            fic["subnet"][
-                                "address_prefix"
-                            ] = self.get_frontend_address_prefix(
-                                load_balancers_conn, fic["subnet"]
+                            fic["subnet"]["address_prefix"] = (
+                                self.get_frontend_address_prefix(
+                                    load_balancers_conn, fic["subnet"]
+                                )
                             )
                             fic["subnet"]["name"] = self.get_frontend_ip_subnet_name(
                                 fic["subnet"]["id"]
@@ -229,12 +233,14 @@ class LoadBalancersManager(AzureBaseManager):
                         region_code=load_balancer_dict["location"],
                         reference=self.make_reference(load_balancer_dict.get("id")),
                         tags=load_balancer_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -261,8 +267,8 @@ class LoadBalancersManager(AzureBaseManager):
                 # Get LB's name, VMs name attached to Backend Pool
                 for ip_configuration in network_interface_dict["ip_configurations"]:
                     if (
-                            ip_configuration.get("load_balancer_backend_address_pools")
-                            is not None
+                        ip_configuration.get("load_balancer_backend_address_pools")
+                        is not None
                     ):
                         for ic in ip_configuration[
                             "load_balancer_backend_address_pools"
@@ -300,7 +306,7 @@ class LoadBalancersManager(AzureBaseManager):
         return network_interface_list
 
     def get_ip_configurations_list(
-            self, load_balancer_conn, rg_name, network_interface_name
+        self, load_balancer_conn, rg_name, network_interface_name
     ):
         ip_configuration_list = []
         if network_interface_name:
@@ -375,11 +381,11 @@ class LoadBalancersManager(AzureBaseManager):
 
         if backend_address_pools_count == 1:
             backend_address_pools_count_display = (
-                    str(backend_address_pools_count) + " backend pool"
+                str(backend_address_pools_count) + " backend pool"
             )
         else:
             backend_address_pools_count_display = (
-                    str(backend_address_pools_count) + " backend pools"
+                str(backend_address_pools_count) + " backend pools"
             )
 
         return backend_address_pools_count_display
@@ -389,7 +395,7 @@ class LoadBalancersManager(AzureBaseManager):
         matched_vm_list = list()
         for find_object in find_list_pool:
             if (
-                    find_object["id"] in find_key
+                find_object["id"] in find_key
             ):  # if network interface card's id matches to the backend configuration's id
                 if find_object.get("virtual_machine") is not None:
                     matched_vm_list.append(
@@ -426,7 +432,7 @@ class LoadBalancersManager(AzureBaseManager):
 
     @staticmethod
     def get_backend_address_pool_name(
-            lbr_backend_address_pool,
+        lbr_backend_address_pool,
     ):  # id must exist if there is a backend address pool object
         return lbr_backend_address_pool["id"].split("/")[10]
 

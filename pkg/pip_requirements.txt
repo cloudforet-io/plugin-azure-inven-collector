@@ -14,3 +14,5 @@ azure-mgmt-cosmosdb
 azure-mgmt-containerinstance
 azure-mgmt-webpubsub
 azure-mgmt-resource
+azure-mgmt-advisor==10.0.0b1
+azure-mgmt-cognitiveservices

@@ -3,11 +3,13 @@ import logging
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.connector.vm_scale_sets.vm_scale_sets_connector import VMScaleSetsConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class VMScaleSetsManager(AzureBaseManager):
@@ -25,9 +27,7 @@ class VMScaleSetsManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Compute"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-vm-scale-set.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-vm-scale-set.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +37,9 @@ class VMScaleSetsManager(AzureBaseManager):
         vm_scale_sets_conn = VMScaleSetsConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         vm_scale_sets = vm_scale_sets_conn.list_vm_scale_sets()
@@ -61,7 +63,7 @@ class VMScaleSetsManager(AzureBaseManager):
                 )
 
                 if vm_scale_set_dict.get(
-                        "proximity_placement_group"
+                    "proximity_placement_group"
                 ):  # if it has a key -> get value -> check if it isn't None / if no 'Key' ->  return None
                     vm_scale_set_dict.update(
                         {
@@ -74,10 +76,10 @@ class VMScaleSetsManager(AzureBaseManager):
                 # Get Instance termination notification display
                 if vm_scale_set_dict.get("virtual_machine_profile") is not None:
                     if (
-                            vm_scale_set_dict["virtual_machine_profile"].get(
-                                "scheduled_events_profile"
-                            )
-                            is not None
+                        vm_scale_set_dict["virtual_machine_profile"].get(
+                            "scheduled_events_profile"
+                        )
+                        is not None
                     ):
                         if vm_scale_set.virtual_machine_profile[
                             "scheduled_events_profile"
@@ -92,10 +94,10 @@ class VMScaleSetsManager(AzureBaseManager):
                         )
                     # Convert disks' sku-dict to string display
                     if (
-                            vm_scale_set_dict["virtual_machine_profile"].get(
-                                "storage_profile"
-                            )
-                            is not None
+                        vm_scale_set_dict["virtual_machine_profile"].get(
+                            "storage_profile"
+                        )
+                        is not None
                     ):
                         if vm_scale_set_dict["virtual_machine_profile"][
                             "storage_profile"
@@ -104,13 +106,13 @@ class VMScaleSetsManager(AzureBaseManager):
                                 "virtual_machine_profile"
                             ]["storage_profile"]["image_reference"]
                             image_reference_str = (
-                                    str(image_reference_dict["publisher"])
-                                    + " / "
-                                    + str(image_reference_dict["offer"])
-                                    + " / "
-                                    + str(image_reference_dict["sku"])
-                                    + " / "
-                                    + str(image_reference_dict["version"])
+                                str(image_reference_dict["publisher"])
+                                + " / "
+                                + str(image_reference_dict["offer"])
+                                + " / "
+                                + str(image_reference_dict["sku"])
+                                + " / "
+                                + str(image_reference_dict["version"])
                             )
                             vm_scale_set_dict["virtual_machine_profile"][
                                 "storage_profile"
@@ -134,8 +136,8 @@ class VMScaleSetsManager(AzureBaseManager):
                                 )
                     # Get VM Profile's operating_system type (Linux or Windows)
                     if (
-                            vm_scale_set_dict["virtual_machine_profile"].get("os_profile")
-                            is not None
+                        vm_scale_set_dict["virtual_machine_profile"].get("os_profile")
+                        is not None
                     ):
                         vm_scale_set_dict["virtual_machine_profile"][
                             "os_profile"
@@ -150,18 +152,18 @@ class VMScaleSetsManager(AzureBaseManager):
                         )
                     # Get VM Profile's primary Vnet\
                     if (
-                            vm_scale_set_dict["virtual_machine_profile"].get(
-                                "network_profile"
-                            )
-                            is not None
+                        vm_scale_set_dict["virtual_machine_profile"].get(
+                            "network_profile"
+                        )
+                        is not None
                     ):
                         vmss_vm_network_profile_dict = vm_scale_set_dict[
                             "virtual_machine_profile"
                         ]["network_profile"]
                         if primary_vnet := self.get_primary_vnet(
-                                vmss_vm_network_profile_dict[
-                                    "network_interface_configurations"
-                                ]
+                            vmss_vm_network_profile_dict[
+                                "network_interface_configurations"
+                            ]
                         ):
                             vmss_vm_network_profile_dict.update(
                                 {"primary_vnet": primary_vnet}
@@ -235,12 +237,14 @@ class VMScaleSetsManager(AzureBaseManager):
                         region_code=vm_scale_set_dict["location"],
                         reference=self.make_reference(vm_scale_set_dict.get("id")),
                         tags=vm_scale_set_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -261,7 +265,7 @@ class VMScaleSetsManager(AzureBaseManager):
 
     # Get instances of a virtual machine from a VM scale set
     def get_vm_instance_dict(
-            self, vm_instance, vm_instance_conn, resource_group, vm_scale_set_name
+        self, vm_instance, vm_instance_conn, resource_group, vm_scale_set_name
     ):
         vm_instance_dict = self.convert_nested_dictionary(vm_instance)
 
@@ -281,8 +285,8 @@ class VMScaleSetsManager(AzureBaseManager):
         #     )
         if vm_instance_dict.get("vm_instance_status_profile") is not None:
             if (
-                    vm_instance_dict["vm_instance_status_profile"].get("vm_agent")
-                    is not None
+                vm_instance_dict["vm_instance_status_profile"].get("vm_agent")
+                is not None
             ):
                 vm_instance_dict.update(
                     {
@@ -295,9 +299,9 @@ class VMScaleSetsManager(AzureBaseManager):
         # Get Primary Vnet display
         if getattr(vm_instance, "network_profile_configuration") is not None:
             if primary_vnet := self.get_primary_vnet(
-                    vm_instance_dict["network_profile_configuration"][
-                        "network_interface_configurations"
-                    ]
+                vm_instance_dict["network_profile_configuration"][
+                    "network_interface_configurations"
+                ]
             ):
                 vm_instance_dict.update({"primary_vnet": primary_vnet})
 
@@ -305,7 +309,7 @@ class VMScaleSetsManager(AzureBaseManager):
 
     # Get Instance view of a virtual machine from a VM scale set Instance
     def get_vm_instance_view_dict(
-            self, vm_instance_conn, resource_group, vm_scale_set_name, instance_id
+        self, vm_instance_conn, resource_group, vm_scale_set_name, instance_id
     ):
         vm_instance_status_profile = vm_instance_conn.get_vm_scale_set_instance_view(
             resource_group, vm_scale_set_name, instance_id
@@ -318,7 +322,7 @@ class VMScaleSetsManager(AzureBaseManager):
             status_str = None
 
             for status in vm_instance_status_profile_dict.get("vm_agent").get(
-                    "statuses"
+                "statuses"
             ):
                 status_str = status["display_status"]
 
@@ -330,7 +334,7 @@ class VMScaleSetsManager(AzureBaseManager):
         return vm_instance_status_profile_dict
 
     def list_auto_scale_settings(
-            self, vm_scale_sets_conn, resource_group_name, vm_scale_set_id
+        self, vm_scale_sets_conn, resource_group_name, vm_scale_set_id
     ):
         auto_scale_settings_list = list()
         auto_scale_settings_obj = vm_scale_sets_conn.list_auto_scale_settings(
@@ -348,8 +352,8 @@ class VMScaleSetsManager(AzureBaseManager):
                 }
             )
             if (
-                    auto_scale_setting_dict["target_resource_uri"].lower()
-                    == vm_scale_set_id.lower()
+                auto_scale_setting_dict["target_resource_uri"].lower()
+                == vm_scale_set_id.lower()
             ):  # Compare resources' id
                 auto_scale_settings_list.append(auto_scale_setting_dict)
 
@@ -443,7 +447,7 @@ class VMScaleSetsManager(AzureBaseManager):
 
     @staticmethod
     def list_auto_scale_settings_obj(
-            vm_scale_sets_conn, resource_group_name, vm_scale_set_id
+        vm_scale_sets_conn, resource_group_name, vm_scale_set_id
     ):
         auto_scale_settings_obj_list = list()
         # all List of the Auto scaling Rules in this resource group
@@ -453,8 +457,8 @@ class VMScaleSetsManager(AzureBaseManager):
 
         for auto_scale_setting in auto_scale_settings_obj:
             if (
-                    auto_scale_setting.target_resource_uri.lower()
-                    == vm_scale_set_id.lower()
+                auto_scale_setting.target_resource_uri.lower()
+                == vm_scale_set_id.lower()
             ):
                 auto_scale_settings_obj_list.append(auto_scale_setting)
 

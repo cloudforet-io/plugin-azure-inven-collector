@@ -4,10 +4,12 @@ from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
 from plugin.connector.cosmos_db.cosmos_db_connector import CosmosDBConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class CosmosDBManager(AzureBaseManager):
@@ -25,9 +27,7 @@ class CosmosDBManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Database"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-cosmos-db.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-cosmos-db.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +37,9 @@ class CosmosDBManager(AzureBaseManager):
         cosmos_db_conn = CosmosDBConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         cosmos_db_accounts_list = cosmos_db_conn.list_all_cosmos_db_accounts()
@@ -87,8 +89,8 @@ class CosmosDBManager(AzureBaseManager):
                     )
 
                 if (
-                        cosmos_db_account_dict.get("private_endpoint_connections")
-                        is not None
+                    cosmos_db_account_dict.get("private_endpoint_connections")
+                    is not None
                 ):
                     for private_connection in cosmos_db_account_dict[
                         "private_endpoint_connections"
@@ -142,17 +144,21 @@ class CosmosDBManager(AzureBaseManager):
                         provider=self.provider,
                         data=cosmos_db_account_dict,
                         account=secret_data["subscription_id"],
-                        instance_type=cosmos_db_account_dict["database_account_offer_type"],
+                        instance_type=cosmos_db_account_dict[
+                            "database_account_offer_type"
+                        ],
                         region_code=cosmos_db_account_dict["location"],
                         reference=self.make_reference(cosmos_db_account_dict.get("id")),
                         # launched_at=cosmos_db_account_dict.system_data.created_at,
                         tags=cosmos_db_account_dict.get("tags", {}),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,

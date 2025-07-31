@@ -4,10 +4,12 @@ from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
 from plugin.connector.disks.disks_connector import DisksConnector
-from plugin.connector.subscriptions.subscriptions_connector import SubscriptionsConnector
+from plugin.connector.subscriptions.subscriptions_connector import (
+    SubscriptionsConnector,
+)
 from plugin.manager.base import AzureBaseManager
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("spaceone")
 
 
 class DisksManager(AzureBaseManager):
@@ -25,9 +27,7 @@ class DisksManager(AzureBaseManager):
             is_primary=True,
             is_major=True,
             labels=["Compute", "Storage"],
-            tags={
-                "spaceone:icon": f"{ICON_URL}/azure-disk.svg"
-            }
+            tags={"spaceone:icon": f"{ICON_URL}/azure-disk.svg"},
         )
 
     def create_cloud_service(self, options, secret_data, schema):
@@ -37,7 +37,9 @@ class DisksManager(AzureBaseManager):
         disks_conn = DisksConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_obj = subscription_conn.get_subscription(secret_data["subscription_id"])
+        subscription_obj = subscription_conn.get_subscription(
+            secret_data["subscription_id"]
+        )
         subscription_info = self.convert_nested_dictionary(subscription_obj)
 
         disks = disks_conn.list_disks()
@@ -57,7 +59,9 @@ class DisksManager(AzureBaseManager):
                 # update disk_data dict
                 disk_dict.update(
                     {
-                        "resource_group": self.get_resource_group_from_id(disk_dict["id"]),
+                        "resource_group": self.get_resource_group_from_id(
+                            disk_dict["id"]
+                        ),
                         "subscription_id": subscription_info["subscription_id"],
                         "subscription_name": subscription_info["display_name"],
                         "size": disk_dict["disk_size_bytes"],
@@ -65,7 +69,7 @@ class DisksManager(AzureBaseManager):
                             disk_dict["disk_iops_read_write"],
                             disk_dict["disk_m_bps_read_write"],
                         ),
-                        "azure_monitor": {"resource_id": disk_id}
+                        "azure_monitor": {"resource_id": disk_id},
                     }
                 )
 
@@ -117,12 +121,14 @@ class DisksManager(AzureBaseManager):
                         instance_size=disk_data["disk_size_bytes"],
                         region_code=disk_data["location"],
                         reference=self.make_reference(disk_data.get("id")),
-                        data_format="dict"
+                        data_format="dict",
                     )
                 )
 
             except Exception as e:
-                _LOGGER.error(f"[create_cloud_service] Error {self.service} {e}", exc_info=True)
+                _LOGGER.error(
+                    f"[create_cloud_service] Error {self.service} {e}", exc_info=True
+                )
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -149,11 +155,11 @@ class DisksManager(AzureBaseManager):
     @staticmethod
     def get_tier_display(disk_iops_read_write, disk_m_bps_read_write):
         tier_display = (
-                str(disk_iops_read_write)
-                + " IOPS"
-                + ", "
-                + str(disk_m_bps_read_write)
-                + " Mbps"
+            str(disk_iops_read_write)
+            + " IOPS"
+            + ", "
+            + str(disk_m_bps_read_write)
+            + " Mbps"
         )
         return tier_display
 

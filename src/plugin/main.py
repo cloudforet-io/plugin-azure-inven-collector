@@ -12,21 +12,25 @@ app = CollectorPluginServer()
 
 _LOGGER = logging.getLogger("spaceone")
 
-DEFAULT_RESOURCE_TYPES = ["inventory.CloudService", "inventory.CloudServiceType", "inventory.Metric",
-                          "inventory.Region"]
+DEFAULT_RESOURCE_TYPES = [
+    "inventory.CloudService",
+    "inventory.CloudServiceType",
+    "inventory.Metric",
+    "inventory.Region",
+]
 
 
-@app.route('Collector.init')
+@app.route("Collector.init")
 def collector_init(params: dict) -> dict:
     return _create_init_metadata()
 
 
-@app.route('Collector.verify')
+@app.route("Collector.verify")
 def collector_verify(params: dict) -> None:
     pass
 
 
-@app.route('Collector.collect')
+@app.route("Collector.collect")
 def collector_collect(params: dict) -> Generator[dict, None, None]:
     options: dict = params.get("options", {}) or {}
     secret_data: dict = params["secret_data"]
@@ -38,9 +42,13 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
     _check_secret_data(secret_data)
 
     start_time = time.time()
-    _LOGGER.debug(f"[collector_collect] Start Collecting Azure Resources {subscription_id}")
+    _LOGGER.debug(
+        f"[collector_collect] Start Collecting Azure Resources {subscription_id}"
+    )
 
-    cloud_service_groups = _get_cloud_service_groups_from_options_and_task_options(options, task_options)
+    cloud_service_groups = _get_cloud_service_groups_from_options_and_task_options(
+        options, task_options
+    )
     resource_type = task_options.get("resource_type")
 
     if resource_type == "inventory.Region":
@@ -48,9 +56,13 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
         location_info = subscriptions_mgr.list_location_info(secret_data)
         yield from AzureBaseManager().collect_region(location_info)
     else:
-        for manager in AzureBaseManager.list_managers_by_cloud_service_groups(cloud_service_groups):
+        for manager in AzureBaseManager.list_managers_by_cloud_service_groups(
+            cloud_service_groups
+        ):
             if resource_type == "inventory.CloudService":
-                yield from manager().collect_cloud_services(options, secret_data, schema)
+                yield from manager().collect_cloud_services(
+                    options, secret_data, schema
+                )
             elif resource_type == "inventory.CloudServiceType":
                 yield from manager().collect_cloud_service_type()
             elif resource_type == "inventory.Metric":
@@ -58,10 +70,11 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
             else:
                 yield from manager().collect_resources(options, secret_data, schema)
     _LOGGER.debug(
-        f"[collector_collect] Finished Collecting Azure Resources {subscription_id} duration: {time.time() - start_time} seconds")
+        f"[collector_collect] Finished Collecting Azure Resources {subscription_id} duration: {time.time() - start_time} seconds"
+    )
 
 
-@app.route('Job.get_tasks')
+@app.route("Job.get_tasks")
 def job_get_tasks(params: dict) -> dict:
     domain_id = params["domain_id"]
     options = params.get("options", {})
@@ -73,14 +86,18 @@ def job_get_tasks(params: dict) -> dict:
     if not resource_types:
         resource_types = DEFAULT_RESOURCE_TYPES
 
-    for manager in AzureBaseManager.list_managers_by_cloud_service_groups(cloud_service_groups):
+    for manager in AzureBaseManager.list_managers_by_cloud_service_groups(
+        cloud_service_groups
+    ):
         for resource_type in resource_types:
-            tasks.append({
-                "task_options": {
-                    "resource_type": resource_type,
-                    "cloud_service_groups": [manager.cloud_service_group]
+            tasks.append(
+                {
+                    "task_options": {
+                        "resource_type": resource_type,
+                        "cloud_service_groups": [manager.cloud_service_group],
+                    }
                 }
-            })
+            )
 
     return {"tasks": tasks}
 
@@ -97,9 +114,9 @@ def _create_init_metadata() -> dict:
                         "items": {"type": "string"},
                         "default": "All",
                         "enum": _get_cloud_service_group_enum(),
-                        "description": "Choose one of the service to collect data. If you choose 'All', it will collect all services."
+                        "description": "Choose one of the service to collect data. If you choose 'All', it will collect all services.",
                     }
-                }
+                },
             }
         }
     }
@@ -114,22 +131,26 @@ def _get_cloud_service_group_enum() -> list:
     return enum
 
 
-def _get_cloud_service_groups_from_options_and_task_options(options: dict, task_options: dict) -> list:
+def _get_cloud_service_groups_from_options_and_task_options(
+    options: dict, task_options: dict
+) -> list:
     cloud_service_groups = options.get("cloud_service_groups", [])
     if task_options:
-        cloud_service_groups = task_options.get("cloud_service_groups", cloud_service_groups)
+        cloud_service_groups = task_options.get(
+            "cloud_service_groups", cloud_service_groups
+        )
     return cloud_service_groups
 
 
 def _check_secret_data(secret_data: dict):
     if "tenant_id" not in secret_data:
-        raise ERROR_REQUIRED_PARAMETER(key='secret_data.tenant_id')
+        raise ERROR_REQUIRED_PARAMETER(key="secret_data.tenant_id")
 
     if "subscription_id" not in secret_data:
-        raise ERROR_REQUIRED_PARAMETER(key='secret_data.subscription_id')
+        raise ERROR_REQUIRED_PARAMETER(key="secret_data.subscription_id")
 
     if "client_id" not in secret_data:
-        raise ERROR_REQUIRED_PARAMETER(key='secret_data.client_id')
+        raise ERROR_REQUIRED_PARAMETER(key="secret_data.client_id")
 
     if "client_secret" not in secret_data:
-        raise ERROR_REQUIRED_PARAMETER(key='secret_data.client_secret')
+        raise ERROR_REQUIRED_PARAMETER(key="secret_data.client_secret")
