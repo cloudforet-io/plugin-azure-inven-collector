@@ -115,26 +115,29 @@ class VirtualMachineVmManager:
         return vm_data
 
     def get_os_data(self, vm_storage_profile):
-        if vm_storage_profile.image_reference is not None:
-            try:
+        try:
+            if vm_storage_profile.image_reference is not None:
+                offer = vm_storage_profile.image_reference.offer
                 os_type = self.get_os_type(vm_storage_profile.os_disk)
                 image_reference = vm_storage_profile.image_reference
-                offer = vm_storage_profile.image_reference.offer
 
                 if os_type and offer is not None:
-                    try:
-                        os_data = {
-                            "os_distro": self.get_os_distro(os_type, offer),
-                            "details": self.get_os_details(image_reference),
-                            "os_type": os_type,
-                        }
-                        return os_data
+                    return {
+                        "os_distro": self.get_os_distro(os_type, offer),
+                        "details": self.get_os_details(image_reference),
+                        "os_type": os_type,
+                    }
+                else:
+                    return {
+                        "os_distro": vm_storage_profile.os_disk.os_type,
+                        # "details": self.get_os_details(image_reference),
+                        "os_type": os_type,
+                    }
 
-                    except Exception as e:
-                        print(f"[ERROR: GET OS Distro Data]: {e}")
+        except Exception as e:
+            print(f"[ERROR: GET OS Data]: {e}")
 
-            except Exception as e:
-                print(f"[ERROR: GET OS Data]: {e}")
+        return None
 
     def get_compute_data(
         self, vm, resource_group_name, network_security_groups, subscription_id

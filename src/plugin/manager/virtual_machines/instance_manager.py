@@ -126,7 +126,8 @@ class VirtualMachinesManager(AzureBaseManager):
                     if vnet_subnet_dict.get("subnet_info"):
                         subnet_data = vnet_subnet_dict["subnet_info"]
 
-                vm_resource.update({"tags": self.get_tags(vm.tags)})
+                # vm_resource.update({"tags": self.get_tags(vm.tags)})
+                vm_resource.update({"tags": vm.tags})
 
                 resource_id = f'/subscriptions/{subscription_data["subscription_id"]}/resourceGroups/{resource_group_name}/providers/Microsoft.Compute/virtualMachines/{vm_resource["name"]}'
 
@@ -192,14 +193,14 @@ class VirtualMachinesManager(AzureBaseManager):
 
         return cloud_services, error_responses
 
-    @staticmethod
-    def get_tags(tags):
-        tags_result = []
-        if tags:
-            for k, v in tags.items():
-                tags_result.append({"key": k, "value": v})
-
-        return tags_result
+    # @staticmethod
+    # def get_tags(tags):
+    #     tags_result = []
+    #     if tags:
+    #         for k, v in tags.items():
+    #             tags_result.append({"key": k, "value": v})
+    #
+    #     return tags_result
 
     @staticmethod
     def get_resource_info_in_vm(vm, resource_groups):

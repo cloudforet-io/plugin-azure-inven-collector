@@ -11,7 +11,7 @@ search:
     - Image: data.compute.image
     - Availability Zone: data.compute.az
     - OS Type: data.os.os_type
-    - OS Architecture: data.os.os_arch
+    #    - OS Architecture: data.os.os_arch
     - MAC Address: data.nics.mac_address
     - Public IP Address: data.nics.public_ip_address
     - Public DNS: data.nics.tags.public_dns
@@ -117,8 +117,8 @@ table:
     - OS Type: data.os.os_type
       is_optional: true
     - OS: data.os.os_distro
-    - OS Architecture: data.os.os_arch
-      is_optional: true
+    #    - OS Architecture: data.os.os_arch
+    #      is_optional: true
     - Primary IP: data.primary_ip_address
     - Public DNS: data.nics
       type: list
@@ -345,12 +345,12 @@ tabs.0:
           translation_id: PAGE_SCHEMA.OS_TYPE
         - OS Distribution: data.os.os_distro
           translation_id: PAGE_SCHEMA.OS_DISTRO
-        - OS Architecture: data.os.os_arch
-          translation_id: PAGE_SCHEMA.OS_ARCH
+        #        - OS Architecture: data.os.os_arch
+        #          translation_id: PAGE_SCHEMA.OS_ARCH
         - OS Version Details: data.os.details
           translation_id: PAGE_SCHEMA.OS_DETAILS
-        - OS License: data.os.os_license
-          translation_id: PAGE_SCHEMA.OS_LICENSE
+    #        - OS License: data.os.os_license
+    #          translation_id: PAGE_SCHEMA.OS_LICENSE
     - name: Hardware
       type: item
       fields:
