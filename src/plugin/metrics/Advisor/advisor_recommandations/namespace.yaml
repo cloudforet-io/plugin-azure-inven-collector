@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-advisor-recommendations
+name: Advisor/Recommendations
+category: ASSET
+resource_type: inventory.CloudService
+group: azure
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-advisor.svg"
+version: '1.0'

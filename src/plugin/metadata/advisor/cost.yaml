@@ -1,0 +1,51 @@
+---
+search:
+  fields:
+    - Tenant ID: data.tenant_id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Recommendation name: data.name
+    - Impact: data.impact
+    - Category: data.category
+    - Last updated at: data.last_updated
+    - Recommendation name: data.name
+    - Term: data.extended_properties.term
+    - Look-back period: data.extended_properties.lookbackPeriod
+
+
+
+table:
+  sort:
+    key: data.impact
+    desc: false
+  fields:
+    - Impact: data.impact
+    - Category: data.category
+    - Potential yearly savings based on retail pricing: data.potential_yearly_savings_based_on_retail_pricing_display
+    - Currency: data.extended_properties.savingsCurrency
+    - Impacted resource name: data.impacted_value_display
+    - Impacted resource: data.impacted_field
+    - Last updated at: data.last_updated
+    - Recommendation name: data.name
+
+
+tabs.0:
+  name: Details
+  type: item
+  fields:
+    - Tenant ID: data.tenant_id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Recommendation name: data.name
+    - Impacted resource: data.impacted_value_display
+    - Recommended action: data.short_description.solution
+    - Impact: data.impact
+    - Category: data.category
+    - Last updated: data.last_updated
+    - Quantity: data.extended_properties.displayQty
+    - Term: data.extended_properties.term
+    - Look-back period (days): data.extended_properties.lookbackPeriod
+
+
+
+

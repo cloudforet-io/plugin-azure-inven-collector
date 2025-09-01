@@ -1,0 +1,44 @@
+---
+search:
+  fields:
+    - Tenant ID: data.tenant_id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Impact: data.impact
+    - Category: data.category
+    - Last updated at: data.last_updated
+
+
+table:
+  sort:
+    key: data.impact
+    desc: true
+  fields:
+    - Recommendation name: data.name
+    - Impact: data.impact
+    - Description: data.short_description.problem
+    - Category: data.category
+    - Impacted resource name: data.extended_properties.assessmentKey
+    - Impacted resource: data.impacted_field
+    - Last updated at: data.last_updated
+
+
+tabs.0:
+  name: Details
+  type: item
+  fields:
+    - Tenant ID: data.tenant_id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Name: name
+    - Recommendation name: data.name
+    - Impact: data.impact
+    - Category: data.category
+    - Last update time: data.last_updated
+
+  tabs.1:
+    name: Extended Properties
+    type: item
+    fields:
+      - Score: data.extended_properties.score
+      - AssessmentKey: data.extended_properties.assessmentKey

@@ -1,0 +1,32 @@
+---
+search:
+  fields:
+    - Tenant ID: data.tenant_id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Category: data.score_category_display
+    - Impacted Resource Count: data.impactedResourceCount
+      type: integer
+
+table:
+  sort:
+    key: data.lastRefreshedScore.score
+    desc: true
+  fields:
+    - Score: data.lastRefreshedScore.score
+    - Category: data.score_category_display
+    - Impacted Resource Count: data.lastRefreshedScore.impactedResourceCount
+
+
+tabs.0:
+  name: Last Refreshed Score
+  root_path: data.lastRefreshedScore
+  type: items
+  fields:
+    - Date: date
+    - Score: score
+    - Category Count: categoryCount
+    - Impacted Resource Count: impactedResourceCount
+    - Potential Score Increase: potentialScoreIncrease
+    - Consumption Units: consumptionUnits
+

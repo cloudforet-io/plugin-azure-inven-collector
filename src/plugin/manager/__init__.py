@@ -1,3 +1,4 @@
+from .advisor import *
 from .application_gatways import *
 from .cognitive_services import *
 from .container_instances import *
