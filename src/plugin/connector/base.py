@@ -33,6 +33,7 @@ _LOGGER = logging.getLogger("spaceone")
 class AzureBaseConnector(BaseConnector):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.credential = None
         self.subscription_client = None
         self.compute_client = None
         self.network_client = None
@@ -59,56 +60,56 @@ class AzureBaseConnector(BaseConnector):
         os.environ["AZURE_CLIENT_ID"] = secret_data["client_id"]
         os.environ["AZURE_CLIENT_SECRET"] = secret_data["client_secret"]
 
-        credential = DefaultAzureCredential()
+        self.credential = DefaultAzureCredential()
 
-        self.subscription_client = SubscriptionClient(credential=credential)
+        self.subscription_client = SubscriptionClient(credential=self.credential)
         self.compute_client = ComputeManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.network_client = NetworkManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.sql_client = SqlManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.monitor_client = MonitorManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.container_instance_client = ContainerInstanceManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.resource_client = ResourceManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.storage_client = StorageManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.cosmosdb_client = CosmosDBManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.postgre_sql_client = PostgreSQLManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.postgre_sql_flexible_client = PostgreSQLFlexibleManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.web_pubsub_service_client = WebPubSubManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.key_vault_client = KeyVaultManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.mysql_client = MySQLManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.mysql_flexible_client = MySQLFlexibleManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.advisor_client = AdvisorManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
         self.cognitive_services_client = CognitiveServicesManagementClient(
-            credential=credential, subscription_id=subscription_id
+            credential=self.credential, subscription_id=subscription_id
         )
 
     def get_connector(self, cloud_service_group: str, cloud_service_type: str):
@@ -158,12 +159,11 @@ class AzureBaseConnector(BaseConnector):
 
         return headers
 
-    @staticmethod
-    def _get_access_token():
+    def _get_access_token(self):
         try:
-            credential = DefaultAzureCredential(logging_enable=True)
+            # credential = DefaultAzureCredential(logging_enable=True)
             scopes = ["https://management.azure.com/.default"]
-            token_info = credential.get_token(*scopes)
+            token_info = self.credential.get_token(*scopes)
             return token_info.token
         except Exception as e:
             _LOGGER.error(f"[ERROR] _get_access_token :{e}")
