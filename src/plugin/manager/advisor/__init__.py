@@ -1,1 +1,8 @@
 from .advisor_score_manager import ScoreManager
+from .recommendation_cost_manager import RecommendationCostManager
+from .recommendation_operational_excellence_manager import (
+    RecommendationOperationalExcellenceManager,
+)
+from .recommendation_performance_manager import RecommendationPerformanceManager
+from .recommendation_reliability_manager import RecommendationReliabilityManager
+from .recommendation_security_manager import RecommendationSecurityManager

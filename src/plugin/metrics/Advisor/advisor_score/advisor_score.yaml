@@ -1,0 +1,34 @@
+---
+metric_id: metric-azure-advisor-score
+name: Advisor Score
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.Advisor.Score
+query_options:
+  filter:
+    - key: data.score_category_display
+      value:
+        - Cost
+        - Security
+        - Performance
+        - Reliability
+        - OperationalExcellence
+        - Advisor
+      operator: in
+  group_by:
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: data.subscription_id
+      name: Subscription ID
+    - key: data.score_category_display
+      name: Category
+      default: true
+  fields:
+    value:
+      key: data.lastRefreshedScore.score
+      operator: average
+unit: '%'
+namespace_id: ns-azure-advisor-recommendations
+version: '1.0'

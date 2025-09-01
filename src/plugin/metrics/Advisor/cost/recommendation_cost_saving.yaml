@@ -1,0 +1,38 @@
+---
+metric_id: metric-azure-advisor-cost-saving
+name: Cost Saving Recommendation
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.Advisor.Cost
+query_options:
+  group_by:
+    - key: data.impact
+      name: Impact
+      default: true
+    - key: data.category
+      name: Category
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: data.subscription_id
+      name: Subscription ID
+    - key: data.impacted_field
+      name: Impacted Resource Type
+    - key: data.impacted_value_display
+      name: Impacted Resource Name
+    - key: data.short_description.problem
+      name: Description
+    - key: data.extended_properties.term
+      name: Term
+      default: true
+    - key: data.extended_properties.lookbackPeriod
+      name: Look-back period (days)
+      default: true
+  fields:
+    value:
+      key: data.potential_yearly_savings_based_on_retail_pricing_display
+      operator: sum
+unit: USD
+namespace_id: ns-azure-advisor-cost
+version: '1.3'

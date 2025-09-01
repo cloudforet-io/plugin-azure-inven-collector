@@ -1,0 +1,27 @@
+---
+metric_id: metric-azure-advisor-reliability-count
+name: Reliability Recommendation Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.Advisor.Reliability
+query_options:
+  group_by:
+    - key: data.impact
+      name: Impact
+      default: true
+    - key: data.category
+      name: Category
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+      default: true
+    - key: data.subscription_id
+      name: Subscription ID
+    - key: data.impacted_value_display
+      name: Impacted Resource Name
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-advisor-recommendations
+version: '1.1'
