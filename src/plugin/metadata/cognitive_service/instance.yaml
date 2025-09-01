@@ -5,7 +5,7 @@ search:
     - Resource Group: data.resource_group
     - Location: data.location
     - kind: data.kind
-    - Custom Domain Name: data.custom_sub_domain_name
+    - Custom Domain Name: data.properties.custom_sub_domain_name
     - Pricing Tier: data.sku.name
     - Status: data.properties.provisioning_state
     - Created Date: data.properties.date_created
@@ -19,7 +19,7 @@ table:
   fields:
     - Kind: data.kind
     - Location: data.location
-    - Custom Domain Name: data.custom_sub_domain_name
+    - Custom Domain Name: data.properties.custom_sub_domain_name
     - Pricing Tier: data.sku.name
     - Status: data.properties.provisioning_state
     - Created Date: data.properties.date_created
