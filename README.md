@@ -5,70 +5,75 @@
   <img width="245" src="https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/azure-cloud-services.svg">
   <p> 
     <br>
-    <img alt="Version"  src="https://img.shields.io/badge/version-2.0.0-blue.svg?cacheSeconds=2592000"  />    
+    <img alt="Version"  src="https://img.shields.io/badge/version-2.0.8-blue.svg?cacheSeconds=2592000"  />    
     <a href="https://www.apache.org/licenses/LICENSE-2.0"  target="_blank"><img alt="License: Apache 2.0"  src="https://img.shields.io/badge/License-Apache 2.0-yellow.svg" /></a> 
   </p> 
 </div> 
 
 #### Plugin to collect Microsoft Azure Cloud Services
 
-
-> Cloudforet's [plugin-azure-cloud-services](https://github.com/cloudforet-io/plugin-azure-inven-collector) is a convenient tool to 
-get cloud service data from Azure Cloud Services. 
+> Cloudforet's [plugin-azure-cloud-services](https://github.com/cloudforet-io/plugin-azure-inven-collector) is a
+> convenient tool to
+> get cloud service data from Azure Cloud Services.
 
 
 Find us also at [Dockerhub](https://hub.docker.com/r/cloudforet/plugin-azure-inven-collector)
-> Latest stable version : 2.0.0
+> Latest stable version : 2.0.8
 
-Please contact us if you need any further information. 
+Please contact us if you need any further information.
 <admin@cloudforet.io>
-
 
 ## Contents
 
-| Cloud Service Type | Cloud Service                                               |
-|--------------------|-------------------------------------------------------------|
-| Instance           | [Application Gateways](#application-gateways)               |
-| Container          | [Container Instances](#container-instances)                 |
-| Instance           | [CosmosDB](#cosmos-db)                                      |
-| Disk               | [Disks](#disks)                                             |
-| Instance           | [KeyVaults](#key-vaults)                                    |
-| Instance           | [Load Balancers](#load-balancers)                           |
-| Server             | [MySQL Servers](#mysql-servers---deprecated)                |
-| Server             | [MySQL Flexible Servers](#mysql-flexible-servers)           |
-| Instance           | [NAT Gateways](#nat-gateways)                               |
-| Instance           | [Network Security Groups](#network-security-groups)         |
-| Server             | [PostgreSQL Servers](#postgresql-servers---deprecated)      |
-| Server             | [PostgreSQL Flexible Servers](#postgresql-flexible-servers) |
-| IPAddress          | [Public IP Addresses](#public-ip-addresses)                 |
-| Instance           | [Snapshots](#snapshots)                                     |
-| Server             | [SQL Servers](#sql-servers)                                 |
-| Database           | [SQL Databases](#sql-databases)                             |
-| Storage            | [Storage Accounts](#storage-accounts)                       |
-| Instance           | [Virtual Machines](#virtual-machines)                       |
-| Instance           | [Virtual Networks](#virtual-networks)                       |
-| ScaleSet           | [VM ScaleSets](#virtual-machine-scale-sets)                 |
-| Service            | [Web PubSub Service](#web-pubsub-service)                   |
+| Cloud Service Type                                                       | Cloud Service                                               |
+|--------------------------------------------------------------------------|-------------------------------------------------------------|
+| Instance                                                                 | [Application Gateways](#application-gateways)               |
+| Container                                                                | [Container Instances](#container-instances)                 |
+| Instance                                                                 | [CosmosDB](#cosmos-db)                                      |
+| Disk                                                                     | [Disks](#disks)                                             |
+| Instance                                                                 | [KeyVaults](#key-vaults)                                    |
+| Instance                                                                 | [Load Balancers](#load-balancers)                           |
+| Server                                                                   | [MySQL Servers](#mysql-servers---deprecated)                |
+| Server                                                                   | [MySQL Flexible Servers](#mysql-flexible-servers)           |
+| Instance                                                                 | [NAT Gateways](#nat-gateways)                               |
+| Instance                                                                 | [Network Security Groups](#network-security-groups)         |
+| Server                                                                   | [PostgreSQL Servers](#postgresql-servers---deprecated)      |
+| Server                                                                   | [PostgreSQL Flexible Servers](#postgresql-flexible-servers) |
+| IPAddress                                                                | [Public IP Addresses](#public-ip-addresses)                 |
+| Instance                                                                 | [Snapshots](#snapshots)                                     |
+| Server                                                                   | [SQL Servers](#sql-servers)                                 |
+| Database                                                                 | [SQL Databases](#sql-databases)                             |
+| Storage                                                                  | [Storage Accounts](#storage-accounts)                       |
+| Instance                                                                 | [Virtual Machines](#virtual-machines)                       |
+| Instance                                                                 | [Virtual Networks](#virtual-networks)                       |
+| ScaleSet                                                                 | [VM ScaleSets](#virtual-machine-scale-sets)                 |
+| Service                                                                  | [Web PubSub Service](#web-pubsub-service)                   |
+| Score<br>OperationalExcellence<br>Performance<br>Reliability<br>Security | [Advisor](#advisor)                                         |
+
     
 ---
+
 ## SETTING
+
 You should insert information about account in Cloudforet's **Service Account** initially.
+
 * Base Information
-	* `name`
-	* `Tenant ID`
-	* `Subscription ID`
-	* `Tag`
+    * `name`
+    * `Tenant ID`
+    * `Subscription ID`
+    * `Tag`
 
 * Credentials
-	* `Tenant ID`
-	* `Subscription ID`
-	* `Client Secret`
-	* `Client ID`
+    * `Tenant ID`
+    * `Subscription ID`
+    * `Client Secret`
+    * `Client ID`
+
 ---
 
 ## Azure Service Endpoint (in use)
 
- There is an endpoints used to collect Azure resources information.
+There is an endpoints used to collect Azure resources information.
 
 <pre>
 https://management.azure.com
@@ -82,39 +87,46 @@ https://*.vault.azure.net
 
 The following is a list of services being collected and service code information.
 
-| No. | Service name                | Service Code                                |
-|-----|-----------------------------|---------------------------------------------|
-| 1   | Application Gateways        | Microsoft.Network/applicationGateways       |
-| 2   | Cosmos DB                   | Microsoft.DocumentDB/databaseAccounts       |
-| 3   | Disks                       | Microsoft.Compute/disks                     |
-| 4   | Key Vaults                  | Microsoft.KeyVault/vaults                   |
-| 5   | Load Balancers              | Microsoft.Network/loadBalancers             |
-| 6   | MySQL Servers               | Microsoft.DBforMySQL/servers                |
-| 7   | MySQL Flexible Servers      | Microsoft.DBforMySQL/flexibleServers        |
-| 8   | SQL Servers                 | Microsoft.Sql/servers                       |
-| 9   | SQL Databases               | Microsoft.Sql/servers/databases             |
-| 10  | NAT Gateways                | Microsoft.Network/natGateways               |
-| 11  | Network Security Groups     | Microsoft.Network/networkSecurityGroups     |
-| 12  | PostgreSQL Servers          | Microsoft.DBforPostgreSQL/servers           |
-| 13  | PostgreSQL Flexible Servers | Microsoft.DBforPostgreSQL/flexibleServers   |
-| 14  | Public IP Addresses         | Microsoft.Network/publicIPAddresses         |
-| 15  | Snapshots                   | Microsoft.Compute/snapshots                 |
-| 16  | Storage Accounts            | Microsoft.Storage/storageAccounts           |
-| 17  | Virtual Machines            | Microsoft.Compute/virtualMachines           |
-| 18  | Virtual Networks            | Microsoft.Network/virtualNetworks           |
-| 19  | VM ScaleSets                | Microsoft.Compute/virtualMachineScaleSets   |
-| 20  | Container Instances         | Microsoft.ContainerInstance/containerGroups |
-| 21  | Web PubSub Service          | Microsoft.SignalRService/WebPubSub          |
+| No. | Service name                | Service Code                                                      |
+|-----|-----------------------------|-------------------------------------------------------------------|
+| 1   | Application Gateways        | Microsoft.Network/applicationGateways                             |
+| 2   | Cosmos DB                   | Microsoft.DocumentDB/databaseAccounts                             |
+| 3   | Disks                       | Microsoft.Compute/disks                                           |
+| 4   | Key Vaults                  | Microsoft.KeyVault/vaults                                         |
+| 5   | Load Balancers              | Microsoft.Network/loadBalancers                                   |
+| 6   | MySQL Servers               | Microsoft.DBforMySQL/servers                                      |
+| 7   | MySQL Flexible Servers      | Microsoft.DBforMySQL/flexibleServers                              |
+| 8   | SQL Servers                 | Microsoft.Sql/servers                                             |
+| 9   | SQL Databases               | Microsoft.Sql/servers/databases                                   |
+| 10  | NAT Gateways                | Microsoft.Network/natGateways                                     |
+| 11  | Network Security Groups     | Microsoft.Network/networkSecurityGroups                           |
+| 12  | PostgreSQL Servers          | Microsoft.DBforPostgreSQL/servers                                 |
+| 13  | PostgreSQL Flexible Servers | Microsoft.DBforPostgreSQL/flexibleServers                         |
+| 14  | Public IP Addresses         | Microsoft.Network/publicIPAddresses                               |
+| 15  | Snapshots                   | Microsoft.Compute/snapshots                                       |
+| 16  | Storage Accounts            | Microsoft.Storage/storageAccounts                                 |
+| 17  | Virtual Machines            | Microsoft.Compute/virtualMachines                                 |
+| 18  | Virtual Networks            | Microsoft.Network/virtualNetworks                                 |
+| 19  | VM ScaleSets                | Microsoft.Compute/virtualMachineScaleSets                         |
+| 20  | Container Instances         | Microsoft.ContainerInstance/containerGroups                       |
+| 21  | Web PubSub Service          | Microsoft.SignalRService/WebPubSub                                |
+| 22  | Advisor                     | Microsoft.Advisor/advisorScore<br>Microsoft.ResourceHealth/events |
+
 ---
 
 ## Authentication Overview
-Registered service account on Cloudforet must have certain permissions to collect cloud service data 
+
+Registered service account on Cloudforet must have certain permissions to collect cloud service data
 Please, set authentication privilege for followings:
 
-### Custom roles for collecting Azure cloud resources 
+### Custom roles for collecting Azure cloud resources
+
 Cloudforet Azure collector requires several privileges for collecting resources. <br>
-Please create custom roles in Azure portal, and assign following roles to Cloudforet Azure collector apps before collect resources.
-For information on creating custom roles in Azure, see the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
+Please create custom roles in Azure portal, and assign following roles to Cloudforet Azure collector apps before collect
+resources.
+For information on creating custom roles in Azure, see
+the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
+
 ```
 {
     "properties": {
@@ -322,24 +334,31 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
     }
 }
 ```
+
 ### Additional custom roles for Cloudforet collector
+
 Some of cloud services require several additional IAM settings for collecting resources. <br>
 
 #### [Key Vaults](https://learn.microsoft.com/en-us/python/api/azure-mgmt-keyvault/azure.mgmt.keyvault?view=azure-python)
 
 - KeyVaults
 
-For collecting Azure ```KeyVaults``` resources, you need to assign a Key Vault access policy to SpaceONE collector App in Azure portal.
+For collecting Azure ```KeyVaults``` resources, you need to assign a Key Vault access policy to SpaceONE collector App
+in Azure portal.
 
-For information on assigning access policy, see [Microsoft key vault access policy document - legacy](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).<br>
-If your ```KeyVaults``` has Azure RBAC model see [Microsoft key vault access policy document](https://learn.microsoft.com/en-us/azure/role-based-access-control/overview?WT.mc_id=Portal-Microsoft_Azure_KeyVault)
+For information on assigning access policy,
+see [Microsoft key vault access policy document - legacy](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal).<br>
+If your ```KeyVaults``` has Azure RBAC model
+see [Microsoft key vault access policy document](https://learn.microsoft.com/en-us/azure/role-based-access-control/overview?WT.mc_id=Portal-Microsoft_Azure_KeyVault)
 
 #### [Cosmos DB](https://learn.microsoft.com/en-us/python/api/azure-mgmt-cosmosdb/azure.mgmt.cosmosdb?view=azure-python)
 
 - Cosmos DB
 
-For collecting key lists in ```CosmosDB``` azure resources, you need to assign an access policy to SpaceONE collector App in Azure portal.
-For information on creating custom roles in Azure, see the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
+For collecting key lists in ```CosmosDB``` azure resources, you need to assign an access policy to SpaceONE collector
+App in Azure portal.
+For information on creating custom roles in Azure, see
+the [Microsoft custom role document](https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles). <br>
 
 ```
 {
@@ -364,29 +383,29 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
 ```
 
 #### [Virtual Machines](https://docs.microsoft.com/ko-kr/rest/api/compute/virtualmachines/list)
-      
+
 - Virtual Machines
 
     - Scope
         - https://learn.microsoft.com/en-us/python/api/azure-mgmt-resource/azure.mgmt.resource.resources.resourcemanagementclient?view=azure-python#azure-mgmt-resource-resources-resourcemanagementclient-resource-groups
-          - resource_groups
-            - list() 
+            - resource_groups
+                - list()
         - https://learn.microsoft.com/en-us/python/api/azure-mgmt-compute/azure.mgmt.compute.computemanagementclient?view=azure-python#azure-mgmt-compute-computemanagementclient-virtual-machines
-          - virtual_machines
-            - list_all()
+            - virtual_machines
+                - list_all()
         - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-virtual-networks
-          - virtual_networks
-            - list_all()
+            - virtual_networks
+                - list_all()
         - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-public-ip-addresses
-          - public_ip_addresses
-            - list_all()
+            - public_ip_addresses
+                - list_all()
         - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-network-interfaces
-          - network_interfaces
-            - list_all()
+            - network_interfaces
+                - list_all()
         - https://learn.microsoft.com/en-us/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python#azure-mgmt-network-networkmanagementclient-network-security-groups
-          - network_security_groups
-            - list_all()
-		
+            - network_security_groups
+                - list_all()
+
     - Permissions
         ```
         - Microsoft.Compute/*/read
@@ -396,9 +415,9 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         - Microsoft.Network/networkSecurityGroups/read
         - Microsoft.Network/loadBalancers/read
         ```
-	
-  
+
 #### [Virtual Machine Scale Sets](https://docs.microsoft.com/en-us/rest/api/compute/virtualmachinescalesets/listall)
+
 - Virtual Machine Scale Sets
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/compute/virtualmachinescalesets/listall
@@ -427,8 +446,9 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/runCommands/read",
         "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/providers/Microsoft.Insights/metricDefinitions/read"
         ```
-        
+
 #### [Virtual Networks](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/virtual-networks/list-all)
+
 - Virtual Networks
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/virtual-networks/list-all
@@ -474,21 +494,22 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         
 
 #### [Disks](https://docs.microsoft.com/en-ca/rest/api/compute/disks/list)
+
 - Disks
     - Scope
         - https://docs.microsoft.com/en-ca/rest/api/compute/disks/list
-    
+
     - Permissions
        ```
        "Microsoft.Compute/disks/read"
        ```
 
-
 #### [Snapshots](https://docs.microsoft.com/en-us/rest/api/compute/snapshots/list)
+
 - Snapshots
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/compute/snapshots/list
-    
+
     - Permissions
       ```
        "Microsoft.Compute/snapshots/read",
@@ -496,40 +517,41 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
       ```
 
 #### [SQL Servers](https://docs.microsoft.com/en-us/rest/api/sql/2021-02-01-preview/servers)
+
 - SQL Servers
-    - Scope 
+    - Scope
         - https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.sqlmanagementclient?view=azure-python
-          - servers
-            - list()
-          - databases
-            - list_by_server()
-            - list_by_elastic_pool()
-          - server_azure_ad_administrators
-            - list_by_server()
-          - server_automatic_tuning
-            - get()
-          - server_blob_auditing_policies
-            - get()
-          - failover_groups
-            - list_by_server()
-          - list_encryption_protectors
-            - list_by_server()
-          - elastic_pools
-            - list_by_server()
-          - restorable_dropped_databases
-            - list_by_server()
-          - firewall_rules
-            - list_by_server()
-          - virtual_network_rules
-            - list_by_server()
-          - sync_groups
-            - list_by_server()
-          - sync_agents
-            - list_by_server()
-          - data_masking_policies
-            - list_by_database()
-          - replication_links
-            - list_by_database()
+            - servers
+                - list()
+            - databases
+                - list_by_server()
+                - list_by_elastic_pool()
+            - server_azure_ad_administrators
+                - list_by_server()
+            - server_automatic_tuning
+                - get()
+            - server_blob_auditing_policies
+                - get()
+            - failover_groups
+                - list_by_server()
+            - list_encryption_protectors
+                - list_by_server()
+            - elastic_pools
+                - list_by_server()
+            - restorable_dropped_databases
+                - list_by_server()
+            - firewall_rules
+                - list_by_server()
+            - virtual_network_rules
+                - list_by_server()
+            - sync_groups
+                - list_by_server()
+            - sync_agents
+                - list_by_server()
+            - data_masking_policies
+                - list_by_database()
+            - replication_links
+                - list_by_database()
 
     - Permissions
     ```
@@ -555,34 +577,37 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
     ```
 
 #### [SQL Databases](https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.operations.databasesoperations?view=azure-python)
+
 - SQL Databases
-  - Scope
-    - https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.sqlmanagementclient?view=azure-python
-        - servers
-          - list()
-        - databases
-          - list_by_server()
-        - sync_groups
-          - list_by_database()
-        - sync_agents
-          - list_by_server()
-        - replication_links
-          - list_by_server()
-        - database_blob_auditing_policies
-          - get()
-  - Permissions
-    ```
-    "Microsoft.Sql/servers/read",
-    "Microsoft.Sql/servers/syncAgents/read",
-    "Microsoft.Sql/servers/replicationLinks/read",
-    "Microsoft.Sql/servers/databases/replicationLinks/read",
-    "Microsoft.Sql/servers/databases/read",
-    "Microsoft.Sql/servers/databases/auditingSettings/read",
-    "Microsoft.Sql/servers/databases/syncGroups/read"
-    ```
+    - Scope
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-sql/azure.mgmt.sql.sqlmanagementclient?view=azure-python
+            - servers
+                - list()
+            - databases
+                - list_by_server()
+            - sync_groups
+                - list_by_database()
+            - sync_agents
+                - list_by_server()
+            - replication_links
+                - list_by_server()
+            - database_blob_auditing_policies
+                - get()
+    - Permissions
+      ```
+      "Microsoft.Sql/servers/read",
+      "Microsoft.Sql/servers/syncAgents/read",
+      "Microsoft.Sql/servers/replicationLinks/read",
+      "Microsoft.Sql/servers/databases/replicationLinks/read",
+      "Microsoft.Sql/servers/databases/read",
+      "Microsoft.Sql/servers/databases/auditingSettings/read",
+      "Microsoft.Sql/servers/databases/syncGroups/read"
+      ```
+
 #### [Load Balancers](https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall)
+
 - Load Balancer
-    - Scope 
+    - Scope
         - https://docs.microsoft.com/en-us/rest/api/load-balancer/loadbalancers/listall
         - https://docs.microsoft.com/ko-kr/rest/api/virtualnetwork/subnets/get
 
@@ -608,8 +633,9 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         ```
 
 #### [Public IP Addresses](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/public-ip-addresses/list-all)
+
 - Public IP Address
-    - Scope 
+    - Scope
         - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/public-ip-addresses/list-all
 
     - Permissions
@@ -620,10 +646,10 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.Network/publicIPAddresses/providers/Microsoft.Insights/diagnosticSettings/read"
       ```
 
-
 #### [Network Security Groups](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/network-security-groups/list-all)
+
 - Network Security Group
-    - Scope 
+    - Scope
         - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/network-security-groups/list-all
 
     - Permissions
@@ -640,8 +666,9 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
       ```
 
 #### [Application Gateways](https://docs.microsoft.com/en-us/rest/api/application-gateway/application-gateways/list-all)
+
 - Application Gateways
-    - Scope 
+    - Scope
         - https://docs.microsoft.com/en-us/rest/api/application-gateway/application-gateways/list-all
 
     - Permissions
@@ -658,8 +685,9 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
       ```
 
 #### [NAT Gateways](https://docs.microsoft.com/en-us/rest/api/virtualnetwork/nat-gateways/list-all)
+
 - NAT Gateways
-    - Scope 
+    - Scope
         - https://docs.microsoft.com/en-us/rest/api/virtualnetwork/nat-gateways/list-all
 
     - Permissions
@@ -676,16 +704,17 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
       ```
 
 #### [Storage Accounts](https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list#blobrestorerange)
+
 - Storage Accounts
-    - Scope 
+    - Scope
         - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-storage/azure.mgmt.storage.storagemanagementclient?view=azure-python
-          - storage_accounts
-            - list()
-          - blob_containers
-            - list()
+            - storage_accounts
+                - list()
+            - blob_containers
+                - list()
         - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-monitor/azure.mgmt.monitor.monitormanagementclient?view=azure-python
-          - metrics
-            - list()
+            - metrics
+                - list()
     - Permissions
       ```
         "Microsoft.Storage/deletedAccounts/read",
@@ -701,10 +730,13 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.Insights/Metrics/Read"
       ```
 
+####
 
-#### ~~[MySQL Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql.mysqlmanagementclient?view=azure-python)~~ (Deprecated)
+~~[MySQL Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql.mysqlmanagementclient?view=azure-python)~~ (
+Deprecated)
+
 - MySQL Servers
-    - Scope 
+    - Scope
         - https://docs.microsoft.com/en-us/rest/api/storagerp/storage-accounts/list
     - Permissions
         ```
@@ -727,28 +759,32 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.DBforMySQL/servers/recoverableServers/read",
         "Microsoft.DBforMySQL/servers/virtualNetworkRules/read"
         ```
-    
-    - ~~SpaceONE Inventory Collector only supports ``Single Servers`` type.~~ 
-    - [``Azure Database for MySQL Single Servers``  is on the retirement path.](https://learn.microsoft.com/ko-kr/azure/mysql/migrate/whats-happening-to-mysql-single-server)
 
+    - ~~SpaceONE Inventory Collector only supports ``Single Servers`` type.~~
+    - [
+      ``Azure Database for MySQL Single Servers``  is on the retirement path.](https://learn.microsoft.com/ko-kr/azure/mysql/migrate/whats-happening-to-mysql-single-server)
 
 #### [MySQL Flexible Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql_flexibleservers.mysqlmanagementclient?view=azure-python)
+
 - MySQL Flexible Servers
     - Scope
         - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql_flexibleservers.operations.serversoperations?view=azure-python
-          - servers
-            - list()
+            - servers
+                - list()
         - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.mysql_flexibleservers.operations.firewallrulesoperations?view=azure-python
-          - firewall_rules
-            - list_by_server()
+            - firewall_rules
+                - list_by_server()
     - Permissions
         ```
         "Microsoft.DBforMySQL/flexibleServers/read",
         "Microsoft.DBforMySQL/flexibleServers/firewallRules/read"
         ```
 
+####
 
-#### ~~[PostgreSQL Servers](https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list)~~ (Deprecated)
+~~[PostgreSQL Servers](https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list)~~ (
+Deprecated)
+
 - PostgreSQL Servers
     - Scope
         - https://docs.microsoft.com/en-us/rest/api/postgresql/flexibleserver(preview)/servers/list
@@ -769,53 +805,66 @@ For information on creating custom roles in Azure, see the [Microsoft custom rol
         "Microsoft.DBforPostgreSQL/servers/securityAlertPolicies/read",
         "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules/read"
       ```
-      
-    - ~~SpaceONE Inventory Collector only supports ``Single Servers`` type.~~ 
-    - [``Azure Database for PostgreSQL Single Servers`` is on the retirement path.](https://learn.microsoft.com/ko-kr/azure/postgresql/single-server/whats-happening-to-postgresql-single-server)
-      
+
+    - ~~SpaceONE Inventory Collector only supports ``Single Servers`` type.~~
+    - [
+      ``Azure Database for PostgreSQL Single Servers`` is on the retirement path.](https://learn.microsoft.com/ko-kr/azure/postgresql/single-server/whats-happening-to-postgresql-single-server)
 
 #### [PostgreSQL Flexible Servers](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.postgresql_flexibleservers.postgresqlmanagementclient?view=azure-python)
+
 - PostgreSQL Servers
     - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.postgresql_flexibleservers.operations.serversoperations?view=azure-python
-      - servers
-        - list()
+        - servers
+            - list()
     - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-rdbms/azure.mgmt.rdbms.postgresql_flexibleservers.operations.firewallrulesoperations?view=azure-python
-      - firewall_rules
-        - list_by_server()
+        - firewall_rules
+            - list_by_server()
     - Permissions
       ```
         "Microsoft.DBforPostgreSQL/flexibleServers/read",
         "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules/read"
       ```
-      
 
 #### [Container Instances](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerinstance/azure.mgmt.containerinstance.containerinstancemanagementclient?view=azure-python)
+
 - Container Instances
     - Scope
         - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerinstance/azure.mgmt.containerinstance.containerinstancemanagementclient?view=azure-python
-          - container_groups
-            - list()
+            - container_groups
+                - list()
     - Permissions
       ```
         "Microsoft.ContainerInstance/containerGroups/read"
       ``` 
 
 #### [Web PubSub Service](https://learn.microsoft.com/en-us/python/api/overview/azure/web-pubsub?view=azure-python)
+
 - Web PubSub Service
     - Scope
         - https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-webpubsub_1.1.0b1/sdk/webpubsub/azure-mgmt-webpubsub/azure/mgmt/webpubsub/operations
-          - web_pub_sub
-            - list_by_subscription()
-            - list_keys()
-          - web_pub_sub_hubs
-            - list()
+            - web_pub_sub
+                - list_by_subscription()
+                - list_keys()
+            - web_pub_sub_hubs
+                - list()
     - Permissions
       ```
       "Microsoft.SignalRService/WebPubSub/read",
       "Microsoft.SignalRService/WebPubSub/hubs/read",
       "Microsoft.SignalRService/webPubSub/listKeys/action"
       ```
+
+#### [Advisor](https://learn.microsoft.com/en-us/python/api/overview/azure/advisor?view=azure-python)
+
+- Advisor
+    - Scope
+        - https://learn.microsoft.com/en-us/python/api/azure-mgmt-advisor/azure.mgmt.advisor.advisormanagementclient?view=azure-python
+            - recommendations
+                - list()
+    - Permissions
+
 ---
+
 ## Options
 
 ### Cloud Service Type : Specify what to collect
@@ -894,8 +943,9 @@ The `service_code_mappers` items that can be specified are as follows.
 
 ### Custom Asset URL : Update ASSET_URL in Cloud Service Type.
 
-If `custom_asset_url` is in options, You can change it to an asset_url that users will use instead of the default asset_url.  
-The default ASSET_URL in cloud_service_conf is 
+If `custom_asset_url` is in options, You can change it to an asset_url that users will use instead of the default
+asset_url.  
+The default ASSET_URL in cloud_service_conf is
 `https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure`
 
 <pre>
@@ -910,9 +960,10 @@ The default ASSET_URL in cloud_service_conf is
 
 ## Release Note
 
-
 | Version | Description                                                                                                                                                                                                                                                                                                                                                               | Affected Service                                    | Release Date |
 |---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
+| 2.0.8   | - Add Azure Advisor service                                                                                                                                                                                                                                                                                                                                               |                                                     |              |
+| 2.0.5   | - Add Azure Cognitive service                                                                                                                                                                                                                                                                                                                                             |                                                     |              |
 | 2.0.0   | - [Migration to spaceone framework 2.0](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/91)                                                                                                                                                                                                                                                          | All Services                                        | 2024.08.22   |
 | 1.7.0   | - Add metric data query for all services                                                                                                                                                                                                                                                                                                                                  | All Services                                        | 2024.07.02   |
 | 1.6.18  | - [Fix Data Size too big error when collecting `StorageAccounts`](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/57)                                                                                                                                                                                                                                | Storage Accounts                                    | 2023.09.26   |
@@ -923,39 +974,53 @@ The default ASSET_URL in cloud_service_conf is
 | 1.6.9   | - [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)<br/>- [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)                                                                                                                                                      | CosmosDB                                            | 2023.06.30   |
 
 ### Ver 1.6.14
-* [Fix `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)
+
+* [Fix
+  `Application Gateways` error with assigned managed identity](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/73)
 
 ### Ver 1.6.13
+
 * [Fix `Application Gateways` None type error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/67)
 
 ### Ver 1.6.12
+
 * [Fix `Virtual Networks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/64)
 * [Fix `Disks` modeling error](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/60)
-* [Fix error occurs when collecting `SQL server` and database](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/41)
+* [Fix error occurs when collecting
+  `SQL server` and database](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/41)
 
 ### Ver 1.6.9
+
 * [Fix CosmosDB location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/53)
 * [Add all Azure location info](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/52)
 
 ### Ver 1.6.7
+
 * [Size of storage service(ex.disk, snapshot) display error at console](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/49)
 
 ### Ver 1.6.4
+
 * [Error 'list index out of range' occur when collecting StorageAccounts](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/45)
 
 ### Ver 1.6.3
+
 * [Fix error when collecting virtual machine](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/40)
 
 ### Ver 1.6.1
-* [Collect the total size in use of the Azure ```Storage Account``` ](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/33)
+
+* [Collect the total size in use of the Azure
+  ```Storage Account``` ](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/33)
 
 ### Ver 1.6.0
+
 * [Add ```Web PubSub Service``` cloud service](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/21)
 
 ### Ver 1.5.0
+
 * [Add ```Container Instances``` cloud service](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/14)
 
 ### Ver 1.4.0
+
 * [Merge Azure vm plugin to Azure inventory collector](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/2)
 * Split SQL Servers to SQL Servers and SQL Databases
 * [Update Azure sdk version](https://github.com/cloudforet-io/plugin-azure-inven-collector/pull/4)
@@ -963,44 +1028,59 @@ The default ASSET_URL in cloud_service_conf is
 * Change cloud_service_name and cloud_service_group
 
 ### Ver 1.3.0
+
 * [Add feature for monitoring metrics](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/190)
 
 ### Ver 1.2.15
+
 * [Add feature to convert service_code to what you want using options](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/186)
 
 ### Ver 1.2.14
+
 * [Add feature for Usage Overview of cloud services](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/174)
 
 ### Ver 1.2.13
+
 * [Add feature to specify the Cloud Service Type and collect it.](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/162)
-* [Add fields to cloud services model(account, instance_type, instance_size, launched_at)](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/159) 
+* [Add fields to cloud services model(account, instance_type, instance_size, launched_at)](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/159)
 * [Add ErrorResources to collect error messages as resources](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/issues/157)
 
 ### Ver 1.2.12
-* [Add ```PostgreSQL Servers```  cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/154)
+
+* [Add
+  ```PostgreSQL Servers```  cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/154)
 
 ### Ver 1.2.10
+
 * [Add CosmosDB Syntax bug](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/152/commits)
-* [Add ```CosmosDB``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/commit/c50693a222555611cb1fb27b2ce222543e1cf174)
+* [Add
+  ```CosmosDB``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/commit/c50693a222555611cb1fb27b2ce222543e1cf174)
 * [Update CI workflow](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/142)
 
 ### Ver 1.2.8
-* [Add ```MySQL Servers``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/136)
 
+* [Add
+  ```MySQL Servers``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/136)
 
 ### Ver 1.2.7
-* [Add ```Key Vaults``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/123)
+
+* [Add
+  ```Key Vaults``` cloud service](https://github.com/spaceone-dev/plugin-azure-cloud-service-inven-collector/pull/123)
 
 ### Ver 1.2.6
+
 * Add ```Storage Accounts``` cloud service
 
 ### Ver 1.2.5
+
 * Add ```NAT Gateways``` cloud service
 
 ### Ver 1.2.4
+
 * Add ```Network Security Groups``` cloud service
 
 ### Ver 1.2.3
+
 * Add ```Virtual Networks```, ```Application Gateways```, ```Public IP Address``` cloud service
 
 
