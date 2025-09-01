@@ -123,12 +123,12 @@ def _create_init_metadata() -> dict:
 
 
 def _get_cloud_service_group_enum() -> list:
-    enum = ["All"]
+    cloud_service_groups = ["All"]
     for manager in AzureBaseManager.__subclasses__():
         if manager.cloud_service_group:
-            enum.append(manager.cloud_service_group)
+            cloud_service_groups.append(manager.cloud_service_group)
 
-    return enum
+    return list(set(cloud_service_groups))
 
 
 def _get_cloud_service_groups_from_options_and_task_options(
