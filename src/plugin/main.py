@@ -123,12 +123,15 @@ def _create_init_metadata() -> dict:
 
 
 def _get_cloud_service_group_enum() -> list:
-    cloud_service_groups = ["All"]
-    for manager in AzureBaseManager.__subclasses__():
-        if manager.cloud_service_group:
-            cloud_service_groups.append(manager.cloud_service_group)
+    cloud_service_group = [
+        manager.cloud_service_group
+        for manager in AzureBaseManager.__subclasses__()
+        if manager.cloud_service_group
+    ]
 
-    return list(set(cloud_service_groups))
+    sorted_cloud_service_group = sorted(list(set(cloud_service_group)))
+
+    return ["All"] + sorted_cloud_service_group
 
 
 def _get_cloud_service_groups_from_options_and_task_options(
