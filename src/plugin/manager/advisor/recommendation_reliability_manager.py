@@ -65,6 +65,7 @@ class RecommendationReliabilityManager(AzureBaseManager):
                         ),
                         data=recommendation_info,
                         reference=self.make_reference(recommendation_info.get("id")),
+                        data_format="dict",
                     )
                 )
             except Exception as e:
