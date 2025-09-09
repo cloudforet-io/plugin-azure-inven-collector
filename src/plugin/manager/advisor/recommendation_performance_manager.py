@@ -50,7 +50,7 @@ class RecommendationPerformanceManager(AzureBaseManager):
 
                 short_description = recommendation_info.get("short_description")
                 extended_properties = (
-                    recommendation_info.get("extended_properties", {}) or {}
+                        recommendation_info.get("extended_properties", {}) or {}
                 )
 
                 cloud_services.append(
@@ -65,6 +65,7 @@ class RecommendationPerformanceManager(AzureBaseManager):
                         ),
                         data=recommendation_info,
                         reference=self.make_reference(recommendation_info.get("id")),
+                        data_format="dict",
                     )
                 )
             except Exception as e:
@@ -95,7 +96,7 @@ class RecommendationPerformanceManager(AzureBaseManager):
 
     @staticmethod
     def _create_impact_updates_display(
-        updates: list, impacted_service: str, impacted_region: dict
+            updates: list, impacted_service: str, impacted_region: dict
     ) -> list:
         impact_updates_display = []
         for update in updates:
@@ -114,6 +115,6 @@ class RecommendationPerformanceManager(AzureBaseManager):
 
     @staticmethod
     def _get_region_from_extended_properties(
-        extended_properties: dict,
+            extended_properties: dict,
     ) -> Union[str, None]:
         return extended_properties.get("region", None)

@@ -38,7 +38,9 @@ class ScoreManager(AzureBaseManager):
             try:
                 score_id = score_value.get("id")
                 score_name = score_value.get("name")
-                score_info = score_value.get("properties", {})
+                score_info = self.convert_nested_dictionary(
+                    score_value.get("properties", {})
+                )
                 score_category_display = self._get_score_category_from_id(score_id)
 
                 score_info.update(
@@ -87,6 +89,7 @@ class ScoreManager(AzureBaseManager):
                         region_code=None,
                         data=score_info,
                         reference=self.make_reference(score_id),
+                        data_format="dict",
                     )
                 )
             except Exception as e:

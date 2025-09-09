@@ -1,9 +1,6 @@
-import copy
 import logging
-from datetime import datetime
 from typing import Union
 
-from dateutil.relativedelta import relativedelta
 from spaceone.inventory.plugin.collector.lib import *
 
 from plugin.conf.cloud_service_conf import ICON_URL
@@ -80,6 +77,7 @@ class RecommendationOperationalExcellenceManager(AzureBaseManager):
                         ),
                         data=recommendation_info,
                         reference=self.make_reference(recommendation_info.get("id")),
+                        data_format="dict",
                     )
                 )
             except Exception as e:

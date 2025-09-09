@@ -117,11 +117,10 @@ class LoadBalancersManager(AzureBaseManager):
                             )
 
                         # Get all of private ip addresses
-                        private_ip_address_list.append(fic["private_ip_address"])
+                        private_ip = fic.get("private_ip_address")
 
-                        load_balancer_dict.update(
-                            {"private_ip_address_display": private_ip_address_list}
-                        )
+                        if private_ip is not None:
+                            private_ip_address_list.append(private_ip)
 
                 # Since Azure python sdk returns only one backend pool, delete the backend pool list first, and then use the new API connection
                 if load_balancer_dict.get("backend_address_pools") is not None:
