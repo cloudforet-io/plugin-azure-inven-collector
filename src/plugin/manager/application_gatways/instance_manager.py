@@ -89,8 +89,8 @@ class InstanceManager(AzureBaseManager):
 
                 for frontend_ip_configuration_dict in frontend_ip_configurations:
                     if (
-                        frontend_ip_configuration_dict.get("private_ip_address")
-                        is not None
+                            frontend_ip_configuration_dict.get("private_ip_address")
+                            is not None
                     ):
                         application_gateway_dict.update(
                             {
@@ -108,15 +108,20 @@ class InstanceManager(AzureBaseManager):
                             }
                         )
                     elif (
-                        frontend_ip_configuration_dict.get("public_ip_address")
-                        is not None
+                            frontend_ip_configuration_dict.get("public_ip_address")
+                            is not None
                     ):
+                        public_ip_address_resource_group = (
+                            frontend_ip_configuration_dict["public_ip_address"][
+                                "id"
+                            ].split("/")[4]
+                        )
                         public_ip_address_name = frontend_ip_configuration_dict[
                             "public_ip_address"
                         ]["id"].split("/")[8]
                         public_ip_address_dict = self.get_public_ip_address(
                             application_gateways_conn,
-                            application_gateway_dict["resource_group"],
+                            public_ip_address_resource_group,
                             public_ip_address_name,
                         )
                         application_gateway_dict.update(
@@ -146,8 +151,8 @@ class InstanceManager(AzureBaseManager):
                     )
 
                 if (
-                    application_gateway_dict.get("backend_http_settings_collection")
-                    is not None
+                        application_gateway_dict.get("backend_http_settings_collection")
+                        is not None
                 ):
                     for backend_setting in application_gateway_dict[
                         "backend_http_settings_collection"
@@ -228,10 +233,10 @@ class InstanceManager(AzureBaseManager):
                         http_listener_id = request_routing_rule["http_listener"]["id"]
 
                         for request_routing_rule in application_gateway_dict.get(
-                            "request_routing_rules", []
+                                "request_routing_rules", []
                         ):
                             if http_listener_id in request_routing_rule.get(
-                                "http_listener"
+                                    "http_listener"
                             ).get("id", ""):
                                 http_applied_rules_list.append(
                                     request_routing_rule["name"]
@@ -299,7 +304,7 @@ class InstanceManager(AzureBaseManager):
         return cloud_services, error_responses
 
     def get_public_ip_address(
-        self, application_gateway_conn, resource_group_name, pip_name
+            self, application_gateway_conn, resource_group_name, pip_name
     ):
         public_ip_address_obj = application_gateway_conn.get_public_ip_addresses(
             resource_group_name, pip_name
@@ -316,7 +321,7 @@ class InstanceManager(AzureBaseManager):
         for http_listener in http_listeners_list:
             if http_listener.get("frontend_ip_configuration") is not None:
                 if frontend_ip_configuration_dict["id"] in http_listener.get(
-                    "frontend_ip_configuration", {}
+                        "frontend_ip_configuration", {}
                 ).get("id", ""):
                     associated_listener.append(http_listener.get("name"))
         return associated_listener
@@ -332,7 +337,7 @@ class InstanceManager(AzureBaseManager):
 
     @staticmethod
     def get_backend_pool_associated_rules(
-        backend_address_pool, url_path_maps, request_routing_rules
+            backend_address_pool, url_path_maps, request_routing_rules
     ):
         backend_address_pool_associated_rules = []
         backend_address_pool_id = backend_address_pool.get("id")
@@ -342,8 +347,8 @@ class InstanceManager(AzureBaseManager):
                 "default_backend_address_pool"
             )
             if (
-                default_backend_address_pool is not None
-                and default_backend_address_pool.get("id") == backend_address_pool_id
+                    default_backend_address_pool is not None
+                    and default_backend_address_pool.get("id") == backend_address_pool_id
             ):
                 backend_address_pool_associated_rules.append(url_path_map.get("name"))
 
@@ -352,8 +357,8 @@ class InstanceManager(AzureBaseManager):
                 "backend_address_pool"
             )
             if (
-                request_backend_address_pool is not None
-                and request_backend_address_pool.get("id") == backend_address_pool_id
+                    request_backend_address_pool is not None
+                    and request_backend_address_pool.get("id") == backend_address_pool_id
             ):
                 backend_address_pool_associated_rules.append(
                     request_routing_rule.get("name")
@@ -362,7 +367,7 @@ class InstanceManager(AzureBaseManager):
 
     @staticmethod
     def update_http_listeners_list(
-        http_listeners_list, http_listener_id, http_applied_rules
+            http_listeners_list, http_listener_id, http_applied_rules
     ):
         for http_listener in http_listeners_list:
             if http_listener["id"] == http_listener_id:
@@ -380,22 +385,22 @@ class InstanceManager(AzureBaseManager):
 
     @staticmethod
     def list_rewrite_rule_rules_applied(
-        rewrite_rule_id, request_routing_rules, url_path_maps
+            rewrite_rule_id, request_routing_rules, url_path_maps
     ):
         rules_applied_list = []
         for request_routing_rule in request_routing_rules:
             if request_routing_rule.get("rewrite_rule_set") is not None:
                 if (
-                    request_routing_rule["rewrite_rule_set"].get("id")
-                    == rewrite_rule_id
+                        request_routing_rule["rewrite_rule_set"].get("id")
+                        == rewrite_rule_id
                 ):
                     rules_applied_list.append(request_routing_rule["name"])
 
         for url_path_map in url_path_maps:
             if url_path_map.get("default_rewrite_rule_set") is not None:
                 if (
-                    url_path_map["default_rewrite_rule_set"].get("id")
-                    == rewrite_rule_id
+                        url_path_map["default_rewrite_rule_set"].get("id")
+                        == rewrite_rule_id
                 ):
                     rules_applied_list.append(url_path_map["name"])
 
