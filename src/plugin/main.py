@@ -16,7 +16,7 @@ DEFAULT_RESOURCE_TYPES = [
     "inventory.CloudService",
     "inventory.CloudServiceType",
     "inventory.Metric",
-    "inventory.Region",
+    # "inventory.Region",
 ]
 
 
@@ -98,6 +98,9 @@ def job_get_tasks(params: dict) -> dict:
                     }
                 }
             )
+
+    # append region task
+    tasks.append({"task_options": {"resource_type": "inventory.Region"}})
 
     return {"tasks": tasks}
 

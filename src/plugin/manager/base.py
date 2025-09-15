@@ -41,17 +41,20 @@ class AzureBaseManager(BaseManager):
 
     @classmethod
     def list_managers_by_cloud_service_groups(cls, cloud_service_groups: list):
-        if cloud_service_groups in ["All"] or not cloud_service_groups:
-            for manager in cls.__subclasses__():
-                if manager.cloud_service_group:
-                    yield manager
-        elif cloud_service_groups:
-            for manager in cls.__subclasses__():
-                if (
-                    manager.cloud_service_group
-                    and manager.cloud_service_group in cloud_service_groups
-                ):
-                    yield manager
+        yielded_groups = set()
+
+        check_all = not cloud_service_groups or "All" in cloud_service_groups
+
+        for manager in cls.__subclasses__():
+            group = manager.cloud_service_group
+
+            if (
+                group
+                and group not in yielded_groups
+                and (check_all or group in cloud_service_groups)
+            ):
+                yielded_groups.add(group)
+                yield manager
 
     @classmethod
     def get_managers_by_cloud_service_group(cls, cloud_service_group: str):
