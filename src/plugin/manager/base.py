@@ -40,7 +40,9 @@ class AzureBaseManager(BaseManager):
         raise NotImplementedError("method `create_cloud_service` should be implemented")
 
     @classmethod
-    def list_managers_by_cloud_service_groups(cls, cloud_service_groups: list):
+    def list_managers_by_cloud_service_groups(
+        cls, cloud_service_groups: list, create_job: bool = False
+    ):
         yielded_groups = set()
 
         check_all = not cloud_service_groups or "All" in cloud_service_groups
@@ -48,13 +50,13 @@ class AzureBaseManager(BaseManager):
         for manager in cls.__subclasses__():
             group = manager.cloud_service_group
 
-            if (
-                group
-                and group not in yielded_groups
-                and (check_all or group in cloud_service_groups)
-            ):
-                yielded_groups.add(group)
-                yield manager
+            if group and (check_all or group in cloud_service_groups):
+                if create_job:
+                    if group not in yielded_groups:
+                        yielded_groups.add(group)
+                        yield manager
+                else:
+                    yield manager
 
     @classmethod
     def get_managers_by_cloud_service_group(cls, cloud_service_group: str):
