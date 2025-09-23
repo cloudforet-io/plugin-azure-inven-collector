@@ -87,7 +87,7 @@ def job_get_tasks(params: dict) -> dict:
         resource_types = DEFAULT_RESOURCE_TYPES
 
     for manager in AzureBaseManager.list_managers_by_cloud_service_groups(
-        cloud_service_groups
+        cloud_service_groups, create_job=True
     ):
         for resource_type in resource_types:
             tasks.append(
