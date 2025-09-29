@@ -14,6 +14,7 @@ from .postgre_sql_flexible_servers import *
 from .postgre_sql_servers import *
 from .public_ip_addresses import *
 from .public_ip_prefiexes import *
+from .service_health import *
 from .snapshots import *
 from .sql_databases import *
 from .sql_servers import *

@@ -1,0 +1,87 @@
+---
+search:
+  fields:
+    - Tenant ID: data.tenant_id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Tracking ID: data.name
+    - Event type: data.event_type
+    - Level: data.level
+    - Status: data.status
+    - Last updated at: data.last_update_time
+    - Impact start time: data.impact_start_time
+    - End time: data.impact_mitigation_time
+
+
+table:
+  sort:
+    key: data.impact_start_time
+    desc: true
+  fields:
+    - Tracking ID: data.name
+    - Event type: data.event_type
+    - Level: data.level
+    - Status: data.status
+    - Last updated at: data.last_update_time
+    - Impact start time: data.impact_start_time
+    - End time: data.impact_mitigation_time
+
+
+tabs.0:
+  name: Summary
+  type: item
+  fields:
+    - Tenant ID: data.tenant_id
+    - Subscription Name: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Tracking ID: data.name
+    - Status: data.status
+    - Event type: data.event_type
+    - Start time: data.impact_start_time
+    - End time: data.impact_mitigation_time
+    - Last update time: data.last_update_time
+    - Impacted services: data.impacted_services_display
+      type: list
+      options:
+        delimiter: ', '
+    - Impacted subscriptions: data.impacted_subscriptions_display
+      type: list
+      options:
+        delimiter: ', '
+    - Impacted regions: data.impacted_regions_display
+      type: list
+      options:
+        delimiter: ', '
+tabs.1:
+  name: Description
+  type: html
+  root_path: data.description
+
+tabs.2:
+  name: Impacted Services
+  type: query-search-table
+  root_path: data.impact_display
+  fields:
+    - Impacted service: impacted_service_display
+    - Status: status
+    - Impacted region: impacted_region
+    - Impacted subscriptions: impacted_subscriptions
+      type: list
+      options:
+        delimiter: ', '
+    - Last update time: last_update_time
+
+
+tabs.3:
+  name: Issue Updates
+  type: query-search-table
+  root_path: data.impact_updates_display
+  fields:
+    - Service: impacted_service_display
+    - Region: impacted_region_display
+      type: list
+      options:
+        delimiter: ', '
+    - Summary: summary
+      type: html
+    - Update time: update_date_time

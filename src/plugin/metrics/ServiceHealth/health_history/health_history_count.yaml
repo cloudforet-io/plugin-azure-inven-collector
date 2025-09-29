@@ -1,0 +1,42 @@
+---
+metric_id: metric-azure-service-health-health-history
+name: Health History Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.ServiceHealth.HealthHistory
+query_options:
+  unwind:
+    path: data.impacted_regions_display
+  group_by:
+    - key: data.event_type
+      name: Event Type
+      default: true
+    - key: data.level
+      name: Level
+      default: true
+    - key: data.status
+      name: Status
+      default: true
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+      default: true
+    - key: data.impacted_regions_display
+      name: Impacted Region
+    - key: data.tenant_id
+      name: Tenant ID
+    - key: data.subscription_name
+      name: Subscription Name
+    - key: account
+      name: Subscription ID
+    - key: data.title
+      name: Title
+    - key: data.name
+      name: Tracking ID
+  fields:
+    value:
+      operator: count
+unit: Count
+namespace_id: ns-azure-service-health-health-history
+version: '1.2'
