@@ -1,0 +1,8 @@
+---
+namespace_id: ns-azure-service-health-health-history
+name: ServiceHealth/HealthHistory
+category: ASSET
+resource_type: inventory.CloudService:azure.ServiceHealth.HealthHistory
+group: azure
+icon: https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/azure/azure-service-health-health-history.svg
+version: '1.0'

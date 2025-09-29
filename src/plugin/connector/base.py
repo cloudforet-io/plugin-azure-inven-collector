@@ -21,6 +21,7 @@ from azure.mgmt.rdbms.postgresql_flexibleservers import (
     PostgreSQLManagementClient as PostgreSQLFlexibleManagementClient,
 )
 from azure.mgmt.resource import ResourceManagementClient, SubscriptionClient
+from azure.mgmt.resourcehealth import ResourceHealthMgmtClient
 from azure.mgmt.sql import SqlManagementClient
 from azure.mgmt.storage import StorageManagementClient
 from azure.mgmt.webpubsub import WebPubSubManagementClient
@@ -41,6 +42,7 @@ class AzureBaseConnector(BaseConnector):
         self.monitor_client = None
         self.container_instance_client = None
         self.resource_client = None
+        self.resource_health_client = None
         self.storage_client = None
         self.cosmosdb_client = None
         self.postgre_sql_client = None
@@ -51,6 +53,7 @@ class AzureBaseConnector(BaseConnector):
         self.mysql_flexible_client = None
         self.advisor_client = None
         self.cognitive_services_client = None
+        self.next_link = None
 
     def set_connect(self, secret_data: dict):
         subscription_id = secret_data["subscription_id"]
@@ -79,6 +82,9 @@ class AzureBaseConnector(BaseConnector):
             credential=self.credential, subscription_id=subscription_id
         )
         self.resource_client = ResourceManagementClient(
+            credential=self.credential, subscription_id=subscription_id
+        )
+        self.resource_health_client = ResourceHealthMgmtClient(
             credential=self.credential, subscription_id=subscription_id
         )
         self.storage_client = StorageManagementClient(
