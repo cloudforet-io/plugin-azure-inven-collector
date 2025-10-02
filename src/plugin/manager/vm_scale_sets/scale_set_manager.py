@@ -360,31 +360,29 @@ class VMScaleSetsManager(AzureBaseManager):
         return auto_scale_settings_list
 
     def get_autoscale_profiles_list(self, autoscale_setting):
-        profiles_list = list()
-        for profile in autoscale_setting.profiles:
-            profile_dict = self.convert_nested_dictionary(profile)
-            profiles_list.append(profile_dict)
+        profiles_list = []
+
+        profiles = autoscale_setting.get("profiles", [])
+
+        if profiles:
+            for profile in profiles:
+                profile_dict = self.convert_nested_dictionary(profile)
+                profiles_list.append(profile_dict)
 
         return profiles_list
 
     def list_virtual_machine_scale_set_power_state(self, autoscale_obj_list):
-        power_state_dict = dict()
-        power_state_list = list()
-
+        power_state_list = []
         for autoscale_setting in autoscale_obj_list:
-            power_state_dict.update(
-                {
-                    "location": autoscale_setting.location,
-                    "profiles": self.get_autoscale_profiles_list(
-                        autoscale_setting
-                    ),  # profiles_list
-                    "enabled": autoscale_setting.enabled,
-                    "name": autoscale_setting.name,
-                    "notifications": autoscale_setting.notifications,
-                    "target_resource_uri": autoscale_setting.target_resource_uri,
-                    "tags": autoscale_setting.tags,
-                }
-            )
+            power_state_dict = {
+                "location": autoscale_setting.get("location"),
+                "profiles": self.get_autoscale_profiles_list(autoscale_setting),
+                "enabled": autoscale_setting.get("enabled"),
+                "name": autoscale_setting.get("name"),
+                "notifications": autoscale_setting.get("notifications"),
+                "target_resource_uri": autoscale_setting.get("target_resource_uri"),
+                "tags": autoscale_setting.get("tags"),
+            }
 
             if power_state_dict.get("profiles") is not None:
                 power_state_dict.update(
@@ -395,6 +393,7 @@ class VMScaleSetsManager(AzureBaseManager):
                     }
                 )
             power_state_list.append(power_state_dict)
+
         return power_state_list
 
     @staticmethod
@@ -445,12 +444,10 @@ class VMScaleSetsManager(AzureBaseManager):
 
         return vnet_id
 
-    @staticmethod
     def list_auto_scale_settings_obj(
-        vm_scale_sets_conn, resource_group_name, vm_scale_set_id
+        self, vm_scale_sets_conn, resource_group_name, vm_scale_set_id
     ):
-        auto_scale_settings_obj_list = list()
-        # all List of the Auto scaling Rules in this resource group
+        auto_scale_settings_list = []
         auto_scale_settings_obj = vm_scale_sets_conn.list_auto_scale_settings(
             resource_group=resource_group_name
         )
@@ -460,9 +457,11 @@ class VMScaleSetsManager(AzureBaseManager):
                 auto_scale_setting.target_resource_uri.lower()
                 == vm_scale_set_id.lower()
             ):
-                auto_scale_settings_obj_list.append(auto_scale_setting)
+                auto_scale_settings_list.append(
+                    self.convert_nested_dictionary(auto_scale_setting)
+                )
 
-        return auto_scale_settings_obj_list
+        return auto_scale_settings_list
 
     @staticmethod
     def get_autoscale_profiles_display(power_state_profiles):
