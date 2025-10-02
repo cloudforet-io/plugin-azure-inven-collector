@@ -234,6 +234,8 @@ class AzureBaseManager(BaseManager):
                 cloud_svc_dict[key] = value_list
             elif isinstance(value, datetime.datetime):
                 cloud_svc_dict[key] = utils.datetime_to_iso8601(value)
+            elif isinstance(value, datetime.timedelta):
+                cloud_svc_dict[key] = str(value)
 
         return cloud_svc_dict
 
