@@ -21,7 +21,7 @@ with open("VERSION", "r") as f:
     f.close()
 
 setup(
-    name="plugin-azure-inven-collector",
+    name="plugin_azure_inven_collector",
     version=VERSION,
     description="MS Azure cloud service inventory collector",
     long_description="",
