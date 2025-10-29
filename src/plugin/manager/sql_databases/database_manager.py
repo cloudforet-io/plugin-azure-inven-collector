@@ -114,7 +114,7 @@ class SQLDatabasesManager(AzureBaseManager):
                         )
 
                     # Get Sync Groups by databases
-                    if current_sku_tier != "DataWarehouse":
+                    if current_sku_tier not in ["DataWarehouse", "Hyperscale"]:
                         sql_database_sync_groups = (
                             sql_databases_conn.list_sync_groups_by_databases(
                                 resource_group=resource_group_name,
