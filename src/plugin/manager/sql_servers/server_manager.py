@@ -458,7 +458,10 @@ class SQLServersManager(AzureBaseManager):
                 )
 
             # Get Sync Groups by databases
-            if database_dict.get("service_tier_display") != "DataWarehouse":
+            if database_dict.get("service_tier_display") not in [
+                "DataWarehouse",
+                "Hyperscale",
+            ]:
                 database_dict.update(
                     {
                         "sync_group": self.get_sync_group_by_databases(
