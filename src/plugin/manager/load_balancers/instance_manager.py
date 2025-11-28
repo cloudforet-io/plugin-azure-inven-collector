@@ -193,6 +193,15 @@ class LoadBalancersManager(AzureBaseManager):
                     )
 
                     for inr in load_balancer_dict["inbound_nat_rules"]:
+                        backend_ip_config = inr.get("backend_ip_configuration")
+                        target_vm = None
+
+                        if backend_ip_config and backend_ip_config.get("id"):
+                            target_vm = self.get_matched_vm_info(
+                                backend_ip_config["id"],
+                                load_balancer_dict["network_interfaces"],
+                            )
+
                         inr.update(
                             {
                                 "frontend_ip_configuration_display": self.get_frontend_ip_configuration_display(
@@ -201,10 +210,7 @@ class LoadBalancersManager(AzureBaseManager):
                                 "port_mapping_display": self.get_port_mapping_display(
                                     inr["frontend_port"], inr["backend_port"]
                                 ),
-                                "target_virtual_machine": self.get_matched_vm_info(
-                                    inr["backend_ip_configuration"]["id"],
-                                    load_balancer_dict["network_interfaces"],
-                                ),
+                                "target_virtual_machine": target_vm,
                             }
                         )
 
