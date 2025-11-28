@@ -37,4 +37,4 @@ query_options:
       operator: count
 unit: Count
 namespace_id: ns-azure-advisor-cost
-version: '1.4'
+version: '1.5'
