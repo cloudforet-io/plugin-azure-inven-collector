@@ -29,6 +29,9 @@ query_options:
     - key: data.extended_properties.lookbackPeriod
       name: Look-back period (days)
       default: true
+    - key: data.recommendation_type_id
+      name: Recommendation Type Id
+      default: true
   fields:
     value:
       operator: count
