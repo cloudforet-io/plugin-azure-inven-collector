@@ -38,4 +38,4 @@ query_options:
       operator: sum
 unit: USD
 namespace_id: ns-azure-advisor-cost
-version: '1.3'
+version: '1.4'
