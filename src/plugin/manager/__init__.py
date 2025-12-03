@@ -2,6 +2,7 @@ from .advisor import *
 from .application_gatways import *
 from .cognitive_services import *
 from .container_instances import *
+from .container_registries import *
 from .cosmos_db import *
 from .disks import *
 from .key_vaults import *
@@ -23,3 +24,4 @@ from .virtual_machines import *
 from .virtual_networks import *
 from .vm_scale_sets import *
 from .web_pub_sub_service import *
+from .functions import *

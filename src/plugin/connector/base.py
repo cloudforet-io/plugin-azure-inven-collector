@@ -8,6 +8,8 @@ from azure.mgmt.advisor import AdvisorManagementClient
 from azure.mgmt.cognitiveservices import CognitiveServicesManagementClient
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.containerinstance import ContainerInstanceManagementClient
+# Container Registry 클라이언트 import 추가
+from azure.mgmt.containerregistry import ContainerRegistryManagementClient
 from azure.mgmt.cosmosdb import CosmosDBManagementClient
 from azure.mgmt.keyvault import KeyVaultManagementClient
 from azure.mgmt.monitor import MonitorManagementClient
@@ -41,6 +43,7 @@ class AzureBaseConnector(BaseConnector):
         self.sql_client = None
         self.monitor_client = None
         self.container_instance_client = None
+        self.container_registry_client = None
         self.resource_client = None
         self.resource_health_client = None
         self.storage_client = None
@@ -81,6 +84,10 @@ class AzureBaseConnector(BaseConnector):
         self.container_instance_client = ContainerInstanceManagementClient(
             credential=self.credential, subscription_id=subscription_id
         )
+        self.container_registry_client = ContainerRegistryManagementClient(
+            credential=self.credential, subscription_id=subscription_id
+        )
+
         self.resource_client = ResourceManagementClient(
             credential=self.credential, subscription_id=subscription_id
         )

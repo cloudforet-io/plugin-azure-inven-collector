@@ -19,7 +19,6 @@ DEFAULT_RESOURCE_TYPES = [
     # "inventory.Region",
 ]
 
-
 @app.route("Collector.init")
 def collector_init(params: dict) -> dict:
     return _create_init_metadata()

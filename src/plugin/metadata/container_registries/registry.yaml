@@ -1,0 +1,178 @@
+search:
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Login Server: data.login_server
+    - Pricing Tier: data.sku.name
+    - Provisioning State: data.provisioning_state
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Subscription: data.subscription_name
+
+tabs.0:
+  name: Access Keys
+  type: item
+  fields:
+    - Login Server: data.login_server
+    - Admin User: data.admin_user_enabled
+      type: enum
+      enums:
+        - true: green.500
+          type: badge
+        - false: gray.500
+          type: badge
+    - Registry Name: name
+
+tabs.1:
+  name: ID
+  type: item
+  fields:
+    - Resource Group: data.resource_group
+    - Subscribe: data.subscription_name
+
+tabs.2:
+  name: Networking (Public Access)
+  type: item
+  fields:
+    - Login Server: data.login_server
+    - Use Dedicated Data Endpoints: data.data_endpoint_enabled
+    - Data Endpoint: data.data_endpoint
+    - Location: data.location
+
+tabs.3:
+  name: Networking (Private Access)
+  type: table
+  root_path: data.private_endpoints
+  fields:
+    - Connection Name: connection_name
+    - Connection Status: connection_state.status
+    - Private Endpoint: private_endpoint_id
+    - Explanation: connection_state.description
+    - Provisioning State: provisioning_state
+
+tabs.4:
+  name: Attributes
+  type: item
+  fields:
+    - Login Server: data.login_server
+    - Domain Name Label Range: data.domain_name_label_scope
+    - Admin User: data.admin_user_enabled
+    - Pricing Plans: data.sku.name
+    - Temporary Deletion: data.soft_delete_enabled
+    - Role Assignment Permissions Mode: data.role_assignment_mode
+
+tabs.5:
+  name: Lock
+  type: table
+  root_path: data.locks
+  fields:
+    - Lock Name: name
+    - Lock Type: level
+    - Scope: scope
+    - Notes: notes
+
+tabs.6:
+  name: Repository
+  type: table
+  root_path: data.repositories
+  fields:
+    - Repository: name
+    - Cache Rules: has_cache_rule
+      is_optional: true
+
+tabs.7:
+  name: Webhooks
+  type: table
+  root_path: data.webhooks
+  fields:
+    - Name: name
+    - Location: location
+    - Movement: actions
+      type: list
+      options:
+        delimiter: '<br>'
+    - Range: scope
+    - Situation: status
+
+tabs.8:
+  name: Replication in the region
+  type: table
+  root_path: data.replications
+  fields:
+    - Name: name
+    - Location: location
+    - Provisioning Status: provisioning_state
+    - Situation: status.display_status
+
+tabs.9:
+  name: Work
+  type: table
+  root_path: data.tasks
+  fields:
+    - Work: name
+    - Platform: platform.os
+    - Created: creation_date
+      type: datetime
+      source_type: iso8601
+    - Trigger: trigger.source_triggers.[0].name
+
+tabs.10:
+  name: Connected registry
+  type: table
+  root_path: data.connected_registries
+  fields:
+    - Name: name
+    - Mode: mode
+    - Situation: provisioning_state
+    - Active Status: status
+    - Last Sync: last_sync_time
+      type: datetime
+      source_type: iso8601
+
+tabs.11:
+  name: Cache
+  type: table
+  root_path: data.cache_rules
+  fields:
+    - Name: name
+    - Original Registry: source_repository
+    - Credentials: credential_set_resource_id
+    - ACR Repository: target_repository
+
+tabs.12:
+  name: Token
+  type: table
+  root_path: data.tokens
+  fields:
+    - Name: name
+    - Range Map: scope_map_id
+    - Password 1 Expired: password1_expiry
+      type: datetime
+      source_type: iso8601
+    - Password 2 Expired: password2_expiry
+      type: datetime
+      source_type: iso8601
+    - Situation: status
+    - Date Created: creation_date
+      type: datetime
+      source_type: iso8601
+
+tabs.13:
+  name: Range Map
+  type: table
+  root_path: data.scope_maps
+  fields:
+    - Name: name
+    - Form: type
+    - Date Created: creation_date
+      type: datetime
+      source_type: iso8601
+    - Explanation: description

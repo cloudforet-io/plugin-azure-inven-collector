@@ -1,0 +1,37 @@
+---
+metric_id: metric-azure-container-registries-registry-count
+name: Registry Count
+metric_type: GAUGE
+resource_type: inventory.CloudService:azure.ContainerRegistries.Registry
+
+query_options:
+  group_by:
+    - key: region_code
+      name: Region
+      reference:
+        resource_type: inventory.Region
+        reference_key: region_code
+
+    - key: data.subscription_name
+      name: Subscription Name
+
+    - key: account
+      name: Subscription ID
+
+    - key: data.resource_group
+      name: Resource Group
+
+    - key: data.sku.name
+      name: Pricing Tier
+
+    - key: data.provisioning_state
+      name: Provisioning State
+      default: true
+
+  fields:
+    value:
+      operator: count
+
+unit: Count
+namespace_id: ns-azure-container-registries-registry
+version: '1.0'
