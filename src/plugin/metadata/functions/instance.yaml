@@ -1,0 +1,52 @@
+search:
+  fields:
+    - Name: name
+    - Subscription: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - App Service Plan: data.app_service_plan.name
+    - App Type: data.kind
+    - Pricing Tier: data.pricing_tier
+    - Status: data.status
+
+table:
+  sort:
+    key: name
+    desc: false
+  fields:
+    - Status: data.status
+    - Location: data.location
+    - Pricing Tier: data.pricing_tier
+    - App Service Plan: data.app_service_plan.name
+    - Subscription: data.subscription_name
+    - App Type: data.kind
+
+tabs.0:
+  name: Networking
+  type: item
+  fields:
+    - Public network access: data.networking.public_network_access
+    - App assigned address: data.networking.app_assigned_address
+    - Private endpoints: data.networking.private_endpoints
+    - Inbound addresses: data.networking.inbound_addresses
+    - Virtual network integration: data.networking.virtual_network_integration
+    - Hybrid connections: data.networking.hybrid_connections
+    - Outbound DNS: data.networking.outbound_dns
+    - Outbound addresses: data.networking.outbound_addresses
+    - NAT gateway: data.networking.nat_gateway
+    - Network security group: data.networking.network_security_group
+    - User defined route: data.networking.user_defined_route
+
+tabs.1:
+  name: App Service plan
+  type: item
+  fields:
+    - Name: data.app_service_plan.name
+    - Resource Group: data.app_service_plan.resource_group
+    - Location: data.app_service_plan.location
+    - Pricing plan: data.app_service_plan.pricing_plan
+    - Instance Count: data.app_service_plan.instance_count
+    - Apps: data.app_service_plan.apps
+    - Operating System: data.app_service_plan.operating_system
+    - Zone redundant: data.app_service_plan.zone_redundant
