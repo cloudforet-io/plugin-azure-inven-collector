@@ -29,6 +29,7 @@ Please contact us if you need any further information.
 |--------------------------------------------------------------------------|-------------------------------------------------------------|
 | Instance                                                                 | [Application Gateways](#application-gateways)               |
 | Container                                                                | [Container Instances](#container-instances)                 |
+| Container                                                                | [Container Registries](#container-registries)               |
 | Instance                                                                 | [CosmosDB](#cosmos-db)                                      |
 | Disk                                                                     | [Disks](#disks)                                             |
 | Instance                                                                 | [KeyVaults](#key-vaults)                                    |
@@ -49,6 +50,7 @@ Please contact us if you need any further information.
 | ScaleSet                                                                 | [VM ScaleSets](#virtual-machine-scale-sets)                 |
 | Service                                                                  | [Web PubSub Service](#web-pubsub-service)                   |
 | Score<br>OperationalExcellence<br>Performance<br>Reliability<br>Security | [Advisor](#advisor)                                         |
+| Instance                                                                 | [Functions](#functions)                                     |
 
     
 ---
@@ -111,6 +113,8 @@ The following is a list of services being collected and service code information
 | 20  | Container Instances         | Microsoft.ContainerInstance/containerGroups                       |
 | 21  | Web PubSub Service          | Microsoft.SignalRService/WebPubSub                                |
 | 22  | Advisor                     | Microsoft.Advisor/advisorScore<br>Microsoft.ResourceHealth/events |
+| 23  | Container Registries        | Microsoft.ContainerRegistry/registries                            |
+| 24  | Functions                   | Microsoft.Web/sites                                               |
 
 ---
 
@@ -836,6 +840,43 @@ Deprecated)
       ```
         "Microsoft.ContainerInstance/containerGroups/read"
       ``` 
+      
+#### [Container Registries](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerregistry/azure.mgmt.containerregistry.containerregistrymanagementclient?view=azure-python)
+
+- Container Registries
+    - Scope
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerregistry/azure.mgmt.containerregistry.containerregistrymanagementclient?view=azure-python
+            - registries
+                - list()
+                - get()
+                - list_usages()
+            - webhooks
+                - list()
+            - replications
+                - list()
+            - tasks
+                - list()
+            - connected_registries
+                - list()
+            - cache_rules
+                - list()
+            - tokens
+                - list()
+            - scope_maps
+                - list()
+    - Permissions
+      ```
+        "Microsoft.ContainerRegistry/registries/read",
+        "Microsoft.ContainerRegistry/registries/listUsages/read",
+        "Microsoft.ContainerRegistry/registries/webhooks/read",
+        "Microsoft.ContainerRegistry/registries/replications/read",
+        "Microsoft.ContainerRegistry/registries/tasks/read",
+        "Microsoft.ContainerRegistry/registries/connectedRegistries/read",
+        "Microsoft.ContainerRegistry/registries/cacheRules/read",
+        "Microsoft.ContainerRegistry/registries/tokens/read",
+        "Microsoft.ContainerRegistry/registries/scopeMaps/read",
+        "Microsoft.Resources/subscriptions/resourceGroups/read"
+      ```
 
 #### [Web PubSub Service](https://learn.microsoft.com/en-us/python/api/overview/azure/web-pubsub?view=azure-python)
 
@@ -863,6 +904,35 @@ Deprecated)
                 - list()
     - Permissions
 
+#### [Functions](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-web/azure.mgmt.web.websitemanagementclient?view=azure-python)
+
+- Functions
+    - Scope
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-web/azure.mgmt.web.websitemanagementclient?view=azure-python
+            - web_apps
+                - list()
+                - get()
+                - list_private_endpoint_connections()
+                - list_hybrid_connections()
+            - app_service_plans
+                - get()
+        - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-network/azure.mgmt.network.networkmanagementclient?view=azure-python
+            - virtual_networks
+                - get()
+            - subnets
+                - get()
+    - Permissions
+      ```
+        "Microsoft.Web/*/read",
+        "Microsoft.Network/virtualNetworks/read",
+        "Microsoft.Network/virtualNetworks/subnets/read",
+        "Microsoft.Network/privateEndpoints/read",
+        "Microsoft.Network/publicIPAddresses/read",
+        "Microsoft.Network/natGateways/read",
+        "Microsoft.Network/networkSecurityGroups/read",
+        "Microsoft.Network/routeTables/read",
+        "Microsoft.Resources/*/read"
+      ```
 ---
 
 ## Options
@@ -896,7 +966,9 @@ The cloud_service_types items that can be specified are as follows.
         'VirtualNetworks',
         'VMScaleSets',
         'ContainerInstances',
-        'WebPubSubService'
+        'WebPubSubService',
+        "ContainerRegistries",
+        "Functions"
     ]
 }
 </code>
@@ -962,6 +1034,7 @@ The default ASSET_URL in cloud_service_conf is
 
 | Version | Description                                                                                                                                                                                                                                                                                                                                                               | Affected Service                                    | Release Date |
 |---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
+| 2.0.9   | - Add Azure Functions, Container Registries                                                                                                      | Functions, Container Registries | 2025.12.03    |
 | 2.0.8   | - Add Azure Advisor service                                                                                                                                                                                                                                                                                                                                               |                                                     |              |
 | 2.0.5   | - Add Azure Cognitive service                                                                                                                                                                                                                                                                                                                                             |                                                     |              |
 | 2.0.0   | - [Migration to spaceone framework 2.0](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/91)                                                                                                                                                                                                                                                          | All Services                                        | 2024.08.22   |
