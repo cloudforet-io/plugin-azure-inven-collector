@@ -8,7 +8,6 @@ from azure.mgmt.advisor import AdvisorManagementClient
 from azure.mgmt.cognitiveservices import CognitiveServicesManagementClient
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.containerinstance import ContainerInstanceManagementClient
-# Container Registry 클라이언트 import 추가
 from azure.mgmt.containerregistry import ContainerRegistryManagementClient
 from azure.mgmt.cosmosdb import CosmosDBManagementClient
 from azure.mgmt.keyvault import KeyVaultManagementClient

@@ -32,24 +32,20 @@ class ContainerRegistriesManager(AzureBaseManager):
         )
 
     def create_cloud_service(self, options, secret_data, schema):
+        # Collect container registry resources
         cloud_services = []
         error_responses = []
 
-        container_registries_conn = ContainerRegistriesConnector(
-            secret_data=secret_data
-        )
+        container_registries_conn = ContainerRegistriesConnector(secret_data=secret_data)
         subscription_conn = SubscriptionsConnector(secret_data=secret_data)
 
-        subscription_raw = subscription_conn.get_subscription(
-            secret_data["subscription_id"]
-        )
+        # Load subscription info
+        subscription_raw = subscription_conn.get_subscription(secret_data["subscription_id"])
         subscription_info = self.convert_nested_dictionary(subscription_raw)
 
+        # Validate subscription info
         if not isinstance(subscription_info, dict):
-            _LOGGER.error(
-                "[ContainerRegistries] invalid subscription_info. raw=%r",
-                subscription_raw,
-            )
+            _LOGGER.error("[ContainerRegistries] Invalid subscription info")
             error_responses.append(
                 make_error_response(
                     error=Exception("Invalid subscription info"),
@@ -60,33 +56,25 @@ class ContainerRegistriesManager(AzureBaseManager):
             )
             return cloud_services, error_responses
 
+        # Iterate registry list
         for registry in container_registries_conn.list_registries():
             try:
                 registry_dict = self.convert_nested_dictionary(registry)
                 if not isinstance(registry_dict, dict):
-                    _LOGGER.error(
-                        "[ContainerRegistries] registry list item is not dict. raw=%r",
-                        registry,
-                    )
                     continue
 
                 registry_id = registry_dict["id"]
                 resource_group_name = self.get_resource_group_from_id(registry_id)
                 registry_name = registry_dict["name"]
 
+                # Fetch full registry detail
                 registry_dict = self.convert_nested_dictionary(
-                    container_registries_conn.get_registry(
-                        resource_group_name, registry_name
-                    )
+                    container_registries_conn.get_registry(resource_group_name, registry_name)
                 )
-
                 if not isinstance(registry_dict, dict):
-                    _LOGGER.error(
-                        "[ContainerRegistries] registry dict is not dict. "
-                        f"rg={resource_group_name}, name={registry_name}, raw={registry_dict}"
-                    )
                     continue
 
+                # Base fields
                 registry_dict.update(
                     {
                         "resource_group": resource_group_name,
@@ -96,27 +84,18 @@ class ContainerRegistriesManager(AzureBaseManager):
                     }
                 )
 
+                # Populate registry data
                 self._set_settings_info(registry_dict)
-
-                self._set_services_info(
-                    container_registries_conn,
-                    registry_dict,
-                    resource_group_name,
-                    registry_name,
-                )
-
+                self._set_services_info(container_registries_conn, registry_dict, resource_group_name, registry_name)
                 self._set_repository_permissions_info(
-                    container_registries_conn,
-                    registry_dict,
-                    resource_group_name,
-                    registry_name,
+                    container_registries_conn, registry_dict, resource_group_name, registry_name
                 )
 
-                registry_dict = self.update_tenant_id_from_secret_data(
-                    registry_dict, secret_data
-                )
+                # Common metadata
+                registry_dict = self.update_tenant_id_from_secret_data(registry_dict, secret_data)
                 self.set_region_code(registry_dict["location"])
 
+                # Build CloudService
                 cloud_services.append(
                     make_cloud_service(
                         name=registry_dict["name"],
@@ -131,11 +110,9 @@ class ContainerRegistriesManager(AzureBaseManager):
                         data_format="dict",
                     )
                 )
+
             except Exception as e:
-                _LOGGER.error(
-                    f"[create_cloud_service] Error {self.service_code} {e}",
-                    exc_info=True,
-                )
+                _LOGGER.error(f"[create_cloud_service] Error {self.service_code}: {e}", exc_info=True)
                 error_responses.append(
                     make_error_response(
                         error=e,
@@ -148,20 +125,17 @@ class ContainerRegistriesManager(AzureBaseManager):
         return cloud_services, error_responses
 
     def _set_settings_info(self, registry_dict):
+        # Populate Settings category
         if not isinstance(registry_dict, dict):
-            _LOGGER.error(
-                "[ContainerRegistries] _set_settings_info called with non-dict: %r",
-                registry_dict,
-            )
             return
 
-        registry_dict["admin_user_enabled"] = registry_dict.get(
-            "admin_user_enabled", False
-        )
+        registry_dict["admin_user_enabled"] = registry_dict.get("admin_user_enabled", False)
 
+        # Identity mapping
         identities = []
         if identity_info := registry_dict.get("identity"):
             identity_type = identity_info.get("type", "None")
+
             if "SystemAssigned" in identity_type:
                 identities.append(
                     {
@@ -173,8 +147,8 @@ class ContainerRegistriesManager(AzureBaseManager):
                 )
 
             for ua_id in identity_info.get("user_assigned_identities", {}):
-                try:
-                    parts = ua_id.split("/")
+                parts = ua_id.split("/")
+                if len(parts) >= 5:
                     identities.append(
                         {
                             "name": parts[-1],
@@ -183,42 +157,33 @@ class ContainerRegistriesManager(AzureBaseManager):
                             "subscription_id": parts[2],
                         }
                     )
-                except Exception:
+                else:
                     identities.append({"name": ua_id, "type": "UserAssigned"})
         registry_dict["identities"] = identities
 
-        registry_dict["private_endpoints"] = []  # Placeholder
-
+        # Policies
         policies = registry_dict.get("policies", {})
-        registry_dict["domain_name_label_scope"] = policies.get(
-            "quarantine_policy", {}
-        ).get("status", "Unsecured")
+        registry_dict["domain_name_label_scope"] = policies.get("quarantine_policy", {}).get("status", "Unsecured")
         registry_dict["soft_delete_enabled"] = (
             policies.get("retention_policy", {}).get("status", "disabled") == "enabled"
         )
         registry_dict.setdefault("role_assignment_mode", "RBAC_REGISTRY")
 
-        registry_dict["locks"] = []  # Placeholder
+        registry_dict["private_endpoints"] = []
+        registry_dict["locks"] = []
 
     def _set_services_info(self, conn, registry_dict, rg, name):
+        # Populate Services category
         if not isinstance(registry_dict, dict):
-            _LOGGER.error(
-                "[ContainerRegistries] _set_services_info called with non-dict: %r",
-                registry_dict,
-            )
             return
 
         registry_dict["repositories"] = []
 
         webhooks = conn.list_webhooks(rg, name)
-        registry_dict["webhooks"] = [
-            self.convert_nested_dictionary(w) for w in webhooks
-        ]
+        registry_dict["webhooks"] = [self.convert_nested_dictionary(w) for w in webhooks]
 
         replications = conn.list_replications(rg, name)
-        registry_dict["replications"] = [
-            self.convert_nested_dictionary(r) for r in replications
-        ]
+        registry_dict["replications"] = [self.convert_nested_dictionary(r) for r in replications]
 
         tasks = conn.list_tasks(rg, name)
         registry_dict["tasks"] = [self.convert_nested_dictionary(t) for t in tasks]
@@ -229,38 +194,28 @@ class ContainerRegistriesManager(AzureBaseManager):
         ]
 
         cache_rules = conn.list_cache_rules(rg, name)
-        registry_dict["cache_rules"] = [
-            self.convert_nested_dictionary(rule) for rule in cache_rules
-        ]
+        registry_dict["cache_rules"] = [self.convert_nested_dictionary(rule) for rule in cache_rules]
         registry_dict["cache_credentials"] = []
 
     def _set_repository_permissions_info(self, conn, registry_dict, rg, name):
+        # Populate Repository Permissions category
         if not isinstance(registry_dict, dict):
-            _LOGGER.error(
-                "[ContainerRegistries] _set_repository_permissions_info called with non-dict: %r",
-                registry_dict,
-            )
             return
 
         tokens = conn.list_tokens(rg, name)
         token_list = []
         for t in tokens:
             td = self.convert_nested_dictionary(t)
-
             if not isinstance(td, dict):
-                _LOGGER.error(
-                    "[ContainerRegistries] token item is not dict. raw=%r",
-                    t,
-                )
                 continue
 
-            if creds := td.get("credentials"):
+            creds = td.get("credentials")
+            if creds:
                 td["password1_expiry"] = creds.get("password1", {}).get("expiry")
                 td["password2_expiry"] = creds.get("password2", {}).get("expiry")
-            token_list.append(td)
-        registry_dict["tokens"] = token_list
 
+            token_list.append(td)
+
+        registry_dict["tokens"] = token_list
         scope_maps = conn.list_scope_maps(rg, name)
-        registry_dict["scope_maps"] = [
-            self.convert_nested_dictionary(s) for s in scope_maps
-        ]
+        registry_dict["scope_maps"] = [self.convert_nested_dictionary(s) for s in scope_maps]
