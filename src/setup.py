@@ -34,6 +34,7 @@ setup(
         "spaceone-api",
         "azure-identity",
         "azure-mgmt-resource",
+        "azure-mgmt-containerservice>=24.0.0",
     ],
     package_data={
         "plugin": [

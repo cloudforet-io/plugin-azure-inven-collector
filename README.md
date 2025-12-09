@@ -51,6 +51,8 @@ Please contact us if you need any further information.
 | Service                                                                  | [Web PubSub Service](#web-pubsub-service)                   |
 | Score<br>OperationalExcellence<br>Performance<br>Reliability<br>Security | [Advisor](#advisor)                                         |
 | Instance                                                                 | [Functions](#functions)                                     |
+| Instance                                                                 | [Kubernetes Service](#kubernetes-service) |
+
 
     
 ---
@@ -115,6 +117,8 @@ The following is a list of services being collected and service code information
 | 22  | Advisor                     | Microsoft.Advisor/advisorScore<br>Microsoft.ResourceHealth/events |
 | 23  | Container Registries        | Microsoft.ContainerRegistry/registries                            |
 | 24  | Functions                   | Microsoft.Web/sites                                               |
+| 25 | Kubernetes Service | Microsoft.ContainerService/ManagedClusters |
+
 
 ---
 
@@ -933,6 +937,26 @@ Deprecated)
         "Microsoft.Network/routeTables/read",
         "Microsoft.Resources/*/read"
       ```
+      
+#### [Kubernetes Service](https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerservice/azure.mgmt.containerservice.containerserviceclient?view=azure-python)
+
+- Kubernetes Service (AKS)
+  - Scope
+    - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-containerservice/azure.mgmt.containerservice.containerserviceclient?view=azure-python
+      - managed_clusters  
+        - list()
+        - get()
+        
+    - https://learn.microsoft.com/ko-kr/python/api/azure-mgmt-resource/azure.mgmt.resource.resources.resourcemanagementclient?view=azure-python
+      - locks
+        - list_at_resource_level()
+  - Permissions
+   ```
+    "Microsoft.ContainerService/managedClusters/read"
+    "Microsoft.ContainerService/managedClusters/listClusterUserCredential/action"
+    "Microsoft.Authorization/locks/*/read"
+    "Microsoft.Resources/subscriptions/resourceGroups/read"
+   ```
 ---
 
 ## Options
@@ -968,7 +992,8 @@ The cloud_service_types items that can be specified are as follows.
         'ContainerInstances',
         'WebPubSubService',
         "ContainerRegistries",
-        "Functions"
+        "Functions",
+        "KubernetesService"
     ]
 }
 </code>
@@ -1034,7 +1059,8 @@ The default ASSET_URL in cloud_service_conf is
 
 | Version | Description                                                                                                                                                                                                                                                                                                                                                               | Affected Service                                    | Release Date |
 |---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|--------------|
-| 2.0.9   | - Add Azure Functions, Container Registries                                                                                                      | Functions, Container Registries | 2025.12.03    |
+| 2.0.10  | - Add Kubernetes Service (AKS)                                                                                                      | Kubernetes Service (AKS) | 2025.12.09   |
+| 2.0.9   | - Add Azure Functions, Container Registries                                                                                                      | Functions, Container Registries | 2025.12.03   |
 | 2.0.8   | - Add Azure Advisor service                                                                                                                                                                                                                                                                                                                                               |                                                     |              |
 | 2.0.5   | - Add Azure Cognitive service                                                                                                                                                                                                                                                                                                                                             |                                                     |              |
 | 2.0.0   | - [Migration to spaceone framework 2.0](https://github.com/cloudforet-io/plugin-azure-inven-collector/issues/91)                                                                                                                                                                                                                                                          | All Services                                        | 2024.08.22   |
