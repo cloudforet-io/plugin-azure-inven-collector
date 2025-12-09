@@ -1,0 +1,101 @@
+search:
+  fields:
+    - Name: name
+    - Type: data.type
+    - Subscription: data.subscription_name
+    - Subscription ID: account
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Kubernetes Version: data.kubernetes_version
+    - Fleet Manager: data.fleet_manager
+    - Power state: data.power_state_display
+
+table:
+  sort:
+    key: name
+    desc: false
+  fields:
+    - Type: data.type
+    - Subscription: data.subscription_name
+    - Subscription ID: data.subscription_id
+    - Resource Group: data.resource_group
+    - Location: data.location
+    - Kubernetes Version: data.kubernetes_version
+    - Fleet Manager: data.fleet_manager
+    - Power state: data.power_state_display
+
+tabs.0:
+  name: Node pools
+  type: table
+  root_path: data.node_pools
+  fields:
+    - Node pool: node_pool
+    - Provisioning state: provisioning_state
+    - Power state: power_state
+    - Scale method: scale_method
+###TODO: target_nodes calculation is not fully accurate yet and will be improved in a future update.
+#    - Target nodes: target_nodes
+    - Min nodes: min_nodes
+    - Max nodes: max_nodes
+    - Autoscaling status: autoscaling_status
+    - Mode: mode
+    - Operating system: operating_system
+
+tabs.1:
+  name: Security configuration
+  type: item
+  fields:
+    - Enable OIDC: data.security_configuration.enable_oidc
+    - Issuer URL: data.security_configuration.issuer_url
+    - Enable Workload Identity: data.security_configuration.enable_workload_identity
+    - Enable Image Cleaner: data.security_configuration.enable_image_cleaner
+    - Scan time (in days): data.security_configuration.scan_time_in_days
+    - Authentication: data.security_configuration.authentication
+    - Enable secret store CSI driver: data.security_configuration.enable_secret_store_csi_driver
+
+tabs.2:
+  name: Networking
+  type: item
+  fields:
+    - Network configuration: data.networking.network_configuration
+    - Outbound type: data.networking.outbound_type
+    - Pod CIDR: data.networking.pod_cidr
+    - Service CIDR: data.networking.service_cidr
+    - DNS service IP: data.networking.dns_service_ip
+    - Cilium dataplane: data.networking.cilium_dataplane
+    - Network policy engine: data.networking.network_policy_engine
+    - Public access to API server: data.networking.public_access_to_api_server
+    - Authorized IP ranges: data.networking.authorized_ip_ranges
+    - Load balancer: data.networking.load_balancer
+    ###TODO:  VNet/Subnet
+#    - Virtual network: data.networking.virtual_network
+#    - Subnet: data.networking.subnet
+    - Ingress controller: data.networking.ingress_controller
+
+tabs.3:
+  name: Properties
+  type: item
+  fields:
+    - Kubernetes Version: data.properties_section.kubernetes_version
+    - DNS prefix: data.properties_section.dns_prefix
+    - API server address: data.properties_section.api_server_address
+    - RBAC: data.properties_section.rbac
+    - Encryption type: data.properties_section.encryption_type
+    ###TODO: Workspace resource ID
+#    - Workspace resource ID: data.properties_section.workspace_resource_id
+    - Infrastructure resource group: data.properties_section.infrastructure_resource_group
+    - HTTP application routing domain: data.properties_section.http_application_routing_domain
+    - Resource ID: data.properties_section.resource_id
+    - Location: data.properties_section.location
+    - Resource Group: data.properties_section.resource_group
+    - Subscription ID: data.properties_section.subscription_id
+
+tabs.4:
+  name: Locks
+  type: table
+  root_path: data.locks
+  fields:
+    - Lock name: lock_name
+    - Lock type: lock_type
+    - Scope: scope
+    - Notes: notes
